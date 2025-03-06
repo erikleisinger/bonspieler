@@ -23,14 +23,15 @@ export default function BracketGame({
         <div className="flex">{game.id}</div>
       </div>
 
-      {connections.teams.map((team, index) => {
-        return (
-          <div className="flex justify-between" key={"team-" + index}>
-            <BracketGameTeam team={team} />
-            <div className="text-gray-300">0</div>
-          </div>
-        );
-      })}
+      {connections?.teams?.length &&
+        connections.teams.map((team, index) => {
+          return (
+            <div className="flex justify-between " key={"team-" + index}>
+              <BracketGameTeam team={team} />
+              <div className="text-gray-300">0</div>
+            </div>
+          );
+        })}
     </div>
   );
 }

@@ -61,7 +61,7 @@ export default function Round({
               ...getRowSpanForGame(game),
             }}
           >
-            <div className="relative py-4">
+            <div className=" py-4">
               <BracketGame game={game} connections={connections[game.id]} />
             </div>
           </div>
