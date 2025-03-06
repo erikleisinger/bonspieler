@@ -8,9 +8,7 @@ export default function BracketGameTeam({
     if (teamId) {
       return teamId;
     } else if (gameId) {
-      return `${isWinner ? "Winner of " : "Loser of "}${gameId.substr(
-        gameId.length - 5
-      )}`;
+      return `${isWinner ? "Winner of " : "Loser of "}${gameId}`;
     }
   }
 

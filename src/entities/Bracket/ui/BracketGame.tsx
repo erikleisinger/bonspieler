@@ -14,13 +14,13 @@ export default function BracketGame({
 
   return (
     <div
-      className="w-[300px] flex flex-col text-white p-2 rounded-md game__container text-xs"
+      className="w-[200px] flex flex-col text-white p-2 rounded-md game__container text-xs"
       id={"game-" + game.id}
       onClick={() => editGame(game)}
     >
       <div className="flex justify-between">
         <div>Draw 1</div>
-        <div className="flex">{game.id.substr(game.id.length - 5)}</div>
+        <div className="flex">{game.id}</div>
       </div>
 
       {connections.teams.map((team, index) => {

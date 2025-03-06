@@ -107,7 +107,7 @@ export default function Bracket({ rounds, connections }: BracketProps) {
     setRows({ ...gameRowSpanMap });
   }
   return (
-    <div className="flex gap-32 relative">
+    <div className="flex gap-24 relative">
       {rounds.map((games, roundIndex) => {
         return (
           <BracketRound
