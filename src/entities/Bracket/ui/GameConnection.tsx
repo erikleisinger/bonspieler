@@ -23,10 +23,14 @@ export default function GameConnection({
     return { position, dimensions };
   }, [positionInfo, gameId]);
   return (
+    /**
+     * TODO:
+     * Use an SVG instead of all these divs
+     */
     positionInfo && (
       <div
         id={"connection-" + gameId}
-        className="absolute flex items-center pointer-events-auto border-white hover:border-blue-500 group cursor-pointer "
+        className="absolute grid grid-cols-[32px_1fr] items-center pointer-events-auto border-white hover:border-blue-500 group cursor-pointer "
         style={{
           left: position.x + "px",
           top: position.y + "px",
@@ -34,15 +38,28 @@ export default function GameConnection({
           height: dimensions.height + "px",
         }}
       >
-        <div className="grid grid-rows-2 gap-[25px] w-4 h-full border-[inherit]">
-          <div className="border-[4px] border-l-0 border-b-0 rounded-tr-[12px] border-[inherit]  "></div>
-          <div className="border-[4px] border-l-0 border-t-0 rounded-br-[12px] border-[inherit]  "></div>
+        <div className="grid grid-rows-[12px_1fr_12px_12px_1fr_12px] grid-cols-[16px_16px] h-full border-[inherit]">
+          <div className="border-[4px] border-l-0 border-b-0 rounded-tr-[12px] border-[inherit] grow translate-y-[4px]  "></div>
+          <div />
+          <div className="border-[4px] border-t-0 border-l-0 border-b-0 translate-y-[3px] border-[inherit]" />
+          <div />
+
+          <div />
+          <div className="border-[4px] border-r-0 border-t-0 rounded-bl-[18px]   border-[inherit] translate-x-[-4px] translate-y-[2px]   "></div>
+          <div />
+          <div className="border-[4px] border-b-0 border-r-0 rounded-tl-[18px] border-[inherit] translate-x-[-4px] translate-y-[-2px] "></div>
+          <div className="border-[4px] border-t-0 border-l-0 border-b-0 translate-y-[-3px] border-[inherit]" />
+          <div />
+          <div className="border-[4px] border-l-0 border-t-0 rounded-br-[12px] border-[inherit] grow translate-y-[-4px] "></div>
+          <div />
         </div>
-        <div className="grid grid-rows-2 h-[30px] translate-x-[-4px] border-[inherit]">
-          <div className="border-[4px] border-r-0 border-t-0 rounded-bl-[16px] translate-y-[2px]  border-[inherit]  w-8 "></div>
-          <div className="border-[4px] border-b-0 border-r-0 rounded-tl-[16px] translate-y-[-2px] border-[inherit] w-8 "></div>
-        </div>
-        <div className="h-[3px] bg-white group-hover:bg-blue-500 grow translate-x-[-5px] cursor-pointer"></div>
+
+        <div
+          className="h-[4px] bg-white group-hover:bg-blue-500 grow translate-x-[-4px]  cursor-pointer"
+          style={{
+            width: "calc(100% + 4px)",
+          }}
+        ></div>
       </div>
     )
   );

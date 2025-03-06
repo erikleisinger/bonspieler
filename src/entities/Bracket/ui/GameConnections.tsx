@@ -1,20 +1,21 @@
 import GameConnection from "./GameConnection";
-import type { BracketConnection } from "../lib";
-import type { BracketGame } from "../lib/types/BracketGame";
+import type { BracketConnections, BracketGame, BracketRows } from "../lib";
 import type { GameConnectionPositionInfo } from "../lib/types/GameConnection";
 import { useState, useEffect, useRef } from "react";
 export default function GameConnections({
   games,
   connections,
+  rows,
 }: {
   games: BracketGame[];
-  connections: { [gameId: string]: BracketConnection };
+  connections: BracketConnections;
+  rows: BracketRows;
 }) {
   const [connectionPositions, setConnectionPositions] = useState<{
     [gameId: string]: GameConnectionPositionInfo;
   }>({});
 
-  const MARGIN = 16;
+  const MARGIN = 8;
 
   function calculateConnectionPositions() {
     const positions: { [gameId: string]: GameConnectionPositionInfo } = {};
@@ -73,7 +74,7 @@ export default function GameConnections({
 
   useEffect(() => {
     calculateConnectionPositions();
-  }, [games, connections]);
+  }, [games, connections, rows]);
 
   const container = useRef(null);
 

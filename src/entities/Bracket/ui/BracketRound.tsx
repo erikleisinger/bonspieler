@@ -1,32 +1,58 @@
 import BracketGame from "./BracketGame";
+import type {
+  BracketGame as BracketGameType,
+  BracketConnections,
+  BracketRows,
+} from "../lib";
 
-export default function Round({ games, connections, rows }) {
-  const GAME_HEIGHT = 125;
+export default function Round({
+  games,
+  connections,
+  rows,
+  roundIndex,
+}: {
+  games: BracketGameType[];
+  connections: BracketConnections;
+  rows: BracketRows;
+  roundIndex: number;
+}) {
+  const GAME_HEIGHT = 100;
 
-  function getRowSpanForGame(game) {
+  function getRowSpanForGame(game: BracketGameType) {
+    const { rowStart = 1, rowEnd = 2 } = rows[game.id] || {};
     return {
-      gridRow: "span " + rows[game.id],
+      gridRow: `${rowStart} / ${rowEnd}`,
     };
   }
 
   function getRowDefinition() {
-    const numRows = games.reduce((all, current) => {
-      const rowsForGame = rows[current.id];
-      return all + rowsForGame;
+    let gameHeight = GAME_HEIGHT;
+    const arr = new Array(roundIndex).fill(null);
+    arr.forEach(() => {
+      let newGameHeight = gameHeight / 2;
+      gameHeight = newGameHeight;
+    });
+
+    let numRowsForRound = games.reduce((all, current) => {
+      const { rowEnd = 2 } = rows[current.id] || {};
+
+      if (rowEnd > all) return rowEnd;
+      return all;
     }, 0);
+
     return {
-      gridTemplateRows: `repeat(${numRows}, ${GAME_HEIGHT}px)`,
+      gridTemplateRows: `repeat(${numRowsForRound}, ${gameHeight}px)`,
     };
   }
 
   return (
     <div
-      className={`relative  grid gap-8`}
+      className={`relative  grid `}
       style={{
         ...getRowDefinition(),
       }}
     >
-      {games.map((game) => {
+      {games.map((game: BracketGameType) => {
         return (
           <div
             key={game.id}
@@ -35,7 +61,9 @@ export default function Round({ games, connections, rows }) {
               ...getRowSpanForGame(game),
             }}
           >
-            <BracketGame game={game} connections={connections[game.id]} />
+            <div className="relative py-4">
+              <BracketGame game={game} connections={connections[game.id]} />
+            </div>
           </div>
         );
       })}

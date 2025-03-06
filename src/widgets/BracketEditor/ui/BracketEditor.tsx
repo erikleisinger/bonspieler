@@ -1,5 +1,9 @@
 "use client";
-
+import {
+  MAX_BRACKET_COUNT,
+  MAX_TEAM_COUNT,
+  MAX_WINNER_COUNT,
+} from "../lib/constants";
 import BracketEditorOptions from "./BracketEditorOptions";
 import { useState } from "react";
 import {
@@ -14,6 +18,7 @@ export default function BracketEditor({ className }: { className?: string }) {
   function updateTeamCount(e: any) {
     const newValue = parseInt(e.target.value);
     if (newValue < 1) return;
+    if (newValue > MAX_TEAM_COUNT) return;
     setTeamCount(newValue);
   }
 
@@ -21,6 +26,7 @@ export default function BracketEditor({ className }: { className?: string }) {
   function updateNumWinners(e: any, index: number) {
     const newValue = parseInt(e.target.value);
     if (newValue < 1) return;
+    if (newValue > MAX_WINNER_COUNT) return;
     const newArray = [...numWinners];
     newArray[index] = newValue;
     setNumWinners(newArray);
@@ -31,6 +37,7 @@ export default function BracketEditor({ className }: { className?: string }) {
   function updateNumBrackets(e: any) {
     const newValue = parseInt(e.target.value);
     if (newValue < 1) return;
+    if (newValue > MAX_BRACKET_COUNT) return;
     setNumBrackets(newValue);
 
     if (numWinners.length - 1 < newValue) {
@@ -56,6 +63,10 @@ export default function BracketEditor({ className }: { className?: string }) {
   }
 
   return (
+    /**
+     * Add edit game here as a placeholder;
+     * TODO: editing functionality will be added later
+     */
     <BracketEditingContext.Provider
       value={{
         editGame: (game: BracketGame) => {
@@ -73,15 +84,16 @@ export default function BracketEditor({ className }: { className?: string }) {
           numBrackets={numBrackets}
           updateNumBrackets={updateNumBrackets}
         />
-        <div className="flex flex-col gap-16 relative p-8">
+        <div className="flex flex-col gap-16 relative p-8 w-fit">
           {brackets.map((rounds, bracketIndex) => {
             return (
-              <Bracket
-                key={"bracket-" + bracketIndex}
-                connections={connections}
-                rounds={rounds}
-                bracketNumber={bracketIndex + 1}
-              />
+              <div className="m-16" key={"bracket-" + bracketIndex}>
+                <Bracket
+                  connections={connections}
+                  rounds={rounds}
+                  bracketNumber={bracketIndex + 1}
+                />
+              </div>
             );
           })}
         </div>

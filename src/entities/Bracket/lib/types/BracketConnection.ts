@@ -16,8 +16,16 @@ export interface BracketConnectionRegularTeam
   isWinner: boolean;
 }
 
+export type BracketConnectionTeam =
+  | BracketConnectionRegularTeam
+  | BracketConnectionSeedTeam;
+
 export interface BracketConnection {
   winnerTo: string | null;
   loserTo: string | null;
-  teams: (BracketConnectionRegularTeam | BracketConnectionRegularTeam)[];
+  teams: BracketConnectionTeam[];
+}
+
+export interface BracketConnections {
+  [gameId: string]: BracketConnection;
 }
