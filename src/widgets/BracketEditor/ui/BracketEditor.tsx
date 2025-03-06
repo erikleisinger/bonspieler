@@ -84,10 +84,10 @@ export default function BracketEditor({ className }: { className?: string }) {
           numBrackets={numBrackets}
           updateNumBrackets={updateNumBrackets}
         />
-        <div className="flex flex-col gap-16 relative p-8 w-fit">
+        <div className="flex flex-col gap-16 relative  w-fit">
           {brackets.map((rounds, bracketIndex) => {
             return (
-              <div className="m-16" key={"bracket-" + bracketIndex}>
+              <div className="m-8" key={"bracket-" + bracketIndex}>
                 <Bracket
                   connections={connections}
                   rounds={rounds}

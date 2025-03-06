@@ -4,6 +4,8 @@ import {
   MAX_WINNER_COUNT,
 } from "../lib/constants";
 
+import { Input } from "@/shared/ui/input";
+
 interface BracketEditorOptionsProps {
   teamCount: number;
   updateTeamCount: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -29,7 +31,7 @@ export default function BracketEditorOptions({
     <div>
       <div className="flex flex-col">
         <label htmlFor="TEAM_COUNT_INPUT">Team Count</label>
-        <input
+        <Input
           className="text-black w-fit"
           type="number"
           id="TEAM_COUNT_INPUT"
@@ -40,7 +42,7 @@ export default function BracketEditorOptions({
       </div>
       <div className="flex flex-col">
         <label htmlFor="BRACKET_COUNT_INPUT"># Brackets</label>
-        <input
+        <Input
           className="text-black w-fit"
           type="number"
           id="BRACKET_COUNT_INPUT"
@@ -56,7 +58,7 @@ export default function BracketEditorOptions({
               <label htmlFor={"WINNER_COUNT_INPUT" + "-" + i}>
                 Winners bracket {i + 1}
               </label>
-              <input
+              <Input
                 className="text-black w-fit"
                 type="number"
                 id={"WINNER_COUNT_INPUT" + "-" + i}
