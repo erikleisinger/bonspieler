@@ -1,22 +1,19 @@
 import BracketGame from "./BracketGame";
-import type {
-  BracketGame as BracketGameType,
-  BracketConnections,
-  BracketRows,
-} from "../lib";
+import type { BracketGame as BracketGameType, BracketRows } from "../lib";
+import { useContext } from "react";
+import { BracketContext } from "@/shared/Bracket/BracketContext";
+import { GAME_HEIGHT } from "../lib/constants/game";
 
 export default function Round({
   games,
-  connections,
   rows,
   roundIndex,
 }: {
   games: BracketGameType[];
-  connections: BracketConnections;
   rows: BracketRows;
   roundIndex: number;
 }) {
-  const GAME_HEIGHT = 100;
+  const { connections } = useContext(BracketContext);
 
   function getRowSpanForGame(game: BracketGameType) {
     const { rowStart = 1, rowEnd = 2 } = rows[game.id] || {};

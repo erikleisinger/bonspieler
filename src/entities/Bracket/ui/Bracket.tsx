@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import BracketRound from "./BracketRound";
+import { BracketContext } from "@/shared/Bracket/BracketContext";
 import type {
-  BracketConnections,
   BracketGame,
   BracketRow,
   BracketConnectionRegularTeam,
@@ -9,12 +9,12 @@ import type {
 import GameConnections from "./GameConnections";
 
 export interface BracketProps {
-  bracketNumber: number;
   rounds: BracketGame[][];
-  connections: BracketConnections;
 }
 
-export default function Bracket({ rounds, connections }: BracketProps) {
+export default function Bracket({ rounds }: BracketProps) {
+  const { connections } = useContext(BracketContext);
+
   const [rows, setRows] = useState({});
 
   const [baseNumRows, setBaseNumRows] = useState(0);
@@ -112,7 +112,6 @@ export default function Bracket({ rounds, connections }: BracketProps) {
         return (
           <BracketRound
             games={games}
-            connections={connections}
             key={"round-" + roundIndex}
             rows={rows}
             roundIndex={roundIndex}

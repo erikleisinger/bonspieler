@@ -6,9 +6,14 @@ import {
 } from "../lib/constants";
 import BracketEditorOptions from "./BracketEditorOptions";
 import { useState } from "react";
-import { generateBracketTournament } from "@erikleisinger/bracket-generator";
+import {
+  generateBracketTournament,
+  scheduleTournamentGames,
+  visualizeSchedule,
+} from "../../../../../bracket";
 import { Bracket } from "@/entities/Bracket";
 import { BracketEditingContext } from "@/shared/EditableBracket/BracketEditingContext";
+import { BracketContext } from "@/shared/Bracket/BracketContext";
 import { BracketGame } from "@/entities/Bracket";
 
 export default function BracketEditor({ className }: { className?: string }) {
@@ -51,50 +56,49 @@ export default function BracketEditor({ className }: { className?: string }) {
 
   const [brackets, setBrackets] = useState([]);
   const [connections, setConnections] = useState({});
+  const [schedule, setSchedule] = useState({});
 
   function renderBrackets() {
     const tournament = generateBracketTournament(teamCount, numWinners);
     const { brackets, connections } = tournament;
+    const s = scheduleTournamentGames(connections, 8);
+    setSchedule(visualizeSchedule(s));
     setBrackets(brackets);
     setConnections(connections);
   }
 
   return (
-    /**
-     * Add edit game here as a placeholder;
-     * TODO: editing functionality will be added later
-     */
-    <BracketEditingContext.Provider
-      value={{
-        editGame: (game: BracketGame) => {
-          console.log("you can edit the game!");
-        },
-      }}
-    >
-      <div className={className}>
-        <BracketEditorOptions
-          teamCount={teamCount}
-          updateTeamCount={updateTeamCount}
-          numWinners={numWinners}
-          updateNumWinners={updateNumWinners}
-          renderBrackets={renderBrackets}
-          numBrackets={numBrackets}
-          updateNumBrackets={updateNumBrackets}
-        />
-        <div className="flex flex-col gap-16 relative  w-fit">
-          {brackets.map((rounds, bracketIndex) => {
-            return (
-              <div className="m-8" key={"bracket-" + bracketIndex}>
-                <Bracket
-                  connections={connections}
-                  rounds={rounds}
-                  bracketNumber={bracketIndex + 1}
-                />
-              </div>
-            );
-          })}
+    <BracketContext.Provider value={{ schedule, connections }}>
+      {/* Add edit game here as a placeholder; * TODO: editing functionality
+      will be added later  */}
+      <BracketEditingContext.Provider
+        value={{
+          editGame: (game: BracketGame) => {
+            console.log("you can edit the game!");
+          },
+        }}
+      >
+        <div className={className}>
+          <BracketEditorOptions
+            teamCount={teamCount}
+            updateTeamCount={updateTeamCount}
+            numWinners={numWinners}
+            updateNumWinners={updateNumWinners}
+            renderBrackets={renderBrackets}
+            numBrackets={numBrackets}
+            updateNumBrackets={updateNumBrackets}
+          />
+          <div className="flex flex-col gap-16 relative  w-fit">
+            {brackets.map((rounds, bracketIndex) => {
+              return (
+                <div className="m-8" key={"bracket-" + bracketIndex}>
+                  <Bracket rounds={rounds} />
+                </div>
+              );
+            })}
+          </div>
         </div>
-      </div>
-    </BracketEditingContext.Provider>
+      </BracketEditingContext.Provider>
+    </BracketContext.Provider>
   );
 }
