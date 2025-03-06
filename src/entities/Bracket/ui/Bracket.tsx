@@ -84,7 +84,7 @@ export default function Bracket({ rounds, connections }: BracketProps) {
             if (verticalDiff > 0) {
               rowStart += verticalDiff;
             } else if (verticalDiff < 0) {
-              rowEnd -= verticalDiff;
+              rowEnd += verticalDiff;
             }
           }
 
