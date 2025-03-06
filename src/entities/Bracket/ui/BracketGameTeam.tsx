@@ -6,7 +6,7 @@ export default function BracketGameTeam({
 }) {
   function getTeamInfo({ isWinner, gameId, teamId }: BracketConnectionTeam) {
     if (teamId) {
-      return "Team " + teamId.substr(teamId.length - 5);
+      return teamId;
     } else if (gameId) {
       return `${isWinner ? "Winner of " : "Loser of "}${gameId.substr(
         gameId.length - 5

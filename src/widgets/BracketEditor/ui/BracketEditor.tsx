@@ -6,10 +6,7 @@ import {
 } from "../lib/constants";
 import BracketEditorOptions from "./BracketEditorOptions";
 import { useState } from "react";
-import {
-  generateTournament,
-  generateTournamentBrackets,
-} from "@erikleisinger/bracket-generator";
+import { generateBracketTournament } from "@erikleisinger/bracket-generator";
 import { Bracket } from "@/entities/Bracket";
 import { BracketEditingContext } from "@/shared/EditableBracket/BracketEditingContext";
 import { BracketGame } from "@/entities/Bracket";
@@ -55,8 +52,7 @@ export default function BracketEditor({ className }: { className?: string }) {
   const [connections, setConnections] = useState({});
 
   function renderBrackets() {
-    const bracketMap = generateTournament(teamCount, numWinners);
-    const tournament = generateTournamentBrackets(bracketMap, teamCount);
+    const tournament = generateBracketTournament(teamCount, numWinners);
     const { brackets, connections } = tournament;
     setBrackets(brackets);
     setConnections(connections);
