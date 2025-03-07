@@ -14,6 +14,7 @@ export interface BracketProps {
 
 export default function Bracket({ rounds }: BracketProps) {
   const { connections } = useContext(BracketContext);
+  const connectionsString = JSON.stringify(connections);
 
   const [rows, setRows] = useState({});
 
@@ -24,6 +25,8 @@ export default function Bracket({ rounds }: BracketProps) {
         rowEnd: number;
       };
     } = {};
+
+    console.log("calculate rows");
 
     rounds.forEach((round, roundIndex) => {
       round
@@ -96,7 +99,7 @@ export default function Bracket({ rounds }: BracketProps) {
         });
     });
     setRows({ ...gameRowSpanMap });
-  }, [connections, rounds]);
+  }, [connectionsString, rounds]);
 
   useEffect(() => {
     calculateRows();
@@ -104,7 +107,11 @@ export default function Bracket({ rounds }: BracketProps) {
 
   return (
     <div className="flex gap-24 relative">
-      <GameConnections connections={connections} games={rounds.flat()} />
+      <GameConnections
+        connections={connections}
+        games={rounds.flat()}
+        rows={rows}
+      />
       {rounds.map((games, roundIndex) => {
         return (
           <BracketRound

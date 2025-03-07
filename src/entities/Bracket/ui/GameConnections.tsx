@@ -5,9 +5,16 @@ import { useState, useEffect, useRef, useCallback } from "react";
 export default function GameConnections({
   games,
   connections,
+  rows,
 }: {
   games: BracketGame[];
   connections: BracketConnections;
+  rows: {
+    [gameId: string]: {
+      rowStart: number;
+      rowEnd: number;
+    };
+  };
 }) {
   const [connectionPositions, setConnectionPositions] = useState<{
     [gameId: string]: GameConnectionPositionInfo;
@@ -69,7 +76,7 @@ export default function GameConnections({
       };
     });
     setConnectionPositions(positions);
-  }, [games, connections]);
+  }, [games, connections, rows]);
 
   useEffect(() => {
     calculateConnectionPositions();

@@ -1,11 +1,24 @@
 import { createContext } from "react";
-import type { BracketGame, BracketConnection } from "@/entities/Bracket";
-export const BracketEditingContext = createContext({
+export const BracketEditingContext = createContext<{
+  editing: boolean;
+  lookingForWinnerConnection: {
+    gameId: string;
+    bracketNumber: number;
+    roundNumber: number;
+  } | null;
+  removeWinnerConnection: (gameId: string) => void;
+  addWinnerConnection: (
+    originGameId: string,
+    destinationGameId: string
+  ) => void;
+  lookForWinnerConnection: (
+    gameId: string,
+    bracketNumber: number,
+    roundNumber: number
+  ) => void;
+}>({
   editing: false,
-  lookingForWinnerConnection: false,
-  editGame: (game: BracketGame) => {
-    console.warn("Editing is not currently available.");
-  },
+  lookingForWinnerConnection: null,
   removeWinnerConnection: (gameId: string) => {
     console.warn("Editing is not currently available.");
   },
@@ -17,7 +30,9 @@ export const BracketEditingContext = createContext({
    * @param gameId
    * Will find available winner connections and highlight them.
    */
-  lookForWinnerConnection: (gameId: string) => {
-    this.lookingForWinnerConnection = true;
-  },
+  lookForWinnerConnection: (
+    gameId: string,
+    bracketNumber: number,
+    roundNumber: number
+  ) => {},
 });

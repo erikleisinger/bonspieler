@@ -1,5 +1,5 @@
-import "../lib/styles/game.css";
-import { useContext } from "react";
+import "../lib/styles/game.scss";
+import { useContext, useMemo } from "react";
 import { BracketEditingContext } from "@/shared/EditableBracket/BracketEditingContext";
 import { BracketContext } from "@/shared/Bracket/BracketContext";
 import BracketGameTeam from "./BracketGameTeam";
@@ -13,21 +13,66 @@ export default function BracketGame({
   game: BracketGame;
   connections: BracketConnection;
 }) {
-  const { editGame, editing, removeWinnerConnection } = useContext(
-    BracketEditingContext
-  );
+  const {
+    editing,
+    lookingForWinnerConnection,
+    addWinnerConnection,
+    removeWinnerConnection,
+    lookForWinnerConnection,
+  } = useContext(BracketEditingContext);
   const { schedule } = useContext(BracketContext);
   const drawNum = schedule[game.id] || "?";
 
   const hasWinner = connections.winnerTo;
+
+  const isAvailable = useMemo(() => {
+    if (!lookingForWinnerConnection?.gameId) return false;
+    const teams = (connections?.teams || []).filter(
+      ({ gameId, teamId }) => !!gameId || !!teamId
+    );
+    if (teams?.length >= 2) return false;
+    if (lookingForWinnerConnection.bracketNumber !== game.bracketNumber)
+      return false;
+    if (lookingForWinnerConnection.roundNumber + 1 !== game.roundNumber)
+      return false;
+    return (
+      lookingForWinnerConnection?.gameId &&
+      game.id !== lookingForWinnerConnection.gameId
+    );
+  }, [
+    lookingForWinnerConnection?.bracketNumber,
+    lookingForWinnerConnection?.gameId,
+    lookingForWinnerConnection?.roundNumber,
+    game.roundNumber,
+    game.id,
+    game.bracketNumber,
+    connections.teams,
+  ]);
+
+  function onClick() {
+    if (!isAvailable || !lookingForWinnerConnection?.gameId) return;
+    if (lookingForWinnerConnection?.gameId && isAvailable)
+      addWinnerConnection(game.id);
+  }
+
+  function getClassName() {
+    const base = ["BRACKET_GAME flex group game__container--outer"];
+    if (lookingForWinnerConnection && isAvailable) {
+      base.push("available");
+    } else if (lookingForWinnerConnection) {
+      base.push("unavailable");
+    }
+    return base.join(" ");
+  }
+
   return (
-    <div className="flex group game__container--outer">
+    <div className={getClassName()}>
       <div
         className={
           "w-[200px] flex flex-col text-white p-2 rounded-md game__container text-xs relative "
         }
         id={"game-" + game.id}
-        onClick={() => editGame(game)}
+        onClick={onClick}
       >
         <div className="flex justify-between">
           <div>Draw {drawNum}</div>
@@ -45,7 +90,7 @@ export default function BracketGame({
             );
           })}
       </div>
-      {editing && hasWinner && (
+      {editing && hasWinner && !lookingForWinnerConnection && (
         <div className="relative w-7">
           <Button
             size="icon"
@@ -57,18 +102,25 @@ export default function BracketGame({
           </Button>
         </div>
       )}
-      {editing && !hasWinner && (
+      {editing && !hasWinner && !lookingForWinnerConnection && (
         <div className="relative w-7">
           <Button
             size="icon"
             variant="secondary"
             className="hidden hover:block group-hover:block bg-white hover:bg-black hover:text-white absolute h-6 w-6 top-0 bottom-0 m-auto left-1 z-10 pointer-events-auto"
-            onClick={() => removeWinnerConnection(game.id)}
+            onClick={() =>
+              lookForWinnerConnection(
+                game.id,
+                game.bracketNumber,
+                game.roundNumber
+              )
+            }
           >
             +
           </Button>
         </div>
       )}
+      {lookingForWinnerConnection && <div className="w-7" />}
     </div>
   );
 }
