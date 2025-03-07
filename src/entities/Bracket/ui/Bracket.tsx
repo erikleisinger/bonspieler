@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState, useContext, useCallback } from "react";
 import BracketRound from "./BracketRound";
 import { BracketContext } from "@/shared/Bracket/BracketContext";
 import type {
@@ -17,14 +17,8 @@ export default function Bracket({ rounds }: BracketProps) {
 
   const [rows, setRows] = useState({});
 
-  const [baseNumRows, setBaseNumRows] = useState(0);
-
-  useEffect(() => {
-    calculateRows();
-  }, [connections, rounds]);
-
-  function calculateRows() {
-    let gameRowSpanMap: {
+  const calculateRows = useCallback(() => {
+    const gameRowSpanMap: {
       [gameId: string]: {
         rowStart: number;
         rowEnd: number;
@@ -88,9 +82,6 @@ export default function Bracket({ rounds }: BracketProps) {
             }
           }
 
-          if (rowEnd > baseNumRows) {
-            setBaseNumRows(rowEnd);
-          }
           return [
             ...all,
             {
@@ -105,14 +96,15 @@ export default function Bracket({ rounds }: BracketProps) {
         });
     });
     setRows({ ...gameRowSpanMap });
-  }
+  }, [connections, rounds]);
+
+  useEffect(() => {
+    calculateRows();
+  }, [calculateRows]);
+
   return (
     <div className="flex gap-24 relative">
-      <GameConnections
-        connections={connections}
-        games={rounds.flat()}
-        rows={rows}
-      />
+      <GameConnections connections={connections} games={rounds.flat()} />
       {rounds.map((games, roundIndex) => {
         return (
           <BracketRound

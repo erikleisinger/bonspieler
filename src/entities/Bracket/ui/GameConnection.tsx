@@ -22,7 +22,7 @@ export default function GameConnection({
       };
     const { position, dimensions } = positionInfo;
     return { position, dimensions };
-  }, [positionInfo, gameId]);
+  }, [positionInfo]);
 
   return (
     /**

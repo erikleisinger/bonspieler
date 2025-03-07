@@ -18,6 +18,6 @@ export const BracketEditingContext = createContext({
    * Will find available winner connections and highlight them.
    */
   lookForWinnerConnection: (gameId: string) => {
-    console.warn("Editing is not currently available.");
+    this.lookingForWinnerConnection = true;
   },
 });

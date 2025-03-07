@@ -1,15 +1,13 @@
 import GameConnection from "./GameConnection";
-import type { BracketConnections, BracketGame, BracketRows } from "../lib";
+import type { BracketConnections, BracketGame } from "../lib";
 import type { GameConnectionPositionInfo } from "../lib/types/GameConnection";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 export default function GameConnections({
   games,
   connections,
-  rows,
 }: {
   games: BracketGame[];
   connections: BracketConnections;
-  rows: BracketRows;
 }) {
   const [connectionPositions, setConnectionPositions] = useState<{
     [gameId: string]: GameConnectionPositionInfo;
@@ -17,11 +15,12 @@ export default function GameConnections({
 
   const MARGIN = 8;
 
-  function calculateConnectionPositions() {
+  const calculateConnectionPositions = useCallback(() => {
     const positions: { [gameId: string]: GameConnectionPositionInfo } = {};
     const { top: containerTop, left: containerLeft } =
       container.current.getBoundingClientRect();
-    games.forEach((game, gameIndex) => {
+
+    games.forEach((game) => {
       const { teams = [] } = connections[game.id] || {};
       const connectedGames = teams.filter(
         ({ gameId, isWinner }) => !!gameId && !!isWinner
@@ -70,11 +69,11 @@ export default function GameConnections({
       };
     });
     setConnectionPositions(positions);
-  }
+  }, [games, connections]);
 
   useEffect(() => {
     calculateConnectionPositions();
-  }, [games, connections, rows]);
+  }, [calculateConnectionPositions]);
 
   const container = useRef(null);
 

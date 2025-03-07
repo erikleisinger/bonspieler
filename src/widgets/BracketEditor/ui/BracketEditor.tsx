@@ -1,16 +1,8 @@
 "use client";
-import {
-  MAX_BRACKET_COUNT,
-  MAX_TEAM_COUNT,
-  MAX_WINNER_COUNT,
-  removeWinnerConnection,
-} from "../lib";
-import type {
-  BracketGame as BracketGameType,
-  BracketConnections,
-} from "@/entities/Bracket";
+import { removeWinnerConnection } from "../lib";
+import type { BracketGame, BracketConnections } from "@/entities/Bracket";
 import BracketEditorOptions from "./BracketEditorOptions";
-import { useState, useContext } from "react";
+import { useState } from "react";
 import {
   getNewTeamCount,
   getNewWinnerCount,
@@ -18,12 +10,11 @@ import {
 } from "../lib";
 import {
   generateTournament,
-  scheduleTournamentGames,
+  scheduleTournament,
 } from "@erikleisinger/bracket-generator";
 import { Bracket } from "@/entities/Bracket";
 import { BracketEditingContext } from "@/shared/EditableBracket/BracketEditingContext";
 import { BracketContext } from "@/shared/Bracket/BracketContext";
-import { BracketGame } from "@/entities/Bracket";
 
 export default function BracketEditor({ className }: { className?: string }) {
   /**
@@ -56,7 +47,7 @@ export default function BracketEditor({ className }: { className?: string }) {
 
   const [numBrackets, setNumBrackets] = useState(1);
 
-  function updateNumBrackets(e: any) {
+  function updateNumBrackets(e: string) {
     const { brackets: newBrackets, winners: newWinners } =
       getNewBracketAndWinnerCount(e, numBrackets, numWinners);
     setNumBrackets(newBrackets);
@@ -67,21 +58,14 @@ export default function BracketEditor({ className }: { className?: string }) {
    * Overall bracket state
    */
 
-  const [brackets, setBrackets] = useState<BracketGameType[][]>([]);
+  const [brackets, setBrackets] = useState<BracketGame[][][]>([]);
   const [connections, setConnections] = useState<BracketConnections>({});
   const [schedule, setSchedule] = useState({});
 
   function renderBrackets() {
     const tournament = generateTournament(teamCount, numWinners);
-    const {
-      brackets,
-      connections,
-    }: { brackets: BracketGameType[][]; connections: BracketConnections } =
-      tournament;
-    const { schedule: tournamentSchedule } = scheduleTournamentGames(
-      connections,
-      8
-    );
+    const { brackets, connections } = tournament;
+    const { schedule: tournamentSchedule } = scheduleTournament(connections, 8);
     setSchedule(tournamentSchedule);
     setBrackets(brackets);
     setConnections(connections);
@@ -99,9 +83,6 @@ export default function BracketEditor({ className }: { className?: string }) {
       <BracketEditingContext.Provider
         value={{
           editing: true,
-          editGame: (game: BracketGame) => {
-            console.log("you can edit the game!");
-          },
           removeWinnerConnection: handleRemoveWinnerConnection,
         }}
       >
