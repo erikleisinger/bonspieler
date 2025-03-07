@@ -1,5 +1,6 @@
 export type {
   BracketConnection,
+  BracketConnections,
   BracketConnectionRegularTeam,
   BracketConnectionRegularTeamId,
   BracketConnectionSeedTeam,

@@ -3,68 +3,93 @@ import {
   MAX_BRACKET_COUNT,
   MAX_TEAM_COUNT,
   MAX_WINNER_COUNT,
-} from "../lib/constants";
+  removeWinnerConnection,
+} from "../lib";
+import type {
+  BracketGame as BracketGameType,
+  BracketConnections,
+} from "@/entities/Bracket";
 import BracketEditorOptions from "./BracketEditorOptions";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import {
-  generateBracketTournament,
+  getNewTeamCount,
+  getNewWinnerCount,
+  getNewBracketAndWinnerCount,
+} from "../lib";
+import {
+  generateTournament,
   scheduleTournamentGames,
-  visualizeSchedule,
-} from "../../../../../bracket";
+} from "@erikleisinger/bracket-generator";
 import { Bracket } from "@/entities/Bracket";
 import { BracketEditingContext } from "@/shared/EditableBracket/BracketEditingContext";
 import { BracketContext } from "@/shared/Bracket/BracketContext";
 import { BracketGame } from "@/entities/Bracket";
 
 export default function BracketEditor({ className }: { className?: string }) {
+  /**
+   * Bracket params
+   */
+
+  /**
+   * Number of teams total in the tournament
+   */
+
   const [teamCount, setTeamCount] = useState(19);
-  function updateTeamCount(e: any) {
-    const newValue = parseInt(e.target.value);
-    if (newValue < 1) return;
-    if (newValue > MAX_TEAM_COUNT) return;
-    setTeamCount(newValue);
+
+  function updateTeamCount(e: string) {
+    setTeamCount(getNewTeamCount(e, teamCount));
   }
 
+  /**
+   * Number of teams that advance from each bracket.
+   */
+
   const [numWinners, setNumWinners] = useState([1]);
-  function updateNumWinners(e: any, index: number) {
-    const newValue = parseInt(e.target.value);
-    if (newValue < 1) return;
-    if (newValue > MAX_WINNER_COUNT) return;
-    const newArray = [...numWinners];
-    newArray[index] = newValue;
-    setNumWinners(newArray);
+
+  function updateNumWinners(e: string, index: number) {
+    setNumWinners(getNewWinnerCount(e, numWinners, index));
   }
+
+  /**
+   * Number of brackets in the tournament
+   */
 
   const [numBrackets, setNumBrackets] = useState(1);
 
   function updateNumBrackets(e: any) {
-    const newValue = parseInt(e.target.value);
-    if (newValue < 1) return;
-    if (newValue > MAX_BRACKET_COUNT) return;
-    setNumBrackets(newValue);
-
-    if (numWinners.length - 1 < newValue) {
-      const newArray = [...numWinners];
-      newArray.push(1);
-      setNumWinners(newArray);
-    } else if (numWinners.length > newValue) {
-      const newArray = [...numWinners];
-      newArray.pop();
-      setNumWinners(newArray);
-    }
+    const { brackets: newBrackets, winners: newWinners } =
+      getNewBracketAndWinnerCount(e, numBrackets, numWinners);
+    setNumBrackets(newBrackets);
+    setNumWinners(newWinners);
   }
 
-  const [brackets, setBrackets] = useState([]);
-  const [connections, setConnections] = useState({});
+  /**
+   * Overall bracket state
+   */
+
+  const [brackets, setBrackets] = useState<BracketGameType[][]>([]);
+  const [connections, setConnections] = useState<BracketConnections>({});
   const [schedule, setSchedule] = useState({});
 
   function renderBrackets() {
-    const tournament = generateBracketTournament(teamCount, numWinners);
-    const { brackets, connections } = tournament;
-    const s = scheduleTournamentGames(connections, 8);
-    setSchedule(visualizeSchedule(s));
+    const tournament = generateTournament(teamCount, numWinners);
+    const {
+      brackets,
+      connections,
+    }: { brackets: BracketGameType[][]; connections: BracketConnections } =
+      tournament;
+    const { schedule: tournamentSchedule } = scheduleTournamentGames(
+      connections,
+      8
+    );
+    setSchedule(tournamentSchedule);
     setBrackets(brackets);
     setConnections(connections);
+  }
+
+  function handleRemoveWinnerConnection(gameId: string) {
+    const newConnections = removeWinnerConnection(gameId, connections);
+    setConnections(newConnections);
   }
 
   return (
@@ -73,9 +98,11 @@ export default function BracketEditor({ className }: { className?: string }) {
       will be added later  */}
       <BracketEditingContext.Provider
         value={{
+          editing: true,
           editGame: (game: BracketGame) => {
             console.log("you can edit the game!");
           },
+          removeWinnerConnection: handleRemoveWinnerConnection,
         }}
       >
         <div className={className}>

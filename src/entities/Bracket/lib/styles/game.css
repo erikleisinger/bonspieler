@@ -10,8 +10,14 @@
     transition: all 0.1s;
  
 }
-
+.game__container--outer:hover>.game__container {
+    box-shadow: #a5b4fc 0px 0px 6px 4px;
+}
 .game__container:hover {
     box-shadow: #a5b4fc 0px 0px 6px 4px;
     border-color: transparent;
+}
+
+.game__container.qualifier {
+    box-shadow: #fde68a 0px 0px 1px 4px;
 }

@@ -1,8 +1,10 @@
 import BracketGame from "./BracketGame";
 import type { BracketGame as BracketGameType, BracketRows } from "../lib";
-import { useContext } from "react";
+import { use, useContext } from "react";
+import { BracketEditingContext } from "@/shared/EditableBracket/BracketEditingContext";
 import { BracketContext } from "@/shared/Bracket/BracketContext";
 import { GAME_HEIGHT } from "../lib/constants/game";
+import { Button } from "@/shared/ui/button";
 
 export default function Round({
   games,
@@ -14,6 +16,7 @@ export default function Round({
   roundIndex: number;
 }) {
   const { connections } = useContext(BracketContext);
+  const { editing } = useContext(BracketEditingContext);
 
   function getRowSpanForGame(game: BracketGameType) {
     const { rowStart = 1, rowEnd = 2 } = rows[game.id] || {};
@@ -58,7 +61,7 @@ export default function Round({
               ...getRowSpanForGame(game),
             }}
           >
-            <div className=" py-4">
+            <div className="py-4 flex">
               <BracketGame game={game} connections={connections[game.id]} />
             </div>
           </div>

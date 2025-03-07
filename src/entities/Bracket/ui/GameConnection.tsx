@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import type { GameConnectionPositionInfo } from "../lib/types/GameConnection";
+
 export default function GameConnection({
   gameId,
   positionInfo,
@@ -22,6 +23,7 @@ export default function GameConnection({
     const { position, dimensions } = positionInfo;
     return { position, dimensions };
   }, [positionInfo, gameId]);
+
   return (
     /**
      * TODO:
@@ -30,7 +32,7 @@ export default function GameConnection({
     positionInfo && (
       <div
         id={"connection-" + gameId}
-        className="absolute grid grid-cols-[32px_1fr] items-center pointer-events-auto border-white hover:border-blue-500 group cursor-pointer "
+        className="absolute grid grid-cols-[32px_1fr] items-center  border-white  group cursor-pointer "
         style={{
           left: position.x + "px",
           top: position.y + "px",
@@ -55,7 +57,7 @@ export default function GameConnection({
         </div>
 
         <div
-          className="h-[4px] bg-white group-hover:bg-blue-500 grow translate-x-[-4px]  cursor-pointer"
+          className="h-[4px] bg-white  grow translate-x-[-4px]  cursor-pointer"
           style={{
             width: "calc(100% + 4px)",
           }}

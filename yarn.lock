@@ -14,10 +14,10 @@
   dependencies:
     tslib "^2.4.0"
 
-"@erikleisinger/bracket-generator@1.0.5":
-  version "1.0.5"
-  resolved "https://npm.pkg.github.com/download/@erikleisinger/bracket-generator/1.0.5/a4de230f5e7800f69b7ff001aec881d8eb59c044#a4de230f5e7800f69b7ff001aec881d8eb59c044"
-  integrity sha512-aGE8+dqQ36HsbT0zjB/eOIOCt7i91FwttzCRGiTlwAom1FaCT7L/yC4s2Fw/ePzetpbiMOfO1joHnQgAVvvuYg==
+"@erikleisinger/bracket-generator@1.0.11":
+  version "1.0.11"
+  resolved "https://npm.pkg.github.com/download/@erikleisinger/bracket-generator/1.0.11/9b932ba0f3db7092b85f8ba5cae0f0a11e67cc3f#9b932ba0f3db7092b85f8ba5cae0f0a11e67cc3f"
+  integrity sha512-1IgSm/ffrHd9AVElCJr0AcXmdpoNhb0CAh4pRUDTOzw7GjO1UbmGcKAfTkTQleTbZcYgbxxEAhivHhQ/tF2sAg==
 
 "@eslint-community/eslint-utils@^4.2.0", "@eslint-community/eslint-utils@^4.4.0":
   version "4.4.1"
@@ -347,6 +347,18 @@
   version "0.11.0"
   resolved "https://registry.yarnpkg.com/@pkgjs/parseargs/-/parseargs-0.11.0.tgz#a77ea742fab25775145434eb1d2328cf5013ac33"
   integrity sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==
+
+"@radix-ui/react-compose-refs@1.1.1":
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/@radix-ui/react-compose-refs/-/react-compose-refs-1.1.1.tgz#6f766faa975f8738269ebb8a23bad4f5a8d2faec"
+  integrity sha512-Y9VzoRDSJtgFMUCoiZBDVo084VQ5hfpXxVE+NgkdNsjiDBByiImMZKKhxMwCbdHvhlENG6a833CbFkOQvTricw==
+
+"@radix-ui/react-slot@^1.1.2":
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/@radix-ui/react-slot/-/react-slot-1.1.2.tgz#daffff7b2bfe99ade63b5168407680b93c00e1c6"
+  integrity sha512-YAKxaiGsSQJ38VzKH86/BPRC4rh+b1Jpa+JneA5LRE7skmLPNAyeG8kPJj/oo4STLvlrs8vkf/iYyc3A5stYCQ==
+  dependencies:
+    "@radix-ui/react-compose-refs" "1.1.1"
 
 "@rtsao/scc@^1.1.0":
   version "1.1.0"

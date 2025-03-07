@@ -8,15 +8,12 @@ import { Input } from "@/shared/ui/input";
 
 interface BracketEditorOptionsProps {
   teamCount: number;
-  updateTeamCount: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  updateTeamCount: (e: string) => void;
   numWinners: number[];
-  updateNumWinners: (
-    e: React.ChangeEvent<HTMLInputElement>,
-    index: number
-  ) => void;
+  updateNumWinners: (e: string, index: number) => void;
   renderBrackets: () => void;
   numBrackets: number;
-  updateNumBrackets: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  updateNumBrackets: (e: string) => void;
 }
 export default function BracketEditorOptions({
   teamCount,
@@ -36,7 +33,9 @@ export default function BracketEditorOptions({
           type="number"
           id="TEAM_COUNT_INPUT"
           value={teamCount}
-          onInput={updateTeamCount}
+          onInput={(e: React.ChangeEvent<HTMLInputElement>) =>
+            updateTeamCount(e.target.value)
+          }
           max={MAX_TEAM_COUNT}
         />
       </div>
@@ -47,7 +46,9 @@ export default function BracketEditorOptions({
           type="number"
           id="BRACKET_COUNT_INPUT"
           value={numBrackets}
-          onInput={updateNumBrackets}
+          onInput={(e: React.ChangeEvent<HTMLInputElement>) =>
+            updateNumBrackets(e.target.value)
+          }
           max={MAX_BRACKET_COUNT}
         />
       </div>
@@ -64,7 +65,7 @@ export default function BracketEditorOptions({
                 id={"WINNER_COUNT_INPUT" + "-" + i}
                 value={numWinners[i]}
                 onInput={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  updateNumWinners(e, i)
+                  updateNumWinners(e.target.value, i)
                 }
                 max={MAX_WINNER_COUNT}
                 min={1}

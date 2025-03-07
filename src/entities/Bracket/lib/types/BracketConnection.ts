@@ -8,6 +8,11 @@ export interface BracketConnectionRegularTeamId {
   teamId: null;
 }
 
+export interface BracketConnectionEmptyTeamId {
+  teamId: null;
+  gameId: null;
+}
+
 export interface BracketConnectionSeedTeam extends BracketConnectionSeedTeamId {
   isWinner: boolean;
 }
@@ -16,9 +21,15 @@ export interface BracketConnectionRegularTeam
   isWinner: boolean;
 }
 
+export interface BracketConnectionEmptyTeam
+  extends BracketConnectionEmptyTeamId {
+  isWinner: boolean;
+}
+
 export type BracketConnectionTeam =
   | BracketConnectionRegularTeam
-  | BracketConnectionSeedTeam;
+  | BracketConnectionSeedTeam
+  | BracketConnectionEmptyTeam;
 
 export interface BracketConnection {
   winnerTo: string | null;

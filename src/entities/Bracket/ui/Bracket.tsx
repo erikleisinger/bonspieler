@@ -57,8 +57,8 @@ export default function Bracket({ rounds }: BracketProps) {
              * the height of rows decreases as the round number increases.
              */
 
-            rowStart = lastGameRowEnd + roundIndex + 1 * roundIndex;
-            rowEnd = lastGameRowEnd + roundIndex + 1 + 1 * roundIndex;
+            rowStart = lastGameRowEnd;
+            rowEnd = lastGameRowEnd + 1 * 2 ** roundIndex;
           } else {
             const upperOriginGame = gameConnections[0];
             const lowerOriginGame = gameConnections[1] || gameConnections[0];
@@ -108,6 +108,11 @@ export default function Bracket({ rounds }: BracketProps) {
   }
   return (
     <div className="flex gap-24 relative">
+      <GameConnections
+        connections={connections}
+        games={rounds.flat()}
+        rows={rows}
+      />
       {rounds.map((games, roundIndex) => {
         return (
           <BracketRound
@@ -118,11 +123,6 @@ export default function Bracket({ rounds }: BracketProps) {
           />
         );
       })}
-      <GameConnections
-        connections={connections}
-        games={rounds.flat()}
-        rows={rows}
-      />
     </div>
   );
 }
