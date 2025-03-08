@@ -107,6 +107,22 @@ export default function BracketEditor({ className }: { className?: string }) {
     });
   }
 
+  function handleAddLoserConnection(destinationGameId: string) {
+    const originGameId = bracketState.lookingForLoserConnection;
+    if (!originGameId) return;
+    dispatch({
+      type: BracketEditorActionName.AddLoserConnection,
+      args: {
+        originGameId,
+        destinationGameId,
+      },
+    });
+    dispatch({
+      type: BracketEditorActionName.CancelLookForLoserConnection,
+      args: null,
+    });
+  }
+
   const hasConnections = Object.keys(bracketState.connections).length > 0;
 
   function cancelLookingListener(e) {
@@ -117,6 +133,10 @@ export default function BracketEditor({ className }: { className?: string }) {
     if (!isBracketGame) {
       dispatch({
         type: BracketEditorActionName.CancelLookForWinnerConnection,
+        args: null,
+      });
+      dispatch({
+        type: BracketEditorActionName.CancelLookForLoserConnection,
         args: null,
       });
       removeCancelLookingListener();
@@ -142,6 +162,7 @@ export default function BracketEditor({ className }: { className?: string }) {
         availableGames: bracketState.availableGames,
         editing: bracketState.editing,
         lookingForWinnerConnection: bracketState.lookingForWinnerConnection,
+        lookingForLoserConnection: bracketState.lookingForLoserConnection,
         lookForWinnerConnection: (
           gameId: string,
           gameIndex: string | number,
@@ -166,8 +187,28 @@ export default function BracketEditor({ className }: { className?: string }) {
             },
           });
         },
+        lookForLoserConnection: ({
+          gameId,
+          bracketNumber,
+        }: {
+          gameId: string;
+          bracketNumber: string | number;
+        }) => {
+          document.addEventListener("click", cancelLookingListener);
+          dispatch({
+            type: BracketEditorActionName.LookForLoserConnection,
+            args: {
+              gameId,
+              bracketNumber:
+                typeof bracketNumber === "string"
+                  ? parseInt(bracketNumber)
+                  : bracketNumber,
+            },
+          });
+        },
         addWinnerConnection: handleAddWinnerConnection,
         removeWinnerConnection: handleRemoveWinnerConnection,
+        addLoserConnection: handleAddLoserConnection,
       }}
     >
       <div className={className}>

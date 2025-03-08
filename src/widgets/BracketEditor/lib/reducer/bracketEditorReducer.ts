@@ -5,7 +5,10 @@ import type {
 } from "@/entities/Bracket";
 import type { Nullable } from "@/types";
 import { lookForWinnerConnection } from "./lookForWinnerConnection";
+import { lookForLoserConnection } from "./lookForLoserConnection";
 import { removeWinnerConnection } from "./removeWinnerConnection";
+import { addWinnerConnection } from "./addWinnerConnection";
+import { addLoserConnection } from "./addLoserConnection";
 
 export const DEFAULT_BRACKET_EDITOR_STATE: BracketEditorState = {
   availableGames: [],
@@ -13,6 +16,7 @@ export const DEFAULT_BRACKET_EDITOR_STATE: BracketEditorState = {
   connections: {},
   editing: true,
   lookingForWinnerConnection: null,
+  lookingForLoserConnection: null,
   schedule: {},
   rows: {},
 };
@@ -23,7 +27,10 @@ export enum BracketEditorActionName {
   RemoveWinnerConnection = "removeWinnerConnection",
   LookForWinnerConnection = "lookForWinnerConnection",
   CancelLookForWinnerConnection = "cancelLookForWinnerConnection",
+  CancelLookForLoserConnection = "cancelLookForLoserConnection",
   AddWinnerConnection = "addWinnerConnection",
+  LookForLoserConnection = "lookForLoserConnection",
+  AddLoserConnection = "addLoserConnection",
 }
 
 interface SetInitialStateAction {
@@ -32,6 +39,13 @@ interface SetInitialStateAction {
     connections: BracketConnections;
     brackets: BracketGame[][][];
     schedule: { [gameId: string]: number };
+  };
+}
+
+interface SetRowsAction {
+  type: BracketEditorActionName.SetRows;
+  args: {
+    rows: BracketRows;
   };
 }
 
@@ -64,10 +78,22 @@ interface AddWinnerConnectionAction {
   };
 }
 
-interface SetRowsAction {
-  type: BracketEditorActionName.SetRows;
+interface LookForLoserConnectionAction {
+  type: BracketEditorActionName.LookForLoserConnection;
   args: {
-    rows: BracketRows;
+    gameId: string;
+    bracketNumber: number;
+  };
+}
+interface CancelLookForLoserConnectionAction {
+  type: BracketEditorActionName.CancelLookForLoserConnection;
+  args: null;
+}
+interface AddLoserConnectionAction {
+  type: BracketEditorActionName.AddLoserConnection;
+  args: {
+    originGameId: string;
+    destinationGameId: string;
   };
 }
 
@@ -77,7 +103,10 @@ type BracketEditorAction =
   | LookForWinnerConnectionAction
   | CancelLookForWinnerConnectionAction
   | AddWinnerConnectionAction
-  | SetRowsAction;
+  | SetRowsAction
+  | LookForLoserConnectionAction
+  | CancelLookForLoserConnectionAction
+  | AddLoserConnectionAction;
 
 export interface BracketEditorState {
   availableGames: string[];
@@ -89,6 +118,7 @@ export interface BracketEditorState {
     bracketNumber: number;
     roundNumber: number;
   }>;
+  lookingForLoserConnection: Nullable<string>;
   rows: BracketRows;
   schedule: { [gameId: string]: number };
 }
@@ -134,66 +164,7 @@ export function bracketEditorReducer(
       return newState;
     }
     case BracketEditorActionName.AddWinnerConnection: {
-      const { originGameId, destinationGameId } = action.args;
-      if (!originGameId) {
-        console.warn("originGameId is required for addWinnerConnection action");
-        return state;
-      }
-      if (!destinationGameId) {
-        console.warn(
-          "destinationGameId is required for addWinnerConnection action"
-        );
-        return state;
-      }
-      const { connections } = state;
-      const originConnection = connections[originGameId];
-      const destinationConnection = connections[destinationGameId];
-      if (!originConnection) {
-        console.warn(
-          "originConnection is required for addWinnerConnection action"
-        );
-        return state;
-      }
-      if (!destinationConnection) {
-        console.warn(
-          "destinationConnection is required for addWinnerConnection action"
-        );
-        return state;
-      }
-
-      const newDestinationConnection = { ...destinationConnection };
-      const newTeams = [...newDestinationConnection.teams];
-      const availableTeamIndex = newTeams.findIndex(
-        ({ gameId, teamId }) => !gameId && !teamId
-      );
-      if (availableTeamIndex === -1) {
-        console.warn(
-          "destination game does not have an available team slot for addWinnerConnection action"
-        );
-        return state;
-      }
-      newTeams.splice(availableTeamIndex, 1, {
-        gameId: originGameId,
-        teamId: null,
-        isWinner: true,
-      });
-      newDestinationConnection.teams = newTeams;
-
-      const newOriginConnection = {
-        ...originConnection,
-        winnerTo: destinationGameId,
-      };
-
-      const newConnections = {
-        ...connections,
-        [originGameId]: newOriginConnection,
-        [destinationGameId]: newDestinationConnection,
-      };
-      const newState = {
-        ...state,
-        connections: newConnections,
-      };
-      return newState;
+      return addWinnerConnection(state, action.args);
     }
     case BracketEditorActionName.SetRows: {
       const { rows } = action.args;
@@ -210,6 +181,20 @@ export function bracketEditorReducer(
         rows: newRows,
       };
       return newState;
+    }
+    case BracketEditorActionName.LookForLoserConnection: {
+      return lookForLoserConnection(state, action.args);
+    }
+    case BracketEditorActionName.CancelLookForLoserConnection: {
+      const newState = {
+        ...state,
+        lookingForLoserConnection: null,
+        availableGames: [],
+      };
+      return newState;
+    }
+    case BracketEditorActionName.AddLoserConnection: {
+      return addLoserConnection(state, action.args);
     }
     default: {
       return state;

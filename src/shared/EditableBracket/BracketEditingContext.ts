@@ -9,6 +9,7 @@ export const BracketEditingContext = createContext<{
     bracketNumber: number;
     roundNumber: number;
   }>;
+  lookingForLoserConnection: string;
   removeWinnerConnection: (gameId: string) => void;
   addWinnerConnection: (destinationGameId: string) => void;
   lookForWinnerConnection: (
@@ -17,10 +18,18 @@ export const BracketEditingContext = createContext<{
     bracketNumber: number,
     roundNumber: number
   ) => void;
+  lookForLoserConnection: ({
+    gameId,
+    bracketNumber,
+  }: {
+    gameId: string;
+    bracketNumber: number;
+  }) => void;
 }>({
   availableGames: [],
   editing: false,
   lookingForWinnerConnection: null,
+  lookingForLoserConnection: null,
   removeWinnerConnection: (gameId: string) => {
     console.warn("Editing is not currently available.");
   },
@@ -34,6 +43,13 @@ export const BracketEditingContext = createContext<{
    */
   lookForWinnerConnection: (
     gameId: string,
+    gameIndex: number,
+    bracketNumber: number,
+    roundNumber: number
+  ) => {},
+  lookForLoserConnection: (
+    gameId: string,
+    gameIndex: number,
     bracketNumber: number,
     roundNumber: number
   ) => {},
