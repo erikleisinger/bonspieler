@@ -10,6 +10,7 @@ export function getNewBracketAndWinnerCount(
     brackets: currentBracketCount,
     winners: currentWinners,
   };
+  if (isNaN(newValue)) return returnValue;
   if (newValue < 1) return returnValue;
   if (newValue > MAX_BRACKET_COUNT) return returnValue;
 

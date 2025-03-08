@@ -33,9 +33,10 @@ export default function BracketEditorOptions({
           type="number"
           id="TEAM_COUNT_INPUT"
           value={teamCount}
-          onInput={(e: React.ChangeEvent<HTMLInputElement>) =>
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             updateTeamCount(e.target.value)
           }
+          onFocus={(e) => e.target.select()}
           max={MAX_TEAM_COUNT}
         />
       </div>
@@ -46,33 +47,36 @@ export default function BracketEditorOptions({
           type="number"
           id="BRACKET_COUNT_INPUT"
           value={numBrackets}
-          onInput={(e: React.ChangeEvent<HTMLInputElement>) =>
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             updateNumBrackets(e.target.value)
           }
+          onFocus={(e) => e.target.select()}
           max={MAX_BRACKET_COUNT}
         />
       </div>
       <div className="p-4">
-        {new Array(numBrackets).fill(0).map((_, i) => (
-          <div key={i}>
-            <div className="flex flex-col">
-              <label htmlFor={"WINNER_COUNT_INPUT" + "-" + i}>
-                Winners bracket {i + 1}
-              </label>
-              <Input
-                className="text-black w-fit"
-                type="number"
-                id={"WINNER_COUNT_INPUT" + "-" + i}
-                value={numWinners[i]}
-                onInput={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  updateNumWinners(e.target.value, i)
-                }
-                max={MAX_WINNER_COUNT}
-                min={1}
-              />
+        {numBrackets &&
+          new Array(numBrackets).fill(0).map((_, i) => (
+            <div key={i}>
+              <div className="flex flex-col">
+                <label htmlFor={"WINNER_COUNT_INPUT" + "-" + i}>
+                  Winners bracket {i + 1}
+                </label>
+                <Input
+                  className="text-black w-fit"
+                  type="number"
+                  id={"WINNER_COUNT_INPUT" + "-" + i}
+                  value={numWinners[i]}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    updateNumWinners(e.target.value, i)
+                  }
+                  onFocus={(e) => e.target.select()}
+                  max={MAX_WINNER_COUNT}
+                  min={1}
+                />
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
       </div>
 
       <button
