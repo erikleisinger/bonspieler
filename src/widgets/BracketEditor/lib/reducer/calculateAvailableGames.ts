@@ -15,7 +15,7 @@ import { BracketConnectionRegularTeam } from "@erikleisinger/bracket-generator";
  *
  */
 
-function getWinnerOriginConnectionsForGame(
+function getOriginConnectionsForGame(
   gameId: string,
   connections: BracketConnections
 ): BracketConnectionRegularTeam[] {
@@ -26,7 +26,7 @@ function getWinnerOriginConnectionsForGame(
   const { teams = [] } = connection;
   if (!teams.length) return [];
   const winnerConnections = teams.filter(
-    ({ gameId, isWinner }) => !!gameId && isWinner
+    ({ gameId, teamId }) => !!gameId && !teamId
   ) as BracketConnectionRegularTeam[];
 
   return winnerConnections;
@@ -49,10 +49,7 @@ function isUnavailable(
   if (!connection) {
     return true;
   }
-  const winnerConnections = getWinnerOriginConnectionsForGame(
-    gameId,
-    connections
-  );
+  const winnerConnections = getOriginConnectionsForGame(gameId, connections);
   if (winnerConnections.length === 2) return true;
   return false;
 }
@@ -161,7 +158,7 @@ export function calculateAvailableGames({
    */
   const lowestAbove = bracketRowsRelativeToOrigin.reduce(
     (currentLowest, current) => {
-      if (current.rowEnd > theseRows.rowStart) return currentLowest;
+      if (current.rowEnd > theseRows.rowEnd) return currentLowest;
       if (!currentLowest) return current;
       if (current.rowEnd > currentLowest.rowEnd) return current;
       return currentLowest;
