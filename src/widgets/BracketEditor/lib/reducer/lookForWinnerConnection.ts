@@ -14,7 +14,7 @@ export function lookForWinnerConnection(
     bracketNumber: number;
     roundNumber: number;
   }
-): Partial<BracketEditorState> {
+): BracketEditorState {
   if (!gameId) {
     console.warn("gameId is required for lookForWinnerConnection action");
     return state;

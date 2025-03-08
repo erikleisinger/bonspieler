@@ -1,0 +1,922 @@
+{
+  "connections": {
+    "A1": {
+      "winnerTo": "A5",
+      "loserTo": "B1",
+      "teams": [
+        {
+          "isWinner": true,
+          "teamId": "seed",
+          "gameId": null
+        },
+        {
+          "isWinner": true,
+          "teamId": "seed",
+          "gameId": null
+        }
+      ]
+    },
+    "A2": {
+      "winnerTo": "A6",
+      "loserTo": "B1",
+      "teams": [
+        {
+          "isWinner": true,
+          "teamId": "seed",
+          "gameId": null
+        },
+        {
+          "isWinner": true,
+          "teamId": "seed",
+          "gameId": null
+        }
+      ]
+    },
+    "A3": {
+      "winnerTo": "A7",
+      "loserTo": "B2",
+      "teams": [
+        {
+          "isWinner": true,
+          "teamId": "seed",
+          "gameId": null
+        },
+        {
+          "isWinner": true,
+          "teamId": "seed",
+          "gameId": null
+        }
+      ]
+    },
+    "A4": {
+      "winnerTo": "A8",
+      "loserTo": "B2",
+      "teams": [
+        {
+          "isWinner": true,
+          "teamId": "seed",
+          "gameId": null
+        },
+        {
+          "isWinner": true,
+          "teamId": "seed",
+          "gameId": null
+        }
+      ]
+    },
+    "A5": {
+      "winnerTo": "A13",
+      "loserTo": "B3",
+      "teams": [
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "A1"
+        },
+        {
+          "isWinner": true,
+          "teamId": "seed",
+          "gameId": null
+        }
+      ]
+    },
+    "A6": {
+      "winnerTo": "A13",
+      "loserTo": "B4",
+      "teams": [
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "A2"
+        },
+        {
+          "isWinner": true,
+          "teamId": "seed",
+          "gameId": null
+        }
+      ]
+    },
+    "A7": {
+      "winnerTo": "A14",
+      "loserTo": "B5",
+      "teams": [
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "A3"
+        },
+        {
+          "isWinner": true,
+          "teamId": "seed",
+          "gameId": null
+        }
+      ]
+    },
+    "A8": {
+      "winnerTo": "A14",
+      "loserTo": "B5",
+      "teams": [
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "A4"
+        },
+        {
+          "isWinner": true,
+          "teamId": "seed",
+          "gameId": null
+        }
+      ]
+    },
+    "A9": {
+      "winnerTo": "A15",
+      "loserTo": "B6",
+      "teams": [
+        {
+          "isWinner": true,
+          "teamId": "seed",
+          "gameId": null
+        },
+        {
+          "isWinner": true,
+          "teamId": "seed",
+          "gameId": null
+        }
+      ]
+    },
+    "A10": {
+      "winnerTo": "A15",
+      "loserTo": "B6",
+      "teams": [
+        {
+          "isWinner": true,
+          "teamId": "seed",
+          "gameId": null
+        },
+        {
+          "isWinner": true,
+          "teamId": "seed",
+          "gameId": null
+        }
+      ]
+    },
+    "A11": {
+      "winnerTo": "A16",
+      "loserTo": "B7",
+      "teams": [
+        {
+          "isWinner": true,
+          "teamId": "seed",
+          "gameId": null
+        },
+        {
+          "isWinner": true,
+          "teamId": "seed",
+          "gameId": null
+        }
+      ]
+    },
+    "A12": {
+      "winnerTo": "A16",
+      "loserTo": "B7",
+      "teams": [
+        {
+          "isWinner": true,
+          "teamId": "seed",
+          "gameId": null
+        },
+        {
+          "isWinner": true,
+          "teamId": "seed",
+          "gameId": null
+        }
+      ]
+    },
+    "A13": {
+      "winnerTo": "A17",
+      "loserTo": "B9",
+      "teams": [
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "A5"
+        },
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "A6"
+        }
+      ]
+    },
+    "A14": {
+      "winnerTo": "A17",
+      "loserTo": "B10",
+      "teams": [
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "A7"
+        },
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "A8"
+        }
+      ]
+    },
+    "A15": {
+      "winnerTo": "A18",
+      "loserTo": "B11",
+      "teams": [
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "A9"
+        },
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "A10"
+        }
+      ]
+    },
+    "A16": {
+      "winnerTo": "A18",
+      "loserTo": "B12",
+      "teams": [
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "A11"
+        },
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "A12"
+        }
+      ]
+    },
+    "A17": {
+      "winnerTo": "A19",
+      "loserTo": "B15",
+      "teams": [
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "A13"
+        },
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "A14"
+        }
+      ]
+    },
+    "A18": {
+      "winnerTo": "A19",
+      "loserTo": "B8",
+      "teams": [
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "A15"
+        },
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "A16"
+        }
+      ]
+    },
+    "A19": {
+      "winnerTo": null,
+      "loserTo": "B17",
+      "teams": [
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "A17"
+        },
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "A18"
+        }
+      ]
+    },
+    "B1": {
+      "winnerTo": "B3",
+      "loserTo": null,
+      "teams": [
+        {
+          "isWinner": false,
+          "teamId": null,
+          "gameId": "A1"
+        },
+        {
+          "isWinner": false,
+          "teamId": null,
+          "gameId": "A2"
+        }
+      ]
+    },
+    "B2": {
+      "winnerTo": "B4",
+      "loserTo": null,
+      "teams": [
+        {
+          "isWinner": false,
+          "teamId": null,
+          "gameId": "A3"
+        },
+        {
+          "isWinner": false,
+          "teamId": null,
+          "gameId": "A4"
+        }
+      ]
+    },
+    "B3": {
+      "winnerTo": "B8",
+      "loserTo": null,
+      "teams": [
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "B1"
+        },
+        {
+          "isWinner": false,
+          "teamId": null,
+          "gameId": "A5"
+        }
+      ]
+    },
+    "B4": {
+      "winnerTo": "B9",
+      "loserTo": null,
+      "teams": [
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "B2"
+        },
+        {
+          "isWinner": false,
+          "teamId": null,
+          "gameId": "A6"
+        }
+      ]
+    },
+    "B5": {
+      "winnerTo": "B10",
+      "loserTo": null,
+      "teams": [
+        {
+          "isWinner": false,
+          "teamId": null,
+          "gameId": "A7"
+        },
+        {
+          "isWinner": false,
+          "teamId": null,
+          "gameId": "A8"
+        }
+      ]
+    },
+    "B6": {
+      "winnerTo": "B11",
+      "loserTo": null,
+      "teams": [
+        {
+          "isWinner": false,
+          "teamId": null,
+          "gameId": "A9"
+        },
+        {
+          "isWinner": false,
+          "teamId": null,
+          "gameId": "A10"
+        }
+      ]
+    },
+    "B7": {
+      "winnerTo": "B12",
+      "loserTo": null,
+      "teams": [
+        {
+          "isWinner": false,
+          "teamId": null,
+          "gameId": "A11"
+        },
+        {
+          "isWinner": false,
+          "teamId": null,
+          "gameId": "A12"
+        }
+      ]
+    },
+    "B8": {
+      "winnerTo": "B13",
+      "loserTo": null,
+      "teams": [
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "B3"
+        },
+        {
+          "isWinner": false,
+          "teamId": null,
+          "gameId": "A18"
+        }
+      ]
+    },
+    "B9": {
+      "winnerTo": "B13",
+      "loserTo": null,
+      "teams": [
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "B4"
+        },
+        {
+          "isWinner": false,
+          "teamId": null,
+          "gameId": "A13"
+        }
+      ]
+    },
+    "B10": {
+      "winnerTo": "B14",
+      "loserTo": null,
+      "teams": [
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "B5"
+        },
+        {
+          "isWinner": false,
+          "teamId": null,
+          "gameId": "A14"
+        }
+      ]
+    },
+    "B11": {
+      "winnerTo": "B14",
+      "loserTo": null,
+      "teams": [
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "B6"
+        },
+        {
+          "isWinner": false,
+          "teamId": null,
+          "gameId": "A15"
+        }
+      ]
+    },
+    "B12": {
+      "winnerTo": "B15",
+      "loserTo": null,
+      "teams": [
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "B7"
+        },
+        {
+          "isWinner": false,
+          "teamId": null,
+          "gameId": "A16"
+        }
+      ]
+    },
+    "B13": {
+      "winnerTo": "B16",
+      "loserTo": null,
+      "teams": [
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "B8"
+        },
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "B9"
+        }
+      ]
+    },
+    "B14": {
+      "winnerTo": "B16",
+      "loserTo": null,
+      "teams": [
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "B10"
+        },
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "B11"
+        }
+      ]
+    },
+    "B15": {
+      "winnerTo": "B17",
+      "loserTo": null,
+      "teams": [
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "B12"
+        },
+        {
+          "isWinner": false,
+          "teamId": null,
+          "gameId": "A17"
+        }
+      ]
+    },
+    "B16": {
+      "winnerTo": "B18",
+      "loserTo": null,
+      "teams": [
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "B13"
+        },
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "B14"
+        }
+      ]
+    },
+    "B17": {
+      "winnerTo": "B18",
+      "loserTo": null,
+      "teams": [
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "B15"
+        },
+        {
+          "isWinner": false,
+          "teamId": null,
+          "gameId": "A19"
+        }
+      ]
+    },
+    "B18": {
+      "winnerTo": null,
+      "loserTo": null,
+      "teams": [
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "B16"
+        },
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "B17"
+        }
+      ]
+    }
+  },
+  "schedule": {
+    "A1": 1,
+    "A2": 1,
+    "A3": 1,
+    "A4": 1,
+    "A9": 1,
+    "A10": 1,
+    "A11": 1,
+    "A12": 1,
+    "A5": 2,
+    "A6": 2,
+    "A7": 2,
+    "A8": 2,
+    "A15": 2,
+    "A16": 2,
+    "B1": 2,
+    "B2": 2,
+    "A13": 3,
+    "A14": 3,
+    "A18": 3,
+    "B3": 3,
+    "B4": 3,
+    "B5": 3,
+    "B6": 3,
+    "B7": 3,
+    "A17": 4,
+    "B8": 4,
+    "B9": 4,
+    "B10": 4,
+    "B11": 4,
+    "B12": 4,
+    "A19": 5,
+    "B13": 5,
+    "B14": 5,
+    "B15": 5,
+    "B16": 6,
+    "B17": 6,
+    "B18": 7
+  },
+  "brackets": [
+    [
+      [
+        {
+          "id": "A1",
+          "isSeed": true,
+          "bracketNumber": 0,
+          "roundNumber": 0,
+          "score": 0
+        },
+        {
+          "id": "A2",
+          "isSeed": true,
+          "bracketNumber": 0,
+          "roundNumber": 0,
+          "score": 0
+        },
+        {
+          "id": "A3",
+          "isSeed": true,
+          "bracketNumber": 0,
+          "roundNumber": 0,
+          "score": 0
+        },
+        {
+          "id": "A4",
+          "isSeed": true,
+          "bracketNumber": 0,
+          "roundNumber": 0,
+          "score": 0
+        }
+      ],
+      [
+        {
+          "id": "A5",
+          "isSeed": true,
+          "bracketNumber": 0,
+          "roundNumber": 1,
+          "score": 1
+        },
+        {
+          "id": "A6",
+          "isSeed": true,
+          "bracketNumber": 0,
+          "roundNumber": 1,
+          "score": 1
+        },
+        {
+          "id": "A7",
+          "isSeed": true,
+          "bracketNumber": 0,
+          "roundNumber": 1,
+          "score": 1
+        },
+        {
+          "id": "A8",
+          "isSeed": true,
+          "bracketNumber": 0,
+          "roundNumber": 1,
+          "score": 1
+        },
+        {
+          "id": "A9",
+          "isSeed": true,
+          "bracketNumber": 0,
+          "roundNumber": 1,
+          "score": 1
+        },
+        {
+          "id": "A10",
+          "isSeed": true,
+          "bracketNumber": 0,
+          "roundNumber": 1,
+          "score": 1
+        },
+        {
+          "id": "A11",
+          "isSeed": true,
+          "bracketNumber": 0,
+          "roundNumber": 1,
+          "score": 1
+        },
+        {
+          "id": "A12",
+          "isSeed": true,
+          "bracketNumber": 0,
+          "roundNumber": 1,
+          "score": 1
+        }
+      ],
+      [
+        {
+          "id": "A13",
+          "isSeed": false,
+          "bracketNumber": 0,
+          "roundNumber": 2,
+          "score": 2
+        },
+        {
+          "id": "A14",
+          "isSeed": false,
+          "bracketNumber": 0,
+          "roundNumber": 2,
+          "score": 2
+        },
+        {
+          "id": "A15",
+          "isSeed": false,
+          "bracketNumber": 0,
+          "roundNumber": 2,
+          "score": 2
+        },
+        {
+          "id": "A16",
+          "isSeed": false,
+          "bracketNumber": 0,
+          "roundNumber": 2,
+          "score": 2
+        }
+      ],
+      [
+        {
+          "id": "A17",
+          "isSeed": false,
+          "bracketNumber": 0,
+          "roundNumber": 3,
+          "score": 3
+        },
+        {
+          "id": "A18",
+          "isSeed": false,
+          "bracketNumber": 0,
+          "roundNumber": 3,
+          "score": 3
+        }
+      ],
+      [
+        {
+          "id": "A19",
+          "isSeed": false,
+          "bracketNumber": 0,
+          "roundNumber": 4,
+          "score": 4
+        }
+      ]
+    ],
+    [
+      [
+        {
+          "id": "B1",
+          "isSeed": false,
+          "bracketNumber": 1,
+          "roundNumber": 0,
+          "score": 0
+        },
+        {
+          "id": "B2",
+          "isSeed": false,
+          "bracketNumber": 1,
+          "roundNumber": 0,
+          "score": 0
+        }
+      ],
+      [
+        {
+          "id": "B3",
+          "isSeed": false,
+          "bracketNumber": 1,
+          "roundNumber": 1,
+          "score": 1
+        },
+        {
+          "id": "B4",
+          "isSeed": false,
+          "bracketNumber": 1,
+          "roundNumber": 1,
+          "score": 1
+        },
+        {
+          "id": "B5",
+          "isSeed": false,
+          "bracketNumber": 1,
+          "roundNumber": 1,
+          "score": 1
+        },
+        {
+          "id": "B6",
+          "isSeed": false,
+          "bracketNumber": 1,
+          "roundNumber": 1,
+          "score": 1
+        },
+        {
+          "id": "B7",
+          "isSeed": false,
+          "bracketNumber": 1,
+          "roundNumber": 1,
+          "score": 1
+        }
+      ],
+      [
+        {
+          "id": "B8",
+          "isSeed": false,
+          "bracketNumber": 1,
+          "roundNumber": 2,
+          "score": 2
+        },
+        {
+          "id": "B9",
+          "isSeed": false,
+          "bracketNumber": 1,
+          "roundNumber": 2,
+          "score": 2
+        },
+        {
+          "id": "B10",
+          "isSeed": false,
+          "bracketNumber": 1,
+          "roundNumber": 2,
+          "score": 2
+        },
+        {
+          "id": "B11",
+          "isSeed": false,
+          "bracketNumber": 1,
+          "roundNumber": 2,
+          "score": 2
+        },
+        {
+          "id": "B12",
+          "isSeed": false,
+          "bracketNumber": 1,
+          "roundNumber": 2,
+          "score": 2
+        }
+      ],
+      [
+        {
+          "id": "B13",
+          "isSeed": false,
+          "bracketNumber": 1,
+          "roundNumber": 3,
+          "score": 3
+        },
+        {
+          "id": "B14",
+          "isSeed": false,
+          "bracketNumber": 1,
+          "roundNumber": 3,
+          "score": 3
+        },
+        {
+          "id": "B15",
+          "isSeed": false,
+          "bracketNumber": 1,
+          "roundNumber": 3,
+          "score": 3
+        }
+      ],
+      [
+        {
+          "id": "B16",
+          "isSeed": false,
+          "bracketNumber": 1,
+          "roundNumber": 4,
+          "score": 4
+        },
+        {
+          "id": "B17",
+          "isSeed": false,
+          "bracketNumber": 1,
+          "roundNumber": 4,
+          "score": 4
+        }
+      ],
+      [
+        {
+          "id": "B18",
+          "isSeed": false,
+          "bracketNumber": 1,
+          "roundNumber": 5,
+          "score": 5
+        }
+      ]
+    ]
+  ]
+}

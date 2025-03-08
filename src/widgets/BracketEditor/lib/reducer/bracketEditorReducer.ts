@@ -14,7 +14,7 @@ export const DEFAULT_BRACKET_EDITOR_STATE: BracketEditorState = {
   availableGames: [],
   brackets: [],
   connections: {},
-  editing: true,
+  editing: false,
   lookingForWinnerConnection: null,
   lookingForLoserConnection: null,
   schedule: {},
@@ -137,7 +137,7 @@ export function bracketEditorReducer(
       }
 
       const newState = {
-        ...JSON.parse(JSON.stringify(DEFAULT_BRACKET_EDITOR_STATE)),
+        ...state,
         connections: newConnections,
         brackets,
         schedule,

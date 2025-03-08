@@ -10,4 +10,4 @@ export type {
   BracketRow,
 } from "./lib";
 export { calculateRowSpanForGame } from "./lib";
-export { Bracket } from "./ui";
+export { Bracket, Brackets } from "./ui";

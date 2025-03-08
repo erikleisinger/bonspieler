@@ -10,9 +10,8 @@ import {
   generateTournament,
   scheduleTournament,
 } from "@erikleisinger/bracket-generator";
-import { Bracket, type BracketRows } from "@/entities/Bracket";
+import { Brackets, type BracketRows } from "@/entities/Bracket";
 import { BracketEditingContext } from "@/shared/EditableBracket/BracketEditingContext";
-import { BracketContext } from "@/shared/Bracket/BracketContext";
 import {
   BracketEditorActionName,
   bracketEditorReducer,
@@ -61,10 +60,10 @@ export default function BracketEditor({ className }: { className?: string }) {
    * Overall bracket state
    */
 
-  const [bracketState, dispatch] = useReducer(
-    bracketEditorReducer,
-    JSON.parse(JSON.stringify(DEFAULT_BRACKET_EDITOR_STATE))
-  );
+  const [bracketState, dispatch] = useReducer(bracketEditorReducer, {
+    ...JSON.parse(JSON.stringify(DEFAULT_BRACKET_EDITOR_STATE)),
+    editing: true,
+  });
 
   function renderBrackets() {
     const tournament = generateTournament(teamCount, numWinners);
@@ -223,26 +222,13 @@ export default function BracketEditor({ className }: { className?: string }) {
         />
 
         {hasConnections && (
-          <BracketContext.Provider
-            value={{
-              schedule: bracketState.schedule,
-              connections: bracketState.connections,
-            }}
-          >
-            <div className="flex flex-col gap-16 relative  w-fit">
-              {bracketState.brackets.map((rounds, bracketIndex) => {
-                return (
-                  <div className="m-8" key={"bracket-" + bracketIndex}>
-                    <Bracket
-                      rounds={rounds}
-                      setRows={updateRows}
-                      rows={bracketState.rows}
-                    />
-                  </div>
-                );
-              })}
-            </div>
-          </BracketContext.Provider>
+          <Brackets
+            brackets={bracketState.brackets}
+            schedule={bracketState.schedule}
+            connections={bracketState.connections}
+            updateRows={updateRows}
+            rows={bracketState.rows}
+          />
         )}
       </div>
     </BracketEditingContext.Provider>

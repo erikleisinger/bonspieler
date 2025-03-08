@@ -34,7 +34,7 @@ export default function BracketGame({
 
   const isAvailable = useMemo(() => {
     return availableGames.includes(game.id);
-  }, [availableGames]);
+  }, [availableGames, game.id]);
   function onClick() {
     if (!isAvailable) return;
     if (lookingForWinnerConnection?.gameId) addWinnerConnection(game.id);
@@ -83,7 +83,7 @@ export default function BracketGame({
             connections.teams.map((team, index) => {
               return (
                 <div
-                  className="flex justify-between bg-black/5"
+                  className="flex justify-between bg-black/5 px-2"
                   key={"team-" + index}
                 >
                   <BracketGameTeam team={team} />

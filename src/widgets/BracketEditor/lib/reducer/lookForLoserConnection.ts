@@ -25,7 +25,7 @@ export function lookForLoserConnection(
     gameId: string;
     bracketNumber: number;
   }
-): Partial<BracketEditorState> {
+): BracketEditorState {
   if (!gameId) {
     console.warn("gameId is required for lookForLoserConnection action");
     return state;
