@@ -1,5 +1,4 @@
 "use client";
-import type { BracketGame } from "@/entities/Bracket";
 import BracketEditorOptions from "./BracketEditorOptions";
 import { useState, useReducer } from "react";
 import {
@@ -11,10 +10,14 @@ import {
   generateTournament,
   scheduleTournament,
 } from "@erikleisinger/bracket-generator";
-import { Bracket } from "@/entities/Bracket";
+import { Bracket, type BracketRows } from "@/entities/Bracket";
 import { BracketEditingContext } from "@/shared/EditableBracket/BracketEditingContext";
 import { BracketContext } from "@/shared/Bracket/BracketContext";
-import { BracketEditorActionName, bracketEditorReducer } from "../lib";
+import {
+  BracketEditorActionName,
+  bracketEditorReducer,
+  DEFAULT_BRACKET_EDITOR_STATE,
+} from "../lib";
 
 export default function BracketEditor({ className }: { className?: string }) {
   /**
@@ -58,15 +61,10 @@ export default function BracketEditor({ className }: { className?: string }) {
    * Overall bracket state
    */
 
-  const [brackets, setBrackets] = useState<BracketGame[][][]>([]);
-
-  const [schedule, setSchedule] = useState({});
-
-  const [bracketState, dispatch] = useReducer(bracketEditorReducer, {
-    connections: {},
-    editing: true,
-    lookingForWinnerConnection: null,
-  });
+  const [bracketState, dispatch] = useReducer(
+    bracketEditorReducer,
+    JSON.parse(JSON.stringify(DEFAULT_BRACKET_EDITOR_STATE))
+  );
 
   function renderBrackets() {
     const tournament = generateTournament(teamCount, numWinners);
@@ -75,12 +73,12 @@ export default function BracketEditor({ className }: { className?: string }) {
       initialConnections,
       8
     );
-    setSchedule(tournamentSchedule);
-    setBrackets(brackets);
     dispatch({
-      type: BracketEditorActionName.SetInitialConnections,
+      type: BracketEditorActionName.SetInitialState,
       args: {
         connections: initialConnections,
+        brackets: [...brackets],
+        schedule: tournamentSchedule,
       },
     });
   }
@@ -129,13 +127,24 @@ export default function BracketEditor({ className }: { className?: string }) {
     document.removeEventListener("click", cancelLookingListener);
   }
 
+  function updateRows(rowsToAdd: BracketRows) {
+    dispatch({
+      type: BracketEditorActionName.SetRows,
+      args: {
+        rows: rowsToAdd,
+      },
+    });
+  }
+
   return (
     <BracketEditingContext.Provider
       value={{
+        availableGames: bracketState.availableGames,
         editing: bracketState.editing,
         lookingForWinnerConnection: bracketState.lookingForWinnerConnection,
         lookForWinnerConnection: (
           gameId: string,
+          gameIndex: string | number,
           bracketNumber: string | number,
           roundNumber: string | number
         ) => {
@@ -144,6 +153,8 @@ export default function BracketEditor({ className }: { className?: string }) {
             type: BracketEditorActionName.LookForWinnerConnection,
             args: {
               gameId,
+              gameIndex:
+                typeof gameIndex === "string" ? parseInt(gameIndex) : gameIndex,
               bracketNumber:
                 typeof bracketNumber === "string"
                   ? parseInt(bracketNumber)
@@ -172,13 +183,20 @@ export default function BracketEditor({ className }: { className?: string }) {
 
         {hasConnections && (
           <BracketContext.Provider
-            value={{ schedule, connections: bracketState.connections }}
+            value={{
+              schedule: bracketState.schedule,
+              connections: bracketState.connections,
+            }}
           >
             <div className="flex flex-col gap-16 relative  w-fit">
-              {brackets.map((rounds, bracketIndex) => {
+              {bracketState.brackets.map((rounds, bracketIndex) => {
                 return (
                   <div className="m-8" key={"bracket-" + bracketIndex}>
-                    <Bracket rounds={rounds} />
+                    <Bracket
+                      rounds={rounds}
+                      setRows={updateRows}
+                      rows={bracketState.rows}
+                    />
                   </div>
                 );
               })}

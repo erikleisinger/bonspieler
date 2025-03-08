@@ -1,3 +1,4 @@
+import type { Nullable } from "@/types";
 export interface BracketConnectionSeedTeamId {
   teamId: string;
   gameId: null;
@@ -32,8 +33,8 @@ export type BracketConnectionTeam =
   | BracketConnectionEmptyTeam;
 
 export interface BracketConnection {
-  winnerTo: string | null;
-  loserTo: string | null;
+  winnerTo: Nullable<string>;
+  loserTo: Nullable<string>;
   teams: BracketConnectionTeam[];
 }
 

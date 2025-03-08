@@ -6,5 +6,8 @@ export type {
   BracketConnectionSeedTeam,
   BracketConnectionSeedTeamId,
   BracketGame,
+  BracketRows,
+  BracketRow,
 } from "./lib";
+export { calculateRowSpanForGame } from "./lib";
 export { Bracket } from "./ui";

@@ -9,11 +9,15 @@ import { Button } from "@/shared/ui/button";
 export default function BracketGame({
   game,
   connections,
+  gameIndex: gameIndex,
+  rowSpan,
 }: {
   game: BracketGame;
   connections: BracketConnection;
+  gameIndex: number;
 }) {
   const {
+    availableGames,
     editing,
     lookingForWinnerConnection,
     addWinnerConnection,
@@ -21,34 +25,14 @@ export default function BracketGame({
     lookForWinnerConnection,
   } = useContext(BracketEditingContext);
   const { schedule } = useContext(BracketContext);
+
   const drawNum = schedule[game.id] || "?";
 
   const hasWinner = connections.winnerTo;
 
   const isAvailable = useMemo(() => {
-    if (!lookingForWinnerConnection?.gameId) return false;
-    const teams = (connections?.teams || []).filter(
-      ({ gameId, teamId }) => !!gameId || !!teamId
-    );
-    if (teams?.length >= 2) return false;
-    if (lookingForWinnerConnection.bracketNumber !== game.bracketNumber)
-      return false;
-    if (lookingForWinnerConnection.roundNumber + 1 !== game.roundNumber)
-      return false;
-    return (
-      lookingForWinnerConnection?.gameId &&
-      game.id !== lookingForWinnerConnection.gameId
-    );
-  }, [
-    lookingForWinnerConnection?.bracketNumber,
-    lookingForWinnerConnection?.gameId,
-    lookingForWinnerConnection?.roundNumber,
-    game.roundNumber,
-    game.id,
-    game.bracketNumber,
-    connections.teams,
-  ]);
-
+    return availableGames.includes(game.id);
+  }, [availableGames]);
   function onClick() {
     if (!isAvailable || !lookingForWinnerConnection?.gameId) return;
     if (lookingForWinnerConnection?.gameId && isAvailable)
@@ -77,6 +61,7 @@ export default function BracketGame({
         <div className="flex justify-between">
           <div>Draw {drawNum}</div>
           <div className="flex">{game.id}</div>
+          <div>{rowSpan}</div>
         </div>
 
         {connections.teams &&
@@ -111,6 +96,7 @@ export default function BracketGame({
             onClick={() =>
               lookForWinnerConnection(
                 game.id,
+                gameIndex,
                 game.bracketNumber,
                 game.roundNumber
               )

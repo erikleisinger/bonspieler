@@ -1,22 +1,24 @@
 import { createContext } from "react";
+import type { Nullable } from "@/types";
 export const BracketEditingContext = createContext<{
+  availableGames: string[];
   editing: boolean;
-  lookingForWinnerConnection: {
+  lookingForWinnerConnection: Nullable<{
     gameId: string;
+    gameIndex: number;
     bracketNumber: number;
     roundNumber: number;
-  } | null;
+  }>;
   removeWinnerConnection: (gameId: string) => void;
-  addWinnerConnection: (
-    originGameId: string,
-    destinationGameId: string
-  ) => void;
+  addWinnerConnection: (destinationGameId: string) => void;
   lookForWinnerConnection: (
     gameId: string,
+    gameIndex: number,
     bracketNumber: number,
     roundNumber: number
   ) => void;
 }>({
+  availableGames: [],
   editing: false,
   lookingForWinnerConnection: null,
   removeWinnerConnection: (gameId: string) => {

@@ -52,7 +52,7 @@ export default function Round({
         ...getRowDefinition(),
       }}
     >
-      {games.map((game: BracketGameType) => {
+      {games.map((game: BracketGameType, gameIndex: number) => {
         return (
           <div
             key={game.id}
@@ -62,7 +62,12 @@ export default function Round({
             }}
           >
             <div className="py-4 flex">
-              <BracketGame game={game} connections={connections[game.id]} />
+              <BracketGame
+                game={game}
+                connections={connections[game.id]}
+                gameIndex={gameIndex}
+                rowSpan={getRowSpanForGame(game).gridRow}
+              />
             </div>
           </div>
         );

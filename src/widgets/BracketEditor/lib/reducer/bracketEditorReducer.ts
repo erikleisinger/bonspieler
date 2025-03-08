@@ -1,19 +1,37 @@
-import type { BracketConnections } from "@/entities/Bracket";
-
+import type {
+  BracketConnections,
+  BracketGame,
+  BracketRows,
+} from "@/entities/Bracket";
+import type { Nullable } from "@/types";
+import { lookForWinnerConnection } from "./lookForWinnerConnection";
 import { removeWinnerConnection } from "./removeWinnerConnection";
 
+export const DEFAULT_BRACKET_EDITOR_STATE: BracketEditorState = {
+  availableGames: [],
+  brackets: [],
+  connections: {},
+  editing: true,
+  lookingForWinnerConnection: null,
+  schedule: {},
+  rows: {},
+};
+
 export enum BracketEditorActionName {
-  SetInitialConnections = "setInitialConnections",
+  SetInitialState = "setInitialState",
+  SetRows = "setRows",
   RemoveWinnerConnection = "removeWinnerConnection",
   LookForWinnerConnection = "lookForWinnerConnection",
   CancelLookForWinnerConnection = "cancelLookForWinnerConnection",
   AddWinnerConnection = "addWinnerConnection",
 }
 
-interface SetInitialConnectionsAction {
-  type: BracketEditorActionName.SetInitialConnections;
+interface SetInitialStateAction {
+  type: BracketEditorActionName.SetInitialState;
   args: {
     connections: BracketConnections;
+    brackets: BracketGame[][][];
+    schedule: { [gameId: string]: number };
   };
 }
 
@@ -28,6 +46,7 @@ interface LookForWinnerConnectionAction {
   type: BracketEditorActionName.LookForWinnerConnection;
   args: {
     gameId: string;
+    gameIndex: number;
     bracketNumber: number;
     roundNumber: number;
   };
@@ -45,37 +64,53 @@ interface AddWinnerConnectionAction {
   };
 }
 
+interface SetRowsAction {
+  type: BracketEditorActionName.SetRows;
+  args: {
+    rows: BracketRows;
+  };
+}
+
 type BracketEditorAction =
-  | SetInitialConnectionsAction
+  | SetInitialStateAction
   | RemoveWinnerConnectionAction
   | LookForWinnerConnectionAction
   | CancelLookForWinnerConnectionAction
-  | AddWinnerConnectionAction;
+  | AddWinnerConnectionAction
+  | SetRowsAction;
 
+export interface BracketEditorState {
+  availableGames: string[];
+  brackets: BracketGame[][][];
+  connections: BracketConnections;
+  editing: boolean;
+  lookingForWinnerConnection: Nullable<{
+    gameId: string;
+    bracketNumber: number;
+    roundNumber: number;
+  }>;
+  rows: BracketRows;
+  schedule: { [gameId: string]: number };
+}
 export function bracketEditorReducer(
-  state: {
-    connections: BracketConnections;
-    editing: boolean;
-    lookingForWinnerConnection: {
-      gameId: string;
-      bracketNumber: number;
-      roundNumber: number;
-    } | null;
-  },
+  state: BracketEditorState,
   action: BracketEditorAction
 ) {
   switch (action.type) {
-    case BracketEditorActionName.SetInitialConnections: {
-      const { connections: newConnections } = action.args;
+    case BracketEditorActionName.SetInitialState: {
+      const { connections: newConnections, brackets, schedule } = action.args;
       if (!newConnections) {
         console.warn(
           "connections is required for removeWinnerConnection action"
         );
         return state;
       }
+
       const newState = {
-        ...state,
+        ...JSON.parse(JSON.stringify(DEFAULT_BRACKET_EDITOR_STATE)),
         connections: newConnections,
+        brackets,
+        schedule,
       };
       return newState;
     }
@@ -85,41 +120,16 @@ export function bracketEditorReducer(
         console.warn("gameId is required for removeWinnerConnection action");
         return state;
       }
-      const { connections } = state;
-      const newConnections = removeWinnerConnection(gameId, connections);
-      const newState = {
-        ...state,
-        connections: newConnections,
-      };
-      return newState;
+      return removeWinnerConnection(state, { gameId });
     }
     case BracketEditorActionName.LookForWinnerConnection: {
-      const { gameId, bracketNumber, roundNumber } = action.args;
-      if (!gameId) {
-        console.warn("gameId is required for lookForWinnerConnection action");
-        return state;
-      }
-
-      if (typeof bracketNumber !== "number") {
-        console.warn(
-          "bracketNumber is required for lookForWinnerConnection action"
-        );
-        return state;
-      }
-      const newState = {
-        ...state,
-        lookingForWinnerConnection: {
-          gameId,
-          bracketNumber,
-          roundNumber,
-        },
-      };
-      return newState;
+      return lookForWinnerConnection(state, action.args);
     }
     case BracketEditorActionName.CancelLookForWinnerConnection: {
       const newState = {
         ...state,
         lookingForWinnerConnection: null,
+        availableGames: [],
       };
       return newState;
     }
@@ -182,6 +192,22 @@ export function bracketEditorReducer(
       const newState = {
         ...state,
         connections: newConnections,
+      };
+      return newState;
+    }
+    case BracketEditorActionName.SetRows: {
+      const { rows } = action.args;
+      if (!rows) {
+        console.warn("rows is required for setRows action");
+        return state;
+      }
+      const newRows = {
+        ...state.rows,
+        ...rows,
+      };
+      const newState = {
+        ...state,
+        rows: newRows,
       };
       return newState;
     }

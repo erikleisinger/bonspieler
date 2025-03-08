@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "baseUrl": "./src/",
     "target": "ES2017",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
@@ -19,7 +20,8 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./*"],
+      "@/types": ["./shared/types/index.ts"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "test/generateFirstBracketGames.js", "test/closestInSequence.js", "test/findPower.js", "test/utils.js"],
