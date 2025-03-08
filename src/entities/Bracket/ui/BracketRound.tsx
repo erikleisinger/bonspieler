@@ -4,7 +4,6 @@ import { use, useContext } from "react";
 import { BracketEditingContext } from "@/shared/EditableBracket/BracketEditingContext";
 import { BracketContext } from "@/shared/Bracket/BracketContext";
 import { GAME_HEIGHT } from "../lib/constants/game";
-import { Button } from "@/shared/ui/button";
 
 export default function Round({
   games,
@@ -66,7 +65,6 @@ export default function Round({
                 game={game}
                 connections={connections[game.id]}
                 gameIndex={gameIndex}
-                rowSpan={getRowSpanForGame(game).gridRow}
               />
             </div>
           </div>

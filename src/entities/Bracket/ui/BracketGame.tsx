@@ -81,15 +81,7 @@ export default function BracketGame({
           {connections.teams &&
             connections.teams.length &&
             connections.teams.map((team, index) => {
-              return (
-                <div
-                  className="flex justify-between bg-black/5 px-2"
-                  key={"team-" + index}
-                >
-                  <BracketGameTeam team={team} />
-                  <div className="text-gray-300">0</div>
-                </div>
-              );
+              return <BracketGameTeam team={team} key={"team-" + index} />;
             })}
         </div>
         {lookingForWinnerConnection &&

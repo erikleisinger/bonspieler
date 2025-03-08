@@ -27,6 +27,16 @@ export default function Brackets({
     });
   }
 
+  function scrollToGame(gameId: string) {
+    const gameEl = document.getElementById("game-" + gameId);
+    if (!gameEl) return;
+    gameEl.scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+      inline: "center",
+    });
+  }
+
   function goBracket(inc: number, bracketIndex: number) {
     const newBracketIndex = bracketIndex + inc;
     if (newBracketIndex < 0 || newBracketIndex >= brackets.length) return;
@@ -38,6 +48,7 @@ export default function Brackets({
         schedule,
         connections,
         scrollToBracket,
+        scrollToGame,
       }}
     >
       <div className="flex flex-col gap-16 relative  w-fit">
