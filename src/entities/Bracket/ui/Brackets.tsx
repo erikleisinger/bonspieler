@@ -44,7 +44,7 @@ export default function Brackets({
         {brackets.map((rounds, bracketIndex) => {
           return (
             <div key={"bracket-" + bracketIndex}>
-              <div className="sticky top-0 bg-black/10 z-10 p-4 text-3xl font-semibold text-white flex gap-2 ">
+              <div className="sticky w-screen left-0 top-0 bg-black/10 z-10 p-4 text-3xl font-semibold text-white flex gap-2 ">
                 <Button
                   size="icon"
                   variant="secondary"

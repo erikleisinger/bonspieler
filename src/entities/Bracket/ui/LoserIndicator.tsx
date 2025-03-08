@@ -9,13 +9,18 @@ export default function LoserIndicator({
   loserTo: string | null;
   game: BracketGame;
 }) {
-  const { editing, lookingForLoserConnection, lookForLoserConnection } =
-    useContext(BracketEditingContext);
+  const {
+    editing,
+    lookingForLoserConnection,
+    lookingForWinnerConnection,
+    lookForLoserConnection,
+  } = useContext(BracketEditingContext);
 
   const baseButtonStyles =
     "text-white px-1 rounded-sm -mt-[2px] bracket-game__loser-indicator bg-red-500/50";
 
-  const isChangable = editing && !lookingForLoserConnection;
+  const isChangable =
+    editing && !lookingForLoserConnection && !lookingForWinnerConnection;
   return (
     <div className={isChangable ? "group/loser" : ""}>
       <div className={baseButtonStyles + " group-hover/loser:hidden"}>

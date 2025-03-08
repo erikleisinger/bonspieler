@@ -5,7 +5,7 @@ import { BracketContext } from "@/shared/Bracket/BracketContext";
 import BracketGameTeam from "./BracketGameTeam";
 import LoserIndicator from "./LoserIndicator";
 import type { BracketConnection, BracketGame } from "../lib";
-
+import GameConnectionHypothesis from "./GameConnectionHypothesis";
 import { Button } from "@/shared/ui/button";
 export default function BracketGame({
   game,
@@ -92,6 +92,12 @@ export default function BracketGame({
               );
             })}
         </div>
+        {lookingForWinnerConnection &&
+          lookingForWinnerConnection.gameId === game.id && (
+            <div className="absolute right-0 top-0 bottom-0  m-auto h-full ">
+              <GameConnectionHypothesis />
+            </div>
+          )}
       </div>
       {editing &&
         hasWinner &&
