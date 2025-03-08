@@ -26,7 +26,7 @@ function getOriginConnectionsForGame(
   const { teams = [] } = connection;
   if (!teams.length) return [];
   const winnerConnections = teams.filter(
-    ({ gameId, teamId }) => !!gameId && !teamId
+    ({ gameId, teamId }) => !!gameId || !!teamId
   ) as BracketConnectionRegularTeam[];
 
   return winnerConnections;
