@@ -11,6 +11,7 @@ import {
   scheduleTournament,
 } from "@erikleisinger/bracket-generator";
 import { Brackets, type BracketRows } from "@/entities/Bracket";
+import { BracketViewer } from "@/widgets/BracketViewer";
 import { BracketEditingContext } from "@/shared/EditableBracket/BracketEditingContext";
 import {
   BracketEditorActionName,
@@ -222,13 +223,15 @@ export default function BracketEditor({ className }: { className?: string }) {
         />
 
         {hasConnections && (
-          <Brackets
-            brackets={bracketState.brackets}
-            schedule={bracketState.schedule}
-            connections={bracketState.connections}
-            updateRows={updateRows}
-            rows={bracketState.rows}
-          />
+          <div className="mt-8">
+            <Brackets
+              brackets={bracketState.brackets}
+              schedule={bracketState.schedule}
+              connections={bracketState.connections}
+              updateRows={updateRows}
+              rows={bracketState.rows}
+            />
+          </div>
         )}
       </div>
     </BracketEditingContext.Provider>
