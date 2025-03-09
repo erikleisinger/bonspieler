@@ -1,6 +1,7 @@
 "use client";
 import BracketEditorOptions from "./BracketEditorOptions";
-import { useState, useReducer } from "react";
+import BracketEditorOptionsMenu from "./BracketEditorOptionsMenu";
+import { useState, useReducer, useEffect } from "react";
 import {
   getNewTeamCount,
   getNewWinnerCount,
@@ -11,13 +12,15 @@ import {
   scheduleTournament,
 } from "@erikleisinger/bracket-generator";
 import { Brackets, type BracketRows } from "@/entities/Bracket";
-import { BracketViewer } from "@/widgets/BracketViewer";
+
 import { BracketEditingContext } from "@/shared/EditableBracket/BracketEditingContext";
 import {
   BracketEditorActionName,
   bracketEditorReducer,
   DEFAULT_BRACKET_EDITOR_STATE,
 } from "../lib";
+import GameEditOptions from "./GameEditOptions";
+import { scrollToGame } from "@/entities/Bracket/lib/scrollToGame";
 
 export default function BracketEditor({ className }: { className?: string }) {
   /**
@@ -123,10 +126,20 @@ export default function BracketEditor({ className }: { className?: string }) {
     });
   }
 
+  function handleRemoveLoserConnection(gameId: string) {
+    dispatch({
+      type: BracketEditorActionName.RemoveLoserConnection,
+      args: {
+        gameId,
+      },
+    });
+  }
+
   const hasConnections = Object.keys(bracketState.connections).length > 0;
 
   function cancelLookingListener(e) {
     const isBracketGame = Array.from(e.composedPath()).some((el) => {
+      if (el?.id === "BRACKET_GAME_INFO_CONTAINER") return false;
       if (!el?.classList) return false;
       return el.classList.contains("BRACKET_GAME");
     });
@@ -155,6 +168,13 @@ export default function BracketEditor({ className }: { className?: string }) {
       },
     });
   }
+
+  useEffect(() => {
+    if (!bracketState?.lookingForLoserConnection) return;
+    if (!bracketState?.availableGames?.length) return;
+    const [firstAvailableGame] = bracketState.availableGames;
+    scrollToGame(firstAvailableGame);
+  }, [bracketState?.availableGames?.length]);
 
   return (
     <BracketEditingContext.Provider
@@ -194,7 +214,7 @@ export default function BracketEditor({ className }: { className?: string }) {
           gameId: string;
           bracketNumber: string | number;
         }) => {
-          document.addEventListener("click", cancelLookingListener);
+          // document.addEventListener("click", cancelLookingListener);
           dispatch({
             type: BracketEditorActionName.LookForLoserConnection,
             args: {
@@ -209,9 +229,10 @@ export default function BracketEditor({ className }: { className?: string }) {
         addWinnerConnection: handleAddWinnerConnection,
         removeWinnerConnection: handleRemoveWinnerConnection,
         addLoserConnection: handleAddLoserConnection,
+        removeLoserConnection: handleRemoveLoserConnection,
       }}
     >
-      <div className={className}>
+      <div className="hidden md:block">
         <BracketEditorOptions
           teamCount={teamCount}
           updateTeamCount={updateTeamCount}
@@ -221,19 +242,30 @@ export default function BracketEditor({ className }: { className?: string }) {
           numBrackets={numBrackets}
           updateNumBrackets={updateNumBrackets}
         />
-
-        {hasConnections && (
-          <div className="mt-8">
-            <Brackets
-              brackets={bracketState.brackets}
-              schedule={bracketState.schedule}
-              connections={bracketState.connections}
-              updateRows={updateRows}
-              rows={bracketState.rows}
-            />
-          </div>
-        )}
       </div>
+      <div className="md:hidden block fixed bottom-4 right-4 z-50">
+        <BracketEditorOptionsMenu
+          teamCount={teamCount}
+          updateTeamCount={updateTeamCount}
+          numWinners={numWinners}
+          updateNumWinners={updateNumWinners}
+          renderBrackets={renderBrackets}
+          numBrackets={numBrackets}
+          updateNumBrackets={updateNumBrackets}
+        />
+      </div>
+
+      {hasConnections && (
+        <Brackets
+          brackets={bracketState.brackets}
+          schedule={bracketState.schedule}
+          connections={bracketState.connections}
+          updateRows={updateRows}
+          rows={bracketState.rows}
+          persistSelection={!!bracketState.lookingForLoserConnection}
+          infoChildren={<GameEditOptions />}
+        />
+      )}
     </BracketEditingContext.Provider>
   );
 }

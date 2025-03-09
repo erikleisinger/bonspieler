@@ -9,6 +9,7 @@ import { lookForLoserConnection } from "./lookForLoserConnection";
 import { removeWinnerConnection } from "./removeWinnerConnection";
 import { addWinnerConnection } from "./addWinnerConnection";
 import { addLoserConnection } from "./addLoserConnection";
+import { removeLoserConnection } from "./removeLoserConnection";
 
 export const DEFAULT_BRACKET_EDITOR_STATE: BracketEditorState = {
   availableGames: [],
@@ -31,6 +32,7 @@ export enum BracketEditorActionName {
   AddWinnerConnection = "addWinnerConnection",
   LookForLoserConnection = "lookForLoserConnection",
   AddLoserConnection = "addLoserConnection",
+  RemoveLoserConnection = "removeLoserConnection",
 }
 
 interface SetInitialStateAction {
@@ -96,6 +98,12 @@ interface AddLoserConnectionAction {
     destinationGameId: string;
   };
 }
+interface RemoveLoserConnectionAction {
+  type: BracketEditorActionName.RemoveLoserConnection;
+  args: {
+    gameId: string;
+  };
+}
 
 type BracketEditorAction =
   | SetInitialStateAction
@@ -106,7 +114,8 @@ type BracketEditorAction =
   | SetRowsAction
   | LookForLoserConnectionAction
   | CancelLookForLoserConnectionAction
-  | AddLoserConnectionAction;
+  | AddLoserConnectionAction
+  | RemoveLoserConnectionAction;
 
 export interface BracketEditorState {
   availableGames: string[];
@@ -195,6 +204,10 @@ export function bracketEditorReducer(
     }
     case BracketEditorActionName.AddLoserConnection: {
       return addLoserConnection(state, action.args);
+    }
+    case BracketEditorActionName.RemoveLoserConnection: {
+      const { gameId } = action.args;
+      return removeLoserConnection(state, gameId);
     }
     default: {
       return state;

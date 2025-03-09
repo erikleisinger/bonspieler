@@ -7,18 +7,30 @@ import LoserIndicator from "./LoserIndicator";
 import type { BracketConnection, BracketGame } from "../lib";
 import GameConnectionHypothesis from "./GameConnectionHypothesis";
 import { Button } from "@/shared/ui/button";
+
 export default function BracketGame({
   game,
   connections,
-  gameIndex: gameIndex,
+  gameIndex,
+  editing,
+  elementId,
+  selectable,
+  gridItem = true,
+  className = "",
+  onTeamClick,
 }: {
   game: BracketGame;
   connections: BracketConnection;
-  gameIndex: number;
+  gameIndex?: number;
+  editing?: boolean;
+  elementId?: string;
+  selectable?: boolean;
+  gridItem?: boolean;
+  className?: string;
+  onTeamClick?: (gameId: string) => void;
 }) {
   const {
     availableGames,
-    editing,
     lookingForWinnerConnection,
     lookingForLoserConnection,
     addLoserConnection,
@@ -26,24 +38,35 @@ export default function BracketGame({
     removeWinnerConnection,
     lookForWinnerConnection,
   } = useContext(BracketEditingContext);
-  const { schedule } = useContext(BracketContext);
+  const { selectedGame, selectGame, schedule } = useContext(BracketContext);
 
   const drawNum = schedule[game.id] || "?";
 
   const hasWinner = connections.winnerTo;
+  const isSelected = selectable && selectedGame?.id === game.id;
 
   const isAvailable = useMemo(() => {
     return availableGames.includes(game.id);
   }, [availableGames, game.id]);
-  function onClick() {
-    if (!isAvailable) return;
-    if (lookingForWinnerConnection?.gameId) addWinnerConnection(game.id);
-    // make add loser connection function
-    if (lookingForLoserConnection) addLoserConnection(game.id);
+  function onClick(e) {
+    if (lookingForWinnerConnection?.gameId) {
+      if (!isAvailable) return;
+      addWinnerConnection(game.id);
+    } else if (lookingForLoserConnection) {
+      if (!isAvailable) return;
+      addLoserConnection(game.id);
+      e.stopPropagation();
+    } else {
+      selectGame(game);
+    }
   }
 
   function getClassName() {
-    const base = ["BRACKET_GAME flex group game__container--outer"];
+    const base = [
+      "BRACKET_GAME flex group game__container--outer ",
+      className,
+      " ",
+    ];
     if (lookingForWinnerConnection && isAvailable) {
       base.push("available");
     } else if (lookingForWinnerConnection) {
@@ -52,6 +75,8 @@ export default function BracketGame({
       base.push("available");
     } else if (lookingForLoserConnection) {
       base.push("unavailable");
+    } else if (isSelected) {
+      base.push("selected");
     }
     return base.join(" ");
   }
@@ -60,15 +85,17 @@ export default function BracketGame({
     <div className={getClassName()}>
       <div
         className={
-          "w-[200px] flex flex-col text-white p-2 rounded-md game__container text-xs relative "
+          "min-w-[200px] flex flex-col text-foreground p-2 rounded-md game__container  relative bg-glass text-glass-foreground " +
+          (gridItem ? "max-w-[200px]" : "") +
+          className
         }
-        id={"game-" + game.id}
+        id={elementId}
         onClick={onClick}
       >
         <div className="flex justify-between">
           <div className="flex gap-2">
             <div className="flex">{game.id}</div>
-            <div className="text-gray-200">Draw {drawNum}</div>
+            <div className="text-muted">Draw {drawNum}</div>
           </div>
           <div>
             <LoserIndicator
@@ -81,7 +108,13 @@ export default function BracketGame({
           {connections.teams &&
             connections.teams.length &&
             connections.teams.map((team, index) => {
-              return <BracketGameTeam team={team} key={"team-" + index} />;
+              return (
+                <BracketGameTeam
+                  team={team}
+                  key={"team-" + index}
+                  onClick={onTeamClick}
+                />
+              );
             })}
         </div>
         {lookingForWinnerConnection &&

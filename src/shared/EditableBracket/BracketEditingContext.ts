@@ -26,6 +26,7 @@ export const BracketEditingContext = createContext<{
     bracketNumber: number;
   }) => void;
   addLoserConnection: (gameId: string) => void;
+  removeLoserConnection: (gameId: string) => void;
 }>({
   availableGames: [],
   editing: false,
@@ -50,4 +51,5 @@ export const BracketEditingContext = createContext<{
   ) => {},
   lookForLoserConnection: (gameId: string, bracketNumber: number) => {},
   addLoserConnection: (gameId: string) => {},
+  removeLoserConnection: (gameId: string) => {},
 });

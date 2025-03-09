@@ -2,6 +2,7 @@ import GameConnection from "./GameConnection";
 import type { BracketConnections, BracketGame } from "../lib";
 import type { GameConnectionPositionInfo } from "../lib/types/GameConnection";
 import { useState, useEffect, useRef, useCallback } from "react";
+import { getBracketGameElement } from "../lib/getBracketGameElement";
 export default function GameConnections({
   games,
   connections,
@@ -35,7 +36,7 @@ export default function GameConnections({
       if (!connectedGames?.length) return;
 
       const verticalPositions = connectedGames.map((game) => {
-        const gameEl = document.getElementById("game-" + game.gameId);
+        const gameEl = getBracketGameElement(game.gameId);
         const { top, height } = gameEl?.getBoundingClientRect();
         return top + height / 2;
       });
@@ -43,7 +44,7 @@ export default function GameConnections({
       const top = Math.min(...verticalPositions);
       const bottom = Math.max(...verticalPositions);
 
-      const oneEl = document.getElementById("game-" + connectedGames[0].gameId);
+      const oneEl = getBracketGameElement(connectedGames[0].gameId);
       const {
         left: originLeft,
         width: originWidth,
@@ -59,7 +60,7 @@ export default function GameConnections({
           ? originTop - containerTop + MARGIN
           : top - containerTop;
 
-      const thisEl = document.getElementById("game-" + game.id);
+      const thisEl = getBracketGameElement(game.id);
       const { left: thisLeft } = thisEl.getBoundingClientRect();
 
       const posWidth = thisLeft - (originLeft + originWidth);

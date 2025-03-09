@@ -32,7 +32,7 @@ export default function GameConnection({
     positionInfo && (
       <div
         id={"connection-" + gameId}
-        className="absolute grid grid-cols-[32px_1fr] items-center  border-white  group cursor-pointer "
+        className="absolute grid grid-cols-[32px_1fr] items-center  border-connection  group cursor-pointer "
         style={{
           left: position.x + "px",
           top: position.y + "px",
@@ -57,7 +57,7 @@ export default function GameConnection({
         </div>
 
         <div
-          className="h-[4px] bg-white  grow translate-x-[-4px]  cursor-pointer"
+          className="h-[4px] bg-connection  grow translate-x-[-4px]  cursor-pointer"
           style={{
             width: "calc(100% + 4px)",
           }}

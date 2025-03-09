@@ -1,45 +1,31 @@
 import { useContext } from "react";
+import { BracketContext } from "@/shared/Bracket/BracketContext";
 import { BracketEditingContext } from "@/shared/EditableBracket/BracketEditingContext";
-import { BracketGame } from "../lib";
 
 export default function LoserIndicator({
   loserTo,
-  game,
 }: {
   loserTo: string | null;
-  game: BracketGame;
 }) {
-  const {
-    editing,
-    lookingForLoserConnection,
-    lookingForWinnerConnection,
-    lookForLoserConnection,
-  } = useContext(BracketEditingContext);
+  const { scrollToGame } = useContext(BracketContext);
+  const { lookingForLoserConnection } = useContext(BracketEditingContext);
 
   const baseButtonStyles =
-    "text-white px-1 rounded-sm -mt-[2px] bracket-game__loser-indicator bg-red-500/50";
+    "text-destructive-foreground px-1 rounded-sm -mt-[2px] bracket-game__loser-indicator bg-red-500/50";
 
-  const isChangable =
-    editing && !lookingForLoserConnection && !lookingForWinnerConnection;
+  function onClick(e) {
+    if (!loserTo) return;
+    if (lookingForLoserConnection) return;
+    e.stopPropagation();
+    scrollToGame(loserTo, {
+      block: "center",
+      inline: "center",
+    });
+  }
+
   return (
-    <div className={isChangable ? "group/loser" : ""}>
-      <div className={baseButtonStyles + " group-hover/loser:hidden"}>
-        Loser {loserTo || "out"}
-      </div>
-      <div
-        className={
-          baseButtonStyles +
-          " hidden group-hover/loser:block hover:bg-red-500/70"
-        }
-        onClick={() =>
-          lookForLoserConnection({
-            gameId: game.id,
-            bracketNumber: game.bracketNumber,
-          })
-        }
-      >
-        Change
-      </div>
+    <div className={baseButtonStyles} onClick={onClick}>
+      Loser {loserTo || "out"}
     </div>
   );
 }

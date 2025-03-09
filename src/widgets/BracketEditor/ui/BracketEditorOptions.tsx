@@ -5,16 +5,8 @@ import {
 } from "../lib/constants";
 
 import { Input } from "@/shared/ui/input";
+import type { BracketEditorOptionsProps } from "../lib/types/BracketEditorOptions";
 
-interface BracketEditorOptionsProps {
-  teamCount: number;
-  updateTeamCount: (e: string) => void;
-  numWinners: number[];
-  updateNumWinners: (e: string, index: number) => void;
-  renderBrackets: () => void;
-  numBrackets: number;
-  updateNumBrackets: (e: string) => void;
-}
 export default function BracketEditorOptions({
   teamCount,
   updateTeamCount,
@@ -25,8 +17,8 @@ export default function BracketEditorOptions({
   updateNumBrackets,
 }: BracketEditorOptionsProps) {
   return (
-    <div>
-      <div className="flex flex-col">
+    <div className="flex flex-col gap-4">
+      <div>
         <label htmlFor="TEAM_COUNT_INPUT">Team Count</label>
         <Input
           className="text-black w-fit"
@@ -40,6 +32,7 @@ export default function BracketEditorOptions({
           max={MAX_TEAM_COUNT}
         />
       </div>
+
       <div className="flex flex-col">
         <label htmlFor="BRACKET_COUNT_INPUT"># Brackets</label>
         <Input
@@ -54,7 +47,7 @@ export default function BracketEditorOptions({
           max={MAX_BRACKET_COUNT}
         />
       </div>
-      <div className="p-4">
+      <div className="p-4 pt-0">
         {numBrackets &&
           new Array(numBrackets).fill(0).map((_, i) => (
             <div key={i}>
@@ -78,13 +71,14 @@ export default function BracketEditorOptions({
             </div>
           ))}
       </div>
-
-      <button
-        onClick={renderBrackets}
-        className="bg-slate-200 text-slate-900 rounded-md p-2"
-      >
-        render
-      </button>
+      <div>
+        <button
+          onClick={renderBrackets}
+          className="bg-slate-200 text-slate-900 rounded-md p-2"
+        >
+          render
+        </button>
+      </div>
     </div>
   );
 }

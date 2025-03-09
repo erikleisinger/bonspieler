@@ -1,0 +1,1 @@
+export const GAME_ELEMENT_ID_PREFIX = "BRACKET-GAME-";

@@ -1,9 +1,10 @@
 import BracketGame from "./BracketGame";
 import type { BracketGame as BracketGameType, BracketRows } from "../lib";
-import { use, useContext } from "react";
+import { useContext } from "react";
 import { BracketEditingContext } from "@/shared/EditableBracket/BracketEditingContext";
 import { BracketContext } from "@/shared/Bracket/BracketContext";
 import { GAME_HEIGHT } from "../lib/constants/game";
+import { GAME_ELEMENT_ID_PREFIX } from "../lib/constants/element-id";
 
 export default function Round({
   games,
@@ -60,11 +61,15 @@ export default function Round({
               ...getRowSpanForGame(game),
             }}
           >
-            <div className="py-4 flex">
+            <div className="py-4 flex text-xs">
               <BracketGame
                 game={game}
                 connections={connections[game.id]}
                 gameIndex={gameIndex}
+                editing={editing}
+                elementId={GAME_ELEMENT_ID_PREFIX + game.id}
+                selectable={true}
+                gridItem={true}
               />
             </div>
           </div>
