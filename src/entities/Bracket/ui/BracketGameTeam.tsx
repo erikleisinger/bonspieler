@@ -6,10 +6,12 @@ import { FaSeedling } from "react-icons/fa";
 export default function BracketGameTeam({
   className,
   onClick,
+  showSeed = true,
   team,
 }: {
   className?: string;
   onClick?: (gameId: string) => void;
+  showSeed: boolean;
   team: BracketConnectionTeam;
 }) {
   const { readableIdIndex, scrollToGame } = useContext(BracketContext);
@@ -49,8 +51,9 @@ export default function BracketGameTeam({
         className
       }
     >
-      {isSeed && <FaSeedling className="text-emerald-500" />}
+      {isSeed && showSeed && <FaSeedling className="text-emerald-500" />}
       {!isSeed && <div>{getTeamInfo(team)}</div>}
+      {isSeed && !showSeed && <div className="text-muted">Seed</div>}
 
       <div className="text-gray-300">0</div>
     </div>

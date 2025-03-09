@@ -1,12 +1,13 @@
 import { useContext, useMemo } from "react";
 import { BracketContext } from "@/shared/Bracket/BracketContext";
-import { BracketEditingContext } from "@/shared/EditableBracket/BracketEditingContext";
+
 import { Button } from "@/shared/ui/button";
 import { HiOutlinePlus } from "react-icons/hi";
-import { FaHeartBroken } from "react-icons/fa";
+import { FaHeartBroken, FaSeedling, FaEye } from "react-icons/fa";
 import { FaTrophy } from "react-icons/fa";
 import BracketGameTeam from "./BracketGameTeam";
 import SeedToggle from "./SeedToggle";
+
 export default function BracketGameInfo({
   children,
   onBack,
@@ -58,10 +59,26 @@ export default function BracketGameInfo({
             {gameConnection.teams.map((team, index) => {
               return (
                 <div className="flex" key={index}>
+                  {!team?.teamId && (
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => selectGame(team?.gameId)}
+                      className="-ml-2 mr-2"
+                      disabled={!team?.gameId}
+                    >
+                      <FaEye />
+                    </Button>
+                  )}
+                  {team?.teamId === "seed" && (
+                    <div className="flex justify-center items-center w-[36px] h-[36px] -ml-2 mr-2">
+                      <FaSeedling className="text-emerald-500" />
+                    </div>
+                  )}
                   <BracketGameTeam
                     team={team}
-                    className="w-full p-2 rounded-sm grow cursor-pointer"
-                    onClick={(gameId) => selectGame(gameId)}
+                    className=" p-2 rounded-sm grow cursor-pointer"
+                    showSeed={false}
                   />
                   <SeedToggle
                     className="ml-4"

@@ -96,7 +96,6 @@ export default function Round({
                   editing={editing}
                   elementId={GAME_ELEMENT_ID_PREFIX + game.id}
                   selectable={true}
-                  gridItem={true}
                 />
               </div>
             </div>

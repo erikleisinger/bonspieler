@@ -16,7 +16,6 @@ export default function BracketGame({
   elementId,
   selectable,
   className = "",
-  onTeamClick,
 }: {
   game: BracketGame;
   connections: BracketConnection;
@@ -25,7 +24,6 @@ export default function BracketGame({
   elementId?: string;
   selectable?: boolean;
   className?: string;
-  onTeamClick?: (gameId: string) => void;
 }) {
   const {
     availableGames,
@@ -111,7 +109,7 @@ export default function BracketGame({
                 <BracketGameTeam
                   team={team}
                   key={"team-" + index}
-                  onClick={onTeamClick}
+                  className="grow"
                 />
               );
             })}
