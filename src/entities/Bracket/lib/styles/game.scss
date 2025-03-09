@@ -7,6 +7,16 @@
   cursor: pointer;
   pointer-events: all;
   transition: all 0.1s;
+  min-width: 200px;
+  max-width: 200px;
+}
+$SMALL_SCREEN_GAME_WIDTH: calc(100vw - 70px);
+@media (max-width: 768px) {
+  .game__container {
+    min-width: 200px;
+    width: $SMALL_SCREEN_GAME_WIDTH;
+    max-width: $SMALL_SCREEN_GAME_WIDTH;
+  }
 }
 .game__container--outer {
   &:not(:has(.bracket-game__loser-indicator:hover)) {

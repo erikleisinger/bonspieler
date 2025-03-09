@@ -85,8 +85,7 @@ export default function BracketGame({
     <div className={getClassName()}>
       <div
         className={
-          "min-w-[200px] flex flex-col text-foreground p-2 rounded-md game__container  relative bg-glass text-glass-foreground " +
-          (gridItem ? "max-w-[200px]" : "") +
+          " flex flex-col text-foreground p-2 rounded-md game__container  relative bg-glass text-glass-foreground " +
           className
         }
         id={elementId}

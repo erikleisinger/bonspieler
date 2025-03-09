@@ -7,6 +7,8 @@ import { Button } from "@/shared/ui/button";
 import { useState } from "react";
 import BracketGameInfo from "./BracketGameInfo";
 import { scrollToGame } from "../lib/scrollToGame";
+import BracketNavigator from "./BracketNavigator";
+import { BRACKET_CONTAINER_ELEMENT_ID_PREFIX } from "../lib/constants/element-id";
 export default function Brackets({
   brackets,
   connections,
@@ -14,7 +16,6 @@ export default function Brackets({
   rows,
   schedule,
   updateRows,
-  persistSelection,
 }: {
   brackets: BracketGame[][][];
   connections: BracketConnections;
@@ -22,7 +23,6 @@ export default function Brackets({
   rows: BracketRows;
   schedule: { [gameId: string]: number };
   updateRows: (newRows: BracketRows) => void;
-  persistSelection?: boolean;
 }) {
   function scrollToBracket(bracketIndex: number) {
     const bracketHeaderEl = document.getElementById(
@@ -52,8 +52,6 @@ export default function Brackets({
       });
       if (isBracketInfoContainer) return;
     }
-    if (persistSelection) return;
-    const el = document.getElementById("BRACKET_GAME_INFO_CONTAINER");
     setSelectedGame(null);
 
     document.removeEventListener("click", cancelSelectedGame);
@@ -88,65 +86,58 @@ export default function Brackets({
         scrollToGame,
       }}
     >
-      <div className="flex flex-col gap-16 relative  w-fit">
-        <div
-          id="BRACKET_GAME_INFO_CONTAINER"
-          style={{
-            boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.37)",
-            backdropFilter: "blur(8.5px)",
-            WebkitBackdropFilter: "blur(8.5px)",
-            border: "1px solid rgba(255, 255, 255, 0.18)",
-          }}
-          className={
-            "fixed right-0 md:h-screen  z-50 transition-transform bg-glass w-screen md:w-[min(500px,45vw)] " +
-            (selectedGame && !lookingForLoserConnection
-              ? "translate-x-[0]"
-              : " translate-x-[100%]")
-          }
-        >
-          {selectedGame && (
-            <BracketGameInfo
-              onBack={(e) => cancelSelectedGame(e.nativeEvent, true)}
-            >
-              {infoChildren}
-            </BracketGameInfo>
-          )}
+      <div className="grid grid-rows-[auto_1fr] fixed inset-0">
+        <div>
+          <BracketNavigator
+            numBrackets={brackets?.length || 0}
+            goBracket={goBracket}
+          />
         </div>
-        {brackets.map((rounds, bracketIndex) => {
-          return (
-            <div key={"bracket-" + bracketIndex}>
-              <div className="sticky w-screen left-0 top-0 bg-black/10 z-10 p-4 text-3xl font-semibold text-foreground flex gap-2 ">
-                <Button
-                  size="icon"
-                  variant="secondary"
-                  onClick={() => goBracket(-1, bracketIndex)}
-                  disabled={bracketIndex === 0}
+        <div className="relative overflow-auto">
+          <div className="flex flex-col gap-16 absolute inset-0">
+            <div
+              id="BRACKET_GAME_INFO_CONTAINER"
+              style={{
+                boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.37)",
+                backdropFilter: "blur(8.5px)",
+                WebkitBackdropFilter: "blur(8.5px)",
+                border: "1px solid rgba(255, 255, 255, 0.18)",
+              }}
+              className={
+                "fixed right-0 md:h-screen bottom-0  z-50 transition-transform bg-glass w-screen md:w-[min(500px,45vw)] " +
+                (selectedGame && !lookingForLoserConnection
+                  ? "translate-x-[0]"
+                  : " translate-x-[100%]")
+              }
+            >
+              {selectedGame && (
+                <BracketGameInfo
+                  onBack={(e) => cancelSelectedGame(e.nativeEvent, true)}
                 >
-                  {"<"}
-                </Button>
-
-                <Button
-                  size="icon"
-                  variant="secondary"
-                  onClick={() => goBracket(+1, bracketIndex)}
-                  disabled={bracketIndex === brackets.length - 1}
-                >
-                  {">"}
-                </Button>
-
-                <div className="ml-2 text-glass-foreground">
-                  Bracket {bracketIndex + 1}
-                </div>
-              </div>
-              <div
-                className="p-8 pt-16 min-h-screen"
-                id={"BRACKET-CONTAINER-" + bracketIndex}
-              >
-                <Bracket rounds={rounds} setRows={updateRows} rows={rows} />
-              </div>
+                  {infoChildren}
+                </BracketGameInfo>
+              )}
             </div>
-          );
-        })}
+            {brackets.map((rounds, bracketIndex) => {
+              return (
+                <div key={"bracket-" + bracketIndex} className="w-fit">
+                  <div
+                    className="p-0 min-h-screen"
+                    id={BRACKET_CONTAINER_ELEMENT_ID_PREFIX + bracketIndex}
+                  >
+                    <Bracket rounds={rounds} setRows={updateRows} rows={rows} />
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+        {/* <div className="block md:hidden">
+          <BracketNavigator
+            numBrackets={brackets?.length || 0}
+            goBracket={goBracket}
+          />
+        </div> */}
       </div>
     </BracketContext.Provider>
   );

@@ -43,7 +43,7 @@ export default function Bracket({ rounds, rows, setRows }: BracketProps) {
   }, [calculateRows]);
 
   return (
-    <div className="flex gap-24 relative">
+    <div className="flex  relative">
       <GameConnections
         connections={connections}
         games={rounds.flat()}

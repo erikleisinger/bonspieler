@@ -46,35 +46,40 @@ export default function Round({
   }
 
   return (
-    <div
-      className={`relative  grid `}
-      style={{
-        ...getRowDefinition(),
-      }}
-    >
-      {games.map((game: BracketGameType, gameIndex: number) => {
-        return (
-          <div
-            key={game.id}
-            className="flex flex-col justify-center "
-            style={{
-              ...getRowSpanForGame(game),
-            }}
-          >
-            <div className="py-4 flex text-xs">
-              <BracketGame
-                game={game}
-                connections={connections[game.id]}
-                gameIndex={gameIndex}
-                editing={editing}
-                elementId={GAME_ELEMENT_ID_PREFIX + game.id}
-                selectable={true}
-                gridItem={true}
-              />
+    <div>
+      <header className="sticky  right-0 top-2 z-10 p-2 text-glass-foreground font-semibold bg-black/20 backdrop-blur-sm text-center mx-1 rounded-sm">
+        Round {roundIndex + 1}
+      </header>
+      <div
+        className={`relative  grid px-8 md:px-16 pt-4 md:pt-8 w-screen md:w-fit`}
+        style={{
+          ...getRowDefinition(),
+        }}
+      >
+        {games.map((game: BracketGameType, gameIndex: number) => {
+          return (
+            <div
+              key={game.id}
+              className="flex flex-col justify-center "
+              style={{
+                ...getRowSpanForGame(game),
+              }}
+            >
+              <div className="py-4 flex text-xs">
+                <BracketGame
+                  game={game}
+                  connections={connections[game.id]}
+                  gameIndex={gameIndex}
+                  editing={editing}
+                  elementId={GAME_ELEMENT_ID_PREFIX + game.id}
+                  selectable={true}
+                  gridItem={true}
+                />
+              </div>
             </div>
-          </div>
-        );
-      })}
+          );
+        })}
+      </div>
     </div>
   );
 }

@@ -21,7 +21,7 @@ export default function BracketGameInfo({
   }, [connections, selectedGame]);
   return (
     <div className="text-glass-foreground">
-      <div className="flex justify-between items-center p-4 px-6 bg-black/30">
+      <div className="flex justify-between  p-4 px-6 bg-black/30">
         <div>
           <div className="flex gap-2 items-end">
             <h2
@@ -64,9 +64,11 @@ export default function BracketGameInfo({
               onClick={() => selectGame(gameConnection.winnerTo)}
             >
               <FaTrophy className="text-amber-500 text-xl" />
-
-              <div className="text-xl font-semibold">
-                {gameConnection.winnerTo || "Advances"}
+              <div>
+                <div className="text-xs text-muted">Winner</div>
+                <div className="text-xl font-semibold ">
+                  {gameConnection.winnerTo || "Advances"}
+                </div>
               </div>
             </div>
             <div
@@ -74,9 +76,11 @@ export default function BracketGameInfo({
               onClick={() => selectGame(gameConnection.loserTo)}
             >
               <FaHeartBroken className="text-red-500 text-xl" />
-
-              <div className="text-xl font-semibold">
-                {gameConnection.loserTo || "Eliminated"}
+              <div>
+                <div className="text-xs text-muted">Loser</div>
+                <div className="text-xl font-semibold ">
+                  {gameConnection.loserTo || "Eliminated"}
+                </div>
               </div>
             </div>
           </div>
