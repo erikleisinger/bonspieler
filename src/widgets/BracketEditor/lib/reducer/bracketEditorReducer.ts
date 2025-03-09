@@ -12,6 +12,7 @@ import { addLoserConnection } from "./addLoserConnection";
 import { removeLoserConnection } from "./removeLoserConnection";
 import { addGameToRound } from "./addGameToRound";
 import { removeGameFromRound } from "./removeGameFromRound";
+import { toggleSeed } from "./toggleSeed";
 
 export const DEFAULT_BRACKET_EDITOR_STATE: BracketEditorState = {
   availableGames: [],
@@ -38,6 +39,7 @@ export enum BracketEditorActionName {
   RemoveLoserConnection = "removeLoserConnection",
   AddGameToRound = "addGameToRound",
   RemoveGameFromRound = "removeGameFromRound",
+  ToggleSeed = "toggleSeed",
 }
 
 interface SetInitialStateAction {
@@ -128,6 +130,14 @@ interface RemoveGameFromRoundAction {
     bracketNumber: number;
   };
 }
+interface ToggleSeed {
+  type: BracketEditorActionName.ToggleSeed;
+  args: {
+    gameId: string;
+    index: number;
+    teamId: string;
+  };
+}
 
 type BracketEditorAction =
   | SetInitialStateAction
@@ -141,7 +151,8 @@ type BracketEditorAction =
   | AddLoserConnectionAction
   | RemoveLoserConnectionAction
   | AddGameToRoundAction
-  | RemoveGameFromRoundAction;
+  | RemoveGameFromRoundAction
+  | ToggleSeed;
 
 export interface BracketEditorState {
   availableGames: string[];
@@ -259,6 +270,10 @@ export function bracketEditorReducer(
         bracketNumber,
         roundNumber,
       });
+    }
+    case BracketEditorActionName.ToggleSeed: {
+      const { gameId, index, teamId } = action.args;
+      return toggleSeed(state, { gameId, index, teamId });
     }
     default: {
       return state;

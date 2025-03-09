@@ -3,6 +3,7 @@ import { BracketContext } from "@/shared/Bracket/BracketContext";
 import { useContext, useEffect } from "react";
 import { Button } from "@/shared/ui/button";
 import { HiCog } from "react-icons/hi";
+
 export default function GameEditOptions() {
   function onKeyDown(e) {
     if (e.key === "Delete") handleRemoveGame(e);

@@ -1,10 +1,12 @@
 import { useContext, useMemo } from "react";
 import { BracketContext } from "@/shared/Bracket/BracketContext";
+import { BracketEditingContext } from "@/shared/EditableBracket/BracketEditingContext";
 import { Button } from "@/shared/ui/button";
 import { HiOutlinePlus } from "react-icons/hi";
 import { FaHeartBroken } from "react-icons/fa";
 import { FaTrophy } from "react-icons/fa";
 import BracketGameTeam from "./BracketGameTeam";
+import SeedToggle from "./SeedToggle";
 export default function BracketGameInfo({
   children,
   onBack,
@@ -55,12 +57,19 @@ export default function BracketGameInfo({
           <div className=" grid-rows-2 gap-2 hidden md:grid mb-4">
             {gameConnection.teams.map((team, index) => {
               return (
-                <BracketGameTeam
-                  key={index}
-                  team={team}
-                  className="w-full p-2 rounded-sm grow cursor-pointer"
-                  onClick={(gameId) => selectGame(gameId)}
-                />
+                <div className="flex" key={index}>
+                  <BracketGameTeam
+                    team={team}
+                    className="w-full p-2 rounded-sm grow cursor-pointer"
+                    onClick={(gameId) => selectGame(gameId)}
+                  />
+                  <SeedToggle
+                    className="ml-4"
+                    connection={team}
+                    game={selectedGame}
+                    index={index}
+                  />
+                </div>
               );
             })}
           </div>

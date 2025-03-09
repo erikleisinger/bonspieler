@@ -174,6 +174,25 @@ export default function BracketEditor({ className }: { className?: string }) {
     });
   }
 
+  function handleToggleSeed({
+    gameId,
+    index,
+    teamId,
+  }: {
+    gameId: string;
+    index: number;
+    teamId: string;
+  }) {
+    dispatch({
+      type: BracketEditorActionName.ToggleSeed,
+      args: {
+        gameId,
+        index,
+        teamId,
+      },
+    });
+  }
+
   const hasConnections = Object.keys(bracketState.connections).length > 0;
 
   function cancelLookingListener(e) {
@@ -270,6 +289,7 @@ export default function BracketEditor({ className }: { className?: string }) {
         removeLoserConnection: handleRemoveLoserConnection,
         addGameToRound: handleAddGameToRound,
         removeGameFromRound: handleRemoveGameFromRound,
+        toggleSeed: handleToggleSeed,
       }}
     >
       <div className="fixed bottom-4 left-4 md:bottom-8 md:left-8 z-50">

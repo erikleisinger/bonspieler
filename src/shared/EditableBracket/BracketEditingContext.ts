@@ -46,6 +46,15 @@ export const BracketEditingContext = createContext<{
     roundNumber: number;
     bracketNumber: number;
   }) => void;
+  toggleSeed: ({
+    gameId,
+    index,
+    teamId,
+  }: {
+    gameId: string;
+    index: number;
+    teamId: string;
+  }) => void;
 }>({
   availableGames: [],
   editing: false,
@@ -81,4 +90,13 @@ export const BracketEditingContext = createContext<{
     roundNumber: number,
     bracketNumber: number
   ) => {},
+  toggleSeed: ({
+    gameId,
+    index,
+    teamId,
+  }: {
+    gameId: string;
+    index: number;
+    teamId: string | null;
+  }) => {},
 });
