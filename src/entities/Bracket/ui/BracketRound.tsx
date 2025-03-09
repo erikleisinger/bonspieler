@@ -61,7 +61,7 @@ export default function Round({
   }
 
   return (
-    <div>
+    <div className="pointer-events-none">
       <header className="sticky  right-0 top-2 z-10 p-2 text-glass-foreground font-semibold bg-glass shadow-sm backdrop-blur-sm text-center mx-1 rounded-sm">
         Round {roundIndex + 1}
         <Button

@@ -18,7 +18,8 @@ export default function Bracket({
   rows,
   setRows,
 }: BracketProps) {
-  const { connections } = useContext(BracketContext);
+  const { connections, deselectGame } = useContext(BracketContext);
+
   const connectionsString = JSON.stringify(connections);
 
   const calculateRows = useCallback(() => {
@@ -50,6 +51,10 @@ export default function Bracket({
 
   return (
     <div className="flex  relative">
+      <div
+        className="absolute inset-0 "
+        onClick={(e) => deselectGame(e.nativeEvent)}
+      ></div>
       <GameConnections
         connections={connections}
         games={rounds.flat()}
