@@ -11,13 +11,15 @@ export default function BracketGameTeam({
   onClick?: (gameId: string) => void;
   team: BracketConnectionTeam;
 }) {
-  const { scrollToGame } = useContext(BracketContext);
+  const { readableIdIndex, scrollToGame } = useContext(BracketContext);
   const { lookingForLoserConnection } = useContext(BracketEditingContext);
   function getTeamInfo({ isWinner, gameId, teamId }: BracketConnectionTeam) {
     if (teamId) {
       return teamId;
     } else if (gameId) {
-      return `${isWinner ? "Winner of " : "Loser of "}${gameId}`;
+      return `${isWinner ? "Winner of " : "Loser of "}${
+        readableIdIndex[gameId]
+      }`;
     }
   }
 

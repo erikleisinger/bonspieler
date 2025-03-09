@@ -2,6 +2,7 @@ import { createContext } from "react";
 import type { BracketConnections, BracketGame } from "@/entities/Bracket/lib";
 export const BracketContext = createContext<{
   brackets: BracketGame[][][];
+  readableIdIndex: { [gameId: string]: string };
   selectedGame: BracketGame | null;
   schedule: { [gameId: string]: number };
   connections: BracketConnections;
@@ -17,6 +18,7 @@ export const BracketContext = createContext<{
   ) => void;
 }>({
   brackets: [],
+  readableIdIndex: {},
   selectedGame: null,
   schedule: {},
   connections: {},

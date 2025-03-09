@@ -13,6 +13,7 @@ export default function Brackets({
   brackets,
   connections,
   infoChildren,
+  readableIdIndex,
   rows,
   schedule,
   updateRows,
@@ -20,6 +21,7 @@ export default function Brackets({
   brackets: BracketGame[][][];
   connections: BracketConnections;
   infoChildren?: React.ReactNode;
+  readableIdIndex: { [gameId: string]: string };
   rows: BracketRows;
   schedule: { [gameId: string]: number };
   updateRows: (newRows: BracketRows) => void;
@@ -63,6 +65,7 @@ export default function Brackets({
     <BracketContext.Provider
       value={{
         brackets,
+        readableIdIndex,
         selectedGame,
         schedule,
         connections,
@@ -108,7 +111,7 @@ export default function Brackets({
                 <BracketGameInfo
                   onBack={(e) => cancelSelectedGame(e.nativeEvent, true)}
                 >
-                  {infoChildren}
+                  {selectedGame && !lookingForLoserConnection && infoChildren}
                 </BracketGameInfo>
               )}
             </div>
@@ -119,7 +122,12 @@ export default function Brackets({
                     className="p-0 min-h-screen"
                     id={BRACKET_CONTAINER_ELEMENT_ID_PREFIX + bracketIndex}
                   >
-                    <Bracket rounds={rounds} setRows={updateRows} rows={rows} />
+                    <Bracket
+                      rounds={rounds}
+                      setRows={updateRows}
+                      rows={rows}
+                      bracketNumber={bracketIndex}
+                    />
                   </div>
                 </div>
               );

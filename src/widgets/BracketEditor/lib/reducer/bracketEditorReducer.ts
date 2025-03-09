@@ -10,6 +10,8 @@ import { removeWinnerConnection } from "./removeWinnerConnection";
 import { addWinnerConnection } from "./addWinnerConnection";
 import { addLoserConnection } from "./addLoserConnection";
 import { removeLoserConnection } from "./removeLoserConnection";
+import { addGameToRound } from "./addGameToRound";
+import { removeGameFromRound } from "./removeGameFromRound";
 
 export const DEFAULT_BRACKET_EDITOR_STATE: BracketEditorState = {
   availableGames: [],
@@ -18,6 +20,7 @@ export const DEFAULT_BRACKET_EDITOR_STATE: BracketEditorState = {
   editing: false,
   lookingForWinnerConnection: null,
   lookingForLoserConnection: null,
+  readableIdIndex: {},
   schedule: {},
   rows: {},
 };
@@ -33,6 +36,8 @@ export enum BracketEditorActionName {
   LookForLoserConnection = "lookForLoserConnection",
   AddLoserConnection = "addLoserConnection",
   RemoveLoserConnection = "removeLoserConnection",
+  AddGameToRound = "addGameToRound",
+  RemoveGameFromRound = "removeGameFromRound",
 }
 
 interface SetInitialStateAction {
@@ -40,6 +45,7 @@ interface SetInitialStateAction {
   args: {
     connections: BracketConnections;
     brackets: BracketGame[][][];
+    readableIdIndex: { [readableId: string]: string };
     schedule: { [gameId: string]: number };
   };
 }
@@ -105,6 +111,24 @@ interface RemoveLoserConnectionAction {
   };
 }
 
+interface AddGameToRoundAction {
+  type: BracketEditorActionName.AddGameToRound;
+  args: {
+    bracketNumber: number;
+    roundNumber: number;
+    onSuccess?: (game: BracketGame) => void;
+  };
+}
+
+interface RemoveGameFromRoundAction {
+  type: BracketEditorActionName.RemoveGameFromRound;
+  args: {
+    gameId: string;
+    roundNumber: number;
+    bracketNumber: number;
+  };
+}
+
 type BracketEditorAction =
   | SetInitialStateAction
   | RemoveWinnerConnectionAction
@@ -115,7 +139,9 @@ type BracketEditorAction =
   | LookForLoserConnectionAction
   | CancelLookForLoserConnectionAction
   | AddLoserConnectionAction
-  | RemoveLoserConnectionAction;
+  | RemoveLoserConnectionAction
+  | AddGameToRoundAction
+  | RemoveGameFromRoundAction;
 
 export interface BracketEditorState {
   availableGames: string[];
@@ -128,6 +154,7 @@ export interface BracketEditorState {
     roundNumber: number;
   }>;
   lookingForLoserConnection: Nullable<string>;
+  readableIdIndex: { [readableId: string]: string };
   rows: BracketRows;
   schedule: { [gameId: string]: number };
 }
@@ -137,7 +164,12 @@ export function bracketEditorReducer(
 ) {
   switch (action.type) {
     case BracketEditorActionName.SetInitialState: {
-      const { connections: newConnections, brackets, schedule } = action.args;
+      const {
+        connections: newConnections,
+        brackets,
+        schedule,
+        readableIdIndex,
+      } = action.args;
       if (!newConnections) {
         console.warn(
           "connections is required for removeWinnerConnection action"
@@ -149,6 +181,7 @@ export function bracketEditorReducer(
         ...state,
         connections: newConnections,
         brackets,
+        readableIdIndex,
         schedule,
       };
       return newState;
@@ -208,6 +241,24 @@ export function bracketEditorReducer(
     case BracketEditorActionName.RemoveLoserConnection: {
       const { gameId } = action.args;
       return removeLoserConnection(state, gameId);
+    }
+    case BracketEditorActionName.AddGameToRound: {
+      const { state: newState, newGame } = addGameToRound(state, action.args);
+
+      if (action.args.onSuccess) {
+        setTimeout(() => {
+          action.args.onSuccess(newGame);
+        }, 1);
+      }
+      return newState;
+    }
+    case BracketEditorActionName.RemoveGameFromRound: {
+      const { gameId, bracketNumber, roundNumber } = action.args;
+      return removeGameFromRound(state, {
+        gameId,
+        bracketNumber,
+        roundNumber,
+      });
     }
     default: {
       return state;

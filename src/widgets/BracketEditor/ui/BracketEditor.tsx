@@ -10,7 +10,7 @@ import {
 import {
   generateTournament,
   scheduleTournament,
-} from "@erikleisinger/bracket-generator";
+} from "../../../../../bracket/index";
 import { Brackets, type BracketRows } from "@/entities/Bracket";
 
 import { BracketEditingContext } from "@/shared/EditableBracket/BracketEditingContext";
@@ -21,7 +21,7 @@ import {
 } from "../lib";
 import GameEditOptions from "./GameEditOptions";
 import { scrollToGame } from "@/entities/Bracket/lib/scrollToGame";
-
+import { generateReadableIdIndex } from "../lib/generateReadableIdIndex";
 export default function BracketEditor({ className }: { className?: string }) {
   /**
    * Bracket params
@@ -82,6 +82,7 @@ export default function BracketEditor({ className }: { className?: string }) {
         connections: initialConnections,
         brackets: [...brackets],
         schedule: tournamentSchedule,
+        readableIdIndex: generateReadableIdIndex(brackets),
       },
     });
   }
@@ -131,6 +132,44 @@ export default function BracketEditor({ className }: { className?: string }) {
       type: BracketEditorActionName.RemoveLoserConnection,
       args: {
         gameId,
+      },
+    });
+  }
+
+  function handleAddGameToRound({
+    roundNumber,
+    bracketNumber,
+    onSuccess,
+  }: {
+    roundNumber: number;
+    bracketNumber: number;
+    onSuccess?: (game: BracketGame) => void;
+  }) {
+    dispatch({
+      type: BracketEditorActionName.AddGameToRound,
+      args: {
+        roundNumber,
+        bracketNumber,
+        onSuccess,
+      },
+    });
+  }
+
+  function handleRemoveGameFromRound({
+    gameId,
+    bracketNumber,
+    roundNumber,
+  }: {
+    gameId: string;
+    bracketNumber: number;
+    roundNumber: number;
+  }) {
+    dispatch({
+      type: BracketEditorActionName.RemoveGameFromRound,
+      args: {
+        gameId,
+        bracketNumber,
+        roundNumber,
       },
     });
   }
@@ -229,6 +268,8 @@ export default function BracketEditor({ className }: { className?: string }) {
         removeWinnerConnection: handleRemoveWinnerConnection,
         addLoserConnection: handleAddLoserConnection,
         removeLoserConnection: handleRemoveLoserConnection,
+        addGameToRound: handleAddGameToRound,
+        removeGameFromRound: handleRemoveGameFromRound,
       }}
     >
       <div className="fixed bottom-4 left-4 md:bottom-8 md:left-8 z-50">
@@ -250,7 +291,7 @@ export default function BracketEditor({ className }: { className?: string }) {
           connections={bracketState.connections}
           updateRows={updateRows}
           rows={bracketState.rows}
-          persistSelection={!!bracketState.lookingForLoserConnection}
+          readableIdIndex={bracketState.readableIdIndex}
           infoChildren={<GameEditOptions />}
         />
       )}

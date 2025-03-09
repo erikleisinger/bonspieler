@@ -15,7 +15,6 @@ export default function BracketGame({
   editing,
   elementId,
   selectable,
-  gridItem = true,
   className = "",
   onTeamClick,
 }: {
@@ -25,7 +24,6 @@ export default function BracketGame({
   editing?: boolean;
   elementId?: string;
   selectable?: boolean;
-  gridItem?: boolean;
   className?: string;
   onTeamClick?: (gameId: string) => void;
 }) {
@@ -38,11 +36,13 @@ export default function BracketGame({
     removeWinnerConnection,
     lookForWinnerConnection,
   } = useContext(BracketEditingContext);
-  const { selectedGame, selectGame, schedule } = useContext(BracketContext);
+  const { readableIdIndex, selectedGame, selectGame, schedule } =
+    useContext(BracketContext);
 
   const drawNum = schedule[game.id] || "?";
 
-  const hasWinner = connections.winnerTo;
+  const hasWinner = connections?.winnerTo;
+
   const isSelected = selectable && selectedGame?.id === game.id;
 
   const isAvailable = useMemo(() => {
@@ -93,7 +93,7 @@ export default function BracketGame({
       >
         <div className="flex justify-between">
           <div className="flex gap-2">
-            <div className="flex">{game.id}</div>
+            <div className="flex">{readableIdIndex[game.id]}</div>
             <div className="text-muted">Draw {drawNum}</div>
           </div>
           <div>
@@ -104,7 +104,7 @@ export default function BracketGame({
           </div>
         </div>
         <div className="mt-2 flex flex-col gap-1">
-          {connections.teams &&
+          {connections?.teams &&
             connections.teams.length &&
             connections.teams.map((team, index) => {
               return (

@@ -1,5 +1,6 @@
 import { createContext } from "react";
 import type { Nullable } from "@/types";
+import type { BracketGame } from "@/entities/Bracket";
 export const BracketEditingContext = createContext<{
   availableGames: string[];
   editing: boolean;
@@ -27,6 +28,24 @@ export const BracketEditingContext = createContext<{
   }) => void;
   addLoserConnection: (gameId: string) => void;
   removeLoserConnection: (gameId: string) => void;
+  addGameToRound: ({
+    bracketNumber,
+    roundNumber,
+    onSuccess,
+  }: {
+    bracketNumber: number;
+    roundNumber: number;
+    onSuccess?: (game: BracketGame) => void;
+  }) => void;
+  removeGameFromRound: ({
+    gameId,
+    roundNumber,
+    bracketNumber,
+  }: {
+    gameId: string;
+    roundNumber: number;
+    bracketNumber: number;
+  }) => void;
 }>({
   availableGames: [],
   editing: false,
@@ -52,4 +71,14 @@ export const BracketEditingContext = createContext<{
   lookForLoserConnection: (gameId: string, bracketNumber: number) => {},
   addLoserConnection: (gameId: string) => {},
   removeLoserConnection: (gameId: string) => {},
+  addGameToRound: (
+    bracketNumber: number,
+    roundNumber: number,
+    onSuccess: (game: BracketGame) => void
+  ) => {},
+  removeGameFromRound: (
+    gameId: string,
+    roundNumber: number,
+    bracketNumber: number
+  ) => {},
 });

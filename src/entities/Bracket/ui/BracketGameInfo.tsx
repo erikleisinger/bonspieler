@@ -12,8 +12,14 @@ export default function BracketGameInfo({
   children?: React.ReactNode;
   onBack?: () => void;
 }) {
-  const { connections, schedule, selectedGame, scrollToGame, selectGame } =
-    useContext(BracketContext);
+  const {
+    connections,
+    readableIdIndex,
+    schedule,
+    selectedGame,
+    scrollToGame,
+    selectGame,
+  } = useContext(BracketContext);
 
   const gameConnection = useMemo(() => {
     if (!selectedGame) return null;
@@ -28,7 +34,7 @@ export default function BracketGameInfo({
               className="text-3xl font-bold cursor-pointer"
               onClick={() => scrollToGame(selectedGame.id)}
             >
-              {selectedGame.id}
+              {readableIdIndex[selectedGame.id]}
             </h2>
           </div>
           <div className="text-muted text-sm">
@@ -67,7 +73,9 @@ export default function BracketGameInfo({
               <div>
                 <div className="text-xs text-muted">Winner</div>
                 <div className="text-xl font-semibold ">
-                  {gameConnection.winnerTo || "Advances"}
+                  {gameConnection.winnerTo
+                    ? readableIdIndex[gameConnection.winnerTo]
+                    : "Advances"}
                 </div>
               </div>
             </div>
@@ -79,7 +87,9 @@ export default function BracketGameInfo({
               <div>
                 <div className="text-xs text-muted">Loser</div>
                 <div className="text-xl font-semibold ">
-                  {gameConnection.loserTo || "Eliminated"}
+                  {gameConnection.loserTo
+                    ? readableIdIndex[gameConnection.loserTo]
+                    : "Eliminated"}
                 </div>
               </div>
             </div>

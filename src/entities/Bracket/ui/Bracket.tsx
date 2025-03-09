@@ -6,12 +6,18 @@ import type { BracketGame, BracketRowWithId, BracketRows } from "../lib";
 import GameConnections from "./GameConnections";
 
 export interface BracketProps {
+  bracketNumber: number;
   rounds: BracketGame[][];
   rows: BracketRows;
   setRows: (newRows: BracketRows) => void;
 }
 
-export default function Bracket({ rounds, rows, setRows }: BracketProps) {
+export default function Bracket({
+  bracketNumber,
+  rounds,
+  rows,
+  setRows,
+}: BracketProps) {
   const { connections } = useContext(BracketContext);
   const connectionsString = JSON.stringify(connections);
 
@@ -56,6 +62,7 @@ export default function Bracket({ rounds, rows, setRows }: BracketProps) {
             key={"round-" + roundIndex}
             rows={rows}
             roundIndex={roundIndex}
+            bracketNumber={bracketNumber}
           />
         );
       })}

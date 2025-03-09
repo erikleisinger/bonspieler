@@ -1,20 +1,39 @@
 import { BracketEditingContext } from "@/shared/EditableBracket/BracketEditingContext";
 import { BracketContext } from "@/shared/Bracket/BracketContext";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { Button } from "@/shared/ui/button";
 import { HiCog } from "react-icons/hi";
 export default function GameEditOptions() {
-  const { lookForLoserConnection, removeLoserConnection } = useContext(
-    BracketEditingContext
-  );
+  function onKeyDown(e) {
+    if (e.key === "Delete") handleRemoveGame(e);
+  }
+  useEffect(() => {
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+    };
+  }, []);
+  const { lookForLoserConnection, removeLoserConnection, removeGameFromRound } =
+    useContext(BracketEditingContext);
 
-  const { brackets, connections, selectedGame } = useContext(BracketContext);
+  const { brackets, connections, selectedGame, deselectGame } =
+    useContext(BracketContext);
 
   const isLastBracket =
     (brackets?.length || 1) - 1 === selectedGame?.bracketNumber;
 
   const gameConnections = connections[selectedGame?.id];
   const loserTo = gameConnections?.loserTo;
+
+  function handleRemoveGame(e) {
+    const { id, bracketNumber, roundNumber } = { ...selectedGame };
+    deselectGame(e.nativeEvent, true);
+    removeGameFromRound({
+      gameId: id,
+      bracketNumber,
+      roundNumber,
+    });
+  }
 
   return (
     <div>
@@ -49,6 +68,11 @@ export default function GameEditOptions() {
           )}
         </div>
       )}
+      <div className="flex justify-center">
+        <Button variant="destructive" onClick={handleRemoveGame}>
+          Delete
+        </Button>
+      </div>
     </div>
   );
 }
