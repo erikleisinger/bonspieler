@@ -7,7 +7,7 @@ export default function LoserIndicator({
 }: {
   loserTo: string | null;
 }) {
-  const { scrollToGame } = useContext(BracketContext);
+  const { readableIdIndex, scrollToGame } = useContext(BracketContext);
   const { lookingForLoserConnection } = useContext(BracketEditingContext);
 
   const baseButtonStyles =
@@ -25,7 +25,7 @@ export default function LoserIndicator({
 
   return (
     <div className={baseButtonStyles} onClick={onClick}>
-      Loser {loserTo || "out"}
+      Loser {loserTo ? readableIdIndex[loserTo] : "out"}
     </div>
   );
 }
