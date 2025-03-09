@@ -18,7 +18,7 @@ export default function GameEditOptions() {
 
   return (
     <div>
-      <div className="flex gap-2 items-center p-2 py-4 px-4 bg-black/20">
+      <div className="flex gap-2 items-center p-2 py-4 px-4 ">
         <HiCog className="text-3xl" />
         <div className="flex text-2xl">Settings</div>
       </div>

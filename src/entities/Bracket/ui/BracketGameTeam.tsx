@@ -38,8 +38,8 @@ export default function BracketGameTeam({
     <div
       onClick={handleClick}
       className={
-        "flex justify-between bg-black/10 px-2 " +
-        (isGame ? "hover:bg-black/20 cursor-pointer" : "") +
+        "flex justify-between bg-white/10 backdrop-blur-sm rounded-sm px-2 " +
+        (isGame ? "hover:bg-white/80 cursor-pointer" : "") +
         className
       }
     >

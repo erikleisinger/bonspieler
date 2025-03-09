@@ -1,6 +1,7 @@
 import type { BracketEditorOptionsProps } from "../lib/types/BracketEditorOptions";
 import BracketEditorOptions from "./BracketEditorOptions";
 import { useState } from "react";
+import { FaCog } from "react-icons/fa";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -16,11 +17,17 @@ export default function BracketEditorOptionsMenu({
   numBrackets,
   updateNumBrackets,
 }: BracketEditorOptionsProps) {
+  const [open, setOpen] = useState(true);
+
+  function onRender() {
+    setOpen(false);
+    renderBrackets();
+  }
   return (
-    <DropdownMenu>
+    <DropdownMenu defaultOpen={true} open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger asChild>
-        <Button size="icon" variant="secondary">
-          +
+        <Button size="icon" variant="secondary" onClick={() => setOpen(!open)}>
+          <FaCog />
         </Button>
       </DropdownMenuTrigger>
 
@@ -31,7 +38,7 @@ export default function BracketEditorOptionsMenu({
             updateTeamCount={updateTeamCount}
             numWinners={numWinners}
             updateNumWinners={updateNumWinners}
-            renderBrackets={renderBrackets}
+            renderBrackets={onRender}
             numBrackets={numBrackets}
             updateNumBrackets={updateNumBrackets}
           ></BracketEditorOptions>

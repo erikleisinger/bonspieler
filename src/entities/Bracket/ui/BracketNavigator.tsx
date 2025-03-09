@@ -44,7 +44,7 @@ export default function BracketNavigator({
   }, [numBrackets]);
 
   return (
-    <div className="bg-black/20 py-2 px-4 md:p-6 text-glass-foreground flex justify-between md:justify-center items-center md:gap-16">
+    <div className="bg-white backdrop-blur-md px-4 py-1 text-glass-foreground flex justify-between md:justify-center items-center md:gap-2 rounded-xl shadow-md">
       <Button
         variant="primary"
         disabled={!currentBracket}
@@ -52,9 +52,7 @@ export default function BracketNavigator({
       >
         <FaAngleLeft />
       </Button>
-      <div className="text-lg md:text-2xl font-bold">
-        Bracket {currentBracket + 1}
-      </div>
+      <div className=" font-bold">Bracket {currentBracket + 1}</div>
       <Button
         variant="primary"
         disabled={currentBracket === numBrackets - 1}

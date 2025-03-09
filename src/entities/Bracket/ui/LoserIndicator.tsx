@@ -11,7 +11,7 @@ export default function LoserIndicator({
   const { lookingForLoserConnection } = useContext(BracketEditingContext);
 
   const baseButtonStyles =
-    "text-destructive-foreground px-1 rounded-sm -mt-[2px] bracket-game__loser-indicator bg-red-500/50";
+    "text-destructive  rounded-sm  bracket-game__loser-indicator ";
 
   function onClick(e) {
     if (!loserTo) return;

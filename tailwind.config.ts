@@ -17,6 +17,9 @@ export default {
     {
       pattern: /row-span-+/,
     },
+    {
+      pattern: /bg-+/,
+    },
   ],
   theme: {
     extend: {

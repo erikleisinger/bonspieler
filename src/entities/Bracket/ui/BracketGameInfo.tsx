@@ -21,7 +21,7 @@ export default function BracketGameInfo({
   }, [connections, selectedGame]);
   return (
     <div className="text-glass-foreground">
-      <div className="flex justify-between  p-4 px-6 bg-black/30">
+      <div className="flex justify-between  p-4 px-6 ">
         <div>
           <div className="flex gap-2 items-end">
             <h2
@@ -45,7 +45,7 @@ export default function BracketGameInfo({
       </div>
 
       {selectedGame?.id && gameConnection && (
-        <div className="p-4 py-2  md:p-8 md:pb-4 bg-black/30 md:bg-transparent">
+        <div className="p-4 py-2  md:p-8 md:pb-4  md:bg-transparent">
           <div className=" grid-rows-2 gap-2 hidden md:grid mb-4">
             {gameConnection.teams.map((team, index) => {
               return (

@@ -85,7 +85,7 @@ export default function BracketGame({
     <div className={getClassName()}>
       <div
         className={
-          " flex flex-col text-foreground p-2 rounded-md game__container  relative bg-glass text-glass-foreground " +
+          " flex flex-col text-foreground p-2  game__container  relative bg-glass text-glass-foreground backdrop-blur shadow-sm " +
           className
         }
         id={elementId}

@@ -214,7 +214,6 @@ export default function BracketEditor({ className }: { className?: string }) {
           gameId: string;
           bracketNumber: string | number;
         }) => {
-          // document.addEventListener("click", cancelLookingListener);
           dispatch({
             type: BracketEditorActionName.LookForLoserConnection,
             args: {
@@ -232,18 +231,7 @@ export default function BracketEditor({ className }: { className?: string }) {
         removeLoserConnection: handleRemoveLoserConnection,
       }}
     >
-      <div className="hidden md:block">
-        <BracketEditorOptions
-          teamCount={teamCount}
-          updateTeamCount={updateTeamCount}
-          numWinners={numWinners}
-          updateNumWinners={updateNumWinners}
-          renderBrackets={renderBrackets}
-          numBrackets={numBrackets}
-          updateNumBrackets={updateNumBrackets}
-        />
-      </div>
-      <div className="md:hidden block fixed bottom-4 right-4 z-50">
+      <div className="fixed bottom-4 left-4 md:bottom-8 md:left-8 z-50">
         <BracketEditorOptionsMenu
           teamCount={teamCount}
           updateTeamCount={updateTeamCount}

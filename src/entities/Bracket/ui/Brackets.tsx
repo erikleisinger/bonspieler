@@ -86,13 +86,7 @@ export default function Brackets({
         scrollToGame,
       }}
     >
-      <div className="grid grid-rows-[auto_1fr] fixed inset-0">
-        <div>
-          <BracketNavigator
-            numBrackets={brackets?.length || 0}
-            goBracket={goBracket}
-          />
-        </div>
+      <div className=" grid grid-rows-1 fixed inset-0">
         <div className="relative overflow-auto">
           <div className="flex flex-col gap-16 absolute inset-0">
             <div
@@ -104,7 +98,7 @@ export default function Brackets({
                 border: "1px solid rgba(255, 255, 255, 0.18)",
               }}
               className={
-                "fixed right-0 md:h-screen bottom-0  z-50 transition-transform bg-glass w-screen md:w-[min(500px,45vw)] " +
+                "fixed right-0 md:h-screen top-0  z-50 transition-transform bg-glass w-screen md:w-[min(500px,45vw)] " +
                 (selectedGame && !lookingForLoserConnection
                   ? "translate-x-[0]"
                   : " translate-x-[100%]")
@@ -132,12 +126,14 @@ export default function Brackets({
             })}
           </div>
         </div>
-        {/* <div className="block md:hidden">
-          <BracketNavigator
-            numBrackets={brackets?.length || 0}
-            goBracket={goBracket}
-          />
-        </div> */}
+        {brackets && brackets.length > 1 && (
+          <div className="fixed right-4 bottom-4 md:right-8 md:bottom-8 z-50">
+            <BracketNavigator
+              numBrackets={brackets?.length || 0}
+              goBracket={goBracket}
+            />
+          </div>
+        )}
       </div>
     </BracketContext.Provider>
   );

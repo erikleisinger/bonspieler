@@ -1,9 +1,6 @@
 .game__container {
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-  backdrop-filter: blur(8.5px);
-  -webkit-backdrop-filter: blur(8.5px);
-  border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  // border-radius: 10px;
+  border: 1px solid rgba(141, 139, 139, 0.1);
   cursor: pointer;
   pointer-events: all;
   transition: all 0.1s;
@@ -23,7 +20,7 @@ $SMALL_SCREEN_GAME_WIDTH: calc(100vw - 70px);
     &:not(.unavailable) &:not(.available) {
       &:hover {
         .game__container {
-          box-shadow: #a5b4fc 0px 0px 6px 4px;
+          box-shadow: #c5cfff 0px 0px 6px 4px;
           border-color: transparent;
         }
       }
@@ -33,15 +30,13 @@ $SMALL_SCREEN_GAME_WIDTH: calc(100vw - 70px);
   &:not(.unavailable) {
     &.available {
       .game__container {
-        box-shadow: #6ee7b7 0px 0px 6px 4px;
-        background-color: rgba(16, 185, 129, 0.1);
+        box-shadow: #6ee7b7 0px 0px 8px 1px;
       }
     }
     &:hover {
       &.available {
         .game__container {
-          box-shadow: #fcd34d 0px 0px 6px 4px;
-          background-color: rgba(16, 185, 129, 0.1);
+          box-shadow: #fcd34d 0px 0px 8px 1px;
         }
       }
     }
@@ -55,7 +50,7 @@ $SMALL_SCREEN_GAME_WIDTH: calc(100vw - 70px);
 
   &.selected {
     .game__container {
-      box-shadow: #a5b4fc 0px 0px 6px 4px;
+      box-shadow: #9dd0fd 0px 0px 6px 4px;
       border-color: transparent;
     }
   }
