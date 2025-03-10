@@ -3,6 +3,7 @@ import { generateUUID } from "@/shared/utils/generateUUID";
 import type { BracketConnectionTeam, BracketGame } from "../lib";
 import { BracketEditingContext } from "@/shared/EditableBracket/BracketEditingContext";
 import { useContext } from "react";
+import Tooltip from "@/shared/ui/tooltip";
 export default function SeedToggle({
   className,
   connection,
@@ -18,7 +19,12 @@ export default function SeedToggle({
   const id = generateUUID();
   const isFirstRoundFirstBracket =
     game.bracketNumber === 0 && game.roundNumber === 0;
-  const disabled = isFirstRoundFirstBracket || !!connection?.gameId;
+
+  const disabledTooltip = isFirstRoundFirstBracket
+    ? "Games in the first round of the first bracket must be seeded."
+    : !!connection?.gameId
+    ? "This game is already connected to another game."
+    : "";
 
   const checked = connection?.teamId === "seed";
 
@@ -38,14 +44,16 @@ export default function SeedToggle({
     }
   }
   return (
-    <div className={"flex items-center gap-2 " + className}>
-      <Checkbox
-        id={id}
-        disabled={disabled}
-        checked={checked}
-        onCheckedChange={handleToggleSeed}
-      />
-      <label htmlFor={id}>Seed</label>
-    </div>
+    <Tooltip text={disabledTooltip} disabled={!disabledTooltip}>
+      <div className={"flex items-center gap-2 " + className}>
+        <Checkbox
+          id={id}
+          disabled={!!disabledTooltip}
+          checked={checked}
+          onCheckedChange={handleToggleSeed}
+        />
+        <label htmlFor={id}>Seed</label>
+      </div>
+    </Tooltip>
   );
 }
