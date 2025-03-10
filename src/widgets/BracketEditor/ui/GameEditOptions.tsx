@@ -2,7 +2,6 @@ import { BracketEditingContext } from "@/shared/EditableBracket/BracketEditingCo
 import { BracketContext } from "@/shared/Bracket/BracketContext";
 import { useContext, useEffect } from "react";
 import { Button } from "@/shared/ui/button";
-import { HiCog } from "react-icons/hi";
 
 export default function GameEditOptions() {
   function onKeyDown(e) {
@@ -37,41 +36,14 @@ export default function GameEditOptions() {
   }
 
   return (
-    <div>
-      <div className="flex gap-2 items-center p-2 py-4 px-4 ">
-        <HiCog className="text-3xl" />
-        <div className="flex text-2xl">Settings</div>
-      </div>
-      {selectedGame?.id && (
-        <div className="p-4">
-          {!isLastBracket && (
-            <Button
-              variant="destructive"
-              size="lg"
-              onClick={() =>
-                lookForLoserConnection({
-                  gameId: selectedGame.id,
-                  bracketNumber: selectedGame.bracketNumber,
-                })
-              }
-            >
-              Update loser
-            </Button>
-          )}
-          {loserTo && (
-            <Button
-              variant="destructive"
-              size="lg"
-              onClick={() => removeLoserConnection(selectedGame.id)}
-            >
-              Remove loser
-            </Button>
-          )}
-        </div>
-      )}
-      <div className="flex justify-center">
-        <Button variant="destructive" onClick={handleRemoveGame}>
-          Delete
+    <div className="grid grid-rows-1 pb-4">
+      <div className="flex justify-center items-end">
+        <Button
+          className="w-[300px]"
+          variant="destructive"
+          onClick={handleRemoveGame}
+        >
+          Delete game
         </Button>
       </div>
     </div>

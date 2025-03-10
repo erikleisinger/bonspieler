@@ -195,6 +195,17 @@ export default function BracketEditor({ className }: { className?: string }) {
 
   const hasConnections = Object.keys(bracketState.connections).length > 0;
 
+  function deselectAll() {
+    dispatch({
+      type: BracketEditorActionName.CancelLookForWinnerConnection,
+      args: null,
+    });
+    dispatch({
+      type: BracketEditorActionName.CancelLookForLoserConnection,
+      args: null,
+    });
+  }
+
   function cancelLookingListener(e) {
     const isBracketGame = Array.from(e.composedPath()).some((el) => {
       if (el?.id === "BRACKET_GAME_INFO_CONTAINER") return false;
@@ -202,14 +213,7 @@ export default function BracketEditor({ className }: { className?: string }) {
       return el.classList.contains("BRACKET_GAME");
     });
     if (!isBracketGame) {
-      dispatch({
-        type: BracketEditorActionName.CancelLookForWinnerConnection,
-        args: null,
-      });
-      dispatch({
-        type: BracketEditorActionName.CancelLookForLoserConnection,
-        args: null,
-      });
+      deselectAll();
       removeCancelLookingListener();
     }
   }
@@ -290,6 +294,7 @@ export default function BracketEditor({ className }: { className?: string }) {
         addGameToRound: handleAddGameToRound,
         removeGameFromRound: handleRemoveGameFromRound,
         toggleSeed: handleToggleSeed,
+        deselectAll,
       }}
     >
       <div className="fixed bottom-4 left-4 md:bottom-8 md:left-8 z-50">

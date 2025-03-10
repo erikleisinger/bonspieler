@@ -1,6 +1,7 @@
 import { useEffect, useContext, useCallback } from "react";
 import BracketRound from "./BracketRound";
 import { BracketContext } from "@/shared/Bracket/BracketContext";
+import { BracketEditingContext } from "@/shared/EditableBracket/BracketEditingContext";
 import { calculateRowSpanForGame } from "../lib/calculateRowSpanForGame";
 import type { BracketGame, BracketRowWithId, BracketRows } from "../lib";
 import GameConnections from "./GameConnections";
@@ -19,6 +20,11 @@ export default function Bracket({
   setRows,
 }: BracketProps) {
   const { connections, deselectGame } = useContext(BracketContext);
+  const { deselectAll } = useContext(BracketEditingContext);
+  function deselect(e) {
+    deselectGame(e);
+    deselectAll();
+  }
 
   const connectionsString = JSON.stringify(connections);
 
@@ -53,7 +59,7 @@ export default function Bracket({
     <div className="flex  relative">
       <div
         className="absolute inset-0 "
-        onClick={(e) => deselectGame(e.nativeEvent)}
+        onClick={(e) => deselect(e.nativeEvent)}
       ></div>
       <GameConnections
         connections={connections}

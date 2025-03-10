@@ -3,6 +3,7 @@ import type { Nullable } from "@/types";
 import type { BracketGame } from "@/entities/Bracket";
 export const BracketEditingContext = createContext<{
   availableGames: string[];
+  deselectAll: () => void;
   editing: boolean;
   lookingForWinnerConnection: Nullable<{
     gameId: string;
@@ -99,4 +100,5 @@ export const BracketEditingContext = createContext<{
     index: number;
     teamId: string | null;
   }) => {},
+  deselectAll: () => {},
 });
