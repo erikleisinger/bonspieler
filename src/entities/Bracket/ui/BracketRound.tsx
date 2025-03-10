@@ -88,7 +88,7 @@ export default function Round({
                 ...getRowSpanForGame(game),
               }}
             >
-              <div className="py-4 flex text-xs">
+              <div className="py-4 flex text-xs pointer-events-auto">
                 <BracketGame
                   game={game}
                   connections={connections[game.id]}

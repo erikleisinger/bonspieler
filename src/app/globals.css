@@ -10,9 +10,9 @@
     /* Colors */
 
     --background: 0 0% 100%;
-    --foreground: 215, 19%, 35%;
-    --glass: 0, 0%, 100%, 0.3;
-    --glass-foreground: 217, 33%, 17%;
+    --foreground: 215 19% 35%;
+    --glass: 0 0% 100% 0.3;
+    --glass-foreground: 217 33% 17%;
     --primary: 0 0% 9%;
     --primary-foreground: 0 0% 98%;
     --secondary: 0 0% 96.1%;
@@ -21,9 +21,9 @@
     --muted-foreground: 0 0% 80.1%;
     --accent: 0 0% 96.1%;
     --accent-foreground: 0 0% 9%;
-    --destructive: 350, 89%, 60%;
+    --destructive: 350 89% 60%;
     --destructive-foreground: 0 0% 98%;
-    --connection: 213, 27%, 84%, 1;
+    --connection: 213 27% 84%;
 
 
     --card: 0 0% 100%;
