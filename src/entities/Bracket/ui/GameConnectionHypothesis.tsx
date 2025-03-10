@@ -5,13 +5,9 @@ export default function GameConnectionHypothesis() {
 
   const el = useRef<HTMLDivElement>(null);
   function getStyle() {
-    const base = {
-      borderColor: "white",
-    };
-    if (!el.current) return base;
+    if (!el.current) return {};
     const { left, top } = el.current.getBoundingClientRect();
     return {
-      ...base,
       width: (x || 0) - left + "px",
       height: Math.abs((y || 0) - top) + "px",
       transform:
@@ -42,7 +38,7 @@ export default function GameConnectionHypothesis() {
         <div />
       </div>
       <div className="relative">
-        <div className="absolute w-1 h-1 top-0 bottom-0 m-auto">
+        <div className="absolute w-1 h-1 top-0 bottom-0 m-auto border-connection">
           <div style={getStyle()} />
         </div>
       </div>

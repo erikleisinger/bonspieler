@@ -3,12 +3,12 @@ import { useContext } from "react";
 import { BracketEditingContext } from "@/shared/EditableBracket/BracketEditingContext";
 import type { BracketConnections, BracketGame, BracketRows } from "../lib";
 import Bracket from "./Bracket";
-import { Button } from "@/shared/ui/button";
 import { useState } from "react";
 import BracketGameInfo from "./BracketGameInfo";
 import { scrollToGame } from "../lib/scrollToGame";
 import BracketNavigator from "./BracketNavigator";
 import { BRACKET_CONTAINER_ELEMENT_ID_PREFIX } from "../lib/constants/element-id";
+
 export default function Brackets({
   brackets,
   connections,
@@ -135,7 +135,7 @@ export default function Brackets({
           </div>
         </div>
         {brackets && brackets.length > 1 && (
-          <div className="fixed right-4 bottom-4 md:right-8 md:bottom-8 z-50">
+          <div className="fixed right-4 bottom-4 md:right-8 md:bottom-8 z-40">
             <BracketNavigator
               numBrackets={brackets?.length || 0}
               goBracket={goBracket}

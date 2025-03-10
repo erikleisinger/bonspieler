@@ -3,6 +3,33 @@ import { DEFAULT_GAME, DEFAULT_CONNECTION } from "../defaults";
 import { scheduleTournament } from "@erikleisinger/bracket-generator";
 import { generateUUID } from "@/shared/utils/generateUUID";
 import { generateReadableIdIndex } from "../generateReadableIdIndex";
+import type { BracketGame, BracketRows } from "@/entities/Bracket";
+import { getEmptyRoundSlots } from "../getEmptyRoundSlots";
+
+function getFirstAvailableSlot({
+  bracketNumber,
+  roundNumber,
+  brackets,
+  rows,
+}: {
+  bracketNumber: number;
+  roundNumber: number;
+  brackets: BracketGame[][][];
+  rows: BracketRows;
+}) {
+  const available = getEmptyRoundSlots({
+    bracketNumber,
+    roundNumber,
+    brackets,
+    rows,
+  });
+
+  if (!available?.length) {
+    return brackets[bracketNumber][roundNumber].length;
+  }
+  return available[0];
+}
+
 export function addGameToRound(
   state: BracketEditorState,
   {
@@ -22,7 +49,13 @@ export function addGameToRound(
     roundNumber,
     id: generateUUID(),
   };
-  newRound.push(newGame);
+  const firstAvailableSpot = getFirstAvailableSlot({
+    bracketNumber,
+    roundNumber,
+    brackets: newBrackets,
+    rows: state.rows,
+  });
+  newRound.splice(firstAvailableSpot, 0, newGame);
   newBracket[roundNumber] = newRound;
   newBrackets[bracketNumber] = newBracket;
 
@@ -42,6 +75,7 @@ export function addGameToRound(
     readableIdIndex: generateReadableIdIndex(newBrackets),
     schedule,
   };
+
   return {
     state: newState,
     newGame,
