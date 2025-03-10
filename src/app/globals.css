@@ -11,7 +11,7 @@
 
     --background: 0 0% 100%;
     --foreground: 215 19% 35%;
-    --glass: 0 0% 100% 0.3;
+    --glass: 0, 0%, 100%, 0.3;
     --glass-foreground: 217 33% 17%;
     --primary: 0 0% 9%;
     --primary-foreground: 0 0% 98%;
