@@ -8,6 +8,7 @@ import BracketGameInfo from "./BracketGameInfo";
 import { scrollToGame } from "../lib/scrollToGame";
 import BracketNavigator from "./BracketNavigator";
 import { BRACKET_CONTAINER_ELEMENT_ID_PREFIX } from "../lib/constants/element-id";
+import Slideout from "@/shared/ui/slide-out";
 
 export default function Brackets({
   appendNavigatorChildren,
@@ -105,20 +106,9 @@ export default function Brackets({
       <div className=" grid grid-rows-1 absolute inset-0">
         <div className="relative overflow-auto">
           <div className="flex flex-col gap-16 absolute inset-0">
-            <div
+            <Slideout
               id="BRACKET_GAME_INFO_CONTAINER"
-              style={{
-                boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.37)",
-                backdropFilter: "blur(8.5px)",
-                WebkitBackdropFilter: "blur(8.5px)",
-                border: "1px solid rgba(255, 255, 255, 0.18)",
-              }}
-              className={
-                "fixed right-0 md:h-screen top-0  z-50 transition-transform bg-glass w-screen md:w-[min(500px,45vw)] " +
-                (selectedGame && !lookingForLoserConnection
-                  ? "translate-x-[0]"
-                  : " translate-x-[100%]")
-              }
+              visible={!!selectedGame && !lookingForLoserConnection}
             >
               {selectedGame && (
                 <BracketGameInfo
@@ -127,7 +117,8 @@ export default function Brackets({
                   {selectedGame && !lookingForLoserConnection && infoChildren}
                 </BracketGameInfo>
               )}
-            </div>
+            </Slideout>
+
             {brackets.map((rounds, bracketIndex) => {
               return (
                 <div key={"bracket-" + bracketIndex} className="w-fit">

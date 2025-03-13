@@ -29,8 +29,9 @@ import { Button } from "@/shared/ui/button";
 import AddNewBracket from "./AddNewBracket";
 import RemoveBracketButton from "./RemoveBracketButton";
 
-import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import { FaArrowLeft, FaArrowRight, FaCog } from "react-icons/fa";
 import BracketEventOptions from "./BracketEventOptions";
+import Slideout from "@/shared/ui/slide-out";
 
 export default function BracketEditor() {
   /**
@@ -342,6 +343,8 @@ export default function BracketEditor() {
 
   const [drawTimes, setDrawTimes] = useState<{ [key: number]: Date }>({});
 
+  const [showEventOptions, setShowEventOptions] = useState(false);
+
   return (
     <BracketEditingContext.Provider
       value={{
@@ -423,18 +426,24 @@ export default function BracketEditor() {
               <AddNewBracket addBracket={handleAddBracket} />
             }
           >
-            <div className="flex justify-end">
-              <BracketEventOptions
-                totalNumDraws={totalNumDraws}
-                totalNumSheets={bracketState.numSheets}
-                totalNumTeams={totalNumTeams}
-                totalNumWinners={totalNumWinners}
-                updateNumSheets={updateNumSheets}
-                updateNumSheetsAndSchedule={(e) => updateNumSheets(e, true)}
-                drawTimes={drawTimes}
-                setDrawTimes={setDrawTimes}
-              />
-            </div>
+            <Slideout visible={showEventOptions}>
+              {showEventOptions && (
+                <BracketEventOptions
+                  totalNumDraws={totalNumDraws}
+                  totalNumSheets={bracketState.numSheets}
+                  totalNumTeams={totalNumTeams}
+                  totalNumWinners={totalNumWinners}
+                  updateNumSheets={updateNumSheets}
+                  updateNumSheetsAndSchedule={(e) => updateNumSheets(e, true)}
+                  drawTimes={drawTimes}
+                  setDrawTimes={setDrawTimes}
+                  onClose={() => setShowEventOptions(false)}
+                />
+              )}
+            </Slideout>
+            <Button onClick={() => setShowEventOptions(true)}>
+              <FaCog /> Event options
+            </Button>
           </Brackets>
         ) : (
           <div />

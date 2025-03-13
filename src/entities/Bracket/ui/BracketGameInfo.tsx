@@ -55,7 +55,7 @@ export default function BracketGameInfo({
   const drawTime = useMemo(() => {
     const drawNumber = drawTimes[schedule[selectedGame.id]];
     if (!drawNumber) return "No draw time";
-    return format(drawNumber, "h:mm aaa • EEEE, MMM io");
+    return format(drawNumber, "h:mm aaa • EEEE, MMM do");
   }, [schedule[selectedGame.id], drawTimes[schedule[selectedGame.id]]]);
   return (
     <div className="text-glass-foreground grid grid-rows-[auto_1fr] min-h-full">
