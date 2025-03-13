@@ -11,7 +11,8 @@ import {
   FaTrophy,
   FaTimes,
 } from "react-icons/fa";
-import { format } from "date-fns";
+import { DrawTime } from "@/entities/BracketGame";
+import { EditDrawNumber } from "@/features/EditDrawNumber";
 
 import BracketGameTeam from "./BracketGameTeam";
 import SeedToggle from "./SeedToggle";
@@ -52,11 +53,6 @@ export default function BracketGameInfo({
 
   const hasLoser = selectedConnections?.loserTo;
 
-  const drawTime = useMemo(() => {
-    const drawNumber = drawTimes[schedule[selectedGame.id]];
-    if (!drawNumber) return "No draw time";
-    return format(drawNumber, "h:mm aaa • EEEE, MMM do");
-  }, [schedule[selectedGame.id], drawTimes[schedule[selectedGame.id]]]);
   return (
     <div className="text-glass-foreground grid grid-rows-[auto_1fr] min-h-full">
       <div>
@@ -70,8 +66,16 @@ export default function BracketGameInfo({
                 {readableIdIndex[selectedGame.id]}
               </h2>
             </div>
-            <div className="text-muted text-sm">
-              Draw {schedule[selectedGame.id]} • {drawTime}
+            <div className="text-muted text-sm flex gap-2 items-center">
+              {editing ? (
+                <EditDrawNumber gameId={selectedGame.id} />
+              ) : (
+                <DrawTime
+                  gameId={selectedGame.id}
+                  schedule={schedule}
+                  drawTimes={drawTimes}
+                />
+              )}
             </div>
           </div>
 

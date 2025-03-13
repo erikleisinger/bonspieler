@@ -282,6 +282,15 @@ export default function BracketEditor() {
     });
   }
 
+  function handleSetSchedule(schedule: { [gameId: string]: number }) {
+    dispatch({
+      type: BracketEditorActionName.SetSchedule,
+      args: {
+        schedule,
+      },
+    });
+  }
+
   function deselectAll() {
     dispatch({
       type: BracketEditorActionName.CancelLookForWinnerConnection,
@@ -402,6 +411,7 @@ export default function BracketEditor() {
         removeGameFromRound: handleRemoveGameFromRound,
         toggleSeed: handleToggleSeed,
         deselectAll,
+        setSchedule: handleSetSchedule,
       }}
     >
       <div className="fixed inset-0 ">

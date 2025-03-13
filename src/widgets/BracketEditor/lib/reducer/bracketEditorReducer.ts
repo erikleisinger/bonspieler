@@ -47,6 +47,7 @@ export enum BracketEditorActionName {
   AddBracket = "addBracket",
   SetNumSheets = "setNumSheets",
   RemoveBracket = "removeBracket",
+  SetSchedule = "setSchedule",
 }
 
 interface SetInitialStateAction {
@@ -170,6 +171,13 @@ interface RemoveBracketAction {
   };
 }
 
+interface SetScheduleAction {
+  type: BracketEditorActionName.SetSchedule;
+  args: {
+    schedule: { [gameId: string]: number };
+  };
+}
+
 type BracketEditorAction =
   | SetInitialStateAction
   | RemoveWinnerConnectionAction
@@ -186,7 +194,8 @@ type BracketEditorAction =
   | ToggleSeedAction
   | AddBracketAction
   | SetNumSheetsAction
-  | RemoveBracketAction;
+  | RemoveBracketAction
+  | SetScheduleAction;
 
 export interface BracketEditorState {
   availableGames: string[];
@@ -335,6 +344,12 @@ export function bracketEditorReducer(
     }
     case BracketEditorActionName.RemoveBracket: {
       return removeBracket(state, action.args);
+    }
+    case BracketEditorActionName.SetSchedule: {
+      return {
+        ...state,
+        schedule: action.args.schedule,
+      };
     }
     default: {
       return state;
