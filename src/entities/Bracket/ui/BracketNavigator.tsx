@@ -22,7 +22,6 @@ export default function BracketNavigator({
       const el = document.getElementById(
         BRACKET_CONTAINER_ELEMENT_ID_PREFIX + i
       );
-      console.log(el);
       if (!el) continue;
       const options = {
         root: null,

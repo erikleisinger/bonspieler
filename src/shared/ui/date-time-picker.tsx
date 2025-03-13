@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { FaCalendarAlt } from "react-icons/fa";
-import { format } from "date-fns";
+import { format, compareAsc, compareDesc } from "date-fns";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/shared/ui/button";
@@ -14,16 +14,14 @@ export function DateTimePicker({
   date,
   setDate,
 }: {
-  date: Date;
-  setDate: (newDate: Date) => void;
+  date: Date | undefined;
+  setDate: (newDate: Date | undefined) => void;
 }) {
   const [isOpen, setIsOpen] = React.useState(false);
 
   const hours = Array.from({ length: 24 }, (_, i) => i);
   const handleDateSelect = (selectedDate: Date | undefined) => {
-    if (selectedDate) {
-      setDate(selectedDate);
-    }
+    setDate(selectedDate);
   };
 
   const handleTimeChange = (type: "hour" | "minute", value: string) => {

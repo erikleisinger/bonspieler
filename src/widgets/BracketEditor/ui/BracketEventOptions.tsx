@@ -1,4 +1,4 @@
-import { useState, useId } from "react";
+import { useState, useId, useMemo } from "react";
 
 import { Button } from "@/shared/ui/button";
 import NumberSheetsSelect from "@/shared/ui/number-sheets-select";
@@ -6,7 +6,11 @@ import { DateTimePicker } from "@/shared/ui/date-time-picker";
 import { Label } from "@/shared/ui/label";
 import Typography from "@/shared/ui/typography";
 import { HiOutlinePlus } from "react-icons/hi";
+import SaveButton from "@/shared/ui/save-button";
 
+import { getDrawTimeWarnings } from "@/features/DrawTimeWarnings";
+import { FaExclamationTriangle } from "react-icons/fa";
+import Tooltip from "@/shared/ui/tooltip";
 export default function BracketEventOptions({
   drawTimes,
   setDrawTimes,
@@ -36,13 +40,16 @@ export default function BracketEventOptions({
     setTempDrawTimes(newDrawTimes);
   }
 
-  function recalculate() {
+  async function recalculate() {
     updateNumSheetsAndSchedule(totalNumSheets);
     setDrawTimes(tempDrawTimes);
-    onClose();
   }
 
   const drawTimesContainerId = useId();
+
+  const warnings = useMemo(() => {
+    return getDrawTimeWarnings(tempDrawTimes);
+  }, [JSON.stringify(tempDrawTimes)]);
   return (
     <div className="p-4 grid grid-rows-[auto_1fr_auto] absolute inset-0">
       <header className=" flex justify-between mb-8 pt-2 pl-2">
@@ -80,7 +87,10 @@ export default function BracketEventOptions({
             </NumberSheetsSelect>
           </div>
           <div className="mt-4 bg-glass p-4 flex flex-col">
-            <Label htmlFor={drawTimesContainerId}>Draw schedule</Label>
+            <header>
+              <Label htmlFor={drawTimesContainerId}>Draw schedule</Label>
+            </header>
+
             <div id={drawTimesContainerId} className="mt-4">
               {Array.from({ length: totalNumDraws }).map((_, i) => {
                 return (
@@ -88,11 +98,21 @@ export default function BracketEventOptions({
                     key={i}
                     className="grid grid-cols-[70px,1fr] gap-2 items-center"
                   >
-                    <Label htmlFor={"draw-time-" + i}>Draw {i + 1}</Label>
+                    <div className="flex gap-2">
+                      <Label htmlFor={"draw-time-" + i}>Draw {i + 1}</Label>
+                      {warnings[i + 1] && (
+                        <Tooltip text={warnings[i + 1].join("\n")}>
+                          <FaExclamationTriangle className="text-destructive text-sm" />
+                        </Tooltip>
+                      )}
+                    </div>
+
                     <DateTimePicker
                       id={"draw-time-" + i}
                       date={tempDrawTimes[i + 1]}
                       setDate={(e) => updateDrawTime(e, i + 1)}
+                      min={tempDrawTimes[i]}
+                      max={tempDrawTimes[i + 2]}
                     />
                   </div>
                 );
@@ -101,10 +121,11 @@ export default function BracketEventOptions({
           </div>
         </div>
       </div>
-      <footer>
-        <Button className="w-full mt-2" onClick={recalculate}>
-          Save
-        </Button>
+      <footer className="flex justify-center">
+        <SaveButton
+          className="min-w-[300px] m-auto mt-2"
+          onClick={recalculate}
+        />
       </footer>
     </div>
   );
