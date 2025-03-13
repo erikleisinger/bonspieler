@@ -15,6 +15,7 @@ export default function Brackets({
   children,
   connections,
   infoChildren,
+  prependNavigatorChildren,
   readableIdIndex,
   rows,
   schedule,
@@ -25,6 +26,7 @@ export default function Brackets({
   children?: React.ReactNode;
   connections: BracketConnections;
   infoChildren?: React.ReactNode;
+  prependNavigatorChildren?: React.ReactNode;
   readableIdIndex: { [gameId: string]: string };
   rows: BracketRows;
   schedule: { [gameId: string]: number };
@@ -146,6 +148,7 @@ export default function Brackets({
           <div className="fixed right-4 bottom-4 md:right-8 md:bottom-8 z-40 flex flex-col gap-2 ">
             {children}
             <div className="flex gap-2 items-center">
+              {prependNavigatorChildren}
               <BracketNavigator
                 numBrackets={brackets?.length || 0}
                 goBracket={goBracket}

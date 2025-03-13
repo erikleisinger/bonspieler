@@ -141,8 +141,6 @@ export default function BracketEditor() {
     setShowWizard(false);
   }
 
-  const [addBracketMenuOpen, setAddBracketMenuOpen] = useState(false);
-
   function handleAddBracket({
     numTeams,
     numWinners,
@@ -161,7 +159,6 @@ export default function BracketEditor() {
       },
     });
     setNumBrackets(numBrackets + 1);
-    setAddBracketMenuOpen(false);
     updateNumWinners(numWinners, numBrackets);
   }
 
@@ -420,6 +417,9 @@ export default function BracketEditor() {
                 <div />
               )
             }
+            prependNavigatorChildren={
+              <AddNewBracket addBracket={handleAddBracket} />
+            }
           >
             <div className="bg-glass text-glass-foreground backdrop-blur-sm p-4">
               <div className="flex justify-between">
@@ -427,22 +427,6 @@ export default function BracketEditor() {
               </div>
               <div className="flex justify-between">
                 Winners <strong>{totalNumWinners}</strong>
-              </div>
-              <div className="flex gap-2 justify-end mt-4">
-                <DropdownMenu
-                  open={addBracketMenuOpen}
-                  onOpenChange={setAddBracketMenuOpen}
-                >
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="secondary">
-                      <FaPlus /> Add bracket
-                    </Button>
-                  </DropdownMenuTrigger>
-
-                  <DropdownMenuContent className="bg-glass text-glass-foreground backdrop-blur-s p-4">
-                    <AddNewBracket addBracket={handleAddBracket} />
-                  </DropdownMenuContent>
-                </DropdownMenu>
               </div>
             </div>
           </Brackets>
