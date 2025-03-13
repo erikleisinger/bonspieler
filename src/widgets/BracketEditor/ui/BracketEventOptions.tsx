@@ -45,7 +45,7 @@ export default function BracketEventOptions({
         </Button>
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent className="bg-glass text-glass-foreground backdrop-blur-s p-4">
+      <DropdownMenuContent className="bg-glass text-glass-foreground backdrop-blur-md p-4">
         <div className="min-w-[300px] max-w-[90vw]">
           <div className=" bg-glass p-4 rounded-md">
             <div className="flex justify-between">

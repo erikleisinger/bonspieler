@@ -22,11 +22,12 @@ export default function BracketNavigator({
       const el = document.getElementById(
         BRACKET_CONTAINER_ELEMENT_ID_PREFIX + i
       );
+      console.log(el);
       if (!el) continue;
       const options = {
         root: null,
         rootMargin: "0px",
-        threshold: 0.5,
+        threshold: 0.01,
       };
       const observer = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {

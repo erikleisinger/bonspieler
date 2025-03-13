@@ -5,23 +5,19 @@ import { BracketContext } from "@/shared/Bracket/BracketContext";
 import BracketGameTeam from "./BracketGameTeam";
 import LoserIndicator from "./LoserIndicator";
 import type { BracketConnection, BracketGame } from "../lib";
-import GameConnectionHypothesis from "./GameConnectionHypothesis";
-import { Button } from "@/shared/ui/button";
+
 import { GAME_HEIGHT } from "../lib/constants/game";
 
 export default function BracketGame({
   game,
   connections,
-  gameIndex,
-  editing,
   elementId,
   selectable,
   className = "",
 }: {
   game: BracketGame;
   connections: BracketConnection;
-  gameIndex?: number;
-  editing?: boolean;
+
   elementId?: string;
   selectable?: boolean;
   className?: string;
@@ -32,15 +28,11 @@ export default function BracketGame({
     lookingForLoserConnection,
     addLoserConnection,
     addWinnerConnection,
-    removeWinnerConnection,
-    lookForWinnerConnection,
   } = useContext(BracketEditingContext);
   const { readableIdIndex, selectedGame, selectGame, schedule } =
     useContext(BracketContext);
 
   const drawNum = schedule[game.id] || "?";
-
-  const hasWinner = connections?.winnerTo;
 
   const isSelected = selectable && selectedGame?.id === game.id;
 
@@ -129,54 +121,7 @@ export default function BracketGame({
             );
           })}
         </div>
-        {lookingForWinnerConnection &&
-          lookingForWinnerConnection.gameId === game.id && (
-            <div className="absolute right-0 top-0 bottom-0  m-auto h-full ">
-              <GameConnectionHypothesis />
-            </div>
-          )}
       </div>
-      {editing &&
-        hasWinner &&
-        !lookingForWinnerConnection &&
-        !lookingForLoserConnection && (
-          <div className="relative w-7">
-            <Button
-              size="icon"
-              variant="secondary"
-              className="hidden hover:block group-hover:block bg-white hover:bg-black hover:text-white absolute h-6 w-6 top-0 bottom-0 m-auto left-1 z-10 pointer-events-auto"
-              onClick={() => removeWinnerConnection(game.id)}
-            >
-              -
-            </Button>
-          </div>
-        )}
-      {editing &&
-        !hasWinner &&
-        !lookingForWinnerConnection &&
-        !lookingForLoserConnection && (
-          <div className="relative w-7">
-            <Button
-              size="icon"
-              variant="secondary"
-              className="hidden hover:block group-hover:block bg-white hover:bg-black hover:text-white absolute h-6 w-6 top-0 bottom-0 m-auto left-1 z-10 pointer-events-auto"
-              onClick={() =>
-                lookForWinnerConnection(
-                  game.id,
-                  gameIndex,
-                  game.bracketNumber,
-                  game.roundNumber
-                )
-              }
-            >
-              +
-            </Button>
-          </div>
-        )}
-
-      {(lookingForWinnerConnection || lookingForLoserConnection) && (
-        <div className="w-7" />
-      )}
     </div>
   );
 }

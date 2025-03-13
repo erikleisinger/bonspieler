@@ -38,13 +38,13 @@ export default function GameEditOptions() {
   return (
     <div className="grid grid-rows-1 pb-4">
       <div className="flex justify-center items-end">
-        <Button
+        {/* <Button
           className="w-[300px]"
           variant="destructive"
           onClick={handleRemoveGame}
         >
           Delete game
-        </Button>
+        </Button> */}
       </div>
     </div>
   );
