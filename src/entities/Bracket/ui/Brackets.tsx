@@ -14,6 +14,7 @@ export default function Brackets({
   brackets,
   children,
   connections,
+  drawTimes,
   infoChildren,
   prependNavigatorChildren,
   readableIdIndex,
@@ -25,6 +26,7 @@ export default function Brackets({
   brackets: BracketGame[][][];
   children?: React.ReactNode;
   connections: BracketConnections;
+  drawTimes: { [key: number]: Date };
   infoChildren?: React.ReactNode;
   prependNavigatorChildren?: React.ReactNode;
   readableIdIndex: { [gameId: string]: string };
@@ -73,6 +75,7 @@ export default function Brackets({
     <BracketContext.Provider
       value={{
         brackets,
+        drawTimes,
         readableIdIndex,
         selectedGame,
         schedule,
@@ -147,7 +150,7 @@ export default function Brackets({
         {
           <div className="fixed right-4 bottom-4 md:right-8 md:bottom-8 z-40 flex flex-col gap-2 ">
             {children}
-            <div className="flex gap-2 items-center">
+            <div className="flex gap-2 items-center justify-end">
               {prependNavigatorChildren}
               <BracketNavigator
                 numBrackets={brackets?.length || 0}

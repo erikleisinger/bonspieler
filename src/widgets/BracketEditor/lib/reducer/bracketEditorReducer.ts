@@ -15,6 +15,7 @@ import { removeGameFromRound } from "./removeGameFromRound";
 import { toggleSeed } from "./toggleSeed";
 import { addBracket } from "./addBracket";
 import { removeBracket } from "./removeBracket";
+import { scheduleTournament } from "@erikleisinger/bracket-generator";
 
 export const DEFAULT_BRACKET_EDITOR_STATE: BracketEditorState = {
   availableGames: [],
@@ -158,6 +159,7 @@ interface SetNumSheetsAction {
   type: BracketEditorActionName.SetNumSheets;
   args: {
     numSheets: number;
+    withSchedule: boolean;
   };
 }
 
@@ -314,12 +316,22 @@ export function bracketEditorReducer(
     }
 
     case BracketEditorActionName.SetNumSheets: {
-      const { numSheets } = action?.args || {};
+      const { numSheets, withSchedule } = action?.args || {};
       if (!numSheets) return state;
-      return {
-        ...state,
-        numSheets,
-      };
+      if (withSchedule) {
+        const newConnections = { ...state.connections };
+        const { schedule } = scheduleTournament(newConnections, numSheets);
+        return {
+          ...state,
+          numSheets,
+          schedule,
+        };
+      } else {
+        return {
+          ...state,
+          numSheets,
+        };
+      }
     }
     case BracketEditorActionName.RemoveBracket: {
       return removeBracket(state, action.args);

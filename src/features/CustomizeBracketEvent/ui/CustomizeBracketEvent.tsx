@@ -10,6 +10,7 @@ import { TbTournament } from "react-icons/tb";
 import { FaTrophy } from "react-icons/fa";
 
 import type { CustomizeBracketEventProps } from "../lib";
+import NumberSheetsSelect from "@/shared/ui/number-sheets-select";
 
 /**
  * This component allows the user to set parameters for a bracket event as a whole.
@@ -44,10 +45,12 @@ export default function CustomizeBracketEvent({
           >
             How many teams?
           </NumberInput>
-
-          <NumberInput number={numSheets} setNumber={updateNumSheets} min={1}>
+          <NumberSheetsSelect
+            numSheets={numSheets}
+            setNumSheets={updateNumSheets}
+          >
             How many sheets of ice?
-          </NumberInput>
+          </NumberSheetsSelect>
         </div>
       </section>
       <section>

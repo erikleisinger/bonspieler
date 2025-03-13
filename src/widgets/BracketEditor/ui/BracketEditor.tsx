@@ -9,7 +9,11 @@ import {
   generateTournament,
   scheduleTournament,
 } from "@erikleisinger/bracket-generator";
-import { Brackets, type BracketRows } from "@/entities/Bracket";
+import {
+  Brackets,
+  type BracketRows,
+  BracketConnections,
+} from "@/entities/Bracket";
 
 import { BracketEditingContext } from "@/shared/EditableBracket/BracketEditingContext";
 import {
@@ -21,18 +25,12 @@ import GameEditOptions from "./GameEditOptions";
 import { scrollToGame } from "@/entities/Bracket/lib/scrollToGame";
 import { generateReadableIdIndex } from "../lib/generateReadableIdIndex";
 import BracketEditorWizard from "./BracketEditorWizard";
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-} from "@/shared/ui/dropdown-menu";
 import { Button } from "@/shared/ui/button";
-import BracketEditorBracketOptions from "./BracketEditorBracketOptions";
 import AddNewBracket from "./AddNewBracket";
 import RemoveBracketButton from "./RemoveBracketButton";
-import Typography from "@/shared/ui/typography";
 
-import { FaArrowLeft, FaArrowRight, FaCog, FaPlus } from "react-icons/fa";
+import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import BracketEventOptions from "./BracketEventOptions";
 
 export default function BracketEditor() {
   /**
@@ -81,11 +79,12 @@ export default function BracketEditor() {
    * Number of sheets in use; used to calculate schedule of the games
    */
 
-  function updateNumSheets(e: number) {
+  function updateNumSheets(e: number, withSchedule: boolean = false) {
     dispatch({
       type: BracketEditorActionName.SetNumSheets,
       args: {
         numSheets: e,
+        withSchedule,
       },
     });
   }
@@ -105,8 +104,6 @@ export default function BracketEditor() {
     ...JSON.parse(JSON.stringify(DEFAULT_BRACKET_EDITOR_STATE)),
     editing: true,
   });
-
-  const hasConnections = Object.keys(bracketState.connections).length > 0;
 
   const [showWizard, setShowWizard] = useState(true);
 
@@ -333,6 +330,8 @@ export default function BracketEditor() {
       );
     }, 0);
 
+  const totalNumDraws = Math.max(...Object.values(bracketState.schedule || {}));
+
   const totalNumWinners = numWinners.reduce((all, cur) => all + (cur || 0), 0);
   useEffect(() => {
     if (!bracketState?.lookingForLoserConnection) return;
@@ -340,6 +339,8 @@ export default function BracketEditor() {
     const [firstAvailableGame] = bracketState.availableGames;
     scrollToGame(firstAvailableGame);
   }, [bracketState?.availableGames?.length]);
+
+  const [drawTimes, setDrawTimes] = useState<{ [key: number]: Date }>({});
 
   return (
     <BracketEditingContext.Provider
@@ -404,6 +405,7 @@ export default function BracketEditor() {
         {!showWizard ? (
           <Brackets
             brackets={bracketState.brackets}
+            drawTimes={drawTimes}
             schedule={bracketState.schedule}
             connections={bracketState.connections}
             updateRows={updateRows}
@@ -421,13 +423,17 @@ export default function BracketEditor() {
               <AddNewBracket addBracket={handleAddBracket} />
             }
           >
-            <div className="bg-glass text-glass-foreground backdrop-blur-sm p-4">
-              <div className="flex justify-between">
-                Teams <strong>{totalNumTeams}</strong>
-              </div>
-              <div className="flex justify-between">
-                Winners <strong>{totalNumWinners}</strong>
-              </div>
+            <div className="flex justify-end">
+              <BracketEventOptions
+                totalNumDraws={totalNumDraws}
+                totalNumSheets={bracketState.numSheets}
+                totalNumTeams={totalNumTeams}
+                totalNumWinners={totalNumWinners}
+                updateNumSheets={updateNumSheets}
+                updateNumSheetsAndSchedule={(e) => updateNumSheets(e, true)}
+                drawTimes={drawTimes}
+                setDrawTimes={setDrawTimes}
+              />
             </div>
           </Brackets>
         ) : (
