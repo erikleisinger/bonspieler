@@ -144,8 +144,8 @@ export function calculateAvailableGames({
    */
   const highestBelow = bracketRowsRelativeToOrigin.reduce(
     (currentHighest, current) => {
-      if (availableGames.length) return currentHighest;
-      if (current.rowStart < theseRows.rowEnd) return currentHighest;
+      // if (availableGames?.length) return currentHighest;
+      if (current.rowStart < theseRows.rowStart) return currentHighest;
       if (!currentHighest) return current;
       if (current.rowStart < currentHighest.rowStart) return current;
       return currentHighest;
@@ -159,6 +159,7 @@ export function calculateAvailableGames({
   const lowestAbove = bracketRowsRelativeToOrigin.reduce(
     (currentLowest, current) => {
       if (current.rowEnd > theseRows.rowEnd) return currentLowest;
+
       if (!currentLowest) return current;
       if (current.rowEnd > currentLowest.rowEnd) return current;
       return currentLowest;

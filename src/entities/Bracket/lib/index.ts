@@ -14,3 +14,9 @@ export type {
 } from "./types/BracketRows";
 export type { BracketGame } from "./types/BracketGame";
 export { calculateRowSpanForGame } from "./calculateRowSpanForGame";
+export {
+  MAX_TEAM_COUNT,
+  MAX_BRACKET_COUNT,
+  MAX_WINNER_COUNT,
+  MIN_TEAM_COUNT,
+} from "./constants/limits";

@@ -1,4 +1,4 @@
-import { MAX_WINNER_COUNT } from "./constants";
+import { MAX_WINNER_COUNT } from "@/entities/Bracket";
 export function getNewWinnerCount(
   newWinnerCount: string,
   currentWinnerCount: number[],

@@ -7,6 +7,7 @@ import LoserIndicator from "./LoserIndicator";
 import type { BracketConnection, BracketGame } from "../lib";
 import GameConnectionHypothesis from "./GameConnectionHypothesis";
 import { Button } from "@/shared/ui/button";
+import { GAME_HEIGHT } from "../lib/constants/game";
 
 export default function BracketGame({
   game,
@@ -79,8 +80,24 @@ export default function BracketGame({
     return base.join(" ");
   }
 
+  const teams = new Array(2)
+    .fill({
+      teamId: null,
+      gameId: null,
+      isWinner: false,
+    })
+    .map((e, i) => {
+      if (connections?.teams[i]) return connections.teams[i];
+      return e;
+    });
+
   return (
-    <div className={getClassName()}>
+    <div
+      className={getClassName()}
+      style={{
+        height: GAME_HEIGHT + "px",
+      }}
+    >
       <div
         className={
           " flex flex-col text-foreground p-2  game__container  relative bg-glass text-glass-foreground backdrop-blur shadow-sm " +
@@ -102,17 +119,15 @@ export default function BracketGame({
           </div>
         </div>
         <div className="mt-2 flex flex-col gap-1">
-          {connections?.teams &&
-            connections.teams.length &&
-            connections.teams.map((team, index) => {
-              return (
-                <BracketGameTeam
-                  team={team}
-                  key={"team-" + index}
-                  className="grow"
-                />
-              );
-            })}
+          {teams.map((team, index) => {
+            return (
+              <BracketGameTeam
+                team={team}
+                key={"team-" + index}
+                className="grow"
+              />
+            );
+          })}
         </div>
         {lookingForWinnerConnection &&
           lookingForWinnerConnection.gameId === game.id && (

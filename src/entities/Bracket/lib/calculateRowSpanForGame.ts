@@ -47,16 +47,23 @@ export function calculateRowSpanForGame({
 
     rowStart = lastGameRowEnd;
     rowEnd = lastGameRowEnd + 1 * 2 ** roundIndex;
-  } else {
-    /** Sort games by highest row span to lowest row span */
-
+  } else if (gameConnections.length === 1) {
     const upperOriginGame = gameConnections[0];
-    const lowerOriginGame = gameConnections[1] || gameConnections[0];
+    const upperOrigin = rowsIndex[upperOriginGame.gameId];
+    rowStart = upperOrigin.rowStart * 2 - 1;
+    rowEnd = rowStart + 2 ** roundIndex;
+  } else if (gameConnections.length === 2) {
+    /** Sort games by highest row span to lowest row span */
+    const upperOriginGame = gameConnections[0];
+    const lowerOriginGame = gameConnections[1];
 
     const upperOrigin = rowsIndex[upperOriginGame.gameId];
     const lowerOrigin = rowsIndex[lowerOriginGame.gameId];
-    rowEnd = lowerOrigin.rowEnd * 2 - 1;
-    rowStart = upperOrigin.rowStart * 2 - 1;
+
+    rowStart =
+      (upperOrigin.rowStart * 2 - 1 + (lowerOrigin.rowStart * 2 - 1)) / 2;
+
+    rowEnd = rowStart + 2 ** roundIndex;
 
     /**
      * In instances where the the vertical position of the game cannot
@@ -65,31 +72,29 @@ export function calculateRowSpanForGame({
      * find the vertical difference between those origin games and use it to offset
      * the row span of the game being place.
      */
-
-    const upperOriginDiff = upperOrigin.rowEnd - upperOrigin.rowStart;
-    const lowerOriginDiff = lowerOrigin.rowEnd - lowerOrigin.rowStart;
-    const verticalDiff = upperOriginDiff - lowerOriginDiff;
-
-    if (verticalDiff > 0) {
-      rowStart += verticalDiff;
-    } else if (verticalDiff < 0) {
-      rowEnd += verticalDiff;
-    }
+    // const upperOriginDiff = upperOrigin.rowEnd - upperOrigin.rowStart;
+    // const lowerOriginDiff = lowerOrigin.rowEnd - lowerOrigin.rowStart;
+    // const verticalDiff = upperOriginDiff - lowerOriginDiff;
+    // if (verticalDiff > 0) {
+    //   rowStart += verticalDiff;
+    // } else if (verticalDiff < 0) {
+    //   rowEnd += verticalDiff;
+    // }
   }
 
   /**
    * Account for instances where the game is being placed in a position where it overlaps with games above it
    */
 
-  const lastGame = rowsArray[rowsArray.length - 1];
-  if (lastGame) {
-    const { rowEnd: lastGameRowEnd } = lastGame;
-    if (lastGameRowEnd > rowStart) {
-      const rowDiff = rowEnd - rowStart;
-      rowStart = lastGameRowEnd;
-      rowEnd = lastGameRowEnd + rowDiff;
-    }
-  }
+  // const lastGame = rowsArray[rowsArray.length - 1];
+  // if (lastGame) {
+  //   const { rowEnd: lastGameRowEnd } = lastGame;
+  //   if (lastGameRowEnd > rowStart) {
+  //     const rowDiff = rowEnd - rowStart;
+  //     rowStart = lastGameRowEnd;
+  //     rowEnd = lastGameRowEnd + rowDiff;
+  //   }
+  // }
 
   return {
     id: game.id,

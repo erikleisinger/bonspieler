@@ -16,6 +16,8 @@ export const BracketContext = createContext<{
       inline?: "start" | "center" | "end";
     }
   ) => void;
+  currentlyViewingBracket: number;
+  setCurrentlyViewingBracket: (bracketIndex: number) => void;
 }>({
   brackets: [],
   readableIdIndex: {},
@@ -26,4 +28,6 @@ export const BracketContext = createContext<{
   selectGame: () => {},
   scrollToBracket: () => {},
   scrollToGame: () => {},
+  currentlyViewingBracket: 0,
+  setCurrentlyViewingBracket: () => {},
 });

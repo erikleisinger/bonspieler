@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { Button } from "@/shared/ui/button";
 import { FaAngleRight } from "react-icons/fa";
 import { FaAngleLeft } from "react-icons/fa";
 import { BRACKET_CONTAINER_ELEMENT_ID_PREFIX } from "../lib/constants/element-id";
+import { BracketContext } from "@/shared/Bracket/BracketContext";
 export default function BracketNavigator({
   numBrackets,
   goBracket,
@@ -14,7 +15,8 @@ export default function BracketNavigator({
     IntersectionObserver[]
   >([]);
 
-  const [currentBracket, setCurrentBracket] = useState(0);
+  const { currentlyViewingBracket, setCurrentlyViewingBracket } =
+    useContext(BracketContext);
   useEffect(() => {
     for (let i = 0; i < numBrackets; i++) {
       const el = document.getElementById(
@@ -24,12 +26,12 @@ export default function BracketNavigator({
       const options = {
         root: null,
         rootMargin: "0px",
-        threshold: 0.1,
+        threshold: 0.5,
       };
       const observer = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            setCurrentBracket(i);
+            setCurrentlyViewingBracket(i);
           }
         });
 
@@ -43,23 +45,27 @@ export default function BracketNavigator({
     };
   }, [numBrackets]);
 
-  return (
+  return numBrackets ? (
     <div className="bg-white backdrop-blur-md px-4 py-1 text-glass-foreground flex justify-between md:justify-center items-center md:gap-2 rounded-xl shadow-md">
       <Button
-        variant="primary"
-        disabled={!currentBracket}
-        onClick={() => goBracket(-1, currentBracket)}
+        variant="ghost"
+        disabled={!currentlyViewingBracket}
+        onClick={() => goBracket(-1, currentlyViewingBracket)}
+        className={numBrackets === 1 ? "invisible" : ""}
       >
         <FaAngleLeft />
       </Button>
-      <div className=" font-bold">Bracket {currentBracket + 1}</div>
+      <div className=" font-bold">Bracket {currentlyViewingBracket + 1}</div>
       <Button
-        variant="primary"
-        disabled={currentBracket === numBrackets - 1}
-        onClick={() => goBracket(+1, currentBracket)}
+        variant="ghost"
+        disabled={currentlyViewingBracket === numBrackets - 1}
+        onClick={() => goBracket(+1, currentlyViewingBracket)}
+        className={numBrackets === 1 ? "invisible" : ""}
       >
         <FaAngleRight />
       </Button>
     </div>
+  ) : (
+    <div />
   );
 }

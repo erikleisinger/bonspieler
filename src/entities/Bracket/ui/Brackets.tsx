@@ -1,16 +1,18 @@
+import React, { useContext, useState } from "react";
 import { BracketContext } from "@/shared/Bracket/BracketContext";
-import { useContext } from "react";
+
 import { BracketEditingContext } from "@/shared/EditableBracket/BracketEditingContext";
 import type { BracketConnections, BracketGame, BracketRows } from "../lib";
 import Bracket from "./Bracket";
-import { useState } from "react";
 import BracketGameInfo from "./BracketGameInfo";
 import { scrollToGame } from "../lib/scrollToGame";
 import BracketNavigator from "./BracketNavigator";
 import { BRACKET_CONTAINER_ELEMENT_ID_PREFIX } from "../lib/constants/element-id";
 
 export default function Brackets({
+  appendNavigatorChildren,
   brackets,
+  children,
   connections,
   infoChildren,
   readableIdIndex,
@@ -18,7 +20,9 @@ export default function Brackets({
   schedule,
   updateRows,
 }: {
+  appendNavigatorChildren?: React.ReactNode;
   brackets: BracketGame[][][];
+  children?: React.ReactNode;
   connections: BracketConnections;
   infoChildren?: React.ReactNode;
   readableIdIndex: { [gameId: string]: string };
@@ -61,6 +65,8 @@ export default function Brackets({
 
   const { lookingForLoserConnection } = useContext(BracketEditingContext);
 
+  const [currentlyViewingBracket, setCurrentlyViewingBracket] = useState(0);
+
   return (
     <BracketContext.Provider
       value={{
@@ -87,9 +93,11 @@ export default function Brackets({
         },
         scrollToBracket,
         scrollToGame,
+        currentlyViewingBracket,
+        setCurrentlyViewingBracket,
       }}
     >
-      <div className=" grid grid-rows-1 fixed inset-0">
+      <div className=" grid grid-rows-1 absolute inset-0">
         <div className="relative overflow-auto">
           <div className="flex flex-col gap-16 absolute inset-0">
             <div
@@ -134,14 +142,18 @@ export default function Brackets({
             })}
           </div>
         </div>
-        {brackets && brackets.length > 1 && (
-          <div className="fixed right-4 bottom-4 md:right-8 md:bottom-8 z-40">
-            <BracketNavigator
-              numBrackets={brackets?.length || 0}
-              goBracket={goBracket}
-            />
+        {
+          <div className="fixed right-4 bottom-4 md:right-8 md:bottom-8 z-40 flex flex-col gap-2 ">
+            {children}
+            <div className="flex gap-2 items-center">
+              <BracketNavigator
+                numBrackets={brackets?.length || 0}
+                goBracket={goBracket}
+              />
+              {appendNavigatorChildren}
+            </div>
           </div>
-        )}
+        }
       </div>
     </BracketContext.Provider>
   );

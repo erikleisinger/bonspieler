@@ -1,4 +1,4 @@
-import { MAX_BRACKET_COUNT } from "./constants";
+import { MAX_BRACKET_COUNT } from "@/entities/Bracket";
 export function getNewBracketAndWinnerCount(
   newBracketCount: string,
   currentBracketCount: number,

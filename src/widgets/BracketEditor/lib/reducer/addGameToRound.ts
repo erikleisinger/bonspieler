@@ -35,9 +35,13 @@ export function addGameToRound(
   {
     bracketNumber,
     roundNumber,
+    gameIndex,
+    offset = 0,
   }: {
     bracketNumber: number;
     roundNumber: number;
+    gameIndex: number;
+    offset?: number;
   }
 ) {
   const newBrackets = [...state.brackets];
@@ -47,15 +51,22 @@ export function addGameToRound(
     ...JSON.parse(JSON.stringify(DEFAULT_GAME)),
     bracketNumber,
     roundNumber,
+    offset,
     id: generateUUID(),
   };
-  const firstAvailableSpot = getFirstAvailableSlot({
-    bracketNumber,
-    roundNumber,
-    brackets: newBrackets,
-    rows: state.rows,
-  });
-  newRound.splice(firstAvailableSpot, 0, newGame);
+
+  if (gameIndex !== undefined) {
+    newRound.splice(gameIndex, 0, newGame);
+  } else {
+    const firstAvailableSpot = getFirstAvailableSlot({
+      bracketNumber,
+      roundNumber,
+      brackets: newBrackets,
+      rows: state.rows,
+    });
+    newRound.splice(firstAvailableSpot, 0, newGame);
+  }
+
   newBracket[roundNumber] = newRound;
   newBrackets[bracketNumber] = newBracket;
 

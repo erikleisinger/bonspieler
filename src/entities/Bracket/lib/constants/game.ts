@@ -1,1 +1,1 @@
-export const GAME_HEIGHT = 120;
+export const GAME_HEIGHT = 80;

@@ -1,4 +1,4 @@
-import { MAX_TEAM_COUNT } from "./constants";
+import { MAX_TEAM_COUNT } from "@/entities/Bracket";
 export function getNewTeamCount(
   newTeamCount: string,
   currentTeamCount: number

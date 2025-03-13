@@ -1,6 +1,10 @@
 import BracketGame from "./BracketGame";
-import type { BracketGame as BracketGameType, BracketRows } from "../lib";
-import { useContext } from "react";
+import type {
+  BracketGame as BracketGameType,
+  BracketRows,
+  BracketRow,
+} from "../lib";
+import { useContext, useMemo } from "react";
 import { BracketEditingContext } from "@/shared/EditableBracket/BracketEditingContext";
 import { BracketContext } from "@/shared/Bracket/BracketContext";
 import { GAME_HEIGHT } from "../lib/constants/game";
@@ -12,16 +16,23 @@ export default function Round({
   games,
   rows,
   roundIndex,
+  emptySlots,
 }: {
   bracketNumber: number;
   games: BracketGameType[];
   rows: BracketRows;
   roundIndex: number;
+  emptySlots: (BracketRow & { index: number })[];
 }) {
+  const GAME_PADDING = 16;
+
   const { connections, selectGame } = useContext(BracketContext);
-  const { editing, addGameToRound, lookingForLoserConnection } = useContext(
-    BracketEditingContext
-  );
+  const {
+    editing,
+    addGameToRound,
+    lookingForWinnerConnection,
+    addWinnerConnection,
+  } = useContext(BracketEditingContext);
 
   function getRowSpanForGame(game: BracketGameType) {
     const { rowStart = 1, rowEnd = 2 } = rows[game.id] || {};
@@ -31,22 +42,20 @@ export default function Round({
   }
 
   function getRowDefinition() {
-    let gameHeight = GAME_HEIGHT;
-    const arr = new Array(roundIndex).fill(null);
-    arr.forEach(() => {
-      let newGameHeight = gameHeight / 2;
-      gameHeight = newGameHeight;
-    });
+    const rowHeight =
+      (GAME_HEIGHT + GAME_PADDING) / (!roundIndex ? 1 : 2 ** roundIndex);
 
-    let numRowsForRound = games.reduce((all, current) => {
-      const { rowEnd = 2 } = rows[current.id] || {};
-
-      if (rowEnd > all) return rowEnd;
-      return all;
-    }, 0);
+    const numRowsForRound = Math.max(
+      ...[
+        ...(emptySlots ? emptySlots.map(({ rowEnd }) => rowEnd) : []),
+        ...games.map(({ id }) => rows[id]?.rowEnd || 1),
+      ]
+    );
 
     return {
-      gridTemplateRows: `repeat(${numRowsForRound}, ${gameHeight}px)`,
+      gridTemplateRows: `repeat(${
+        numRowsForRound + 2 ** roundIndex
+      }, ${rowHeight}px)`,
     };
   }
 
@@ -58,6 +67,25 @@ export default function Round({
         selectGame(game);
       },
     });
+  }
+
+  function onClickEmptySlot(gameIndex: number) {
+    if (!lookingForWinnerConnection) {
+      addGameToRound({
+        bracketNumber,
+        roundNumber: roundIndex,
+        gameIndex,
+      });
+    } else {
+      addGameToRound({
+        bracketNumber,
+        roundNumber: roundIndex,
+        gameIndex,
+        onSuccess: (game) => {
+          addWinnerConnection(game.id);
+        },
+      });
+    }
   }
 
   return (
@@ -101,6 +129,21 @@ export default function Round({
             </div>
           );
         })}
+        {/* {emptySlots?.length &&
+          emptySlots.map(
+            ({ rowStart, rowEnd, index: gameIndex, offset }, index) => {
+              return (
+                <div
+                  key={index}
+                  style={{
+                    gridRow: `${rowStart} / ${rowEnd}`,
+                  }}
+                  className="hover:bg-gray-500/10 bg-gray-500/5 pointer-events-auto cursor-pointer rounded-xl mr-8 my-2"
+                  onClick={() => onClickEmptySlot(gameIndex)}
+                />
+              );
+            }
+          )} */}
       </div>
     </div>
   );

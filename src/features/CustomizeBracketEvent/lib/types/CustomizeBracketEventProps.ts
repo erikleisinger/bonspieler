@@ -1,11 +1,10 @@
-export interface BracketEditorOptionsProps {
+export interface CustomizeBracketEventProps {
   teamCount: number;
   updateTeamCount: (e: number) => void;
   numWinners: number[];
   updateNumWinners: (e: number, index: number) => void;
-  renderBrackets: () => void;
-  numBrackets: number;
-  updateNumBrackets: (e: number) => void;
   numSheets: number;
   updateNumSheets: (e: number) => void;
+  numBrackets: number;
+  updateNumBrackets: (e: number) => void;
 }

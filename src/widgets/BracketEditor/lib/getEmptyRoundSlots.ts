@@ -20,6 +20,7 @@ export function getEmptyRoundSlots({
   const factor = !roundNumber ? 1 : 2 ** roundNumber;
   const available = games.reduce((all, game, index) => {
     const row = rows[game.id];
+    if (!row) return all;
     const lastRunningClone = { ...lastRunning };
     lastRunning = row;
     const diff = row.rowStart - lastRunningClone.rowEnd;

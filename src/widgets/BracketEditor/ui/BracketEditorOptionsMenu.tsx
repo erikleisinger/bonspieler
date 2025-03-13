@@ -1,5 +1,7 @@
-import type { BracketEditorOptionsProps } from "../lib/types/BracketEditorOptions";
-import BracketEditorOptions from "./BracketEditorOptions";
+import {
+  type CustomizeBracketProps,
+  CustomizeBracket,
+} from "@/features/CustomizeBracket";
 import { useState } from "react";
 import { FaCog } from "react-icons/fa";
 import {
@@ -16,7 +18,7 @@ export default function BracketEditorOptionsMenu({
   renderBrackets,
   numBrackets,
   updateNumBrackets,
-}: BracketEditorOptionsProps) {
+}: CustomizeBracketProps) {
   const [open, setOpen] = useState(true);
 
   function onRender() {
@@ -31,9 +33,9 @@ export default function BracketEditorOptionsMenu({
         </Button>
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent>
+      <DropdownMenuContent className="bg-glass text-glass-foreground backdrop-blur-sm">
         <div className="p-4">
-          <BracketEditorOptions
+          <CustomizeBracket
             teamCount={teamCount}
             updateTeamCount={updateTeamCount}
             numWinners={numWinners}
@@ -41,7 +43,7 @@ export default function BracketEditorOptionsMenu({
             renderBrackets={onRender}
             numBrackets={numBrackets}
             updateNumBrackets={updateNumBrackets}
-          ></BracketEditorOptions>
+          ></CustomizeBracket>
         </div>
       </DropdownMenuContent>
     </DropdownMenu>

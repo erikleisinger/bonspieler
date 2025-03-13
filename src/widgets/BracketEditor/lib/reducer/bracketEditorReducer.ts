@@ -13,6 +13,8 @@ import { removeLoserConnection } from "./removeLoserConnection";
 import { addGameToRound } from "./addGameToRound";
 import { removeGameFromRound } from "./removeGameFromRound";
 import { toggleSeed } from "./toggleSeed";
+import { addBracket } from "./addBracket";
+import { removeBracket } from "./removeBracket";
 
 export const DEFAULT_BRACKET_EDITOR_STATE: BracketEditorState = {
   availableGames: [],
@@ -21,6 +23,7 @@ export const DEFAULT_BRACKET_EDITOR_STATE: BracketEditorState = {
   editing: false,
   lookingForWinnerConnection: null,
   lookingForLoserConnection: null,
+  numSheets: 8,
   readableIdIndex: {},
   schedule: {},
   rows: {},
@@ -40,6 +43,9 @@ export enum BracketEditorActionName {
   AddGameToRound = "addGameToRound",
   RemoveGameFromRound = "removeGameFromRound",
   ToggleSeed = "toggleSeed",
+  AddBracket = "addBracket",
+  SetNumSheets = "setNumSheets",
+  RemoveBracket = "removeBracket",
 }
 
 interface SetInitialStateAction {
@@ -130,12 +136,35 @@ interface RemoveGameFromRoundAction {
     bracketNumber: number;
   };
 }
-interface ToggleSeed {
+interface ToggleSeedAction {
   type: BracketEditorActionName.ToggleSeed;
   args: {
     gameId: string;
     index: number;
     teamId: string;
+  };
+}
+
+interface AddBracketAction {
+  type: BracketEditorActionName.AddBracket;
+  args: {
+    numWinners: number;
+    numTeams: number;
+    isSeeded: boolean;
+  };
+}
+
+interface SetNumSheetsAction {
+  type: BracketEditorActionName.SetNumSheets;
+  args: {
+    numSheets: number;
+  };
+}
+
+interface RemoveBracketAction {
+  type: BracketEditorActionName.RemoveBracket;
+  args: {
+    bracketIndex: number;
   };
 }
 
@@ -152,7 +181,10 @@ type BracketEditorAction =
   | RemoveLoserConnectionAction
   | AddGameToRoundAction
   | RemoveGameFromRoundAction
-  | ToggleSeed;
+  | ToggleSeedAction
+  | AddBracketAction
+  | SetNumSheetsAction
+  | RemoveBracketAction;
 
 export interface BracketEditorState {
   availableGames: string[];
@@ -165,6 +197,7 @@ export interface BracketEditorState {
     roundNumber: number;
   }>;
   lookingForLoserConnection: Nullable<string>;
+  numSheets: number;
   readableIdIndex: { [readableId: string]: string };
   rows: BracketRows;
   schedule: { [gameId: string]: number };
@@ -274,6 +307,22 @@ export function bracketEditorReducer(
     case BracketEditorActionName.ToggleSeed: {
       const { gameId, index, teamId } = action.args;
       return toggleSeed(state, { gameId, index, teamId });
+    }
+
+    case BracketEditorActionName.AddBracket: {
+      return addBracket(state, action.args);
+    }
+
+    case BracketEditorActionName.SetNumSheets: {
+      const { numSheets } = action?.args || {};
+      if (!numSheets) return state;
+      return {
+        ...state,
+        numSheets,
+      };
+    }
+    case BracketEditorActionName.RemoveBracket: {
+      return removeBracket(state, action.args);
     }
     default: {
       return state;

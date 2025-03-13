@@ -34,7 +34,7 @@ export function lookForLoserConnection(
   const { connections: newConnections } = removeLoserConnection(state, gameId);
   const availableGames: string[] = [];
   state.brackets.forEach((bracket, bracketIndex) => {
-    if (bracketIndex - 1 !== bracketNumber) return;
+    if (bracketIndex <= bracketNumber) return;
     bracket.forEach((round) => {
       round.forEach((game) => {
         if (game.id === gameId) return;

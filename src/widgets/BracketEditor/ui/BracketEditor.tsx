@@ -1,6 +1,4 @@
 "use client";
-import BracketEditorOptions from "./BracketEditorOptions";
-import BracketEditorOptionsMenu from "./BracketEditorOptionsMenu";
 import { useState, useReducer, useEffect } from "react";
 import {
   getNewTeamCount,
@@ -10,7 +8,7 @@ import {
 import {
   generateTournament,
   scheduleTournament,
-} from "../../../../../bracket/index";
+} from "@erikleisinger/bracket-generator";
 import { Brackets, type BracketRows } from "@/entities/Bracket";
 
 import { BracketEditingContext } from "@/shared/EditableBracket/BracketEditingContext";
@@ -22,7 +20,21 @@ import {
 import GameEditOptions from "./GameEditOptions";
 import { scrollToGame } from "@/entities/Bracket/lib/scrollToGame";
 import { generateReadableIdIndex } from "../lib/generateReadableIdIndex";
-export default function BracketEditor({ className }: { className?: string }) {
+import BracketEditorWizard from "./BracketEditorWizard";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+} from "@/shared/ui/dropdown-menu";
+import { Button } from "@/shared/ui/button";
+import BracketEditorBracketOptions from "./BracketEditorBracketOptions";
+import AddNewBracket from "./AddNewBracket";
+import RemoveBracketButton from "./RemoveBracketButton";
+import Typography from "@/shared/ui/typography";
+
+import { FaArrowLeft, FaArrowRight, FaCog, FaPlus } from "react-icons/fa";
+
+export default function BracketEditor() {
   /**
    * Bracket params
    */
@@ -35,6 +47,18 @@ export default function BracketEditor({ className }: { className?: string }) {
 
   function updateTeamCount(e: string) {
     setTeamCount(getNewTeamCount(e, teamCount));
+  }
+
+  /**
+   * Number of teams for each bracket
+   */
+
+  const [numBracketTeams, setNumBracketTeams] = useState<number[]>([]);
+
+  function updateNumBracketTeams(e: number, index: number) {
+    const newNumBracketTeams = [...numBracketTeams];
+    newNumBracketTeams[index] = e;
+    setNumBracketTeams(newNumBracketTeams);
   }
 
   /**
@@ -53,6 +77,19 @@ export default function BracketEditor({ className }: { className?: string }) {
 
   const [numBrackets, setNumBrackets] = useState(1);
 
+  /**
+   * Number of sheets in use; used to calculate schedule of the games
+   */
+
+  function updateNumSheets(e: number) {
+    dispatch({
+      type: BracketEditorActionName.SetNumSheets,
+      args: {
+        numSheets: e,
+      },
+    });
+  }
+
   function updateNumBrackets(e: string) {
     const { brackets: newBrackets, winners: newWinners } =
       getNewBracketAndWinnerCount(e, numBrackets, numWinners);
@@ -69,13 +106,29 @@ export default function BracketEditor({ className }: { className?: string }) {
     editing: true,
   });
 
-  function renderBrackets() {
+  const hasConnections = Object.keys(bracketState.connections).length > 0;
+
+  const [showWizard, setShowWizard] = useState(true);
+
+  function calculateTournamentSchedule(
+    connections: BracketConnections,
+    sheets: number
+  ) {
+    const { schedule: tournamentSchedule } = scheduleTournament(
+      connections,
+      sheets
+    );
+    return tournamentSchedule;
+  }
+
+  function renderBracketsFromWizard() {
     const tournament = generateTournament(teamCount, numWinners);
     const { brackets, connections: initialConnections } = tournament;
-    const { schedule: tournamentSchedule } = scheduleTournament(
+    const tournamentSchedule = calculateTournamentSchedule(
       initialConnections,
-      8
+      bracketState.numSheets
     );
+
     dispatch({
       type: BracketEditorActionName.SetInitialState,
       args: {
@@ -85,6 +138,41 @@ export default function BracketEditor({ className }: { className?: string }) {
         readableIdIndex: generateReadableIdIndex(brackets),
       },
     });
+    setShowWizard(false);
+  }
+
+  const [addBracketMenuOpen, setAddBracketMenuOpen] = useState(false);
+
+  function handleAddBracket({
+    numTeams,
+    numWinners,
+    isSeeded,
+  }: {
+    numTeams: number;
+    numWinners: number;
+    isSeeded: boolean;
+  }) {
+    dispatch({
+      type: BracketEditorActionName.AddBracket,
+      args: {
+        numTeams,
+        numWinners,
+        isSeeded,
+      },
+    });
+    setNumBrackets(numBrackets + 1);
+    setAddBracketMenuOpen(false);
+    updateNumWinners(numWinners, numBrackets);
+  }
+
+  function handleRemoveBracket(bracketIndex: number) {
+    dispatch({
+      type: BracketEditorActionName.RemoveBracket,
+      args: {
+        bracketIndex,
+      },
+    });
+    setNumBrackets(numBrackets - 1);
   }
 
   function handleRemoveWinnerConnection(gameId: string) {
@@ -139,10 +227,14 @@ export default function BracketEditor({ className }: { className?: string }) {
   function handleAddGameToRound({
     roundNumber,
     bracketNumber,
+    gameIndex,
+    offset,
     onSuccess,
   }: {
     roundNumber: number;
     bracketNumber: number;
+    gameIndex: number;
+    offset?: number;
     onSuccess?: (game: BracketGame) => void;
   }) {
     dispatch({
@@ -150,6 +242,8 @@ export default function BracketEditor({ className }: { className?: string }) {
       args: {
         roundNumber,
         bracketNumber,
+        gameIndex,
+        offset,
         onSuccess,
       },
     });
@@ -193,8 +287,6 @@ export default function BracketEditor({ className }: { className?: string }) {
     });
   }
 
-  const hasConnections = Object.keys(bracketState.connections).length > 0;
-
   function deselectAll() {
     dispatch({
       type: BracketEditorActionName.CancelLookForWinnerConnection,
@@ -231,6 +323,20 @@ export default function BracketEditor({ className }: { className?: string }) {
     });
   }
 
+  const totalNumTeams = (bracketState?.brackets || [])
+    .flat()
+    .flat()
+    .flat()
+    .reduce((all, { id: gameId }) => {
+      return (
+        all +
+        ((bracketState.connections[gameId]?.teams || []).filter(
+          ({ teamId }) => teamId === "seed"
+        )?.length || 0)
+      );
+    }, 0);
+
+  const totalNumWinners = numWinners.reduce((all, cur) => all + (cur || 0), 0);
   useEffect(() => {
     if (!bracketState?.lookingForLoserConnection) return;
     if (!bracketState?.availableGames?.length) return;
@@ -297,29 +403,88 @@ export default function BracketEditor({ className }: { className?: string }) {
         deselectAll,
       }}
     >
-      <div className="fixed bottom-4 left-4 md:bottom-8 md:left-8 z-50">
-        <BracketEditorOptionsMenu
-          teamCount={teamCount}
-          updateTeamCount={updateTeamCount}
-          numWinners={numWinners}
-          updateNumWinners={updateNumWinners}
-          renderBrackets={renderBrackets}
-          numBrackets={numBrackets}
-          updateNumBrackets={updateNumBrackets}
-        />
-      </div>
+      <div className="fixed inset-0 ">
+        {!showWizard ? (
+          <Brackets
+            brackets={bracketState.brackets}
+            schedule={bracketState.schedule}
+            connections={bracketState.connections}
+            updateRows={updateRows}
+            rows={bracketState.rows}
+            readableIdIndex={bracketState.readableIdIndex}
+            infoChildren={<GameEditOptions />}
+            appendNavigatorChildren={
+              bracketState.brackets?.length ? (
+                <RemoveBracketButton onClick={handleRemoveBracket} />
+              ) : (
+                <div />
+              )
+            }
+          >
+            <div className="bg-glass text-glass-foreground backdrop-blur-sm p-4">
+              <div className="flex justify-between">
+                Teams <strong>{totalNumTeams}</strong>
+              </div>
+              <div className="flex justify-between">
+                Winners <strong>{totalNumWinners}</strong>
+              </div>
+              <div className="flex gap-2 justify-end mt-4">
+                <DropdownMenu
+                  open={addBracketMenuOpen}
+                  onOpenChange={setAddBracketMenuOpen}
+                >
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="secondary">
+                      <FaPlus /> Add bracket
+                    </Button>
+                  </DropdownMenuTrigger>
 
-      {hasConnections && (
-        <Brackets
-          brackets={bracketState.brackets}
-          schedule={bracketState.schedule}
-          connections={bracketState.connections}
-          updateRows={updateRows}
-          rows={bracketState.rows}
-          readableIdIndex={bracketState.readableIdIndex}
-          infoChildren={<GameEditOptions />}
-        />
-      )}
+                  <DropdownMenuContent className="bg-glass text-glass-foreground backdrop-blur-s p-4">
+                    <AddNewBracket addBracket={handleAddBracket} />
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+            </div>
+          </Brackets>
+        ) : (
+          <div />
+        )}
+        {showWizard && (
+          <div className="fixed inset-0 flex items-center justify-center">
+            <div className="m-auto bg-glass text-glass-foreground backdrop-blur-sm  rounded-lg shadow-sm h-screen md:h-[90vh] overflow-auto w-screen md:w-[700px]">
+              <BracketEditorWizard
+                teamCount={teamCount}
+                updateTeamCount={updateTeamCount}
+                numWinners={numWinners}
+                updateNumWinners={updateNumWinners}
+                renderBrackets={renderBracketsFromWizard}
+                numBrackets={numBrackets}
+                updateNumBrackets={updateNumBrackets}
+                numSheets={bracketState.numSheets}
+                updateNumSheets={updateNumSheets}
+              />
+            </div>
+            <Button
+              className="absolute right-2 top-2"
+              variant="secondary"
+              size="icon"
+              onClick={() => setShowWizard(false)}
+            >
+              <FaArrowRight />
+            </Button>
+          </div>
+        )}
+        {!showWizard && (
+          <Button
+            size="icon"
+            variant="secondary"
+            className=" z-10 absolute top-2 left-2"
+            onClick={() => setShowWizard(true)}
+          >
+            <FaArrowLeft />
+          </Button>
+        )}
+      </div>
     </BracketEditingContext.Provider>
   );
 }

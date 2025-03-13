@@ -56,6 +56,7 @@ export const BracketEditingContext = createContext<{
     index: number;
     teamId: string;
   }) => void;
+  numSheets: number;
 }>({
   availableGames: [],
   editing: false,
@@ -101,4 +102,5 @@ export const BracketEditingContext = createContext<{
     teamId: string | null;
   }) => {},
   deselectAll: () => {},
+  numSheets: 8,
 });
