@@ -1,3 +1,3 @@
-export default function BracketTeam() {
-  return <div>Team</div>;
+export default function BracketTeam({ team }) {
+  return <div>{team.name}</div>;
 }
