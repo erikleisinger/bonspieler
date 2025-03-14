@@ -13,9 +13,11 @@ import { ScrollArea, ScrollBar } from "@/shared/ui/scroll-area";
 export function DateTimePicker({
   date,
   setDate,
+  side = "top",
 }: {
   date: Date | undefined;
   setDate: (newDate: Date | undefined) => void;
+  side: "top" | "bottom" | "left" | "right";
 }) {
   const [isOpen, setIsOpen] = React.useState(false);
 
@@ -43,7 +45,8 @@ export function DateTimePicker({
           variant="outline"
           className={cn(
             "w-full justify-start text-left font-normal",
-            !date && "text-muted-foreground"
+            !date && "text-muted-foreground",
+            isOpen && "ring-2"
           )}
         >
           <FaCalendarAlt className="mr-2 h-4 w-4" />
@@ -54,7 +57,7 @@ export function DateTimePicker({
           )}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-auto p-0">
+      <PopoverContent className="w-auto p-0" side={side}>
         <div className="sm:flex">
           <Calendar
             mode="single"

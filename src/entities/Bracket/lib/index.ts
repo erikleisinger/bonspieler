@@ -13,7 +13,10 @@ export type {
   BracketRowWithId,
 } from "./types/BracketRows";
 export type { BracketGame } from "./types/BracketGame";
+export type { BracketSchedule } from "./types/BracketSchedule";
+export type { BracketDrawTimes } from "./types/BracketDrawTimes";
 export { calculateRowSpanForGame } from "./calculateRowSpanForGame";
+export { getBracketName } from "./getBracketName";
 export {
   MAX_TEAM_COUNT,
   MAX_BRACKET_COUNT,

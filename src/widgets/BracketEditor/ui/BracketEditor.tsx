@@ -27,7 +27,8 @@ import { generateReadableIdIndex } from "../lib/generateReadableIdIndex";
 import BracketEditorWizard from "./BracketEditorWizard";
 import { Button } from "@/shared/ui/button";
 import AddNewBracket from "./AddNewBracket";
-import RemoveBracketButton from "./RemoveBracketButton";
+import EditBracketButton from "./EditBracketButton";
+import EditBracketOptions from "./EditBracketOptions";
 
 import { FaArrowLeft, FaArrowRight, FaCog } from "react-icons/fa";
 import BracketEventOptions from "./BracketEventOptions";
@@ -169,6 +170,7 @@ export default function BracketEditor() {
       },
     });
     setNumBrackets(numBrackets - 1);
+    setBracketToEdit(null);
   }
 
   function handleRemoveWinnerConnection(gameId: string) {
@@ -363,6 +365,14 @@ export default function BracketEditor() {
   const [drawTimes, setDrawTimes] = useState<{ [key: number]: Date }>({});
 
   const [showEventOptions, setShowEventOptions] = useState(false);
+  const [bracketToEdit, setBracketToEdit] = useState<Nullable<number>>(null);
+
+  const [bracketEventName, setBracketEventName] = useState("New Bracket Event");
+
+  function editEvent() {
+    setShowEventOptions(true);
+    setBracketToEdit(null);
+  }
 
   return (
     <BracketEditingContext.Provider
@@ -371,6 +381,7 @@ export default function BracketEditor() {
         editing: bracketState.editing,
         lookingForWinnerConnection: bracketState.lookingForWinnerConnection,
         lookingForLoserConnection: bracketState.lookingForLoserConnection,
+        numWinners,
         selectedDraw: bracketState.selectedDraw,
         lookForWinnerConnection: (
           gameId: string,
@@ -424,22 +435,39 @@ export default function BracketEditor() {
         deselectAll,
         setSchedule: handleSetSchedule,
         setSelectedDraw,
+        showEventEditor: () => setShowEventOptions(true),
       }}
     >
       <div className="fixed inset-0 ">
         {!showWizard ? (
           <Brackets
+            backButton={
+              !showWizard && (
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  onClick={() => setShowWizard(true)}
+                >
+                  <FaArrowLeft />
+                </Button>
+              )
+            }
             brackets={bracketState.brackets}
             drawTimes={drawTimes}
             schedule={bracketState.schedule}
             connections={bracketState.connections}
+            eventName={bracketEventName}
             updateRows={updateRows}
             rows={bracketState.rows}
             readableIdIndex={bracketState.readableIdIndex}
             infoChildren={<GameEditOptions />}
             appendNavigatorChildren={
               bracketState.brackets?.length ? (
-                <RemoveBracketButton onClick={handleRemoveBracket} />
+                <EditBracketButton
+                  editBracket={(bracketNum: number) =>
+                    setBracketToEdit(bracketNum)
+                  }
+                />
               ) : (
                 <div />
               )
@@ -448,6 +476,18 @@ export default function BracketEditor() {
               <AddNewBracket addBracket={handleAddBracket} />
             }
           >
+            <Slideout visible={bracketToEdit !== null}>
+              {bracketToEdit !== null && (
+                <EditBracketOptions
+                  onClose={() => {
+                    setBracketToEdit(null);
+                    setSelectedDraw(null);
+                  }}
+                  removeBracket={handleRemoveBracket}
+                  editEvent={() => setShowEventOptions(true)}
+                />
+              )}
+            </Slideout>
             <Slideout visible={showEventOptions}>
               {showEventOptions && (
                 <BracketEventOptions
@@ -458,12 +498,17 @@ export default function BracketEditor() {
                   updateNumSheets={updateNumSheets}
                   updateNumSheetsAndSchedule={(e) => updateNumSheets(e, true)}
                   drawTimes={drawTimes}
+                  eventName={bracketEventName}
+                  setEventName={setBracketEventName}
                   setDrawTimes={setDrawTimes}
-                  onClose={() => setShowEventOptions(false)}
+                  onClose={() => {
+                    setShowEventOptions(false);
+                    setSelectedDraw(null);
+                  }}
                 />
               )}
             </Slideout>
-            <Button onClick={() => setShowEventOptions(true)}>
+            <Button onClick={editEvent}>
               <FaCog /> Event options
             </Button>
           </Brackets>
@@ -494,16 +539,6 @@ export default function BracketEditor() {
               <FaArrowRight />
             </Button>
           </div>
-        )}
-        {!showWizard && (
-          <Button
-            size="icon"
-            variant="secondary"
-            className=" z-10 absolute top-2 left-2"
-            onClick={() => setShowWizard(true)}
-          >
-            <FaArrowLeft />
-          </Button>
         )}
       </div>
     </BracketEditingContext.Provider>

@@ -9,7 +9,8 @@ import { BracketEditingContext } from "@/shared/EditableBracket/BracketEditingCo
 import { BracketContext } from "@/shared/Bracket/BracketContext";
 import { GAME_HEIGHT } from "../lib/constants/game";
 import { GAME_ELEMENT_ID_PREFIX } from "../lib/constants/element-id";
-import { format } from "date-fns";
+import { Badge } from "@/shared/ui/badge";
+import DrawTime from "@/shared/ui/draw-time";
 
 export default function Round({
   games,
@@ -25,7 +26,7 @@ export default function Round({
   const GAME_PADDING = 16;
 
   const { connections, schedule, drawTimes } = useContext(BracketContext);
-  const { editing } = useContext(BracketEditingContext);
+  const { editing, showEventEditor } = useContext(BracketEditingContext);
 
   function getRowSpanForGame(game: BracketGameType) {
     const { rowStart = 1, rowEnd = 2 } = rows[game.id] || {};
@@ -59,22 +60,28 @@ export default function Round({
       if (!times.includes(drawNum)) times.push(drawNum);
     });
 
-    return (
-      times
-        .map((num) => {
-          if (!drawTimes[num]) return null;
-          return format(drawTimes[num], "h:mm aaa • MMM do");
-        })
-        .filter(Boolean)
-        .join(" | ") || "Draw times not scheduled"
-    );
+    return times.map((num) => drawTimes[num]).filter(Boolean);
   }, [games, schedule, drawTimes]);
 
   return (
     <div className="pointer-events-none">
       <header className="sticky  right-0 top-2 z-10 p-2 text-glass-foreground font-semibold bg-glass shadow-sm backdrop-blur-sm text-center mx-1 rounded-sm pointer-events-auto">
         <div>Round {roundIndex + 1}</div>
-        <div className="text-xs font-normal">{roundDrawTimes}</div>
+        <div className="text-xs font-normal">
+          {roundDrawTimes?.length ? (
+            roundDrawTimes.map((t, i) => <DrawTime key={i} drawTime={t} />)
+          ) : editing ? (
+            <Badge
+              variant="destructive"
+              className="py-0 cursor-pointer"
+              onClick={showEventEditor}
+            >
+              Draw times not set.
+            </Badge>
+          ) : (
+            <div>Draw times not set</div>
+          )}
+        </div>
       </header>
       <div
         className={`relative  grid px-8 md:px-16 pt-4 md:pt-8 w-screen md:w-fit`}

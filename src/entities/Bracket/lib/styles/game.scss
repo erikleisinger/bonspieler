@@ -54,4 +54,22 @@ $SMALL_SCREEN_GAME_WIDTH: calc(100vw - 70px);
       border-color: transparent;
     }
   }
+
+  &.modified {
+    .game__container {
+      animation: flash 0.8s;
+    }
+  }
+}
+
+@keyframes flash {
+  0% {
+    background-color: initial;
+  }
+  50% {
+    background-color: #a7f3d050;
+  }
+  100% {
+    background-color: initial;
+  }
 }

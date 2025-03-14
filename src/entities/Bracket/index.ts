@@ -5,12 +5,15 @@ export type {
   BracketConnectionRegularTeamId,
   BracketConnectionSeedTeam,
   BracketConnectionSeedTeamId,
+  BracketDrawTimes,
   BracketGame,
   BracketRows,
   BracketRow,
+  BracketSchedule,
 } from "./lib";
 export {
   calculateRowSpanForGame,
+  getBracketName,
   MAX_BRACKET_COUNT,
   MAX_TEAM_COUNT,
   MAX_WINNER_COUNT,

@@ -1,6 +1,6 @@
 import type { BracketConnectionTeam } from "../lib";
 import { BracketContext } from "@/shared/Bracket/BracketContext";
-import { BracketEditingContext } from "@/shared/EditableBracket/BracketEditingContext";
+
 import { useContext } from "react";
 import { FaSeedling } from "react-icons/fa";
 export default function BracketGameTeam({
@@ -14,8 +14,7 @@ export default function BracketGameTeam({
   showSeed: boolean;
   team: BracketConnectionTeam;
 }) {
-  const { readableIdIndex, scrollToGame } = useContext(BracketContext);
-  const { lookingForLoserConnection } = useContext(BracketEditingContext);
+  const { readableIdIndex } = useContext(BracketContext);
 
   function getTeamInfo({ isWinner, gameId, teamId }: BracketConnectionTeam) {
     if (teamId) {
@@ -29,25 +28,10 @@ export default function BracketGameTeam({
 
   const isSeed = team?.teamId === "seed";
 
-  const isGame = !!team?.gameId;
-
-  function handleClick(e) {
-    if (!team?.gameId) return;
-    e.stopPropagation();
-    if (onClick && typeof onClick === "function") {
-      onClick(team.gameId);
-    } else {
-      if (lookingForLoserConnection) return;
-      scrollToGame(team.gameId);
-    }
-  }
-
   return (
     <div
-      onClick={handleClick}
       className={
         "flex justify-between bg-white/10 backdrop-blur-sm rounded-sm px-2 " +
-        (isGame ? "hover:bg-white/80 cursor-pointer" : "") +
         className
       }
     >

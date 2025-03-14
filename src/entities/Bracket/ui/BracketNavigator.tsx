@@ -4,6 +4,7 @@ import { FaAngleRight } from "react-icons/fa";
 import { FaAngleLeft } from "react-icons/fa";
 import { BRACKET_CONTAINER_ELEMENT_ID_PREFIX } from "../lib/constants/element-id";
 import { BracketContext } from "@/shared/Bracket/BracketContext";
+import { getBracketName } from "../lib";
 export default function BracketNavigator({
   numBrackets,
   goBracket,
@@ -55,7 +56,9 @@ export default function BracketNavigator({
       >
         <FaAngleLeft />
       </Button>
-      <div className=" font-bold">Bracket {currentlyViewingBracket + 1}</div>
+      <div className=" font-bold">
+        {getBracketName(currentlyViewingBracket)}
+      </div>
       <Button
         variant="ghost"
         disabled={currentlyViewingBracket === numBrackets - 1}

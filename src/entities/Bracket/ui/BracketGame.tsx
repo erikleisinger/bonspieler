@@ -1,5 +1,5 @@
 import "../lib/styles/game.scss";
-import { useContext, useMemo } from "react";
+import { useContext, useMemo, useEffect, useState, useRef } from "react";
 import { BracketEditingContext } from "@/shared/EditableBracket/BracketEditingContext";
 import { BracketContext } from "@/shared/Bracket/BracketContext";
 import BracketGameTeam from "./BracketGameTeam";
@@ -86,9 +86,22 @@ export default function BracketGame({
       return e;
     });
 
+  const firstUpdate = useRef(true);
+  const [modified, setModified] = useState<"modified" | null>(null);
+  useEffect(() => {
+    if (firstUpdate.current) {
+      firstUpdate.current = false;
+      return;
+    }
+    setModified("modified");
+    setTimeout(() => {
+      setModified(null);
+    }, 1001);
+  }, [drawNum, firstUpdate]);
+
   return (
     <div
-      className={getClassName()}
+      className={getClassName() + " " + modified}
       style={{
         height: GAME_HEIGHT + "px",
       }}

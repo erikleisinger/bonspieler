@@ -111,7 +111,7 @@ export default function BracketGameInfo({
                     )}
                     <BracketGameTeam
                       team={team}
-                      className=" p-2 rounded-sm grow cursor-pointer"
+                      className=" p-2 rounded-sm grow "
                       showSeed={false}
                     />
                     <SeedToggle

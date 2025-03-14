@@ -22,7 +22,8 @@ import testTourney from "../lib/test-tourney.json";
 //   schedule: { [gameId: string]: number };
 // }) {
 export default function BracketViewer() {
-  const { connections, brackets, schedule, readableIdIndex } = testTourney;
+  const { connections, brackets, schedule, readableIdIndex, drawTimes } =
+    testTourney;
   const [rows, setRows] = useState({});
   function updateRows(newRows: BracketRows) {
     setRows((prevRows) => {
@@ -41,6 +42,7 @@ export default function BracketViewer() {
       rows={rows}
       updateRows={updateRows}
       readableIdIndex={readableIdIndex}
+      drawTimes={drawTimes}
     />
   );
 }

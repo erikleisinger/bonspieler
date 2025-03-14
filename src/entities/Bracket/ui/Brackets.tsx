@@ -9,13 +9,16 @@ import { scrollToGame } from "../lib/scrollToGame";
 import BracketNavigator from "./BracketNavigator";
 import { BRACKET_CONTAINER_ELEMENT_ID_PREFIX } from "../lib/constants/element-id";
 import Slideout from "@/shared/ui/slide-out";
+import Typography from "@/shared/ui/typography";
 
 export default function Brackets({
   appendNavigatorChildren,
+  backButton,
   brackets,
   children,
   connections,
   drawTimes,
+  eventName = "Bracket",
   infoChildren,
   prependNavigatorChildren,
   readableIdIndex,
@@ -24,10 +27,12 @@ export default function Brackets({
   updateRows,
 }: {
   appendNavigatorChildren?: React.ReactNode;
+  backButton?: React.ReactNode;
   brackets: BracketGame[][][];
   children?: React.ReactNode;
   connections: BracketConnections;
   drawTimes: { [key: number]: Date };
+  eventName?: string;
   infoChildren?: React.ReactNode;
   prependNavigatorChildren?: React.ReactNode;
   readableIdIndex: { [gameId: string]: string };
@@ -68,9 +73,30 @@ export default function Brackets({
     document.removeEventListener("click", cancelSelectedGame);
   }
 
-  const { lookingForLoserConnection } = useContext(BracketEditingContext);
+  const { lookingForLoserConnection, setSelectedDraw } = useContext(
+    BracketEditingContext
+  );
 
   const [currentlyViewingBracket, setCurrentlyViewingBracket] = useState(0);
+
+  function selectGame(game: BracketGame | null | string) {
+    if (!game) return;
+    let gameToSelect = game;
+    if (typeof game === "string") {
+      gameToSelect =
+        brackets
+          .flat()
+          .flat()
+          .find(({ id }) => id === game) || "";
+    } else if (game?.id === undefined) return;
+    setSelectedGame(gameToSelect);
+    setSelectedDraw(null);
+
+    scrollToGame(gameToSelect.id, {
+      inline: "center",
+      block: "center",
+    });
+  }
 
   return (
     <BracketContext.Provider
@@ -82,33 +108,26 @@ export default function Brackets({
         schedule,
         connections,
         deselectGame: cancelSelectedGame,
-        selectGame: (game: BracketGame | null | string) => {
-          let gameToSelect = game;
-          if (typeof game === "string") {
-            gameToSelect = brackets
-              .flat()
-              .flat()
-              .find(({ id }) => id === game);
-          } else if (game?.id === undefined) return;
-          setSelectedGame(gameToSelect);
-
-          scrollToGame(gameToSelect.id, {
-            inline: "center",
-            block: "center",
-          });
-        },
+        selectGame,
         scrollToBracket,
         scrollToGame,
         currentlyViewingBracket,
         setCurrentlyViewingBracket,
       }}
     >
-      <div className=" grid grid-rows-1 absolute inset-0">
+      <div className=" grid grid-rows-[auto_1fr] absolute inset-0">
+        <header className="flex gap-2 md:gap-4 p-4 md:py-6 items-center bg-primary/5 backdrop-blur-md text-glass-foreground">
+          {backButton}
+          <Typography tag="h1" className="text-xl md:text-3xl">
+            {eventName}
+          </Typography>
+        </header>
         <div className="relative overflow-auto">
           <div className="flex flex-col gap-16 absolute inset-0">
             <Slideout
               id="BRACKET_GAME_INFO_CONTAINER"
               visible={!!selectedGame && !lookingForLoserConnection}
+              fullHeight={false}
             >
               {selectedGame && (
                 <BracketGameInfo
@@ -123,7 +142,7 @@ export default function Brackets({
               return (
                 <div key={"bracket-" + bracketIndex} className="w-fit">
                   <div
-                    className="p-0 min-h-screen"
+                    className="p-0 min-h-screen pr-[100vw] md:pr-[500px]"
                     id={BRACKET_CONTAINER_ELEMENT_ID_PREFIX + bracketIndex}
                   >
                     <Bracket
@@ -140,7 +159,6 @@ export default function Brackets({
         </div>
         {
           <div className="fixed right-4 bottom-4 md:right-8 md:bottom-8 z-40 flex flex-col gap-2 ">
-            {children}
             <div className="flex gap-2 items-center justify-end">
               {prependNavigatorChildren}
               <BracketNavigator
@@ -149,6 +167,7 @@ export default function Brackets({
               />
               {appendNavigatorChildren}
             </div>
+            {children}
           </div>
         }
       </div>

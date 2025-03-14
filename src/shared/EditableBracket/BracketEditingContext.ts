@@ -17,6 +17,7 @@ export const BracketEditingContext = createContext<{
   }>;
   lookingForLoserConnection: Nullable<string>;
   numSheets: number;
+  numWinners: number[];
   selectedDraw: Nullable<number>;
   addGameToRound: ({
     bracketNumber,
@@ -55,6 +56,7 @@ export const BracketEditingContext = createContext<{
   removeLoserConnection: (gameId: string) => void;
   removeWinnerConnection: (gameId: string) => void;
   setSelectedDraw: (drawNumber: Nullable<number>) => void;
+  showEventEditor: () => void;
   toggleSeed: ({
     gameId,
     index,
@@ -70,6 +72,7 @@ export const BracketEditingContext = createContext<{
   lookingForLoserConnection: null,
   lookingForWinnerConnection: null,
   numSheets: 8,
+  numWinners: [],
   selectedDraw: null,
   addGameToRound: editingDisabled,
   addLoserConnection: editingDisabled,
@@ -81,5 +84,6 @@ export const BracketEditingContext = createContext<{
   removeLoserConnection: editingDisabled,
   removeWinnerConnection: editingDisabled,
   setSelectedDraw: editingDisabled,
+  showEventEditor: editingDisabled,
   toggleSeed: editingDisabled,
 });

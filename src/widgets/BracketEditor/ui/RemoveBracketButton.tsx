@@ -1,9 +1,10 @@
 import { useContext } from "react";
 import { BracketContext } from "@/shared/Bracket/BracketContext";
 import { Button } from "@/shared/ui/button";
-import { FaTrash } from "react-icons/fa";
+import { getBracketName } from "@/entities/Bracket";
 export default function RemoveBracketButton({
   onClick,
+  ...props
 }: {
   onClick: (index: number) => void;
 }) {
@@ -18,8 +19,13 @@ export default function RemoveBracketButton({
   }
 
   return (
-    <Button variant="secondary" size="icon" onClick={handleRemoveBracket}>
-      <FaTrash />
+    <Button
+      {...props}
+      variant="destructive"
+      className="min-w-[300px] m-auto mt-2"
+      onClick={handleRemoveBracket}
+    >
+      Delete {getBracketName(currentlyViewingBracket)}
     </Button>
   );
 }

@@ -52,7 +52,7 @@ export default function AddNewBracket({
         </Button>
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent className="bg-glass text-glass-foreground backdrop-blur-s p-4">
+      <DropdownMenuContent className="bg-glass text-glass-foreground backdrop-blur-md p-4">
         <div>
           <header className="mb-4">
             <Typography tag="h5">Add Bracket</Typography>
