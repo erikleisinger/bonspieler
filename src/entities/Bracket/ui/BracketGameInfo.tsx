@@ -114,12 +114,14 @@ export default function BracketGameInfo({
                       className=" p-2 rounded-sm grow "
                       showSeed={false}
                     />
-                    <SeedToggle
-                      className="ml-4"
-                      connection={team}
-                      game={selectedGame}
-                      index={index}
-                    />
+                    {editing && (
+                      <SeedToggle
+                        className="ml-4"
+                        connection={team}
+                        game={selectedGame}
+                        index={index}
+                      />
+                    )}
                   </div>
                 );
               })}
