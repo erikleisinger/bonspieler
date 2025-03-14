@@ -5,7 +5,7 @@ import type {
 } from "@/entities/Bracket";
 import { Brackets } from "@/entities/Bracket";
 import { useState } from "react";
-import testTourney from "../lib/test-tourney.json";
+import testTourney from "@/../mock/test-tourney.json";
 
 /**
  * Will accept props in production state;

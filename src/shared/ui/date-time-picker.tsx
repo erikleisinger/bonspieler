@@ -51,7 +51,7 @@ export function DateTimePicker({
         >
           <FaCalendarAlt className="mr-2 h-4 w-4" />
           {date ? (
-            format(date, "MM/dd/yyyy hh:mm")
+            format(date, "h:mm aa • MMM do, yyyy")
           ) : (
             <span>MM/DD/YYYY hh:mm</span>
           )}

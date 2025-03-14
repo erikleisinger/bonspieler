@@ -2,7 +2,13 @@ import React, { useContext, useState } from "react";
 import { BracketContext } from "@/shared/Bracket/BracketContext";
 
 import { BracketEditingContext } from "@/shared/EditableBracket/BracketEditingContext";
-import type { BracketConnections, BracketGame, BracketRows } from "../lib";
+import type {
+  BracketConnections,
+  BracketGame,
+  BracketRows,
+  BracketDrawTimes,
+  BracketSchedule,
+} from "../lib";
 import Bracket from "./Bracket";
 import BracketGameInfo from "./BracketGameInfo";
 import { scrollToGame } from "../lib/scrollToGame";
@@ -31,13 +37,13 @@ export default function Brackets({
   brackets: BracketGame[][][];
   children?: React.ReactNode;
   connections: BracketConnections;
-  drawTimes: { [key: number]: Date };
+  drawTimes: BracketDrawTimes;
   eventName?: string;
   infoChildren?: React.ReactNode;
   prependNavigatorChildren?: React.ReactNode;
   readableIdIndex: { [gameId: string]: string };
   rows: BracketRows;
-  schedule: { [gameId: string]: number };
+  schedule: BracketSchedule;
   updateRows: (newRows: BracketRows) => void;
 }) {
   function scrollToBracket(bracketIndex: number) {

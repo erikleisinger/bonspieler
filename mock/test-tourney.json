@@ -1,0 +1,1344 @@
+{
+  "brackets": [
+    [
+      [
+        {
+          "id": "game-fadeb8e6-9a39-4f89-8558-ef7d69a4c77e",
+          "isSeed": true,
+          "bracketNumber": 0,
+          "roundNumber": 0,
+          "score": 0
+        },
+        {
+          "id": "game-bca49ff4-d7e2-4185-9398-8d3d6316ac62",
+          "isSeed": true,
+          "bracketNumber": 0,
+          "roundNumber": 0,
+          "score": 0
+        },
+        {
+          "id": "game-4ed113f1-89fe-48ed-b084-e77c8c31a565",
+          "isSeed": true,
+          "bracketNumber": 0,
+          "roundNumber": 0,
+          "score": 0
+        }
+      ],
+      [
+        {
+          "id": "game-92fe5ae4-d3ef-4673-8a5c-f79008b58681",
+          "isSeed": true,
+          "bracketNumber": 0,
+          "roundNumber": 1,
+          "score": 1
+        },
+        {
+          "id": "game-5855ea64-47e7-4f21-822e-258bdfe98e59",
+          "isSeed": true,
+          "bracketNumber": 0,
+          "roundNumber": 1,
+          "score": 1
+        },
+        {
+          "id": "game-c8ee0a66-708b-479a-bc67-c394ffec3fe6",
+          "isSeed": true,
+          "bracketNumber": 0,
+          "roundNumber": 1,
+          "score": 1
+        },
+        {
+          "id": "game-74fd2bcf-05a7-4c56-a02c-78669e628c2e",
+          "isSeed": true,
+          "bracketNumber": 0,
+          "roundNumber": 1,
+          "score": 1
+        },
+        {
+          "id": "game-878f3c94-c140-4e06-9457-e01f844aee98",
+          "isSeed": true,
+          "bracketNumber": 0,
+          "roundNumber": 1,
+          "score": 1
+        },
+        {
+          "id": "game-834294f5-6935-40dc-bd2f-cf9622a26861",
+          "isSeed": true,
+          "bracketNumber": 0,
+          "roundNumber": 1,
+          "score": 1
+        },
+        {
+          "id": "game-6cc622ce-7cb8-4cdf-af07-3a233bba52be",
+          "isSeed": true,
+          "bracketNumber": 0,
+          "roundNumber": 1,
+          "score": 1
+        },
+        {
+          "id": "game-923a8b82-57a9-49fc-80fe-758da77bf6b2",
+          "isSeed": true,
+          "bracketNumber": 0,
+          "roundNumber": 1,
+          "score": 1
+        }
+      ],
+      [
+        {
+          "id": "game-ac3fd90e-1ad9-40b6-991c-1079571040bc",
+          "isSeed": false,
+          "bracketNumber": 0,
+          "roundNumber": 2,
+          "score": 2
+        },
+        {
+          "id": "game-515dfc70-ab6a-42c5-a158-9525c47ba1ed",
+          "isSeed": false,
+          "bracketNumber": 0,
+          "roundNumber": 2,
+          "score": 2
+        },
+        {
+          "id": "game-6492a23f-2001-4cfe-aa98-e4aa47e687e1",
+          "isSeed": false,
+          "bracketNumber": 0,
+          "roundNumber": 2,
+          "score": 2
+        },
+        {
+          "id": "game-95504981-7a1c-49fe-94e5-b3d141e829e8",
+          "isSeed": false,
+          "bracketNumber": 0,
+          "roundNumber": 2,
+          "score": 2
+        }
+      ],
+      [
+        {
+          "id": "game-a7aa3898-85ee-4d34-b3ff-6c040a56ada1",
+          "isSeed": false,
+          "bracketNumber": 0,
+          "roundNumber": 3,
+          "score": 3
+        },
+        {
+          "id": "game-eddec803-36d8-4f0e-8d57-5cf02bc4c074",
+          "isSeed": false,
+          "bracketNumber": 0,
+          "roundNumber": 3,
+          "score": 3
+        }
+      ],
+      [
+        {
+          "id": "game-1c29b77a-d468-4c6e-9d3f-6e5af8a0db7e",
+          "isSeed": false,
+          "bracketNumber": 0,
+          "roundNumber": 4,
+          "score": 4
+        }
+      ]
+    ],
+    [
+      [
+        {
+          "id": "game-d7ee3290-b4a1-4937-8900-21372df26935",
+          "isSeed": false,
+          "bracketNumber": 1,
+          "roundNumber": 0,
+          "score": 0
+        },
+        {
+          "id": "game-dc9b0a5e-df1b-43dd-9dfb-6e8b82504394",
+          "isSeed": false,
+          "bracketNumber": 1,
+          "roundNumber": 0,
+          "score": 0
+        }
+      ],
+      [
+        {
+          "id": "game-607796fa-9d2d-41de-a8cb-d75fd6088247",
+          "isSeed": false,
+          "bracketNumber": 1,
+          "roundNumber": 1,
+          "score": 1
+        },
+        {
+          "id": "game-df462d5a-795f-486f-8e6c-49bbff833399",
+          "isSeed": false,
+          "bracketNumber": 1,
+          "roundNumber": 1,
+          "score": 1
+        },
+        {
+          "id": "game-1be96753-adec-428a-8558-2d763d36afa2",
+          "isSeed": false,
+          "bracketNumber": 1,
+          "roundNumber": 1,
+          "score": 1
+        },
+        {
+          "id": "game-51648af2-ccb8-4207-8898-1ed155c497e9",
+          "isSeed": false,
+          "bracketNumber": 1,
+          "roundNumber": 1,
+          "score": 1
+        },
+        {
+          "id": "game-ddfbf1e1-a28e-4b13-b068-645dc750b981",
+          "isSeed": false,
+          "bracketNumber": 1,
+          "roundNumber": 1,
+          "score": 1
+        }
+      ],
+      [
+        {
+          "id": "game-fe96d5dc-2fd2-467e-9641-ab28532a83c9",
+          "isSeed": false,
+          "bracketNumber": 1,
+          "roundNumber": 2,
+          "score": 2
+        },
+        {
+          "id": "game-bc55bff2-a590-4e81-b664-9f022e7f41b6",
+          "isSeed": false,
+          "bracketNumber": 1,
+          "roundNumber": 2,
+          "score": 2
+        },
+        {
+          "id": "game-8dfefc77-5a62-4a5f-945b-301f235a77ff",
+          "isSeed": false,
+          "bracketNumber": 1,
+          "roundNumber": 2,
+          "score": 2
+        },
+        {
+          "id": "game-0451d358-a5d1-40de-a308-94dbc0fd410c",
+          "isSeed": false,
+          "bracketNumber": 1,
+          "roundNumber": 2,
+          "score": 2
+        }
+      ],
+      [
+        {
+          "id": "game-8988d9d2-7cd8-4a61-af91-2fad56fee45f",
+          "isSeed": false,
+          "bracketNumber": 1,
+          "roundNumber": 3,
+          "score": 3
+        },
+        {
+          "id": "game-433d8d22-326e-4702-9222-4b5dd7ba7fea",
+          "isSeed": false,
+          "bracketNumber": 1,
+          "roundNumber": 3,
+          "score": 3
+        },
+        {
+          "id": "game-92d2ecd4-0297-47b2-ad88-2afccc431069",
+          "isSeed": false,
+          "bracketNumber": 1,
+          "roundNumber": 3,
+          "score": 3
+        }
+      ],
+      [
+        {
+          "id": "game-809c309b-c9aa-4809-81aa-5a1ebdb1c664",
+          "isSeed": false,
+          "bracketNumber": 1,
+          "roundNumber": 4,
+          "score": 4
+        },
+        {
+          "id": "game-50402081-2dd7-4179-99d7-91ca010b37b5",
+          "isSeed": false,
+          "bracketNumber": 1,
+          "roundNumber": 4,
+          "score": 4
+        }
+      ],
+      [
+        {
+          "id": "game-2a234d44-a26e-4c57-8373-e455567dbfe1",
+          "isSeed": false,
+          "bracketNumber": 1,
+          "roundNumber": 5,
+          "score": 5
+        }
+      ]
+    ],
+    [
+      [
+        {
+          "id": "game-ad366a7a-cd17-474f-97ce-492ad099addc",
+          "isSeed": false,
+          "bracketNumber": 2,
+          "roundNumber": 0,
+          "score": 0
+        },
+        {
+          "id": "game-f5379fcf-51d0-4a73-86ec-197c9a38e271",
+          "isSeed": false,
+          "bracketNumber": 2,
+          "roundNumber": 0,
+          "score": 0
+        }
+      ],
+      [
+        {
+          "id": "game-dd202b68-d4ce-4a36-992b-f967a01842d5",
+          "isSeed": false,
+          "bracketNumber": 2,
+          "roundNumber": 1,
+          "score": 1
+        },
+        {
+          "id": "game-586f4e9b-6e97-415f-a5fa-f3d96bcbddbf",
+          "isSeed": false,
+          "bracketNumber": 2,
+          "roundNumber": 1,
+          "score": 1
+        },
+        {
+          "id": "game-94937ac5-8836-4fb2-bdc1-6d5ef73d3144",
+          "isSeed": false,
+          "bracketNumber": 2,
+          "roundNumber": 1,
+          "score": 1
+        }
+      ],
+      [
+        {
+          "id": "game-1917d187-396f-4910-811e-673c3201eb44",
+          "isSeed": false,
+          "bracketNumber": 2,
+          "roundNumber": 2,
+          "score": 2
+        },
+        {
+          "id": "game-affb0809-dba4-40d3-a888-8cb766a660c2",
+          "isSeed": false,
+          "bracketNumber": 2,
+          "roundNumber": 2,
+          "score": 2
+        },
+        {
+          "id": "game-792ab261-8431-4ead-81eb-d2c4ce271d32",
+          "isSeed": false,
+          "bracketNumber": 2,
+          "roundNumber": 2,
+          "score": 2
+        }
+      ],
+      [
+        {
+          "id": "game-f16f0186-041f-4830-bb29-4bfb25ab2c9b",
+          "isSeed": false,
+          "bracketNumber": 2,
+          "roundNumber": 3,
+          "score": 3
+        },
+        {
+          "id": "game-23209d97-76ca-4533-9e2a-707baa5ad5ed",
+          "isSeed": false,
+          "bracketNumber": 2,
+          "roundNumber": 3,
+          "score": 3
+        },
+        {
+          "id": "game-14c4cb04-b5f5-4b82-b33b-b97e0b96ed3d",
+          "isSeed": false,
+          "bracketNumber": 2,
+          "roundNumber": 3,
+          "score": 3
+        }
+      ],
+      [
+        {
+          "id": "game-a83ff8a5-15a0-4dcf-b12d-b037d7c2c761",
+          "isSeed": false,
+          "bracketNumber": 2,
+          "roundNumber": 4,
+          "score": 4
+        },
+        {
+          "id": "game-8b7c7b8e-807e-4cde-9a3b-447e0bdb9cde",
+          "isSeed": false,
+          "bracketNumber": 2,
+          "roundNumber": 4,
+          "score": 4
+        }
+      ],
+      [
+        {
+          "id": "game-982fc6c0-7377-4b72-8478-4861b1cc31ae",
+          "isSeed": false,
+          "bracketNumber": 2,
+          "roundNumber": 5,
+          "score": 5
+        },
+        {
+          "id": "game-2831292b-d083-488c-be7f-059f4f8cea15",
+          "isSeed": false,
+          "bracketNumber": 2,
+          "roundNumber": 5,
+          "score": 5
+        }
+      ],
+      [
+        {
+          "id": "game-fd83b70c-36d5-454b-8c93-acda3cdf56c8",
+          "isSeed": false,
+          "bracketNumber": 2,
+          "roundNumber": 6,
+          "score": 6
+        }
+      ]
+    ]
+  ],
+  "connections": {
+    "game-fadeb8e6-9a39-4f89-8558-ef7d69a4c77e": {
+      "winnerTo": "game-92fe5ae4-d3ef-4673-8a5c-f79008b58681",
+      "loserTo": "game-d7ee3290-b4a1-4937-8900-21372df26935",
+      "teams": [
+        {
+          "isWinner": true,
+          "teamId": "seed",
+          "gameId": null
+        },
+        {
+          "isWinner": true,
+          "teamId": "seed",
+          "gameId": null
+        }
+      ]
+    },
+    "game-bca49ff4-d7e2-4185-9398-8d3d6316ac62": {
+      "winnerTo": "game-5855ea64-47e7-4f21-822e-258bdfe98e59",
+      "loserTo": "game-dc9b0a5e-df1b-43dd-9dfb-6e8b82504394",
+      "teams": [
+        {
+          "isWinner": true,
+          "teamId": "seed",
+          "gameId": null
+        },
+        {
+          "isWinner": true,
+          "teamId": "seed",
+          "gameId": null
+        }
+      ]
+    },
+    "game-4ed113f1-89fe-48ed-b084-e77c8c31a565": {
+      "winnerTo": "game-c8ee0a66-708b-479a-bc67-c394ffec3fe6",
+      "loserTo": "game-dc9b0a5e-df1b-43dd-9dfb-6e8b82504394",
+      "teams": [
+        {
+          "isWinner": true,
+          "teamId": "seed",
+          "gameId": null
+        },
+        {
+          "isWinner": true,
+          "teamId": "seed",
+          "gameId": null
+        }
+      ]
+    },
+    "game-92fe5ae4-d3ef-4673-8a5c-f79008b58681": {
+      "winnerTo": "game-ac3fd90e-1ad9-40b6-991c-1079571040bc",
+      "loserTo": "game-df462d5a-795f-486f-8e6c-49bbff833399",
+      "teams": [
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "game-fadeb8e6-9a39-4f89-8558-ef7d69a4c77e"
+        },
+        {
+          "isWinner": true,
+          "teamId": "seed",
+          "gameId": null
+        }
+      ]
+    },
+    "game-5855ea64-47e7-4f21-822e-258bdfe98e59": {
+      "winnerTo": "game-ac3fd90e-1ad9-40b6-991c-1079571040bc",
+      "loserTo": "game-1be96753-adec-428a-8558-2d763d36afa2",
+      "teams": [
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "game-bca49ff4-d7e2-4185-9398-8d3d6316ac62"
+        },
+        {
+          "isWinner": true,
+          "teamId": "seed",
+          "gameId": null
+        }
+      ]
+    },
+    "game-c8ee0a66-708b-479a-bc67-c394ffec3fe6": {
+      "winnerTo": "game-515dfc70-ab6a-42c5-a158-9525c47ba1ed",
+      "loserTo": "game-1be96753-adec-428a-8558-2d763d36afa2",
+      "teams": [
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "game-4ed113f1-89fe-48ed-b084-e77c8c31a565"
+        },
+        {
+          "isWinner": true,
+          "teamId": "seed",
+          "gameId": null
+        }
+      ]
+    },
+    "game-74fd2bcf-05a7-4c56-a02c-78669e628c2e": {
+      "winnerTo": "game-515dfc70-ab6a-42c5-a158-9525c47ba1ed",
+      "loserTo": "game-51648af2-ccb8-4207-8898-1ed155c497e9",
+      "teams": [
+        {
+          "isWinner": true,
+          "teamId": "seed",
+          "gameId": null
+        },
+        {
+          "isWinner": true,
+          "teamId": "seed",
+          "gameId": null
+        }
+      ]
+    },
+    "game-878f3c94-c140-4e06-9457-e01f844aee98": {
+      "winnerTo": "game-6492a23f-2001-4cfe-aa98-e4aa47e687e1",
+      "loserTo": "game-51648af2-ccb8-4207-8898-1ed155c497e9",
+      "teams": [
+        {
+          "isWinner": true,
+          "teamId": "seed",
+          "gameId": null
+        },
+        {
+          "isWinner": true,
+          "teamId": "seed",
+          "gameId": null
+        }
+      ]
+    },
+    "game-834294f5-6935-40dc-bd2f-cf9622a26861": {
+      "winnerTo": "game-6492a23f-2001-4cfe-aa98-e4aa47e687e1",
+      "loserTo": "game-ddfbf1e1-a28e-4b13-b068-645dc750b981",
+      "teams": [
+        {
+          "isWinner": true,
+          "teamId": "seed",
+          "gameId": null
+        },
+        {
+          "isWinner": true,
+          "teamId": "seed",
+          "gameId": null
+        }
+      ]
+    },
+    "game-6cc622ce-7cb8-4cdf-af07-3a233bba52be": {
+      "winnerTo": "game-95504981-7a1c-49fe-94e5-b3d141e829e8",
+      "loserTo": "game-ddfbf1e1-a28e-4b13-b068-645dc750b981",
+      "teams": [
+        {
+          "isWinner": true,
+          "teamId": "seed",
+          "gameId": null
+        },
+        {
+          "isWinner": true,
+          "teamId": "seed",
+          "gameId": null
+        }
+      ]
+    },
+    "game-923a8b82-57a9-49fc-80fe-758da77bf6b2": {
+      "winnerTo": "game-95504981-7a1c-49fe-94e5-b3d141e829e8",
+      "loserTo": "game-d7ee3290-b4a1-4937-8900-21372df26935",
+      "teams": [
+        {
+          "isWinner": true,
+          "teamId": "seed",
+          "gameId": null
+        },
+        {
+          "isWinner": true,
+          "teamId": "seed",
+          "gameId": null
+        }
+      ]
+    },
+    "game-ac3fd90e-1ad9-40b6-991c-1079571040bc": {
+      "winnerTo": "game-a7aa3898-85ee-4d34-b3ff-6c040a56ada1",
+      "loserTo": "game-8dfefc77-5a62-4a5f-945b-301f235a77ff",
+      "teams": [
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "game-92fe5ae4-d3ef-4673-8a5c-f79008b58681"
+        },
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "game-5855ea64-47e7-4f21-822e-258bdfe98e59"
+        }
+      ]
+    },
+    "game-515dfc70-ab6a-42c5-a158-9525c47ba1ed": {
+      "winnerTo": "game-a7aa3898-85ee-4d34-b3ff-6c040a56ada1",
+      "loserTo": "game-0451d358-a5d1-40de-a308-94dbc0fd410c",
+      "teams": [
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "game-c8ee0a66-708b-479a-bc67-c394ffec3fe6"
+        },
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "game-74fd2bcf-05a7-4c56-a02c-78669e628c2e"
+        }
+      ]
+    },
+    "game-6492a23f-2001-4cfe-aa98-e4aa47e687e1": {
+      "winnerTo": "game-eddec803-36d8-4f0e-8d57-5cf02bc4c074",
+      "loserTo": "game-0451d358-a5d1-40de-a308-94dbc0fd410c",
+      "teams": [
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "game-878f3c94-c140-4e06-9457-e01f844aee98"
+        },
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "game-834294f5-6935-40dc-bd2f-cf9622a26861"
+        }
+      ]
+    },
+    "game-95504981-7a1c-49fe-94e5-b3d141e829e8": {
+      "winnerTo": "game-eddec803-36d8-4f0e-8d57-5cf02bc4c074",
+      "loserTo": "game-607796fa-9d2d-41de-a8cb-d75fd6088247",
+      "teams": [
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "game-6cc622ce-7cb8-4cdf-af07-3a233bba52be"
+        },
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "game-923a8b82-57a9-49fc-80fe-758da77bf6b2"
+        }
+      ]
+    },
+    "game-a7aa3898-85ee-4d34-b3ff-6c040a56ada1": {
+      "winnerTo": "game-1c29b77a-d468-4c6e-9d3f-6e5af8a0db7e",
+      "loserTo": "game-92d2ecd4-0297-47b2-ad88-2afccc431069",
+      "teams": [
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "game-ac3fd90e-1ad9-40b6-991c-1079571040bc"
+        },
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "game-515dfc70-ab6a-42c5-a158-9525c47ba1ed"
+        }
+      ]
+    },
+    "game-eddec803-36d8-4f0e-8d57-5cf02bc4c074": {
+      "winnerTo": "game-1c29b77a-d468-4c6e-9d3f-6e5af8a0db7e",
+      "loserTo": "game-92d2ecd4-0297-47b2-ad88-2afccc431069",
+      "teams": [
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "game-6492a23f-2001-4cfe-aa98-e4aa47e687e1"
+        },
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "game-95504981-7a1c-49fe-94e5-b3d141e829e8"
+        }
+      ]
+    },
+    "game-1c29b77a-d468-4c6e-9d3f-6e5af8a0db7e": {
+      "winnerTo": null,
+      "loserTo": "game-50402081-2dd7-4179-99d7-91ca010b37b5",
+      "teams": [
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "game-a7aa3898-85ee-4d34-b3ff-6c040a56ada1"
+        },
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "game-eddec803-36d8-4f0e-8d57-5cf02bc4c074"
+        }
+      ]
+    },
+    "game-d7ee3290-b4a1-4937-8900-21372df26935": {
+      "winnerTo": "game-607796fa-9d2d-41de-a8cb-d75fd6088247",
+      "loserTo": "game-f5379fcf-51d0-4a73-86ec-197c9a38e271",
+      "teams": [
+        {
+          "isWinner": false,
+          "teamId": null,
+          "gameId": "game-923a8b82-57a9-49fc-80fe-758da77bf6b2"
+        },
+        {
+          "isWinner": false,
+          "teamId": null,
+          "gameId": "game-fadeb8e6-9a39-4f89-8558-ef7d69a4c77e"
+        }
+      ]
+    },
+    "game-dc9b0a5e-df1b-43dd-9dfb-6e8b82504394": {
+      "winnerTo": "game-df462d5a-795f-486f-8e6c-49bbff833399",
+      "loserTo": "game-f5379fcf-51d0-4a73-86ec-197c9a38e271",
+      "teams": [
+        {
+          "isWinner": false,
+          "teamId": null,
+          "gameId": "game-bca49ff4-d7e2-4185-9398-8d3d6316ac62"
+        },
+        {
+          "isWinner": false,
+          "teamId": null,
+          "gameId": "game-4ed113f1-89fe-48ed-b084-e77c8c31a565"
+        }
+      ]
+    },
+    "game-607796fa-9d2d-41de-a8cb-d75fd6088247": {
+      "winnerTo": "game-fe96d5dc-2fd2-467e-9641-ab28532a83c9",
+      "loserTo": "game-586f4e9b-6e97-415f-a5fa-f3d96bcbddbf",
+      "teams": [
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "game-d7ee3290-b4a1-4937-8900-21372df26935"
+        },
+        {
+          "isWinner": false,
+          "teamId": null,
+          "gameId": "game-95504981-7a1c-49fe-94e5-b3d141e829e8"
+        }
+      ]
+    },
+    "game-df462d5a-795f-486f-8e6c-49bbff833399": {
+      "winnerTo": "game-fe96d5dc-2fd2-467e-9641-ab28532a83c9",
+      "loserTo": "game-94937ac5-8836-4fb2-bdc1-6d5ef73d3144",
+      "teams": [
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "game-dc9b0a5e-df1b-43dd-9dfb-6e8b82504394"
+        },
+        {
+          "isWinner": false,
+          "teamId": null,
+          "gameId": "game-92fe5ae4-d3ef-4673-8a5c-f79008b58681"
+        }
+      ]
+    },
+    "game-1be96753-adec-428a-8558-2d763d36afa2": {
+      "winnerTo": "game-bc55bff2-a590-4e81-b664-9f022e7f41b6",
+      "loserTo": "game-94937ac5-8836-4fb2-bdc1-6d5ef73d3144",
+      "teams": [
+        {
+          "isWinner": false,
+          "teamId": null,
+          "gameId": "game-5855ea64-47e7-4f21-822e-258bdfe98e59"
+        },
+        {
+          "isWinner": false,
+          "teamId": null,
+          "gameId": "game-c8ee0a66-708b-479a-bc67-c394ffec3fe6"
+        }
+      ]
+    },
+    "game-51648af2-ccb8-4207-8898-1ed155c497e9": {
+      "winnerTo": "game-bc55bff2-a590-4e81-b664-9f022e7f41b6",
+      "loserTo": "game-ad366a7a-cd17-474f-97ce-492ad099addc",
+      "teams": [
+        {
+          "isWinner": false,
+          "teamId": null,
+          "gameId": "game-74fd2bcf-05a7-4c56-a02c-78669e628c2e"
+        },
+        {
+          "isWinner": false,
+          "teamId": null,
+          "gameId": "game-878f3c94-c140-4e06-9457-e01f844aee98"
+        }
+      ]
+    },
+    "game-ddfbf1e1-a28e-4b13-b068-645dc750b981": {
+      "winnerTo": "game-8dfefc77-5a62-4a5f-945b-301f235a77ff",
+      "loserTo": "game-ad366a7a-cd17-474f-97ce-492ad099addc",
+      "teams": [
+        {
+          "isWinner": false,
+          "teamId": null,
+          "gameId": "game-834294f5-6935-40dc-bd2f-cf9622a26861"
+        },
+        {
+          "isWinner": false,
+          "teamId": null,
+          "gameId": "game-6cc622ce-7cb8-4cdf-af07-3a233bba52be"
+        }
+      ]
+    },
+    "game-fe96d5dc-2fd2-467e-9641-ab28532a83c9": {
+      "winnerTo": "game-8988d9d2-7cd8-4a61-af91-2fad56fee45f",
+      "loserTo": "game-1917d187-396f-4910-811e-673c3201eb44",
+      "teams": [
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "game-607796fa-9d2d-41de-a8cb-d75fd6088247"
+        },
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "game-df462d5a-795f-486f-8e6c-49bbff833399"
+        }
+      ]
+    },
+    "game-bc55bff2-a590-4e81-b664-9f022e7f41b6": {
+      "winnerTo": "game-8988d9d2-7cd8-4a61-af91-2fad56fee45f",
+      "loserTo": "game-affb0809-dba4-40d3-a888-8cb766a660c2",
+      "teams": [
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "game-1be96753-adec-428a-8558-2d763d36afa2"
+        },
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "game-51648af2-ccb8-4207-8898-1ed155c497e9"
+        }
+      ]
+    },
+    "game-8dfefc77-5a62-4a5f-945b-301f235a77ff": {
+      "winnerTo": "game-433d8d22-326e-4702-9222-4b5dd7ba7fea",
+      "loserTo": "game-792ab261-8431-4ead-81eb-d2c4ce271d32",
+      "teams": [
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "game-ddfbf1e1-a28e-4b13-b068-645dc750b981"
+        },
+        {
+          "isWinner": false,
+          "teamId": null,
+          "gameId": "game-ac3fd90e-1ad9-40b6-991c-1079571040bc"
+        }
+      ]
+    },
+    "game-0451d358-a5d1-40de-a308-94dbc0fd410c": {
+      "winnerTo": "game-433d8d22-326e-4702-9222-4b5dd7ba7fea",
+      "loserTo": "game-dd202b68-d4ce-4a36-992b-f967a01842d5",
+      "teams": [
+        {
+          "isWinner": false,
+          "teamId": null,
+          "gameId": "game-515dfc70-ab6a-42c5-a158-9525c47ba1ed"
+        },
+        {
+          "isWinner": false,
+          "teamId": null,
+          "gameId": "game-6492a23f-2001-4cfe-aa98-e4aa47e687e1"
+        }
+      ]
+    },
+    "game-8988d9d2-7cd8-4a61-af91-2fad56fee45f": {
+      "winnerTo": "game-809c309b-c9aa-4809-81aa-5a1ebdb1c664",
+      "loserTo": "game-f16f0186-041f-4830-bb29-4bfb25ab2c9b",
+      "teams": [
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "game-fe96d5dc-2fd2-467e-9641-ab28532a83c9"
+        },
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "game-bc55bff2-a590-4e81-b664-9f022e7f41b6"
+        }
+      ]
+    },
+    "game-433d8d22-326e-4702-9222-4b5dd7ba7fea": {
+      "winnerTo": "game-809c309b-c9aa-4809-81aa-5a1ebdb1c664",
+      "loserTo": "game-23209d97-76ca-4533-9e2a-707baa5ad5ed",
+      "teams": [
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "game-8dfefc77-5a62-4a5f-945b-301f235a77ff"
+        },
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "game-0451d358-a5d1-40de-a308-94dbc0fd410c"
+        }
+      ]
+    },
+    "game-92d2ecd4-0297-47b2-ad88-2afccc431069": {
+      "winnerTo": "game-50402081-2dd7-4179-99d7-91ca010b37b5",
+      "loserTo": "game-14c4cb04-b5f5-4b82-b33b-b97e0b96ed3d",
+      "teams": [
+        {
+          "isWinner": false,
+          "teamId": null,
+          "gameId": "game-a7aa3898-85ee-4d34-b3ff-6c040a56ada1"
+        },
+        {
+          "isWinner": false,
+          "teamId": null,
+          "gameId": "game-eddec803-36d8-4f0e-8d57-5cf02bc4c074"
+        }
+      ]
+    },
+    "game-809c309b-c9aa-4809-81aa-5a1ebdb1c664": {
+      "winnerTo": "game-2a234d44-a26e-4c57-8373-e455567dbfe1",
+      "loserTo": "game-2831292b-d083-488c-be7f-059f4f8cea15",
+      "teams": [
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "game-8988d9d2-7cd8-4a61-af91-2fad56fee45f"
+        },
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "game-433d8d22-326e-4702-9222-4b5dd7ba7fea"
+        }
+      ]
+    },
+    "game-50402081-2dd7-4179-99d7-91ca010b37b5": {
+      "winnerTo": "game-2a234d44-a26e-4c57-8373-e455567dbfe1",
+      "loserTo": "game-8b7c7b8e-807e-4cde-9a3b-447e0bdb9cde",
+      "teams": [
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "game-92d2ecd4-0297-47b2-ad88-2afccc431069"
+        },
+        {
+          "isWinner": false,
+          "teamId": null,
+          "gameId": "game-1c29b77a-d468-4c6e-9d3f-6e5af8a0db7e"
+        }
+      ]
+    },
+    "game-2a234d44-a26e-4c57-8373-e455567dbfe1": {
+      "winnerTo": null,
+      "loserTo": "game-982fc6c0-7377-4b72-8478-4861b1cc31ae",
+      "teams": [
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "game-809c309b-c9aa-4809-81aa-5a1ebdb1c664"
+        },
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "game-50402081-2dd7-4179-99d7-91ca010b37b5"
+        }
+      ]
+    },
+    "game-ad366a7a-cd17-474f-97ce-492ad099addc": {
+      "winnerTo": "game-dd202b68-d4ce-4a36-992b-f967a01842d5",
+      "loserTo": null,
+      "teams": [
+        {
+          "isWinner": false,
+          "teamId": null,
+          "gameId": "game-51648af2-ccb8-4207-8898-1ed155c497e9"
+        },
+        {
+          "isWinner": false,
+          "teamId": null,
+          "gameId": "game-ddfbf1e1-a28e-4b13-b068-645dc750b981"
+        }
+      ]
+    },
+    "game-f5379fcf-51d0-4a73-86ec-197c9a38e271": {
+      "winnerTo": "game-586f4e9b-6e97-415f-a5fa-f3d96bcbddbf",
+      "loserTo": null,
+      "teams": [
+        {
+          "isWinner": false,
+          "teamId": null,
+          "gameId": "game-d7ee3290-b4a1-4937-8900-21372df26935"
+        },
+        {
+          "isWinner": false,
+          "teamId": null,
+          "gameId": "game-dc9b0a5e-df1b-43dd-9dfb-6e8b82504394"
+        }
+      ]
+    },
+    "game-dd202b68-d4ce-4a36-992b-f967a01842d5": {
+      "winnerTo": "game-1917d187-396f-4910-811e-673c3201eb44",
+      "loserTo": null,
+      "teams": [
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "game-ad366a7a-cd17-474f-97ce-492ad099addc"
+        },
+        {
+          "isWinner": false,
+          "teamId": null,
+          "gameId": "game-0451d358-a5d1-40de-a308-94dbc0fd410c"
+        }
+      ]
+    },
+    "game-586f4e9b-6e97-415f-a5fa-f3d96bcbddbf": {
+      "winnerTo": "game-affb0809-dba4-40d3-a888-8cb766a660c2",
+      "loserTo": null,
+      "teams": [
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "game-f5379fcf-51d0-4a73-86ec-197c9a38e271"
+        },
+        {
+          "isWinner": false,
+          "teamId": null,
+          "gameId": "game-607796fa-9d2d-41de-a8cb-d75fd6088247"
+        }
+      ]
+    },
+    "game-94937ac5-8836-4fb2-bdc1-6d5ef73d3144": {
+      "winnerTo": "game-792ab261-8431-4ead-81eb-d2c4ce271d32",
+      "loserTo": null,
+      "teams": [
+        {
+          "isWinner": false,
+          "teamId": null,
+          "gameId": "game-df462d5a-795f-486f-8e6c-49bbff833399"
+        },
+        {
+          "isWinner": false,
+          "teamId": null,
+          "gameId": "game-1be96753-adec-428a-8558-2d763d36afa2"
+        }
+      ]
+    },
+    "game-1917d187-396f-4910-811e-673c3201eb44": {
+      "winnerTo": "game-f16f0186-041f-4830-bb29-4bfb25ab2c9b",
+      "loserTo": null,
+      "teams": [
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "game-dd202b68-d4ce-4a36-992b-f967a01842d5"
+        },
+        {
+          "isWinner": false,
+          "teamId": null,
+          "gameId": "game-fe96d5dc-2fd2-467e-9641-ab28532a83c9"
+        }
+      ]
+    },
+    "game-affb0809-dba4-40d3-a888-8cb766a660c2": {
+      "winnerTo": "game-23209d97-76ca-4533-9e2a-707baa5ad5ed",
+      "loserTo": null,
+      "teams": [
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "game-586f4e9b-6e97-415f-a5fa-f3d96bcbddbf"
+        },
+        {
+          "isWinner": false,
+          "teamId": null,
+          "gameId": "game-bc55bff2-a590-4e81-b664-9f022e7f41b6"
+        }
+      ]
+    },
+    "game-792ab261-8431-4ead-81eb-d2c4ce271d32": {
+      "winnerTo": "game-14c4cb04-b5f5-4b82-b33b-b97e0b96ed3d",
+      "loserTo": null,
+      "teams": [
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "game-94937ac5-8836-4fb2-bdc1-6d5ef73d3144"
+        },
+        {
+          "isWinner": false,
+          "teamId": null,
+          "gameId": "game-8dfefc77-5a62-4a5f-945b-301f235a77ff"
+        }
+      ]
+    },
+    "game-f16f0186-041f-4830-bb29-4bfb25ab2c9b": {
+      "winnerTo": "game-a83ff8a5-15a0-4dcf-b12d-b037d7c2c761",
+      "loserTo": null,
+      "teams": [
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "game-1917d187-396f-4910-811e-673c3201eb44"
+        },
+        {
+          "isWinner": false,
+          "teamId": null,
+          "gameId": "game-8988d9d2-7cd8-4a61-af91-2fad56fee45f"
+        }
+      ]
+    },
+    "game-23209d97-76ca-4533-9e2a-707baa5ad5ed": {
+      "winnerTo": "game-a83ff8a5-15a0-4dcf-b12d-b037d7c2c761",
+      "loserTo": null,
+      "teams": [
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "game-affb0809-dba4-40d3-a888-8cb766a660c2"
+        },
+        {
+          "isWinner": false,
+          "teamId": null,
+          "gameId": "game-433d8d22-326e-4702-9222-4b5dd7ba7fea"
+        }
+      ]
+    },
+    "game-14c4cb04-b5f5-4b82-b33b-b97e0b96ed3d": {
+      "winnerTo": "game-8b7c7b8e-807e-4cde-9a3b-447e0bdb9cde",
+      "loserTo": null,
+      "teams": [
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "game-792ab261-8431-4ead-81eb-d2c4ce271d32"
+        },
+        {
+          "isWinner": false,
+          "teamId": null,
+          "gameId": "game-92d2ecd4-0297-47b2-ad88-2afccc431069"
+        }
+      ]
+    },
+    "game-a83ff8a5-15a0-4dcf-b12d-b037d7c2c761": {
+      "winnerTo": "game-982fc6c0-7377-4b72-8478-4861b1cc31ae",
+      "loserTo": null,
+      "teams": [
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "game-f16f0186-041f-4830-bb29-4bfb25ab2c9b"
+        },
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "game-23209d97-76ca-4533-9e2a-707baa5ad5ed"
+        }
+      ]
+    },
+    "game-8b7c7b8e-807e-4cde-9a3b-447e0bdb9cde": {
+      "winnerTo": "game-2831292b-d083-488c-be7f-059f4f8cea15",
+      "loserTo": null,
+      "teams": [
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "game-14c4cb04-b5f5-4b82-b33b-b97e0b96ed3d"
+        },
+        {
+          "isWinner": false,
+          "teamId": null,
+          "gameId": "game-50402081-2dd7-4179-99d7-91ca010b37b5"
+        }
+      ]
+    },
+    "game-982fc6c0-7377-4b72-8478-4861b1cc31ae": {
+      "winnerTo": "game-fd83b70c-36d5-454b-8c93-acda3cdf56c8",
+      "loserTo": null,
+      "teams": [
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "game-a83ff8a5-15a0-4dcf-b12d-b037d7c2c761"
+        },
+        {
+          "isWinner": false,
+          "teamId": null,
+          "gameId": "game-2a234d44-a26e-4c57-8373-e455567dbfe1"
+        }
+      ]
+    },
+    "game-2831292b-d083-488c-be7f-059f4f8cea15": {
+      "winnerTo": "game-fd83b70c-36d5-454b-8c93-acda3cdf56c8",
+      "loserTo": null,
+      "teams": [
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "game-8b7c7b8e-807e-4cde-9a3b-447e0bdb9cde"
+        },
+        {
+          "isWinner": false,
+          "teamId": null,
+          "gameId": "game-809c309b-c9aa-4809-81aa-5a1ebdb1c664"
+        }
+      ]
+    },
+    "game-fd83b70c-36d5-454b-8c93-acda3cdf56c8": {
+      "winnerTo": null,
+      "loserTo": null,
+      "teams": [
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "game-982fc6c0-7377-4b72-8478-4861b1cc31ae"
+        },
+        {
+          "isWinner": true,
+          "teamId": null,
+          "gameId": "game-2831292b-d083-488c-be7f-059f4f8cea15"
+        }
+      ]
+    }
+  },
+  "drawTimes": {
+    "1": "2025-03-01T05:00:00.000Z",
+    "2": "2025-03-02T05:00:00.000Z",
+    "3": "2025-03-04T00:20:00.000Z",
+    "4": "2025-03-04T05:00:00.000Z",
+    "5": "2025-03-05T05:00:00.000Z",
+    "6": "2025-03-06T05:00:00.000Z",
+    "7": "2025-03-07T05:00:00.000Z",
+    "8": "2025-03-08T05:00:00.000Z",
+    "9": "2025-03-09T05:00:00.000Z",
+    "10": "2025-03-10T04:00:00.000Z"
+  },
+  "eventName": "My Event",
+  "numTeams": 19,
+  "numSheets": 8,
+  "numWinners": [1, 1, 1],
+  "schedule": {
+    "game-fadeb8e6-9a39-4f89-8558-ef7d69a4c77e": 1,
+    "game-bca49ff4-d7e2-4185-9398-8d3d6316ac62": 1,
+    "game-4ed113f1-89fe-48ed-b084-e77c8c31a565": 1,
+    "game-74fd2bcf-05a7-4c56-a02c-78669e628c2e": 1,
+    "game-878f3c94-c140-4e06-9457-e01f844aee98": 1,
+    "game-834294f5-6935-40dc-bd2f-cf9622a26861": 1,
+    "game-6cc622ce-7cb8-4cdf-af07-3a233bba52be": 1,
+    "game-923a8b82-57a9-49fc-80fe-758da77bf6b2": 1,
+    "game-92fe5ae4-d3ef-4673-8a5c-f79008b58681": 2,
+    "game-5855ea64-47e7-4f21-822e-258bdfe98e59": 2,
+    "game-c8ee0a66-708b-479a-bc67-c394ffec3fe6": 2,
+    "game-6492a23f-2001-4cfe-aa98-e4aa47e687e1": 2,
+    "game-95504981-7a1c-49fe-94e5-b3d141e829e8": 2,
+    "game-d7ee3290-b4a1-4937-8900-21372df26935": 2,
+    "game-dc9b0a5e-df1b-43dd-9dfb-6e8b82504394": 2,
+    "game-51648af2-ccb8-4207-8898-1ed155c497e9": 2,
+    "game-ac3fd90e-1ad9-40b6-991c-1079571040bc": 3,
+    "game-515dfc70-ab6a-42c5-a158-9525c47ba1ed": 3,
+    "game-eddec803-36d8-4f0e-8d57-5cf02bc4c074": 3,
+    "game-607796fa-9d2d-41de-a8cb-d75fd6088247": 3,
+    "game-df462d5a-795f-486f-8e6c-49bbff833399": 3,
+    "game-1be96753-adec-428a-8558-2d763d36afa2": 3,
+    "game-ddfbf1e1-a28e-4b13-b068-645dc750b981": 3,
+    "game-f5379fcf-51d0-4a73-86ec-197c9a38e271": 3,
+    "game-a7aa3898-85ee-4d34-b3ff-6c040a56ada1": 4,
+    "game-fe96d5dc-2fd2-467e-9641-ab28532a83c9": 4,
+    "game-bc55bff2-a590-4e81-b664-9f022e7f41b6": 4,
+    "game-8dfefc77-5a62-4a5f-945b-301f235a77ff": 4,
+    "game-0451d358-a5d1-40de-a308-94dbc0fd410c": 4,
+    "game-ad366a7a-cd17-474f-97ce-492ad099addc": 4,
+    "game-586f4e9b-6e97-415f-a5fa-f3d96bcbddbf": 4,
+    "game-94937ac5-8836-4fb2-bdc1-6d5ef73d3144": 4,
+    "game-1c29b77a-d468-4c6e-9d3f-6e5af8a0db7e": 5,
+    "game-8988d9d2-7cd8-4a61-af91-2fad56fee45f": 5,
+    "game-433d8d22-326e-4702-9222-4b5dd7ba7fea": 5,
+    "game-92d2ecd4-0297-47b2-ad88-2afccc431069": 5,
+    "game-dd202b68-d4ce-4a36-992b-f967a01842d5": 5,
+    "game-affb0809-dba4-40d3-a888-8cb766a660c2": 5,
+    "game-792ab261-8431-4ead-81eb-d2c4ce271d32": 5,
+    "game-809c309b-c9aa-4809-81aa-5a1ebdb1c664": 6,
+    "game-50402081-2dd7-4179-99d7-91ca010b37b5": 6,
+    "game-1917d187-396f-4910-811e-673c3201eb44": 6,
+    "game-23209d97-76ca-4533-9e2a-707baa5ad5ed": 6,
+    "game-14c4cb04-b5f5-4b82-b33b-b97e0b96ed3d": 6,
+    "game-2a234d44-a26e-4c57-8373-e455567dbfe1": 7,
+    "game-f16f0186-041f-4830-bb29-4bfb25ab2c9b": 7,
+    "game-8b7c7b8e-807e-4cde-9a3b-447e0bdb9cde": 7,
+    "game-a83ff8a5-15a0-4dcf-b12d-b037d7c2c761": 8,
+    "game-2831292b-d083-488c-be7f-059f4f8cea15": 8,
+    "game-982fc6c0-7377-4b72-8478-4861b1cc31ae": 9,
+    "game-fd83b70c-36d5-454b-8c93-acda3cdf56c8": 10
+  },
+
+  "readableIdIndex": {
+    "game-fadeb8e6-9a39-4f89-8558-ef7d69a4c77e": "A1",
+    "game-bca49ff4-d7e2-4185-9398-8d3d6316ac62": "A2",
+    "game-4ed113f1-89fe-48ed-b084-e77c8c31a565": "A3",
+    "game-92fe5ae4-d3ef-4673-8a5c-f79008b58681": "A4",
+    "game-5855ea64-47e7-4f21-822e-258bdfe98e59": "A5",
+    "game-c8ee0a66-708b-479a-bc67-c394ffec3fe6": "A6",
+    "game-74fd2bcf-05a7-4c56-a02c-78669e628c2e": "A7",
+    "game-878f3c94-c140-4e06-9457-e01f844aee98": "A8",
+    "game-834294f5-6935-40dc-bd2f-cf9622a26861": "A9",
+    "game-6cc622ce-7cb8-4cdf-af07-3a233bba52be": "A10",
+    "game-923a8b82-57a9-49fc-80fe-758da77bf6b2": "A11",
+    "game-ac3fd90e-1ad9-40b6-991c-1079571040bc": "A12",
+    "game-515dfc70-ab6a-42c5-a158-9525c47ba1ed": "A13",
+    "game-6492a23f-2001-4cfe-aa98-e4aa47e687e1": "A14",
+    "game-95504981-7a1c-49fe-94e5-b3d141e829e8": "A15",
+    "game-a7aa3898-85ee-4d34-b3ff-6c040a56ada1": "A16",
+    "game-eddec803-36d8-4f0e-8d57-5cf02bc4c074": "A17",
+    "game-1c29b77a-d468-4c6e-9d3f-6e5af8a0db7e": "A18",
+    "game-d7ee3290-b4a1-4937-8900-21372df26935": "B1",
+    "game-dc9b0a5e-df1b-43dd-9dfb-6e8b82504394": "B2",
+    "game-607796fa-9d2d-41de-a8cb-d75fd6088247": "B3",
+    "game-df462d5a-795f-486f-8e6c-49bbff833399": "B4",
+    "game-1be96753-adec-428a-8558-2d763d36afa2": "B5",
+    "game-51648af2-ccb8-4207-8898-1ed155c497e9": "B6",
+    "game-ddfbf1e1-a28e-4b13-b068-645dc750b981": "B7",
+    "game-fe96d5dc-2fd2-467e-9641-ab28532a83c9": "B8",
+    "game-bc55bff2-a590-4e81-b664-9f022e7f41b6": "B9",
+    "game-8dfefc77-5a62-4a5f-945b-301f235a77ff": "B10",
+    "game-0451d358-a5d1-40de-a308-94dbc0fd410c": "B11",
+    "game-8988d9d2-7cd8-4a61-af91-2fad56fee45f": "B12",
+    "game-433d8d22-326e-4702-9222-4b5dd7ba7fea": "B13",
+    "game-92d2ecd4-0297-47b2-ad88-2afccc431069": "B14",
+    "game-809c309b-c9aa-4809-81aa-5a1ebdb1c664": "B15",
+    "game-50402081-2dd7-4179-99d7-91ca010b37b5": "B16",
+    "game-2a234d44-a26e-4c57-8373-e455567dbfe1": "B17",
+    "game-ad366a7a-cd17-474f-97ce-492ad099addc": "C1",
+    "game-f5379fcf-51d0-4a73-86ec-197c9a38e271": "C2",
+    "game-dd202b68-d4ce-4a36-992b-f967a01842d5": "C3",
+    "game-586f4e9b-6e97-415f-a5fa-f3d96bcbddbf": "C4",
+    "game-94937ac5-8836-4fb2-bdc1-6d5ef73d3144": "C5",
+    "game-1917d187-396f-4910-811e-673c3201eb44": "C6",
+    "game-affb0809-dba4-40d3-a888-8cb766a660c2": "C7",
+    "game-792ab261-8431-4ead-81eb-d2c4ce271d32": "C8",
+    "game-f16f0186-041f-4830-bb29-4bfb25ab2c9b": "C9",
+    "game-23209d97-76ca-4533-9e2a-707baa5ad5ed": "C10",
+    "game-14c4cb04-b5f5-4b82-b33b-b97e0b96ed3d": "C11",
+    "game-a83ff8a5-15a0-4dcf-b12d-b037d7c2c761": "C12",
+    "game-8b7c7b8e-807e-4cde-9a3b-447e0bdb9cde": "C13",
+    "game-982fc6c0-7377-4b72-8478-4861b1cc31ae": "C14",
+    "game-2831292b-d083-488c-be7f-059f4f8cea15": "C15",
+    "game-fd83b70c-36d5-454b-8c93-acda3cdf56c8": "C16"
+  }
+}

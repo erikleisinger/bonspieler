@@ -34,8 +34,37 @@ import { FaArrowLeft, FaArrowRight, FaCog } from "react-icons/fa";
 import BracketEventOptions from "./BracketEventOptions";
 import Slideout from "@/shared/ui/slide-out";
 import { Nullable } from "@/shared/types";
+import type {
+  BracketDrawTimes,
+  BracketGame,
+  BracketSchedule,
+} from "@/entities/Bracket";
 
-export default function BracketEditor() {
+export default function BracketEditor({
+  data = {
+    brackets: [],
+    connections: {},
+    drawTimes: {},
+    eventName: "New Bracket Event",
+    numTeams: 16,
+    numSheets: 8,
+    numWinners: [1],
+    schedule: {},
+    readableIdIndex: {},
+  },
+}: {
+  data: {
+    brackets: BracketGame[][][];
+    connections: BracketConnections;
+    drawTimes: BracketDrawTimes;
+    eventName: string;
+    numTeams: number;
+    numSheets: number;
+    numWinners: number[];
+    schedule: BracketSchedule;
+    readableIdIndex: { [gameId: string]: string };
+  };
+}) {
   /**
    * Bracket params
    */
@@ -44,29 +73,17 @@ export default function BracketEditor() {
    * Number of teams total in the tournament
    */
 
-  const [teamCount, setTeamCount] = useState(19);
+  const [teamCount, setTeamCount] = useState(data.numTeams);
 
   function updateTeamCount(e: string) {
     setTeamCount(getNewTeamCount(e, teamCount));
   }
 
   /**
-   * Number of teams for each bracket
-   */
-
-  const [numBracketTeams, setNumBracketTeams] = useState<number[]>([]);
-
-  function updateNumBracketTeams(e: number, index: number) {
-    const newNumBracketTeams = [...numBracketTeams];
-    newNumBracketTeams[index] = e;
-    setNumBracketTeams(newNumBracketTeams);
-  }
-
-  /**
    * Number of teams that advance from each bracket.
    */
 
-  const [numWinners, setNumWinners] = useState([1]);
+  const [numWinners, setNumWinners] = useState(data.numWinners);
 
   function updateNumWinners(e: string, index: number) {
     setNumWinners(getNewWinnerCount(e, numWinners, index));
@@ -76,7 +93,7 @@ export default function BracketEditor() {
    * Number of brackets in the tournament
    */
 
-  const [numBrackets, setNumBrackets] = useState(1);
+  const [numBrackets, setNumBrackets] = useState(data.brackets.length);
 
   /**
    * Number of sheets in use; used to calculate schedule of the games
@@ -105,10 +122,17 @@ export default function BracketEditor() {
 
   const [bracketState, dispatch] = useReducer(bracketEditorReducer, {
     ...JSON.parse(JSON.stringify(DEFAULT_BRACKET_EDITOR_STATE)),
+    ...{
+      brackets: data.brackets,
+      connections: data.connections,
+      numSheets: data.numSheets,
+      readableIdIndex: data.readableIdIndex,
+      schedule: data.schedule,
+    },
     editing: true,
   });
 
-  const [showWizard, setShowWizard] = useState(true);
+  const [showWizard, setShowWizard] = useState(!!data?.connections?.length);
 
   function calculateTournamentSchedule(
     connections: BracketConnections,
@@ -362,7 +386,14 @@ export default function BracketEditor() {
     scrollToGame(firstAvailableGame);
   }, [bracketState?.availableGames?.length]);
 
-  const [drawTimes, setDrawTimes] = useState<{ [key: number]: Date }>({});
+  const [drawTimes, setDrawTimes] = useState<BracketDrawTimes>(
+    Object.entries(data.drawTimes).reduce((all, [drawNum, isoString]) => {
+      return {
+        ...all,
+        [drawNum]: new Date(isoString),
+      };
+    }, {})
+  );
 
   const [showEventOptions, setShowEventOptions] = useState(false);
   const [bracketToEdit, setBracketToEdit] = useState<Nullable<number>>(null);
