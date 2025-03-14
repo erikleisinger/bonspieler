@@ -1,9 +1,9 @@
-import type {
-  BracketConnections,
-  BracketGame,
-  BracketRows,
-} from "@/entities/Bracket";
-import type { Nullable } from "@/types";
+import {
+  type BracketEditorState,
+  BracketEditorActionName,
+  type BracketEditorAction,
+} from "../types/reducer-types";
+
 import { lookForWinnerConnection } from "./lookForWinnerConnection";
 import { lookForLoserConnection } from "./lookForLoserConnection";
 import { removeWinnerConnection } from "./removeWinnerConnection";
@@ -15,7 +15,7 @@ import { removeGameFromRound } from "./removeGameFromRound";
 import { toggleSeed } from "./toggleSeed";
 import { addBracket } from "./addBracket";
 import { removeBracket } from "./removeBracket";
-import { scheduleTournament } from "@erikleisinger/bracket-generator";
+import { scheduleTournament } from "@/shared/utils/generate";
 
 export const DEFAULT_BRACKET_EDITOR_STATE: BracketEditorState = {
   availableGames: [],
@@ -26,193 +26,11 @@ export const DEFAULT_BRACKET_EDITOR_STATE: BracketEditorState = {
   lookingForLoserConnection: null,
   numSheets: 8,
   readableIdIndex: {},
+  selectedDraw: null,
   schedule: {},
   rows: {},
 };
 
-export enum BracketEditorActionName {
-  SetInitialState = "setInitialState",
-  SetRows = "setRows",
-  RemoveWinnerConnection = "removeWinnerConnection",
-  LookForWinnerConnection = "lookForWinnerConnection",
-  CancelLookForWinnerConnection = "cancelLookForWinnerConnection",
-  CancelLookForLoserConnection = "cancelLookForLoserConnection",
-  AddWinnerConnection = "addWinnerConnection",
-  LookForLoserConnection = "lookForLoserConnection",
-  AddLoserConnection = "addLoserConnection",
-  RemoveLoserConnection = "removeLoserConnection",
-  AddGameToRound = "addGameToRound",
-  RemoveGameFromRound = "removeGameFromRound",
-  ToggleSeed = "toggleSeed",
-  AddBracket = "addBracket",
-  SetNumSheets = "setNumSheets",
-  RemoveBracket = "removeBracket",
-  SetSchedule = "setSchedule",
-}
-
-interface SetInitialStateAction {
-  type: BracketEditorActionName.SetInitialState;
-  args: {
-    connections: BracketConnections;
-    brackets: BracketGame[][][];
-    readableIdIndex: { [readableId: string]: string };
-    schedule: { [gameId: string]: number };
-  };
-}
-
-interface SetRowsAction {
-  type: BracketEditorActionName.SetRows;
-  args: {
-    rows: BracketRows;
-  };
-}
-
-interface RemoveWinnerConnectionAction {
-  type: BracketEditorActionName.RemoveWinnerConnection;
-  args: {
-    gameId: string;
-  };
-}
-
-interface LookForWinnerConnectionAction {
-  type: BracketEditorActionName.LookForWinnerConnection;
-  args: {
-    gameId: string;
-    gameIndex: number;
-    bracketNumber: number;
-    roundNumber: number;
-  };
-}
-interface CancelLookForWinnerConnectionAction {
-  type: BracketEditorActionName.CancelLookForWinnerConnection;
-  args: null;
-}
-
-interface AddWinnerConnectionAction {
-  type: BracketEditorActionName.AddWinnerConnection;
-  args: {
-    originGameId: string;
-    destinationGameId: string;
-  };
-}
-
-interface LookForLoserConnectionAction {
-  type: BracketEditorActionName.LookForLoserConnection;
-  args: {
-    gameId: string;
-    bracketNumber: number;
-  };
-}
-interface CancelLookForLoserConnectionAction {
-  type: BracketEditorActionName.CancelLookForLoserConnection;
-  args: null;
-}
-interface AddLoserConnectionAction {
-  type: BracketEditorActionName.AddLoserConnection;
-  args: {
-    originGameId: string;
-    destinationGameId: string;
-  };
-}
-interface RemoveLoserConnectionAction {
-  type: BracketEditorActionName.RemoveLoserConnection;
-  args: {
-    gameId: string;
-  };
-}
-
-interface AddGameToRoundAction {
-  type: BracketEditorActionName.AddGameToRound;
-  args: {
-    bracketNumber: number;
-    roundNumber: number;
-    onSuccess?: (game: BracketGame) => void;
-  };
-}
-
-interface RemoveGameFromRoundAction {
-  type: BracketEditorActionName.RemoveGameFromRound;
-  args: {
-    gameId: string;
-    roundNumber: number;
-    bracketNumber: number;
-  };
-}
-interface ToggleSeedAction {
-  type: BracketEditorActionName.ToggleSeed;
-  args: {
-    gameId: string;
-    index: number;
-    teamId: string;
-  };
-}
-
-interface AddBracketAction {
-  type: BracketEditorActionName.AddBracket;
-  args: {
-    numWinners: number;
-    numTeams: number;
-    isSeeded: boolean;
-  };
-}
-
-interface SetNumSheetsAction {
-  type: BracketEditorActionName.SetNumSheets;
-  args: {
-    numSheets: number;
-    withSchedule: boolean;
-  };
-}
-
-interface RemoveBracketAction {
-  type: BracketEditorActionName.RemoveBracket;
-  args: {
-    bracketIndex: number;
-  };
-}
-
-interface SetScheduleAction {
-  type: BracketEditorActionName.SetSchedule;
-  args: {
-    schedule: { [gameId: string]: number };
-  };
-}
-
-type BracketEditorAction =
-  | SetInitialStateAction
-  | RemoveWinnerConnectionAction
-  | LookForWinnerConnectionAction
-  | CancelLookForWinnerConnectionAction
-  | AddWinnerConnectionAction
-  | SetRowsAction
-  | LookForLoserConnectionAction
-  | CancelLookForLoserConnectionAction
-  | AddLoserConnectionAction
-  | RemoveLoserConnectionAction
-  | AddGameToRoundAction
-  | RemoveGameFromRoundAction
-  | ToggleSeedAction
-  | AddBracketAction
-  | SetNumSheetsAction
-  | RemoveBracketAction
-  | SetScheduleAction;
-
-export interface BracketEditorState {
-  availableGames: string[];
-  brackets: BracketGame[][][];
-  connections: BracketConnections;
-  editing: boolean;
-  lookingForWinnerConnection: Nullable<{
-    gameId: string;
-    bracketNumber: number;
-    roundNumber: number;
-  }>;
-  lookingForLoserConnection: Nullable<string>;
-  numSheets: number;
-  readableIdIndex: { [readableId: string]: string };
-  rows: BracketRows;
-  schedule: { [gameId: string]: number };
-}
 export function bracketEditorReducer(
   state: BracketEditorState,
   action: BracketEditorAction
@@ -349,6 +167,13 @@ export function bracketEditorReducer(
       return {
         ...state,
         schedule: action.args.schedule,
+      };
+    }
+    case BracketEditorActionName.ViewDraw: {
+      const { drawNumber } = action.args;
+      return {
+        ...state,
+        selectedDraw: drawNumber,
       };
     }
     default: {

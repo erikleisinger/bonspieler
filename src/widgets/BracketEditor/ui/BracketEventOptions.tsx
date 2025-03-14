@@ -1,5 +1,6 @@
 import { useState, useId, useMemo, useContext } from "react";
 import { BracketContext } from "@/shared/Bracket/BracketContext";
+import { BracketEditingContext } from "@/shared/EditableBracket/BracketEditingContext";
 import { Button } from "@/shared/ui/button";
 import NumberSheetsSelect from "@/shared/ui/number-sheets-select";
 import { DateTimePicker } from "@/shared/ui/date-time-picker";
@@ -9,8 +10,9 @@ import { HiOutlinePlus } from "react-icons/hi";
 import SaveButton from "@/shared/ui/save-button";
 
 import { getDrawTimeWarnings } from "@/features/DrawTimeWarnings";
-import { FaExclamationTriangle } from "react-icons/fa";
+import { FaExclamationTriangle, FaEye } from "react-icons/fa";
 import Tooltip from "@/shared/ui/tooltip";
+import SelectDrawNumberButton from "./SelectDrawNumberButton";
 export default function BracketEventOptions({
   drawTimes,
   setDrawTimes,
@@ -52,6 +54,7 @@ export default function BracketEventOptions({
   }, [JSON.stringify(tempDrawTimes)]);
 
   const { schedule } = useContext(BracketContext);
+  const { setSelectedDraw } = useContext(BracketEditingContext);
   function getNumGamesForDraw(drawNum) {
     return Object.values(schedule).filter((i) => i == drawNum)?.length || 0;
   }
@@ -101,7 +104,7 @@ export default function BracketEventOptions({
                 return (
                   <div
                     key={i}
-                    className="grid grid-cols-[70px,1fr] gap-2 items-center"
+                    className="grid grid-cols-[70px,1fr,auto] gap-2 items-center"
                   >
                     <div>
                       <div className="flex gap-2">
@@ -124,6 +127,7 @@ export default function BracketEventOptions({
                       min={tempDrawTimes[i]}
                       max={tempDrawTimes[i + 2]}
                     />
+                    <SelectDrawNumberButton drawNumber={i + 1} />
                   </div>
                 );
               })}

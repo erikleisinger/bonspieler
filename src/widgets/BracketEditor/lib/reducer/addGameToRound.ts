@@ -1,6 +1,6 @@
 import type { BracketEditorState } from "./bracketEditorReducer";
 import { DEFAULT_GAME, DEFAULT_CONNECTION } from "../defaults";
-import { scheduleTournament } from "@erikleisinger/bracket-generator";
+import { scheduleTournament } from "@/shared/utils/generate";
 import { generateUUID } from "@/shared/utils/generateUUID";
 import { generateReadableIdIndex } from "../generateReadableIdIndex";
 import type { BracketGame, BracketRows } from "@/entities/Bracket";

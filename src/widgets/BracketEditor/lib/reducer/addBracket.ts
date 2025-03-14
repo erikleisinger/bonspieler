@@ -2,7 +2,7 @@ import { BracketEditorState } from "./bracketEditorReducer";
 import {
   generateTournament,
   scheduleTournament,
-} from "@erikleisinger/bracket-generator";
+} from "@/shared/utils/generate";
 import { generateReadableIdIndex } from "../generateReadableIdIndex";
 export function addBracket(
   state: BracketEditorState,

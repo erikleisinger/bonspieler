@@ -8,7 +8,7 @@ import {
 import {
   generateTournament,
   scheduleTournament,
-} from "@erikleisinger/bracket-generator";
+} from "@/shared/utils/generate";
 import {
   Brackets,
   type BracketRows,
@@ -32,6 +32,7 @@ import RemoveBracketButton from "./RemoveBracketButton";
 import { FaArrowLeft, FaArrowRight, FaCog } from "react-icons/fa";
 import BracketEventOptions from "./BracketEventOptions";
 import Slideout from "@/shared/ui/slide-out";
+import { Nullable } from "@/shared/types";
 
 export default function BracketEditor() {
   /**
@@ -291,6 +292,15 @@ export default function BracketEditor() {
     });
   }
 
+  function setSelectedDraw(drawNumber: Nullable<number>) {
+    dispatch({
+      type: BracketEditorActionName.ViewDraw,
+      args: {
+        drawNumber,
+      },
+    });
+  }
+
   function deselectAll() {
     dispatch({
       type: BracketEditorActionName.CancelLookForWinnerConnection,
@@ -361,6 +371,7 @@ export default function BracketEditor() {
         editing: bracketState.editing,
         lookingForWinnerConnection: bracketState.lookingForWinnerConnection,
         lookingForLoserConnection: bracketState.lookingForLoserConnection,
+        selectedDraw: bracketState.selectedDraw,
         lookForWinnerConnection: (
           gameId: string,
           gameIndex: string | number,
@@ -412,6 +423,7 @@ export default function BracketEditor() {
         toggleSeed: handleToggleSeed,
         deselectAll,
         setSchedule: handleSetSchedule,
+        setSelectedDraw,
       }}
     >
       <div className="fixed inset-0 ">

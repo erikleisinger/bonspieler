@@ -6,7 +6,7 @@ import type {
 import { Nullable } from "@/types";
 import { calculateRowSpanForGame } from "@/entities/Bracket";
 import { BracketRowWithId } from "@/entities/Bracket/lib/types/BracketRows";
-import { BracketConnectionRegularTeam } from "@erikleisinger/bracket-generator";
+import { BracketConnectionRegularTeam } from "@/shared/utils/generate";
 
 /**
  *

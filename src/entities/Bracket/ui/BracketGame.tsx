@@ -28,6 +28,7 @@ export default function BracketGame({
     lookingForLoserConnection,
     addLoserConnection,
     addWinnerConnection,
+    selectedDraw,
   } = useContext(BracketEditingContext);
   const { readableIdIndex, selectedGame, selectGame, schedule } =
     useContext(BracketContext);
@@ -67,6 +68,8 @@ export default function BracketGame({
     } else if (lookingForLoserConnection) {
       base.push("unavailable");
     } else if (isSelected) {
+      base.push("selected");
+    } else if (selectedDraw && selectedDraw === drawNum) {
       base.push("selected");
     }
     return base.join(" ");

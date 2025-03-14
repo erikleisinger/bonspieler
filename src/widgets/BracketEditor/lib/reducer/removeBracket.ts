@@ -1,6 +1,6 @@
 import { BracketGame } from "@/entities/Bracket";
 import { BracketEditorState } from "./bracketEditorReducer";
-import { scheduleTournament } from "@erikleisinger/bracket-generator";
+import { scheduleTournament } from "@/shared/utils/generate";
 
 export function removeBracket(
   state: BracketEditorState,

@@ -1,5 +1,5 @@
 import { BracketEditorState } from "./bracketEditorReducer";
-import { scheduleTournament } from "@erikleisinger/bracket-generator";
+import { scheduleTournament } from "@/shared/utils/generate";
 import { generateReadableIdIndex } from "../generateReadableIdIndex";
 export function removeGameFromRound(
   state: BracketEditorState,
