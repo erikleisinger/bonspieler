@@ -6,7 +6,7 @@ import DrawTime from "@/shared/ui/draw-time";
 import Typography from "@/shared/ui/typography";
 import { Button } from "@/shared/ui/button";
 import { FaPencilAlt } from "react-icons/fa";
-import DrawInfo from "./DrawInfo";
+import { DrawInfo } from "@/features/SetEventDrawTimes";
 export default function BracketInfo({
   className = "",
   bracketIndex,

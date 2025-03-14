@@ -2,7 +2,7 @@ import { Label } from "@/shared/ui/label";
 import { useContext } from "react";
 import { BracketContext } from "@/shared/Bracket/BracketContext";
 import { cn } from "@/lib/utils";
-import { DrawTimeValidation } from "@/features/DrawTimeWarnings";
+import DrawTimeValidation from "./DrawTimeValidation";
 import SelectDrawNumberButton from "./SelectDrawNumberButton";
 export default function DrawInfo({
   children,

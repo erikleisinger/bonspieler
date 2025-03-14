@@ -1,5 +1,5 @@
 import Tooltip from "@/shared/ui/tooltip";
-import { FaExclamationTriangle, FaCheckCircle, FaCheck } from "react-icons/fa";
+import { FaExclamationTriangle, FaCheckCircle } from "react-icons/fa";
 import { DrawTimeValidationContext } from "../lib/DrawTimeValidationContext";
 import { useContext } from "react";
 export default function DrawTimeValidation({

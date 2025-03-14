@@ -74,7 +74,7 @@ export default function Round({
             <Badge
               variant="destructive"
               className="py-0 cursor-pointer"
-              onClick={showEventEditor}
+              onClick={() => showEventEditor("schedule")}
             >
               Draw times not set.
             </Badge>

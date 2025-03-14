@@ -367,10 +367,16 @@ export default function BracketEditor() {
   const [showEventOptions, setShowEventOptions] = useState(false);
   const [bracketToEdit, setBracketToEdit] = useState<Nullable<number>>(null);
 
+  const [eventOptionsTab, setEventOptionsTab] = useState("overview");
   const [bracketEventName, setBracketEventName] = useState("New Bracket Event");
 
-  function editEvent() {
+  function openEventOptions(tab: string = "overview") {
     setShowEventOptions(true);
+    setEventOptionsTab(tab);
+  }
+
+  function editEvent() {
+    openEventOptions();
     setBracketToEdit(null);
   }
 
@@ -435,7 +441,8 @@ export default function BracketEditor() {
         deselectAll,
         setSchedule: handleSetSchedule,
         setSelectedDraw,
-        showEventEditor: () => setShowEventOptions(true),
+        showEventEditor: (tab) => openEventOptions(tab),
+        updateNumSheets,
       }}
     >
       <div className="fixed inset-0 ">
@@ -484,19 +491,18 @@ export default function BracketEditor() {
                     setSelectedDraw(null);
                   }}
                   removeBracket={handleRemoveBracket}
-                  editEvent={() => setShowEventOptions(true)}
+                  editEvent={() => openEventOptions()}
                 />
               )}
             </Slideout>
             <Slideout visible={showEventOptions}>
               {showEventOptions && (
                 <BracketEventOptions
+                  initialTab={eventOptionsTab}
                   totalNumDraws={totalNumDraws}
                   totalNumSheets={bracketState.numSheets}
                   totalNumTeams={totalNumTeams}
                   totalNumWinners={totalNumWinners}
-                  updateNumSheets={updateNumSheets}
-                  updateNumSheetsAndSchedule={(e) => updateNumSheets(e, true)}
                   drawTimes={drawTimes}
                   eventName={bracketEventName}
                   setEventName={setBracketEventName}

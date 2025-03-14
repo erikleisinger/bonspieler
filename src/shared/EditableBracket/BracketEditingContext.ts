@@ -56,7 +56,7 @@ export const BracketEditingContext = createContext<{
   removeLoserConnection: (gameId: string) => void;
   removeWinnerConnection: (gameId: string) => void;
   setSelectedDraw: (drawNumber: Nullable<number>) => void;
-  showEventEditor: () => void;
+  showEventEditor: (tab: string) => void;
   toggleSeed: ({
     gameId,
     index,
@@ -66,6 +66,13 @@ export const BracketEditingContext = createContext<{
     index: number;
     teamId: string;
   }) => void;
+  /**
+   *
+   * @param newNumSheets
+   * @param withSchedule will recalculate schedule if true
+   * @returns
+   */
+  updateNumSheets: (newNumSheets: number, withSchedule: boolean) => void;
 }>({
   availableGames: [],
   editing: false,
@@ -86,4 +93,5 @@ export const BracketEditingContext = createContext<{
   setSelectedDraw: editingDisabled,
   showEventEditor: editingDisabled,
   toggleSeed: editingDisabled,
+  updateNumSheets: editingDisabled,
 });
