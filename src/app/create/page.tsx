@@ -1,5 +1,5 @@
 "use client";
-import TournamentView from "@/app/TournamentEdit";
+import TournamentEdit from "@/app/TournamentEdit";
 export default function CreateTournament() {
-  return <TournamentView />;
+  return <TournamentEdit />;
 }

@@ -8,11 +8,9 @@ import { BracketEvent } from "@/entities/Bracket";
 import { getTotalBracketWinners } from "@/shared/Bracket/getTotalBracketWinners";
 import { StageTournamentContext } from "@/shared/types/StageTournamentContext";
 import type { Tournament } from "@/shared/types/Tournament";
-import { generateUUID } from "@/shared/utils/generateUUID";
-import { TOURNAMENT_STORAGE_KEY } from "./storage";
+import { api } from "@/shared/api";
 export default function TournamentEdit({
   tournament = {
-    id: generateUUID(),
     name: "New Bonspiel",
     stages: [],
   },
@@ -32,18 +30,25 @@ export default function TournamentEdit({
   const isBracket = editedStage?.type === TournamentStageType.Bracket;
 
   function saveTournament(newTournament: Tournament) {
-    const tournaments = JSON.parse(
-      localStorage.getItem(TOURNAMENT_STORAGE_KEY)
-    );
-    const newTournaments = {
-      ...tournaments,
-      [editedTournament.id]: newTournament,
-    };
-    localStorage.setItem(
-      TOURNAMENT_STORAGE_KEY,
-      JSON.stringify(newTournaments)
-    );
-    console.log("new tournament: ", newTournament);
+    const { id, stages, name } = newTournament;
+    console.log(newTournament);
+    if (!id) {
+      api.add.tournament({
+        name,
+        schema: JSON.stringify({
+          stages,
+        }),
+      });
+    } else {
+      api.update.tournament({
+        id,
+        updates: {
+          schema: JSON.stringify({
+            stages,
+          }),
+        },
+      });
+    }
   }
 
   function saveBracketEvent(savedEvent: BracketEvent) {

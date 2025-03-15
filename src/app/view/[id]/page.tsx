@@ -1,21 +1,23 @@
 "use client";
 
-import { use } from "react";
+import { use, useEffect, useState } from "react";
 import TournamentView from "@/app/TournamentView";
-import { TOURNAMENT_STORAGE_KEY } from "@/app/storage";
+import { Tournament } from "@/shared/types/Tournament";
+import { api } from "@/shared/api";
 export default function ViewTournament({ params }) {
   // Unwrap the entire params object first
   const unwrappedParams = use(params);
+  const [tournament, setTournament] = useState<Tournament | null>(null);
 
-  // Now you can safely access the id
-  const id = unwrappedParams.id;
+  useEffect(() => {
+    api.get.tournament
+      .byId(unwrappedParams.id)
+      .then((data) => setTournament(data));
+  }, [unwrappedParams.id]);
 
-  /**
-   * Temporary save logic to local storage;
-   * obviously persisting to db later on
-   */
-  const tournaments = localStorage.getItem(TOURNAMENT_STORAGE_KEY);
-  const tournament = JSON.parse(tournaments)[id];
-
-  return <TournamentView tournament={tournament} />;
+  return tournament && tournament.id ? (
+    <TournamentView tournament={tournament} />
+  ) : (
+    <div />
+  );
 }
