@@ -1,3 +1,4 @@
+import type { Client } from "./index";
 export async function addTournament(
   {
     name,
@@ -6,7 +7,7 @@ export async function addTournament(
     name: string;
     schema: string;
   },
-  client
+  client: Client
 ) {
   const { data } = await client
     .from("tournament_schema")

@@ -1,16 +1,20 @@
+import type { Client } from "./index";
 export async function updateTournament(
   {
     id,
     updates,
   }: {
     id: string;
-    updates: any;
+    updates: {
+      name?: string;
+      schema?: string;
+      idk: string;
+    };
   },
-  client
+  client: Client
 ) {
-  const { data } = await client
+  const { data, error } = await client
     .from("tournament_schema")
     .update(updates)
     .eq("id", id);
-  console.log(data);
 }

@@ -96,14 +96,7 @@ export default function TournamentEditor({
       value={selectedView}
       onValueChange={setSelectedView}
     >
-      <div className="flex">
-        <TournamentNavigation tournament={tournament}> </TournamentNavigation>
-        <SaveButton
-          size="lg"
-          onClick={() => saveTournament(tournament)}
-          text={["Save Bonspiel", "Saving bonspiel...", "Bonspiel saved!"]}
-        ></SaveButton>
-      </div>
+      <TournamentNavigation tournament={tournament} />
 
       <TabsContent value="stages" className="relative">
         <TournamentStageList

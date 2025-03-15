@@ -1,4 +1,5 @@
-export async function getTournamentById(id: string, client) {
+import type { Client } from "./index";
+export async function getTournamentById(id: string, client: Client) {
   const { data } = await client
     .from("tournament_schema")
     .select("*")

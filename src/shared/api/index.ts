@@ -1,8 +1,12 @@
-import { createClient } from "@supabase/supabase-js";
+import { createClient, SupabaseClient } from "@supabase/supabase-js";
+import { Database } from "./supabase";
 import { getTournamentById } from "./getTournamentById";
 import { updateTournament } from "./updateTournament";
 import { addTournament } from "./addTournament";
-const client = createClient(
+
+export type Client = SupabaseClient<Database, "public">;
+
+const client = createClient<Database>(
   process.env.NEXT_PUBLIC_SUPABASE_URL,
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 );
