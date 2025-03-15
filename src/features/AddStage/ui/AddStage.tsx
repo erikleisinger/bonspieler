@@ -3,7 +3,7 @@ import { FaPlus } from "react-icons/fa";
 import BracketStageCard from "@/shared/Tournament/BracketStageCard";
 import RoundRobinStageCard from "@/shared/Tournament/RoundRobinCard";
 import PointsStageCard from "@/shared/Tournament/PointsStageCard";
-import { TournamentStageType } from "@/widgets/TournamentEditor/lib/types/TournamentStage";
+import { TournamentStageType } from "@/entities/Tournament";
 import BaseCard from "@/shared/Tournament/BaseCard";
 export default function AddStage({
   addStage,

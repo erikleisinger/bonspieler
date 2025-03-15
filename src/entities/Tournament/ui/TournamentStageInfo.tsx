@@ -5,7 +5,8 @@ import {
 import { Button } from "@/shared/ui/button";
 import Typography from "@/shared/ui/typography";
 import { FaArrowLeft } from "react-icons/fa";
-import TournamentBracketStageInfo from "./TournamentBracketStageInfo";
+
+import { BracketEventInfo } from "@/entities/BracketEvent";
 
 export default function TournamentStageInfo({
   onBack,
@@ -15,7 +16,7 @@ export default function TournamentStageInfo({
 }: {
   onBack: () => void;
   onEdit: () => void;
-  onDelete: () => void;
+  onDelete?: () => void;
   stage: TournamentStage;
 }) {
   return (
@@ -29,13 +30,26 @@ export default function TournamentStageInfo({
 
       <div className=" p-4">
         {stage.type === TournamentStageType.Bracket && (
-          <TournamentBracketStageInfo bracketStage={stage} />
+          <BracketEventInfo
+            schedule={stage.schedule}
+            connections={stage.connections}
+            brackets={stage.brackets}
+            winners={stage.numWinners}
+          />
         )}
       </div>
-      <footer className="grid grid-cols-2 gap-4 ">
-        <Button variant="ghost" onClick={onDelete}>
-          Delete
-        </Button>
+      <footer
+        className="grid  gap-4 "
+        style={{
+          gridTemplateColumns: onDelete ? "repeat(2, 1fr)" : "repeat(1, 1fr)",
+        }}
+      >
+        {onDelete && (
+          <Button variant="ghost" onClick={onDelete}>
+            Delete
+          </Button>
+        )}
+
         <Button onClick={onEdit}>View</Button>
       </footer>
     </>

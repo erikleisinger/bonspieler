@@ -1,5 +1,5 @@
 import GameConnection from "./GameConnection";
-import type { BracketConnections, BracketGame } from "../lib";
+import type { BracketConnections, BracketGame, BracketRows } from "../lib";
 import type { GameConnectionPositionInfo } from "../lib/types/GameConnection";
 import { useState, useEffect, useRef, useCallback } from "react";
 import { getBracketGameElement } from "../lib/getBracketGameElement";
@@ -10,12 +10,7 @@ export default function GameConnections({
 }: {
   games: BracketGame[];
   connections: BracketConnections;
-  rows: {
-    [gameId: string]: {
-      rowStart: number;
-      rowEnd: number;
-    };
-  };
+  rows: BracketRows;
 }) {
   const [connectionPositions, setConnectionPositions] = useState<{
     [gameId: string]: GameConnectionPositionInfo;
@@ -77,6 +72,7 @@ export default function GameConnections({
       };
     });
     setConnectionPositions(positions);
+    console.log("rows updated");
   }, [games, connections, rows]);
 
   useEffect(() => {

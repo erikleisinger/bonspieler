@@ -30,7 +30,7 @@ export default function TournamentStageRotatableCard({
         <div className="grid grid-rows-[auto,1fr,auto] gap-4 bg-glass  tournament-stage__section back absolute inset-0 backdrop-blur-md rounded-3xl  0 p-6 grid grid-rows-[1fr,auto] tournament-card__info">
           <TournamentStageInfo
             stage={stage}
-            onDelete={() => removeStage(stage.id)}
+            onDelete={removeStage ? () => removeStage(stage.id) : undefined}
             onBack={() => setShowDetails(false)}
             onEdit={() => editStage(stage)}
           />
