@@ -18,6 +18,7 @@ import Slideout from "@/shared/ui/slide-out";
 import Typography from "@/shared/ui/typography";
 
 export default function Brackets({
+  appendHeaderChildren,
   appendNavigatorChildren,
   backButton,
   brackets,
@@ -32,6 +33,7 @@ export default function Brackets({
   schedule,
   updateRows,
 }: {
+  appendHeaderChildren?: React.ReactNode;
   appendNavigatorChildren?: React.ReactNode;
   backButton?: React.ReactNode;
   brackets: BracketGame[][][];
@@ -127,6 +129,7 @@ export default function Brackets({
           <Typography tag="h1" className="text-xl md:text-3xl">
             {eventName}
           </Typography>
+          {appendHeaderChildren}
         </header>
         <div className="relative overflow-auto">
           <div className="flex flex-col gap-16 absolute inset-0">

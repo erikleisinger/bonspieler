@@ -13,6 +13,7 @@ import {
   Brackets,
   type BracketRows,
   BracketConnections,
+  BracketEvent,
 } from "@/entities/Bracket";
 
 import { BracketEditingContext } from "@/shared/EditableBracket/BracketEditingContext";
@@ -45,25 +46,19 @@ export default function BracketEditor({
     brackets: [],
     connections: {},
     drawTimes: {},
-    eventName: "New Bracket Event",
+    name: "New Bracket Event",
     numTeams: 16,
     numSheets: 8,
     numWinners: [1],
     schedule: {},
     readableIdIndex: {},
   },
+  onBack = () => {},
+  onSave = () => {},
 }: {
-  data: {
-    brackets: BracketGame[][][];
-    connections: BracketConnections;
-    drawTimes: BracketDrawTimes;
-    eventName: string;
-    numTeams: number;
-    numSheets: number;
-    numWinners: number[];
-    schedule: BracketSchedule;
-    readableIdIndex: { [gameId: string]: string };
-  };
+  data?: BracketEvent;
+  onBack: () => void;
+  onSave: (event: BracketEvent) => void;
 }) {
   /**
    * Bracket params
@@ -132,7 +127,9 @@ export default function BracketEditor({
     editing: true,
   });
 
-  const [showWizard, setShowWizard] = useState(!!data?.connections?.length);
+  const [showWizard, setShowWizard] = useState(
+    !Object.keys(data?.connections || {})?.length
+  );
 
   function calculateTournamentSchedule(
     connections: BracketConnections,
@@ -399,7 +396,7 @@ export default function BracketEditor({
   const [bracketToEdit, setBracketToEdit] = useState<Nullable<number>>(null);
 
   const [eventOptionsTab, setEventOptionsTab] = useState("overview");
-  const [bracketEventName, setBracketEventName] = useState("New Bracket Event");
+  const [bracketEventName, setBracketEventName] = useState(data.name);
 
   function openEventOptions(tab: string = "overview") {
     setShowEventOptions(true);
@@ -409,6 +406,23 @@ export default function BracketEditor({
   function editEvent() {
     openEventOptions();
     setBracketToEdit(null);
+  }
+
+  function handleSave() {
+    const formattedEvent = {
+      brackets: bracketState.brackets,
+      connections: bracketState.connections,
+      drawTimes,
+      name: bracketEventName,
+      numTeams: teamCount,
+      numSheets: bracketState.numSheets,
+      numWinners,
+      schedule: bracketState.schedule,
+      readableIdIndex: bracketState.readableIdIndex,
+    };
+
+    const clone = JSON.parse(JSON.stringify(formattedEvent));
+    onSave(clone);
   }
 
   return (
@@ -499,6 +513,11 @@ export default function BracketEditor({
             rows={bracketState.rows}
             readableIdIndex={bracketState.readableIdIndex}
             infoChildren={<GameEditOptions />}
+            appendHeaderChildren={
+              <div className="flex grow justify-end items-center">
+                <Button onClick={handleSave}>Save Changes</Button>
+              </div>
+            }
             appendNavigatorChildren={
               bracketState.brackets?.length ? (
                 <EditBracketButton
@@ -533,7 +552,7 @@ export default function BracketEditor({
                   totalNumDraws={totalNumDraws}
                   totalNumSheets={bracketState.numSheets}
                   totalNumTeams={totalNumTeams}
-                  totalNumWinners={totalNumWinners}
+                  numWinners={numWinners}
                   drawTimes={drawTimes}
                   eventName={bracketEventName}
                   setEventName={setBracketEventName}
@@ -554,6 +573,11 @@ export default function BracketEditor({
         )}
         {showWizard && (
           <div className="fixed inset-0 flex items-center justify-center">
+            <div className="absolute left-4 top-6">
+              <Button size="icon" variant="ghost" onClick={onBack}>
+                <FaArrowLeft />
+              </Button>
+            </div>
             <div className="m-auto bg-glass text-glass-foreground backdrop-blur-sm  rounded-lg shadow-sm h-screen md:h-[90vh] overflow-auto w-screen md:w-[700px]">
               <BracketEditorWizard
                 teamCount={teamCount}
@@ -568,8 +592,8 @@ export default function BracketEditor({
               />
             </div>
             <Button
-              className="absolute right-2 top-2"
-              variant="secondary"
+              className="absolute right-4 top-6"
+              variant="ghost"
               size="icon"
               onClick={() => setShowWizard(false)}
             >

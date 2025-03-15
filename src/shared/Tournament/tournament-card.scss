@@ -1,0 +1,47 @@
+.tournament-card {
+  perspective: 1000px;
+
+  &.rotatable {
+    .tournament-stage__rotatable-card--content {
+      position: absolute;
+      inset: 0;
+      transition: transform 0.3s, box-shadow 0.1s;
+      transform-style: preserve-3d;
+      border-radius: inherit;
+      pointer-events: all;
+    }
+    .tournament-stage__section {
+      position: absolute;
+      inset: 0;
+      backface-visibility: hidden;
+    }
+
+    &.rotated {
+      .tournament-stage__rotatable-card--content {
+        transform: rotateY(180deg);
+      }
+      .tournament-stage__section.back {
+        pointer-events: all;
+        z-index: 10;
+      }
+      .tournament-stage__section.front {
+        pointer-events: none;
+      }
+    }
+    &:not(.rotated) {
+      .tournament-stage__section.back {
+        pointer-events: none;
+      }
+      .tournament-stage__section.front {
+        pointer-events: all;
+        z-index: 10;
+      }
+    }
+  }
+}
+
+.tournament-card {
+  .tournament-card__info {
+    transform: rotateY(180deg);
+  }
+}

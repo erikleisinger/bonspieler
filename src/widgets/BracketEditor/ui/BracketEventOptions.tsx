@@ -11,6 +11,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { SetEventSheets } from "@/features/SetEventSheets";
 import { SetEventDrawTimes } from "@/features/SetEventDrawTimes";
 import { SetEventTeams } from "@/features/SetEventTeams";
+import { BracketEventInfo } from "@/entities/BracketEvent";
 export default function BracketEventOptions({
   drawTimes,
   eventName,
@@ -19,7 +20,7 @@ export default function BracketEventOptions({
   setEventName,
   totalNumTeams,
   totalNumSheets,
-  totalNumWinners,
+  numWinners,
   totalNumDraws,
   onClose,
 }: {
@@ -31,7 +32,7 @@ export default function BracketEventOptions({
   updateNumSheets: (num: number) => void;
   totalNumTeams: number;
   totalNumSheets: number;
-  totalNumWinners: number;
+  numWinners: number[];
   totalNumDraws: number;
   onClose: () => void;
 }) {
@@ -40,7 +41,7 @@ export default function BracketEventOptions({
   const drawTimesContainerId = useId();
   const teamsContainerId = useId();
 
-  const { brackets } = useContext(BracketContext);
+  const { brackets, connections, schedule } = useContext(BracketContext);
 
   const numBrackets = brackets.length;
 
@@ -77,18 +78,12 @@ export default function BracketEventOptions({
             </TabsList>
             <TabsContent value="overview">
               <div className=" bg-glass p-4 rounded-md">
-                <div className="flex justify-between">
-                  Teams <strong>{totalNumTeams}</strong>
-                </div>
-                <div className="flex justify-between">
-                  Brackets <strong>{numBrackets}</strong>
-                </div>
-                <div className="flex justify-between">
-                  Teams advancing <strong>{totalNumWinners}</strong>
-                </div>
-                <div className="flex justify-between">
-                  Draws <strong>{totalNumDraws}</strong>
-                </div>
+                <BracketEventInfo
+                  winners={numWinners}
+                  brackets={brackets}
+                  schedule={schedule}
+                  connections={connections}
+                />
               </div>
             </TabsContent>
             <TabsContent value="schedule">

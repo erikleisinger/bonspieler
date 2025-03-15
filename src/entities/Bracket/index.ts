@@ -7,6 +7,7 @@ export type {
   BracketConnectionSeedTeamId,
   BracketDrawTimes,
   BracketGame,
+  BracketEvent,
   BracketRows,
   BracketRow,
   BracketSchedule,

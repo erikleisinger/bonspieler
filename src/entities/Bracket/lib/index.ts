@@ -15,6 +15,8 @@ export type {
 export type { BracketGame } from "./types/BracketGame";
 export type { BracketSchedule } from "./types/BracketSchedule";
 export type { BracketDrawTimes } from "./types/BracketDrawTimes";
+export type { BracketEvent } from "./types/BracketEvent";
+export type { BracketReadableIdIndex } from "./types/BracketReadableIdIndex";
 export { calculateRowSpanForGame } from "./calculateRowSpanForGame";
 export { getBracketName } from "./getBracketName";
 export {
