@@ -26,13 +26,11 @@
       }
       .tournament-stage__section.front {
         pointer-events: none;
-        display: none;
       }
     }
     &:not(.rotated) {
       .tournament-stage__section.back {
         pointer-events: none;
-        display: none;
       }
       .tournament-stage__section.front {
         pointer-events: all;

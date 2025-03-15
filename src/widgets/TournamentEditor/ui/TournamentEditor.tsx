@@ -6,20 +6,24 @@ import {
   TournamentStageType,
 } from "@/entities/Tournament";
 import { generateUUID } from "@/shared/utils/generateUUID";
+import type { Tournament } from "@/shared/types/Tournament";
 
 import { TournamentStageList } from "@/features/TournamentStageList";
 
 export default function TournamentEditor({
   onEditStage,
+  updateTournament,
   tournament,
 }: {
   onEditStage: (stage: TournamentStage) => void;
+  updateTournament: (tournament: Tournament) => void;
   tournament: {
     name: string;
     stages: TournamentStage[];
   };
 }) {
   const [stages, setStages] = useState<TournamentStage[]>(tournament.stages);
+
   useEffect(() => {
     setStages(tournament.stages);
   }, [tournament.stages]);
@@ -39,9 +43,34 @@ export default function TournamentEditor({
   function removeStage(stageId: string) {
     const index = stages.findIndex(({ id }) => id === stageId);
     if (index < 0) return;
-    const newStages = [...stages];
+    let newStages = [...stages];
     newStages.splice(index, 1);
+    newStages = newStages.map((s, i) => ({
+      ...s,
+      order: i,
+    }));
     setStages(newStages);
+  }
+
+  function handleChangeStageOrder(
+    inc: number,
+    stage: TournamentStage,
+    currentIndex: number
+  ) {
+    const newIndex = currentIndex + inc;
+    if (newIndex < 0 || newIndex > stages.length - 1) return;
+
+    let newStages = [...stages];
+    const thisStage = [...newStages][currentIndex];
+    newStages.splice(currentIndex, 1);
+    newStages.splice(newIndex, 0, thisStage);
+
+    newStages = newStages.map((stage, i) => ({
+      ...stage,
+      order: i,
+    }));
+    const newTournament = { ...tournament, stages: newStages };
+    updateTournament(newTournament);
   }
 
   return (
@@ -49,6 +78,7 @@ export default function TournamentEditor({
       stages={stages}
       removeStage={removeStage}
       onEditStage={onEditStage}
+      changeStageOrder={handleChangeStageOrder}
     >
       <AddStage addStage={addStage} />
     </TournamentStageList>

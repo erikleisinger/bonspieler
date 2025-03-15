@@ -72,7 +72,6 @@ export default function GameConnections({
       };
     });
     setConnectionPositions(positions);
-    console.log("rows updated");
   }, [games, connections, rows]);
 
   useEffect(() => {

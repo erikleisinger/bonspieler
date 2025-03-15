@@ -28,6 +28,7 @@ export default function TournamentEdit({
   function onEditStage(stage: TournamentStage) {
     setEditedStage(stage);
   }
+
   const isBracket = editedStage?.type === TournamentStageType.Bracket;
 
   function saveBracketEvent(savedEvent: BracketEvent) {
@@ -101,6 +102,7 @@ export default function TournamentEdit({
       {!editedStage && (
         <TournamentEditor
           onEditStage={onEditStage}
+          updateTournament={setEditedTournament}
           tournament={editedTournament}
         />
       )}
