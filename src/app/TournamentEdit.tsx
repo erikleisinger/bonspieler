@@ -31,6 +31,21 @@ export default function TournamentEdit({
 
   const isBracket = editedStage?.type === TournamentStageType.Bracket;
 
+  function saveTournament(newTournament: Tournament) {
+    const tournaments = JSON.parse(
+      localStorage.getItem(TOURNAMENT_STORAGE_KEY)
+    );
+    const newTournaments = {
+      ...tournaments,
+      [editedTournament.id]: newTournament,
+    };
+    localStorage.setItem(
+      TOURNAMENT_STORAGE_KEY,
+      JSON.stringify(newTournaments)
+    );
+    console.log("new tournament: ", newTournament);
+  }
+
   function saveBracketEvent(savedEvent: BracketEvent) {
     const { id, order, type } = editedStage;
 
@@ -45,18 +60,7 @@ export default function TournamentEdit({
     const newTournament = { ...editedTournament, stages: newStages };
 
     setEditedTournament(newTournament);
-
-    const tournaments = JSON.parse(
-      localStorage.getItem(TOURNAMENT_STORAGE_KEY)
-    );
-    const newTournaments = {
-      ...tournaments,
-      [editedTournament.id]: newTournament,
-    };
-    localStorage.setItem(
-      TOURNAMENT_STORAGE_KEY,
-      JSON.stringify(newTournaments)
-    );
+    saveTournament(newTournament);
   }
 
   function discardChanges() {
@@ -103,6 +107,7 @@ export default function TournamentEdit({
         <TournamentEditor
           onEditStage={onEditStage}
           updateTournament={setEditedTournament}
+          saveTournament={saveTournament}
           tournament={editedTournament}
         />
       )}

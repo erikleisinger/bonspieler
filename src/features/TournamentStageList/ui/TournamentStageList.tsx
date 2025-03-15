@@ -63,56 +63,58 @@ export default function TournamentStageList({
   }
 
   return (
-    <div className="fixed inset-0 flex items-center  overflow-auto px-12">
-      <div
-        className=" flex gap-12 items-center relative min-w-full"
-        style={{
-          justifyContent: !stages?.length ? "center" : "flex-start",
-        }}
-      >
-        {stages.map((stage, i) => {
-          return (
-            <div key={stage.id} className="ANIMATED_CARD">
-              <TournamentStageRotatableCard
-                stage={stage}
-                removeStage={removeStage}
-                editStage={onEditStage}
-              >
-                {changeStageOrder ? (
-                  <div className="flex gap-2 items-center ">
-                    <Button
-                      size="icon"
-                      variant="ghost"
-                      disabled={flipping}
-                      style={{
-                        visibility: !i ? "hidden" : "visible",
-                      }}
-                      onClick={(e) => handleChangeOrder(e, -1, stage, i)}
-                    >
-                      <FaChevronLeft />
-                    </Button>
+    <div className="absolute inset-0 flex items-center  overflow-auto ">
+      <div>
+        <div
+          className=" flex gap-12 items-center relative min-w-full w-fit px-12"
+          style={{
+            justifyContent: !stages?.length ? "center" : "flex-start",
+          }}
+        >
+          {stages.map((stage, i) => {
+            return (
+              <div key={stage.id} className="ANIMATED_CARD">
+                <TournamentStageRotatableCard
+                  stage={stage}
+                  removeStage={removeStage}
+                  editStage={onEditStage}
+                >
+                  {changeStageOrder ? (
+                    <div className="flex gap-2 items-center ">
+                      <Button
+                        size="icon"
+                        variant="ghost"
+                        disabled={flipping}
+                        style={{
+                          visibility: !i ? "hidden" : "visible",
+                        }}
+                        onClick={(e) => handleChangeOrder(e, -1, stage, i)}
+                      >
+                        <FaChevronLeft />
+                      </Button>
+                      <div>Stage {stage.order + 1}</div>
+                      <Button
+                        size="icon"
+                        variant="ghost"
+                        style={{
+                          visibility:
+                            i >= stages.length - 1 ? "hidden" : "visible",
+                        }}
+                        disabled={flipping}
+                        onClick={(e) => handleChangeOrder(e, 1, stage, i)}
+                      >
+                        <FaChevronRight />
+                      </Button>
+                    </div>
+                  ) : (
                     <div>Stage {stage.order + 1}</div>
-                    <Button
-                      size="icon"
-                      variant="ghost"
-                      style={{
-                        visibility:
-                          i >= stages.length - 1 ? "hidden" : "visible",
-                      }}
-                      disabled={flipping}
-                      onClick={(e) => handleChangeOrder(e, 1, stage, i)}
-                    >
-                      <FaChevronRight />
-                    </Button>
-                  </div>
-                ) : (
-                  <div>Stage {stage.order + 1}</div>
-                )}
-              </TournamentStageRotatableCard>
-            </div>
-          );
-        })}
-        {children}
+                  )}
+                </TournamentStageRotatableCard>
+              </div>
+            );
+          })}
+          {children}
+        </div>
       </div>
     </div>
   );

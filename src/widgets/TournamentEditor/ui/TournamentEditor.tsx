@@ -7,15 +7,21 @@ import {
 } from "@/entities/Tournament";
 import { generateUUID } from "@/shared/utils/generateUUID";
 import type { Tournament } from "@/shared/types/Tournament";
+import Typography from "@/shared/ui/typography";
+import { Tabs, TabsContent } from "@/shared/ui/tabs";
 
 import { TournamentStageList } from "@/features/TournamentStageList";
+import SaveButton from "@/shared/ui/save-button";
+import { TournamentNavigation } from "@/features/TournamentNavigation";
 
 export default function TournamentEditor({
   onEditStage,
   updateTournament,
+  saveTournament,
   tournament,
 }: {
   onEditStage: (stage: TournamentStage) => void;
+  saveTournament: (tournament: Tournament) => void;
   updateTournament: (tournament: Tournament) => void;
   tournament: {
     name: string;
@@ -30,14 +36,19 @@ export default function TournamentEditor({
 
   function addStage(type: TournamentStageType) {
     const base = JSON.parse(JSON.stringify(DEFAULTS[type]));
-    setStages((prev) => [
-      ...prev,
+    const newStages = [
+      ...stages,
       {
         ...base,
         id: generateUUID(),
-        order: prev.length,
+        order: stages.length,
       },
-    ]);
+    ];
+    setStages(newStages);
+    updateTournament({
+      ...tournament,
+      stages: newStages,
+    });
   }
 
   function removeStage(stageId: string) {
@@ -50,6 +61,10 @@ export default function TournamentEditor({
       order: i,
     }));
     setStages(newStages);
+    updateTournament({
+      ...tournament,
+      stages: newStages,
+    });
   }
 
   function handleChangeStageOrder(
@@ -73,14 +88,33 @@ export default function TournamentEditor({
     updateTournament(newTournament);
   }
 
+  const [selectedView, setSelectedView] = useState("stages");
+
   return (
-    <TournamentStageList
-      stages={stages}
-      removeStage={removeStage}
-      onEditStage={onEditStage}
-      changeStageOrder={handleChangeStageOrder}
+    <Tabs
+      size="lg"
+      className="fixed inset-0 grid grid-rows-[auto,1fr]"
+      value={selectedView}
+      onValueChange={setSelectedView}
     >
-      <AddStage addStage={addStage} />
-    </TournamentStageList>
+      <TournamentNavigation tournament={tournament}>
+        <SaveButton
+          size="lg"
+          onClick={() => saveTournament(tournament)}
+          text={["Save Bonspiel", "Saving bonspiel...", "Bonspiel saved!"]}
+        ></SaveButton>
+      </TournamentNavigation>
+
+      <TabsContent value="stages" className="relative">
+        <TournamentStageList
+          stages={stages}
+          removeStage={removeStage}
+          onEditStage={onEditStage}
+          changeStageOrder={handleChangeStageOrder}
+        >
+          <AddStage addStage={addStage} />
+        </TournamentStageList>
+      </TabsContent>
+    </Tabs>
   );
 }

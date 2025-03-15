@@ -6,6 +6,7 @@ export default function SaveButton({
   className,
   text = ["Save", "Saving...", "Saved!"],
   disabled = false,
+  size,
   variant,
   ...props
 }: {
@@ -13,6 +14,7 @@ export default function SaveButton({
   text?: string[];
   onClick: () => Promise<void>;
   disabled?: boolean;
+  size?: string;
   variant?: string;
 }) {
   const [saveButtonText, setSaveButtonText] = useState(text[0]);
@@ -34,6 +36,7 @@ export default function SaveButton({
       disabled={disabled}
       className={className}
       variant={variant}
+      size={size}
       {...props}
       onClick={handleClick}
     >
