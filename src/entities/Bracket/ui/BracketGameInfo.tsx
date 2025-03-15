@@ -10,6 +10,7 @@ import {
   FaPencilAlt,
   FaTrophy,
   FaTimes,
+  FaDoorOpen,
 } from "react-icons/fa";
 import { DrawTime } from "@/entities/BracketGame";
 import { EditDrawNumber } from "@/features/EditDrawNumber";
@@ -31,6 +32,7 @@ export default function BracketGameInfo({
     readableIdIndex,
     schedule,
     selectedGame,
+    nextStageName,
     scrollToGame,
     selectGame,
   } = useContext(BracketContext);
@@ -132,12 +134,15 @@ export default function BracketGameInfo({
                 onClick={() => selectGame(gameConnection.winnerTo)}
               >
                 <FaTrophy className="text-amber-500 text-xl" />
+
                 <div>
                   <div className="text-xs text-muted">Winner</div>
                   <div className="text-xl font-semibold ">
                     {gameConnection.winnerTo
                       ? readableIdIndex[gameConnection.winnerTo]
-                      : "Advances"}
+                      : nextStageName
+                      ? "Advances"
+                      : "Champion"}
                   </div>
                 </div>
               </div>

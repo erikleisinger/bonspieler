@@ -29,7 +29,6 @@ export default function BracketEventOptions({
   initialTab: string;
   setDrawTimes: (e: BracketDrawTimes) => void;
   setEventName: (newName: string) => void;
-  updateNumSheets: (num: number) => void;
   totalNumTeams: number;
   totalNumSheets: number;
   numWinners: number[];
@@ -42,8 +41,6 @@ export default function BracketEventOptions({
   const teamsContainerId = useId();
 
   const { brackets, connections, schedule } = useContext(BracketContext);
-
-  const numBrackets = brackets.length;
 
   const [selectedTab, setSelectedTab] = useState(initialTab);
 

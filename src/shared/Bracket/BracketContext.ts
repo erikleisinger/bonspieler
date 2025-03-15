@@ -5,6 +5,7 @@ import type {
   BracketGame,
   BracketSchedule,
 } from "@/entities/Bracket/lib";
+import { Nullable } from "../types";
 export const BracketContext = createContext<{
   brackets: BracketGame[][][];
   drawTimes: BracketDrawTimes;
@@ -12,6 +13,7 @@ export const BracketContext = createContext<{
   selectedGame: BracketGame | null;
   schedule: BracketSchedule;
   connections: BracketConnections;
+  nextStageName: Nullable<string>;
   deselectGame: () => void;
   selectGame: (game: BracketGame) => void;
   scrollToBracket: (bracketIndex: number) => void;
@@ -31,6 +33,7 @@ export const BracketContext = createContext<{
   selectedGame: null,
   schedule: {},
   connections: {},
+  nextStageName: null,
   deselectGame: () => {},
   selectGame: () => {},
   scrollToBracket: () => {},

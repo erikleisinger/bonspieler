@@ -7,10 +7,11 @@ import {
 import Typography from "@/shared/ui/typography";
 import NumberInput from "@/shared/ui/number-input";
 import { TbTournament } from "react-icons/tb";
-import { FaTrophy } from "react-icons/fa";
+import { FaCog } from "react-icons/fa";
 
 import type { CustomizeBracketEventProps } from "../lib";
 import NumberSheetsSelect from "@/shared/ui/number-sheets-select";
+import ValidationIcon from "@/shared/ui/validation-icon";
 
 /**
  * This component allows the user to set parameters for a bracket event as a whole.
@@ -20,11 +21,23 @@ import NumberSheetsSelect from "@/shared/ui/number-sheets-select";
 export default function CustomizeBracketEvent({
   teamCount,
   updateTeamCount,
-  numBrackets,
+  numBrackets = 1,
   updateNumBrackets,
   numSheets,
   updateNumSheets,
+  maxTeams,
 }: CustomizeBracketEventProps) {
+  const bracketErrors = !numBrackets
+    ? ["Number of brackets cannot be 0."]
+    : null;
+
+  const teamErrors =
+    maxTeams === null
+      ? null
+      : teamCount > maxTeams
+      ? [`Only ${maxTeams} team(s) advanced from the previous round.`]
+      : null;
+
   return (
     <div>
       <header className="mb-12">
@@ -33,7 +46,7 @@ export default function CustomizeBracketEvent({
 
       <section className="mb-12">
         <header className="mb-6 flex gap-4 items-baseline">
-          <FaTrophy className="text-amber-500" />
+          <FaCog className="text-primary" />
           <Typography tag="h4">Event options</Typography>
         </header>
         <div className="flex flex-col gap-4">
@@ -43,7 +56,10 @@ export default function CustomizeBracketEvent({
             max={MAX_TEAM_COUNT}
             min={MIN_TEAM_COUNT}
           >
-            How many teams?
+            <div className="flex gap-2">
+              <div>How many teams?</div>
+              <ValidationIcon errors={teamErrors} onlyErrors={true} />
+            </div>
           </NumberInput>
           <NumberSheetsSelect
             numSheets={numSheets}
@@ -65,7 +81,10 @@ export default function CustomizeBracketEvent({
             setNumber={updateNumBrackets}
             max={MAX_BRACKET_COUNT}
           >
-            How many brackets?
+            <div className="flex gap-2">
+              <div>How many brackets?</div>
+              <ValidationIcon errors={bracketErrors} onlyErrors={true} />
+            </div>
           </NumberInput>
         </div>
       </section>

@@ -8,4 +8,6 @@ export interface BracketEditorOptionsProps {
   updateNumBrackets: (e: number) => void;
   numSheets: number;
   updateNumSheets: (e: number) => void;
+  maxTeams: number | null;
+  targetEndTeams: number | null;
 }

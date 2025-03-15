@@ -3,6 +3,7 @@ import {
   BracketGame,
   BracketSchedule,
 } from "@/entities/Bracket";
+import { getTotalBracketWinners } from "@/shared/Bracket/getTotalBracketWinners";
 
 export default function BracketEventInfo({
   brackets,
@@ -32,7 +33,7 @@ export default function BracketEventInfo({
     ? 0
     : Math.max(...Object.values(schedule || {}));
 
-  const numWinners = winners.reduce((all, cur) => all + (cur || 0), 0);
+  const numWinners = getTotalBracketWinners(winners);
 
   const numBrackets = brackets?.length || 0;
   return (

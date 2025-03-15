@@ -24,7 +24,7 @@ export default function BaseCard({
         </div>
       </div>
       <div className="flex justify-center items-end ">
-        <div className="font-bold text-white leading-[1] text-[2rem] md:text-[4rem]">
+        <div className="font-bold text-white leading-[1] text-[2rem] md:text-[2.5rem]">
           {text}
         </div>
       </div>

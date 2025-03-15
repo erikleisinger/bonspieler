@@ -10,6 +10,7 @@ export interface BracketEvent {
   brackets: BracketGame[][][];
   connections: BracketConnections;
   drawTimes: BracketDrawTimes;
+  id: string;
   name: string;
   numTeams: number;
   numSheets: number;

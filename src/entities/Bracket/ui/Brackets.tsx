@@ -16,6 +16,7 @@ import BracketNavigator from "./BracketNavigator";
 import { BRACKET_CONTAINER_ELEMENT_ID_PREFIX } from "../lib/constants/element-id";
 import Slideout from "@/shared/ui/slide-out";
 import Typography from "@/shared/ui/typography";
+import { Nullable } from "@/shared/types";
 
 export default function Brackets({
   appendHeaderChildren,
@@ -27,6 +28,7 @@ export default function Brackets({
   drawTimes,
   eventName = "Bracket",
   infoChildren,
+  nextStageName,
   prependNavigatorChildren,
   readableIdIndex,
   rows,
@@ -42,6 +44,7 @@ export default function Brackets({
   drawTimes: BracketDrawTimes;
   eventName?: string;
   infoChildren?: React.ReactNode;
+  nextStageName: Nullable<string>;
   prependNavigatorChildren?: React.ReactNode;
   readableIdIndex: { [gameId: string]: string };
   rows: BracketRows;
@@ -115,6 +118,7 @@ export default function Brackets({
         selectedGame,
         schedule,
         connections,
+        nextStageName,
         deselectGame: cancelSelectedGame,
         selectGame,
         scrollToBracket,

@@ -37,8 +37,13 @@ export default function AddStage({
           <FaPlus />
         </BaseCard>
       </div>
-      <div className="fixed inset-0 z-1  pointer-events-none">
-        <div className="absolute inset-0  z-10 overflow-auto flex justify-start md:justify-center items-center pointer-events-none">
+      <div className="fixed inset-0 z-1 pointer-events-none ">
+        <div
+          className="absolute top-0 bottom-0 max-w-[100vw] m-auto left-0 right-0 w-fit  z-10 overflow-auto flex justify-start items-center "
+          style={{
+            pointerEvents: adding ? "all" : "none",
+          }}
+        >
           <div
             className=" flex justify-start md:justify-center items-center gap-8  px-4 flex items-center md:justify-center   "
             ref={el}

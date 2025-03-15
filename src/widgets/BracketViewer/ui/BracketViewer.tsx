@@ -5,7 +5,6 @@ import type {
 } from "@/entities/Bracket";
 import { Brackets } from "@/entities/Bracket";
 import { useState } from "react";
-import testTourney from "@/../mock/test-tourney.json";
 
 /**
  * Will accept props in production state;
@@ -22,8 +21,7 @@ import testTourney from "@/../mock/test-tourney.json";
 //   schedule: { [gameId: string]: number };
 // }) {
 export default function BracketViewer() {
-  const { connections, brackets, schedule, readableIdIndex, drawTimes } =
-    testTourney;
+  const { connections, brackets, schedule, readableIdIndex, drawTimes } = {};
   const [rows, setRows] = useState({});
   function updateRows(newRows: BracketRows) {
     setRows((prevRows) => {

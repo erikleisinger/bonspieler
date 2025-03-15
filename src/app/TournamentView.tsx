@@ -8,19 +8,23 @@ import {
 import type { TournamentStage } from "@/widgets/TournamentEditor";
 import { BracketEditor } from "@/widgets/BracketEditor";
 import { BracketEvent } from "@/entities/Bracket";
+import { getTotalBracketWinners } from "@/shared/Bracket/getTotalBracketWinners";
+import { StageTournamentContext } from "@/shared/types/StageTournamentContext";
+import type { Tournament } from "@/shared/types/Tournament";
+import { generateUUID } from "@/shared/utils/generateUUID";
+import { TOURNAMENT_STORAGE_KEY } from "./storage";
 export default function TournamentView({
   tournament = {
+    id: generateUUID(),
     name: "New Bonspiel",
     stages: [],
   },
 }: {
-  tournament?: {
-    name: string;
-    stages: TournamentStage[];
-  };
+  tournament?: Tournament;
 }) {
   const tournamentClone = JSON.parse(JSON.stringify(tournament));
-  const [editedTournament, setEditedTournament] = useState(tournamentClone);
+  const [editedTournament, setEditedTournament] =
+    useState<Tournament>(tournamentClone);
 
   const [editedStage, setEditedStage] = useState<TournamentStage | null>(null);
 
@@ -43,11 +47,56 @@ export default function TournamentView({
     const newTournament = { ...editedTournament, stages: newStages };
 
     setEditedTournament(newTournament);
-    setEditedStage(null);
+
+    const tournaments = JSON.parse(
+      localStorage.getItem(TOURNAMENT_STORAGE_KEY)
+    );
+    const newTournaments = {
+      ...tournaments,
+      [editedTournament.id]: newTournament,
+    };
+    localStorage.setItem(
+      TOURNAMENT_STORAGE_KEY,
+      JSON.stringify(newTournaments)
+    );
   }
 
   function discardChanges() {
     setEditedStage(null);
+  }
+
+  function getTournamentContextForStage(
+    stage: TournamentStage
+  ): StageTournamentContext {
+    const { order } = stage;
+    let startTeams = null;
+    let endTeams = null;
+    let prevStageName = null;
+    let nextStageName = null;
+    if (order !== 0) {
+      const lastStage = editedTournament.stages[order - 1];
+      const { numWinners, name } = lastStage || {};
+      startTeams = getTotalBracketWinners(numWinners);
+      prevStageName = name;
+    }
+
+    if (
+      order !== editedTournament.stages.length - 1 &&
+      !!editedTournament.stages[order + 1]
+    ) {
+      const nextStage = editedTournament.stages[order + 1];
+      const { name, numTeams } = nextStage;
+      endTeams = numTeams;
+      nextStageName = name;
+    }
+
+    return {
+      order,
+      startTeams,
+      endTeams,
+      prevStageName,
+      nextStageName,
+    };
   }
 
   return (
@@ -63,6 +112,7 @@ export default function TournamentView({
           data={editedStage}
           onSave={saveBracketEvent}
           onBack={discardChanges}
+          tournamentContext={getTournamentContextForStage(editedStage)}
         />
       )}
     </div>

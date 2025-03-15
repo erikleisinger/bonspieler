@@ -35,17 +35,16 @@ import { FaArrowLeft, FaArrowRight, FaCog } from "react-icons/fa";
 import BracketEventOptions from "./BracketEventOptions";
 import Slideout from "@/shared/ui/slide-out";
 import { Nullable } from "@/shared/types";
-import type {
-  BracketDrawTimes,
-  BracketGame,
-  BracketSchedule,
-} from "@/entities/Bracket";
+import type { BracketDrawTimes, BracketGame } from "@/entities/Bracket";
+import SaveButton from "@/shared/ui/save-button";
+import { StageTournamentContext } from "@/shared/types/StageTournamentContext";
 
 export default function BracketEditor({
   data = {
     brackets: [],
     connections: {},
     drawTimes: {},
+    id: "",
     name: "New Bracket Event",
     numTeams: 16,
     numSheets: 8,
@@ -53,10 +52,18 @@ export default function BracketEditor({
     schedule: {},
     readableIdIndex: {},
   },
+  tournamentContext = {
+    order: 0,
+    startTeams: null,
+    endTeams: null,
+    prevStageName: null,
+    nextStageName: null,
+  },
   onBack = () => {},
   onSave = () => {},
 }: {
   data?: BracketEvent;
+  tournamentContext: StageTournamentContext;
   onBack: () => void;
   onSave: (event: BracketEvent) => void;
 }) {
@@ -68,9 +75,11 @@ export default function BracketEditor({
    * Number of teams total in the tournament
    */
 
-  const [teamCount, setTeamCount] = useState(data.numTeams);
+  const [teamCount, setTeamCount] = useState(
+    tournamentContext?.startTeams || data.numTeams
+  );
 
-  function updateTeamCount(e: string) {
+  function updateTeamCount(e: number) {
     setTeamCount(getNewTeamCount(e, teamCount));
   }
 
@@ -80,7 +89,7 @@ export default function BracketEditor({
 
   const [numWinners, setNumWinners] = useState(data.numWinners);
 
-  function updateNumWinners(e: string, index: number) {
+  function updateNumWinners(e: number, index: number) {
     setNumWinners(getNewWinnerCount(e, numWinners, index));
   }
 
@@ -104,7 +113,7 @@ export default function BracketEditor({
     });
   }
 
-  function updateNumBrackets(e: string) {
+  function updateNumBrackets(e: number) {
     const { brackets: newBrackets, winners: newWinners } =
       getNewBracketAndWinnerCount(e, numBrackets, numWinners);
     setNumBrackets(newBrackets);
@@ -375,14 +384,6 @@ export default function BracketEditor({
 
   const totalNumDraws = Math.max(...Object.values(bracketState.schedule || {}));
 
-  const totalNumWinners = numWinners.reduce((all, cur) => all + (cur || 0), 0);
-  useEffect(() => {
-    if (!bracketState?.lookingForLoserConnection) return;
-    if (!bracketState?.availableGames?.length) return;
-    const [firstAvailableGame] = bracketState.availableGames;
-    scrollToGame(firstAvailableGame);
-  }, [bracketState?.availableGames?.length]);
-
   const [drawTimes, setDrawTimes] = useState<BracketDrawTimes>(
     Object.entries(data.drawTimes).reduce((all, [drawNum, isoString]) => {
       return {
@@ -408,7 +409,7 @@ export default function BracketEditor({
     setBracketToEdit(null);
   }
 
-  function handleSave() {
+  async function handleSave() {
     const formattedEvent = {
       brackets: bracketState.brackets,
       connections: bracketState.connections,
@@ -515,7 +516,12 @@ export default function BracketEditor({
             infoChildren={<GameEditOptions />}
             appendHeaderChildren={
               <div className="flex grow justify-end items-center">
-                <Button onClick={handleSave}>Save Changes</Button>
+                <SaveButton
+                  text={["Save Changes", "Saving...", "Changes saved!"]}
+                  onClick={handleSave}
+                >
+                  Save Changes
+                </SaveButton>
               </div>
             }
             appendNavigatorChildren={
@@ -532,6 +538,7 @@ export default function BracketEditor({
             prependNavigatorChildren={
               <AddNewBracket addBracket={handleAddBracket} />
             }
+            nextStageName={tournamentContext.nextStageName}
           >
             <Slideout visible={bracketToEdit !== null}>
               {bracketToEdit !== null && (
@@ -589,6 +596,8 @@ export default function BracketEditor({
                 updateNumBrackets={updateNumBrackets}
                 numSheets={bracketState.numSheets}
                 updateNumSheets={updateNumSheets}
+                maxTeams={tournamentContext.startTeams}
+                targetEndTeams={tournamentContext.endTeams}
               />
             </div>
             <Button

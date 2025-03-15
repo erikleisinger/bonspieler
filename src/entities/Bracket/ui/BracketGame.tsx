@@ -5,6 +5,8 @@ import { BracketContext } from "@/shared/Bracket/BracketContext";
 import BracketGameTeam from "./BracketGameTeam";
 import LoserIndicator from "./LoserIndicator";
 import type { BracketConnection, BracketGame } from "../lib";
+import { FaTrophy } from "react-icons/fa";
+import { FaPersonRunning } from "react-icons/fa6";
 
 import { GAME_HEIGHT } from "../lib/constants/game";
 
@@ -30,7 +32,7 @@ export default function BracketGame({
     addWinnerConnection,
     selectedDraw,
   } = useContext(BracketEditingContext);
-  const { readableIdIndex, selectedGame, selectGame, schedule } =
+  const { readableIdIndex, selectedGame, selectGame, schedule, nextStageName } =
     useContext(BracketContext);
 
   const drawNum = schedule[game.id] || "?";
@@ -55,8 +57,8 @@ export default function BracketGame({
 
   function getClassName() {
     const base = [
-      "BRACKET_GAME flex group game__container--outer ",
-      className,
+      "BRACKET_GAME flex group game__container--outer relative ",
+      className || "",
       " ",
     ];
     if (lookingForWinnerConnection && isAvailable) {
@@ -99,6 +101,8 @@ export default function BracketGame({
     }, 1001);
   }, [drawNum, firstUpdate]);
 
+  const isFinal = !connections?.winnerTo;
+
   return (
     <div
       className={getClassName() + " " + modified}
@@ -138,6 +142,25 @@ export default function BracketGame({
           })}
         </div>
       </div>
+      {isFinal && (
+        <div className="absolute right-[-1rem] gap-4  top-0 bottom-0 m-auto h-fit   translate-x-[100%]  flex gap-2 text-xl  px-4  backdrop-blur-md p-2 items-center">
+          <div className="">
+            {nextStageName ? (
+              <FaPersonRunning className="text-indigo-500 text-[1.5rem] " />
+            ) : (
+              <FaTrophy className="text-amber-500 text-[2rem]" />
+            )}
+          </div>
+
+          {nextStageName ? (
+            <div className="text-sm grow font-semibold min-w-[200px]">
+              Advances to {nextStageName}
+            </div>
+          ) : (
+            <div className="text-2xl font-bold">Champion</div>
+          )}
+        </div>
+      )}
     </div>
   );
 }

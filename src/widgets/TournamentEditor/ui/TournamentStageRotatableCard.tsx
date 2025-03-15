@@ -7,7 +7,6 @@ import RoundRobinStageCard from "@/shared/Tournament/RoundRobinCard";
 import PointsStageCard from "@/shared/Tournament/PointsStageCard";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
-import { Button } from "@/shared/ui/button";
 import TournamentStageInfo from "./TournamentStageInfo";
 
 export default function TournamentStageRotatableCard({
@@ -40,12 +39,15 @@ export default function TournamentStageRotatableCard({
           className="tournament-stage__section front"
           onClick={() => setShowDetails(true)}
         >
+          <div className="absolute bottom-6 text-lg left-0 right-0 w-fit m-auto text-slate-500 font-bold">
+            Stage {stage.order + 1}
+          </div>
           {stage.type === TournamentStageType.Bracket ? (
-            <BracketStageCard />
+            <BracketStageCard name={stage.name} />
           ) : stage.type === TournamentStageType.Pool ? (
-            <RoundRobinStageCard />
+            <RoundRobinStageCard name={stage.name} />
           ) : stage.type === TournamentStageType.Points ? (
-            <PointsStageCard />
+            <PointsStageCard name={stage.name} />
           ) : (
             <div />
           )}

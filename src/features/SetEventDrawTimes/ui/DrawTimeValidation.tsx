@@ -1,6 +1,5 @@
-import Tooltip from "@/shared/ui/tooltip";
-import { FaExclamationTriangle, FaCheckCircle } from "react-icons/fa";
 import { DrawTimeValidationContext } from "../lib/DrawTimeValidationContext";
+import ValidationIcon from "@/shared/ui/validation-icon";
 import { useContext } from "react";
 export default function DrawTimeValidation({
   drawNumber,
@@ -10,15 +9,5 @@ export default function DrawTimeValidation({
   const { warnings: allWarnings } = useContext(DrawTimeValidationContext);
 
   const warnings = allWarnings[drawNumber] || "";
-  return (
-    <>
-      {warnings ? (
-        <Tooltip text={warnings.join("\n")}>
-          <FaExclamationTriangle className="text-destructive text-sm" />
-        </Tooltip>
-      ) : (
-        <FaCheckCircle className="text-success text-sm" />
-      )}
-    </>
-  );
+  return <ValidationIcon errors={warnings} />;
 }

@@ -2,8 +2,7 @@
 
 import { use } from "react";
 import TournamentView from "@/app/TournamentView";
-import testTourney from "@/../mock/test-tourney.json";
-
+import { TOURNAMENT_STORAGE_KEY } from "@/app/storage";
 export default function EditTournament({ params }) {
   // Unwrap the entire params object first
   const unwrappedParams = use(params);
@@ -11,6 +10,12 @@ export default function EditTournament({ params }) {
   // Now you can safely access the id
   const id = unwrappedParams.id;
 
-  console.log("id: ", id);
-  return <TournamentView tournament={testTourney} />;
+  /**
+   * Temporary save logic to local storage;
+   * obviously persisting to db later on
+   */
+  const tournaments = localStorage.getItem(TOURNAMENT_STORAGE_KEY);
+  const tournament = JSON.parse(tournaments)[id];
+
+  return <TournamentView tournament={tournament} />;
 }

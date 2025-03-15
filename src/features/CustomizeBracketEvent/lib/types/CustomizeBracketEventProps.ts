@@ -7,4 +7,5 @@ export interface CustomizeBracketEventProps {
   updateNumSheets: (e: number) => void;
   numBrackets: number;
   updateNumBrackets: (e: number) => void;
+  maxTeams: number | null;
 }
