@@ -11,11 +11,13 @@ import TournamentStageInfo from "./TournamentStageInfo";
 
 export default function TournamentStageRotatableCard({
   children,
+  className = "",
   editStage,
   removeStage,
   stage,
 }: {
   children?: React.ReactNode;
+  className?: string;
   editStage: (stage: TournamentStage) => void;
   removeStage: (stageId: string) => void;
   stage: TournamentStage;
@@ -24,8 +26,9 @@ export default function TournamentStageRotatableCard({
   return (
     <div
       className={cn(
-        "w-[400px] aspect-[4/5] max-w-[80vw]  backdrop-blur-md rounded-3xl  relative tournament-card rotatable pointer-events-auto ",
-        showDetails ? "rotated" : ""
+        " relative tournament-card rotatable pointer-events-auto w-[250px] sm:w-[300px] md:w-[350px]  aspect-[4/5]",
+        showDetails ? "rotated" : "",
+        className
       )}
     >
       <div className="tournament-stage__rotatable-card--content shadow-md">
@@ -41,7 +44,7 @@ export default function TournamentStageRotatableCard({
           className="tournament-stage__section front"
           onClick={() => setShowDetails(true)}
         >
-          <div className="absolute bottom-6 text-lg left-0 right-0 w-fit m-auto text-black/40 font-bold z-10">
+          <div className="absolute bottom-2 md:bottom-6 md:text-lg left-0 right-0 w-fit m-auto text-black/40 font-bold z-10">
             {children}
           </div>
           {stage.type === TournamentStageType.Bracket ? (

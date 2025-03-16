@@ -1,7 +1,7 @@
 import { client, type Tables } from "@/shared/api";
 export async function getTournamentById(
   id: number
-): Tables<"tournament_schema"> {
+): Promise<Tables<"tournament_schema">> {
   const { data } = await client
     .from("tournament_schema")
     .select("*")

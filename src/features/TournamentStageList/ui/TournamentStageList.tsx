@@ -10,13 +10,11 @@ import { Button } from "@/shared/ui/button";
 gsap.registerPlugin(Flip);
 gsap.registerPlugin(useGSAP);
 export default function TournamentStageList({
-  children,
   onEditStage = () => {},
   changeStageOrder,
   removeStage,
   stages = [],
 }: {
-  children?: React.ReactNode;
   changeStageOrder?: (
     inc: number,
     stage: TournamentStage,
@@ -63,57 +61,53 @@ export default function TournamentStageList({
   }
 
   return (
-    <div>
-      <div
-        className=" flex gap-12 items-center relative min-w-full w-fit px-12"
-        style={{
-          justifyContent: !stages?.length ? "center" : "flex-start",
-        }}
-      >
-        {stages.map((stage, i) => {
-          return (
-            <div key={stage.id} className="ANIMATED_CARD">
-              <TournamentStageRotatableCard
-                stage={stage}
-                removeStage={removeStage}
-                editStage={onEditStage}
-              >
-                {changeStageOrder ? (
-                  <div className="flex gap-2 items-center ">
-                    <Button
-                      size="icon"
-                      variant="ghost"
-                      disabled={flipping}
-                      style={{
-                        visibility: !i ? "hidden" : "visible",
-                      }}
-                      onClick={(e) => handleChangeOrder(e, -1, stage, i)}
-                    >
-                      <FaChevronLeft />
-                    </Button>
-                    <div>Stage {stage.order + 1}</div>
-                    <Button
-                      size="icon"
-                      variant="ghost"
-                      style={{
-                        visibility:
-                          i >= stages.length - 1 ? "hidden" : "visible",
-                      }}
-                      disabled={flipping}
-                      onClick={(e) => handleChangeOrder(e, 1, stage, i)}
-                    >
-                      <FaChevronRight />
-                    </Button>
-                  </div>
-                ) : (
-                  <div>Stage {stage.order + 1}</div>
-                )}
-              </TournamentStageRotatableCard>
-            </div>
-          );
-        })}
-        {children}
-      </div>
+    <div
+      className="flex gap-12 items-center relative  w-fit px-12"
+      style={{
+        justifyContent: !stages?.length ? "center" : "flex-start",
+      }}
+    >
+      {stages.map((stage, i) => {
+        return (
+          <TournamentStageRotatableCard
+            key={stage.id}
+            className="ANIMATED_CARD"
+            stage={stage}
+            removeStage={removeStage}
+            editStage={onEditStage}
+          >
+            {changeStageOrder ? (
+              <div className="flex gap-2 items-center ">
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  disabled={flipping}
+                  style={{
+                    visibility: !i ? "hidden" : "visible",
+                  }}
+                  onClick={(e) => handleChangeOrder(e, -1, stage, i)}
+                >
+                  <FaChevronLeft />
+                </Button>
+                <div>Stage {stage.order + 1}</div>
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  style={{
+                    visibility: i >= stages.length - 1 ? "hidden" : "visible",
+                  }}
+                  disabled={flipping}
+                  onClick={(e) => handleChangeOrder(e, 1, stage, i)}
+                >
+                  <FaChevronRight />
+                </Button>
+              </div>
+            ) : (
+              <div>Stage {stage.order + 1}</div>
+            )}
+          </TournamentStageRotatableCard>
+        );
+      })}
     </div>
   );
 }

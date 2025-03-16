@@ -1,12 +1,29 @@
 import { TournamentStage } from "@/entities/Tournament";
 import { TournamentStageList } from "@/features/TournamentStageList";
+import {
+  TournamentNavigation,
+  TournamentTab,
+} from "@/features/TournamentNavigation";
+import { Tournament } from "@/shared/types/Tournament";
 
 export default function TournamentViewer({
   onViewStage,
-  stages,
+  tournament,
 }: {
   onViewStage: (stage: TournamentStage) => void;
-  stages: TournamentStage[];
+  tournament: Tournament;
 }) {
-  return <TournamentStageList stages={stages} onEditStage={onViewStage} />;
+  return (
+    <TournamentNavigation
+      tournament={tournament}
+      tabsChildren={{
+        [TournamentTab.Stages]: (
+          <TournamentStageList
+            stages={tournament.stages}
+            onEditStage={onViewStage}
+          />
+        ),
+      }}
+    ></TournamentNavigation>
+  );
 }

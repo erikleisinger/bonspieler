@@ -1,6 +1,6 @@
 import "./animation.scss";
-import { AddStage } from "@/features/AddStage";
-import { useState, useEffect } from "react";
+import { AddStage, AddStageCard } from "@/features/AddStage";
+import { useState } from "react";
 import {
   DEFAULTS,
   TournamentStage,
@@ -8,61 +8,54 @@ import {
 } from "@/entities/Tournament";
 import { generateUUID } from "@/shared/utils/generateUUID";
 import type { Tournament } from "@/shared/types/Tournament";
-import { Tabs, TabsContent } from "@/shared/ui/tabs";
 
 import { TournamentStageList } from "@/features/TournamentStageList";
-import { TournamentNavigation } from "@/features/TournamentNavigation";
+import {
+  TournamentNavigation,
+  TournamentTab,
+} from "@/features/TournamentNavigation";
 import { TournamentTeamList } from "@/widgets/TournamentTeamList";
-import { cn } from "@/lib/utils";
 
 export default function TournamentEditor({
   onEditStage,
-  updateTournament,
-  saveTournament,
   tournament,
+  saveTournament,
 }: {
   onEditStage: (stage: TournamentStage) => void;
-  saveTournament: (tournament: Tournament) => void;
-  updateTournament: (tournament: Tournament) => void;
-  tournament: {
-    name: string;
-    stages: TournamentStage[];
-  };
+  saveTournament: (tournament: Tournament) => Promise<void>;
+  tournament: Tournament;
 }) {
-  const [stages, setStages] = useState<TournamentStage[]>(tournament.stages);
-
-  useEffect(() => {
-    setStages(tournament.stages);
-  }, [tournament.stages]);
+  const tournamentClone = JSON.parse(JSON.stringify(tournament));
+  const [editedTournament, setEditedTournament] =
+    useState<Tournament>(tournamentClone);
 
   function addStage(type: TournamentStageType) {
     const base = JSON.parse(JSON.stringify(DEFAULTS[type]));
     const newStages = [
-      ...stages,
+      ...editedTournament.stages,
       {
         ...base,
         id: generateUUID(),
-        order: stages.length,
+        order: editedTournament.stages.length,
       },
     ];
-    setStages(newStages);
-    updateTournament({
+
+    setEditedTournament({
       ...tournament,
       stages: newStages,
     });
   }
 
   function removeStage(stageId: string) {
-    const index = stages.findIndex(({ id }) => id === stageId);
+    const index = editedTournament.stages.findIndex(({ id }) => id === stageId);
     if (index < 0) return;
-    let newStages = [...stages];
+    let newStages = [...editedTournament.stages];
     newStages.splice(index, 1);
     newStages = newStages.map((s, i) => ({
       ...s,
       order: i,
     }));
-    setStages(newStages);
-    updateTournament({
+    setEditedTournament({
       ...tournament,
       stages: newStages,
     });
@@ -74,9 +67,9 @@ export default function TournamentEditor({
     currentIndex: number
   ) {
     const newIndex = currentIndex + inc;
-    if (newIndex < 0 || newIndex > stages.length - 1) return;
+    if (newIndex < 0 || newIndex > editedTournament.stages.length - 1) return;
 
-    let newStages = [...stages];
+    let newStages = [...editedTournament.stages];
     const thisStage = [...newStages][currentIndex];
     newStages.splice(currentIndex, 1);
     newStages.splice(newIndex, 0, thisStage);
@@ -86,82 +79,46 @@ export default function TournamentEditor({
       order: i,
     }));
     const newTournament = { ...tournament, stages: newStages };
-    updateTournament(newTournament);
+    setEditedTournament(newTournament);
   }
 
-  const [selectedView, setSelectedView] = useState("stages");
+  const [addingStage, setAddingStage] = useState(false);
 
   return (
-    <Tabs
-      className="fixed inset-0 grid grid-rows-[auto,1fr]"
-      value={selectedView}
-      onValueChange={setSelectedView}
-    >
-      <div className="z-20 backdrop-blur-md">
-        <TournamentNavigation tournament={tournament} />
-      </div>
-
-      <div
-        className="relative "
-        style={{
-          transformStyle: "preserve-3d",
-          perspective: "1000px",
-        }}
-      >
-        <div className="absolute inset-0 bg-slate-500/5 backdrop-blur-sm z-[3]" />
-        <TabsContent
-          value="stages"
-          style={{
-            transition: "all 0.5s",
-          }}
-          className={cn(
-            "absolute inset-0 transition-all ",
-            selectedView !== "stages"
-              ? "z-[1] behind overflow-visible"
-              : "z-10 ahead overflow-auto"
-          )}
-          forceMount={true}
-        >
-          <TournamentStageList
-            stages={stages}
-            removeStage={removeStage}
-            onEditStage={onEditStage}
-            changeStageOrder={handleChangeStageOrder}
-          >
-            <AddStage addStage={addStage} />
-          </TournamentStageList>
-        </TabsContent>
-        <TabsContent
-          value="teams"
-          style={{
-            transition: "all 0.5s",
-          }}
-          className={cn(
-            "absolute inset-0 flex items-center",
-            selectedView !== "teams" ? "z-[1] behind" : "z-10 ahead"
-          )}
-          forceMount={true}
-        >
+    <TournamentNavigation
+      tournament={tournament}
+      tabsChildren={{
+        [TournamentTab.Stages]: (
+          <>
+            <div className="flex m-auto pr-12 w-fit h-fit">
+              <TournamentStageList
+                stages={editedTournament.stages}
+                removeStage={removeStage}
+                onEditStage={onEditStage}
+                changeStageOrder={handleChangeStageOrder}
+              ></TournamentStageList>
+              <AddStageCard onClick={() => setAddingStage(true)} />
+            </div>
+            <AddStage
+              addStage={addStage}
+              endAdd={() => setAddingStage(false)}
+              active={addingStage}
+            />
+            <div
+              className="absolute w-full h-full bg-white/40 backdrop-blur-md z-10"
+              style={{
+                opacity: addingStage ? 1 : 0,
+                pointerEvents: addingStage ? "all" : "none",
+              }}
+            ></div>
+          </>
+        ),
+        [TournamentTab.Teams]: (
           <div className="m-auto">
             <TournamentTeamList />
           </div>
-        </TabsContent>
-        <TabsContent
-          value="test"
-          style={{
-            transition: "all 0.5s",
-          }}
-          className={cn(
-            "absolute inset-0 flex items-center",
-            selectedView !== "test" ? "z-[1] behind" : "z-10 ahead"
-          )}
-          forceMount={true}
-        >
-          <div className="m-auto">
-            <TournamentTeamList />
-          </div>
-        </TabsContent>
-      </div>
-    </Tabs>
+        ),
+      }}
+    />
   );
 }

@@ -423,7 +423,8 @@ export default function BracketEditor({
     };
 
     const clone = JSON.parse(JSON.stringify(formattedEvent));
-    onSave(clone);
+    console.log("clone: ", clone);
+    await onSave(clone);
   }
 
   return (

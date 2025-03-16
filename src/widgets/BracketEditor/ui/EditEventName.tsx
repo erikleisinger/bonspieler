@@ -4,7 +4,7 @@ import Typography from "@/shared/ui/typography"; // Assuming this import is miss
 import { Button } from "@/shared/ui/button";
 import { FaPencilAlt } from "react-icons/fa";
 
-const MAX_NAME_LENGTH = 50;
+const MAX_NAME_LENGTH = 28;
 export default function EditEventName({
   eventName,
   setEventName,
@@ -58,7 +58,7 @@ export default function EditEventName({
   }
 
   return (
-    <div ref={el} className={editing ? "grow" : ""}>
+    <div ref={el} className={editing ? "grow" : "w-full"}>
       {editing ? (
         <Input
           value={editedEventName}
@@ -68,8 +68,10 @@ export default function EditEventName({
           ref={input}
         />
       ) : (
-        <div className="flex gap-2">
-          <Typography tag="h2">{eventName}</Typography>
+        <div className="grid grid-cols-[1fr,auto] gap-2">
+          <Typography tag="h2" className="break-all">
+            {eventName}
+          </Typography>
           <Button
             variant="ghost"
             size="icon"

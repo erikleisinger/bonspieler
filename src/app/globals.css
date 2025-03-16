@@ -3,12 +3,11 @@
 @tailwind utilities;
 
 
-
 @layer base {
+
   :root {
 
     /* Colors */
-
     --background: 0 0% 100%;
     --foreground: 215 19% 35%;
     --glass: 0, 0%, 100%, 0.3;
@@ -26,6 +25,8 @@
     --connection: 213 27% 84%;
     --success: 160 84% 39%;
     --success-foreground: 0 0% 98%;
+
+
 
 
     --card: 0 0% 100%;
@@ -60,7 +61,11 @@
 
 }
 
-
+.bg-gradient {
+  background-color: hsla(253, 76%, 70%, 1);
+  background-image: radial-gradient(circle at 0% 65%, rgb(249, 248, 255) 1%, transparent 79%), radial-gradient(circle at 47% 61%, hsla(244, 96%, 97%, 1) 1%, transparent 79%), radial-gradient(circle at 64% 18%, hsla(315, 72%, 99%, 1) 1%, transparent 79%), radial-gradient(circle at 80% 18%, hsla(195, 74%, 58%, 1) 1%, transparent 79%), radial-gradient(circle at 70% 64%, hsla(297, 80%, 95%, 1) 1%, transparent 79%);
+  background-blend-mode: normal, normal, normal, normal, normal;
+}
 
 @layer base {
   * {

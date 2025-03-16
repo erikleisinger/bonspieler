@@ -1,4 +1,4 @@
-import { TournamentStage } from "@/widgets/TournamentEditor";
+import type { TournamentStage } from "@/entities/Tournament";
 
 export interface Tournament {
   id?: string;

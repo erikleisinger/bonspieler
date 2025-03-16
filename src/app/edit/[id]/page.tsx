@@ -1,22 +1,27 @@
 "use client";
 
 import { use, useEffect, useState } from "react";
-import TournamentEdit from "@/app/TournamentEdit";
+import { EditTournament } from "@/views/EditTournament";
 import { Tournament } from "@/shared/types/Tournament";
 import { getTournamentById } from "@/widgets/TournamentViewer";
-export default function ViewTournament({ params }) {
+import LoaderFullPage from "@/shared/ui/loader-full-page";
+export default function Page({ params }) {
   // Unwrap the entire params object first
   const unwrappedParams = use(params);
   const [tournament, setTournament] = useState<Tournament | null>(null);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
-    getTournamentById(Number(unwrappedParams.id)).then((data) =>
-      setTournament(data)
-    );
+    setLoading(true);
+    getTournamentById(Number(unwrappedParams.id)).then((data) => {
+      setTournament(data);
+      console.log(data);
+      setLoading(false);
+    });
   }, [unwrappedParams.id]);
 
-  return tournament && tournament.id ? (
-    <TournamentEdit tournament={tournament} />
+  return loading ? (
+    <LoaderFullPage />
   ) : (
-    <div />
+    <EditTournament tournament={tournament} />
   );
 }

@@ -50,8 +50,9 @@ export default function BracketEventOptions({
 
   return (
     <div className="p-4 grid grid-rows-[auto_1fr_auto] absolute inset-0">
-      <header className=" flex justify-between mb-4 md:mb-6 pt-2 pl-2 gap-8">
+      <header className=" grid grid-cols-[1fr,auto] justify-between mb-4 md:mb-6 pt-2 pl-2 gap-8">
         <EditEventName eventName={eventName} setEventName={setEventName} />
+
         <Button variant="ghost" size="icon" onClick={onClose}>
           <HiOutlinePlus
             className="rotate-45"

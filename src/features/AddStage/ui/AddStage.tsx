@@ -1,101 +1,87 @@
-import { useState, useEffect, useRef } from "react";
-import { FaPlus } from "react-icons/fa";
+import { useEffect, useRef } from "react";
+
 import BracketStageCard from "@/shared/Tournament/BracketStageCard";
 import RoundRobinStageCard from "@/shared/Tournament/RoundRobinCard";
 import PointsStageCard from "@/shared/Tournament/PointsStageCard";
 import { TournamentStageType } from "@/entities/Tournament";
-import BaseCard from "@/shared/Tournament/BaseCard";
 export default function AddStage({
   addStage,
+  active,
+  endAdd,
 }: {
   addStage: (stageType: TournamentStageType) => void;
+  active: boolean;
+  endAdd: () => void;
 }) {
-  const [adding, setAdding] = useState(false);
   const el = useRef(null);
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (el.current && !el.current.contains(event.target)) {
-        setAdding(false);
+      console.log(el?.current && !el.current.contains(event.target));
+      if (el?.current && !el.current.contains(event.target)) {
+        endAdd();
       }
     }
-    if (adding) document.addEventListener("mousedown", handleClickOutside);
+    if (active) document.addEventListener("mousedown", handleClickOutside);
     return () => {
       // Unbind the event listener on clean up
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [el, adding]);
+  }, [el, active]);
 
   function handleAdd(type: TournamentStageType) {
     addStage(type);
-    setAdding(false);
+    endAdd();
   }
 
   return (
-    <div className="relative">
-      <div className="ANIMATED_CARD" onClick={() => setAdding(true)}>
-        <BaseCard className="bg-black/20 text-white opacity-[0.3] hover:opacity-[1] transition-all">
-          <FaPlus />
-        </BaseCard>
-      </div>
-      <div className="fixed inset-0 z-1 pointer-events-none ">
+    <div
+      className="absolute top-0 bottom-0 left-0 w-full h-full  z-20 flex items-center"
+      style={{
+        pointerEvents: active ? "all" : "none",
+      }}
+    >
+      <div
+        className="flex justify-start md:justify-center items-center gap-8  px-4 flex items-center md:justify-center m-auto   "
+        ref={el}
+        style={{
+          pointerEvents: active ? "all" : "none",
+        }}
+      >
         <div
-          className="absolute top-0 bottom-0 max-w-[100vw] m-auto left-0 right-0 w-fit  z-10 overflow-auto flex justify-start items-center "
           style={{
-            pointerEvents: adding ? "all" : "none",
+            opacity: active ? 1 : 0,
+            transform: active
+              ? "scale(1) translateX(0)"
+              : "scale(0.9) translateX(-10%)",
+            transition: "all 0.3s",
           }}
+          onClick={() => handleAdd(TournamentStageType.Pool)}
         >
-          <div
-            className=" flex justify-start md:justify-center items-center gap-8  px-4 flex items-center md:justify-center   "
-            ref={el}
-            style={{
-              pointerEvents: adding ? "all" : "none",
-            }}
-          >
-            <div
-              style={{
-                opacity: adding ? 1 : 0,
-                transform: adding
-                  ? "scale(1) translateX(0)"
-                  : "scale(0.9) translateX(-10%)",
-                transition: "all 0.3s",
-              }}
-              onClick={() => handleAdd(TournamentStageType.Pool)}
-            >
-              <RoundRobinStageCard />
-            </div>
+          <RoundRobinStageCard />
+        </div>
 
-            <div
-              style={{
-                opacity: adding ? 1 : 0,
-                transform: adding ? "scale(1)" : "scale(0.9)",
-                transition: "all 0.3s",
-              }}
-              onClick={() => handleAdd(TournamentStageType.Bracket)}
-            >
-              <BracketStageCard />
-            </div>
-            <div
-              style={{
-                opacity: adding ? 1 : 0,
-                transform: adding
-                  ? "scale(1) translateX(0)"
-                  : "scale(0.9) translateX(10%)",
-                transition: "all 0.3s",
-              }}
-              onClick={() => handleAdd(TournamentStageType.Points)}
-            >
-              <PointsStageCard />
-            </div>
-          </div>
+        <div
+          style={{
+            opacity: active ? 1 : 0,
+            transform: active ? "scale(1)" : "scale(0.9)",
+            transition: "all 0.3s",
+          }}
+          onClick={() => handleAdd(TournamentStageType.Bracket)}
+        >
+          <BracketStageCard />
         </div>
         <div
-          className="absolute inset-0 bg-white/20 backdrop-blur-md pointer-events-all"
           style={{
-            opacity: adding ? 1 : 0,
-            pointerEvents: adding ? "all" : "none",
-            transition: "all 0.1s",
+            opacity: active ? 1 : 0,
+            transform: active
+              ? "scale(1) translateX(0)"
+              : "scale(0.9) translateX(10%)",
+            transition: "all 0.3s",
           }}
-        ></div>
+          onClick={() => handleAdd(TournamentStageType.Points)}
+        >
+          <PointsStageCard />
+        </div>
       </div>
     </div>
   );

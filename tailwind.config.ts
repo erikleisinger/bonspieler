@@ -3,13 +3,12 @@ import type { Config } from "tailwindcss";
 export default {
   darkMode: ["class"],
   content: [
-    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/widgets/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/entities/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/shared/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/features/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/views/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   safelist: [
     {
@@ -79,6 +78,16 @@ export default {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+      },
+      keyframes: {
+        progress: {
+          "0%": { transform: "translateX(0) scaleX(0)" },
+          "40%": { transform: "translateX(0) scaleX(0.4)" },
+          "100%": { transform: "translateX(100%) scaleX(0.5)" },
+        },
+      },
+      animation: {
+        progress: "progress 1s infinite linear",
       },
     },
   },

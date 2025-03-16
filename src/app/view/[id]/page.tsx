@@ -1,10 +1,10 @@
 "use client";
 
 import { use, useEffect, useState } from "react";
-import TournamentView from "@/app/TournamentView";
+import { ViewTournament } from "@/views/ViewTournament";
 import { Tournament } from "@/shared/types/Tournament";
 import { getTournamentById } from "@/widgets/TournamentViewer";
-export default function ViewTournament({
+export default function Page({
   params,
 }: {
   params: {
@@ -22,7 +22,7 @@ export default function ViewTournament({
   }, [unwrappedParams.id]);
 
   return tournament && tournament.id ? (
-    <TournamentView tournament={tournament} />
+    <ViewTournament tournament={tournament} />
   ) : (
     <div />
   );
