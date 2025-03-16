@@ -9,6 +9,7 @@ import { getTotalBracketWinners } from "@/shared/Bracket/getTotalBracketWinners"
 import { StageTournamentContext } from "@/shared/types/StageTournamentContext";
 import type { Tournament } from "@/shared/types/Tournament";
 import { api } from "@/shared/api";
+import { addTournament, updateTournament } from "@/widgets/TournamentEditor";
 export default function TournamentEdit({
   tournament = {
     name: "New Bonspiel",
@@ -31,16 +32,16 @@ export default function TournamentEdit({
 
   function saveTournament(newTournament: Tournament) {
     const { id, stages, name } = newTournament;
-    console.log(newTournament);
+
     if (!id) {
-      api.add.tournament({
+      addTournament({
         name,
         schema: JSON.stringify({
           stages,
         }),
       });
     } else {
-      api.update.tournament({
+      updateTournament({
         id,
         updates: {
           schema: JSON.stringify({

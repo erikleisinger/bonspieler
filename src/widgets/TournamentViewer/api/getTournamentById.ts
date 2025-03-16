@@ -1,5 +1,7 @@
-import type { Client } from "./index";
-export async function getTournamentById(id: string, client: Client) {
+import { client, type Tables } from "@/shared/api";
+export async function getTournamentById(
+  id: number
+): Tables<"tournament_schema"> {
   const { data } = await client
     .from("tournament_schema")
     .select("*")

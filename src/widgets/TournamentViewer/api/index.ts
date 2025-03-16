@@ -1,0 +1,1 @@
+export { getTournamentById } from "./getTournamentById";

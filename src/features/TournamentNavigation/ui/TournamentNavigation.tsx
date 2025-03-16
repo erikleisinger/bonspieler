@@ -4,6 +4,7 @@ import { TabsList, TabsTrigger } from "@/shared/ui/tabs";
 enum TournamentTab {
   Stages = "stages",
   Teams = "teams",
+  Test = "test",
 }
 export default function TournamentNavigation({
   tournament,
@@ -19,6 +20,9 @@ export default function TournamentNavigation({
         </TabsTrigger>
         <TabsTrigger value={TournamentTab.Teams} className="h-full grow">
           Teams
+        </TabsTrigger>
+        <TabsTrigger value={TournamentTab.Test} className="h-full grow">
+          Test
         </TabsTrigger>
       </TabsList>
     </header>
