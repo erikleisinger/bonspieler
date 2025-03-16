@@ -26,12 +26,12 @@ export default function TournamentStageRotatableCard({
   return (
     <div
       className={cn(
-        " relative tournament-card rotatable pointer-events-auto w-[250px] sm:w-[300px] md:w-[350px]  aspect-[4/5]",
+        " relative tournament-card rotatable pointer-events-auto w-[90vw]  sm:w-[300px] md:w-[350px]  aspect-[4/5]",
         showDetails ? "rotated" : "",
         className
       )}
     >
-      <div className="tournament-stage__rotatable-card--content shadow-md">
+      <div className="tournament-stage__rotatable-card--content shadow-md absolute inset-0">
         <div className="grid grid-rows-[auto,1fr,auto] gap-4 bg-glass  tournament-stage__section back absolute inset-0 backdrop-blur-md rounded-3xl  0 p-6 grid grid-rows-[1fr,auto] tournament-card__info">
           <TournamentStageInfo
             stage={stage}

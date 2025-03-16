@@ -15,6 +15,7 @@ import {
   TournamentTab,
 } from "@/features/TournamentNavigation";
 import { TournamentTeamList } from "@/widgets/TournamentTeamList";
+import SaveButton from "@/shared/ui/save-button";
 
 export default function TournamentEditor({
   onEditStage,
@@ -90,7 +91,7 @@ export default function TournamentEditor({
       tabsChildren={{
         [TournamentTab.Stages]: (
           <>
-            <div className="flex m-auto pr-12 w-fit h-fit">
+            <div className="flex m-auto pr-4 md:pr-12 w-fit h-fit">
               <TournamentStageList
                 stages={editedTournament.stages}
                 removeStage={removeStage}
@@ -119,6 +120,12 @@ export default function TournamentEditor({
           </div>
         ),
       }}
-    />
+    >
+      <footer className="p-4 flex justify-end bg-glass backdrop-blur-md">
+        <SaveButton
+          onClick={() => saveTournament(editedTournament)}
+        ></SaveButton>
+      </footer>
+    </TournamentNavigation>
   );
 }

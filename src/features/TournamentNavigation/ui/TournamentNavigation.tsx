@@ -6,12 +6,14 @@ import { TournamentTab } from "../lib";
 import { cn } from "@/lib/utils";
 import SaveButton from "@/shared/ui/save-button";
 export default function TournamentNavigation({
+  children,
   tabsChildren = {
     [TournamentTab.Stages]: <div />,
     [TournamentTab.Teams]: <div />,
   },
   tournament,
 }: {
+  children?: React.ReactNode;
   tabsChildren: {
     [TournamentTab.Stages]: React.ReactNode;
     [TournamentTab.Teams]: React.ReactNode;
@@ -29,17 +31,31 @@ export default function TournamentNavigation({
       value={selectedView}
       onValueChange={setSelectedView}
     >
-      <header className="bg-glass p-8 flex justify-between z-10 backdrop-blur-md shadow-sm">
-        <Typography tag="h1">{tournament.name}</Typography>
-        <TabsList className="h-12 w-[300px]">
-          <TabsTrigger value={TournamentTab.Stages} className="h-full grow">
-            Stages
-          </TabsTrigger>
-          <TabsTrigger value={TournamentTab.Teams} className="h-full grow">
-            Teams
-          </TabsTrigger>
-        </TabsList>
-      </header>
+      <div className="z-10">
+        <header className="bg-glass p-4 md:p-2 md:pl-8  text-center md:text-left flex justify-center md:justify-between z-10 backdrop-blur-md shadow-sm items-center">
+          <Typography tag="h3" className="-mt-1">
+            {tournament.name}
+          </Typography>
+          <TabsList className="h-12 w-[300px] hidden md:flex">
+            <TabsTrigger value={TournamentTab.Stages} className="h-full grow">
+              Stages
+            </TabsTrigger>
+            <TabsTrigger value={TournamentTab.Teams} className="h-full grow">
+              Teams
+            </TabsTrigger>
+          </TabsList>
+        </header>
+        <nav className="md:hidden flex">
+          <TabsList className="h-12  grow mx-2 my-1">
+            <TabsTrigger value={TournamentTab.Stages} className="h-full grow">
+              Stages
+            </TabsTrigger>
+            <TabsTrigger value={TournamentTab.Teams} className="h-full grow">
+              Teams
+            </TabsTrigger>
+          </TabsList>
+        </nav>
+      </div>
       <div
         className="relative"
         style={{
@@ -79,9 +95,7 @@ export default function TournamentNavigation({
           {tabsChildren[TournamentTab.Teams]}
         </TabsContent>
       </div>
-      <footer className="p-4 flex justify-end bg-glass backdrop-blur-md shadow-xl">
-        <SaveButton></SaveButton>
-      </footer>
+      {children || <div />}
     </Tabs>
   );
 }
