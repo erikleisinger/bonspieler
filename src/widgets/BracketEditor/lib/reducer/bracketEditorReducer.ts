@@ -16,6 +16,8 @@ import { toggleSeed } from "./toggleSeed";
 import { addBracket } from "./addBracket";
 import { removeBracket } from "./removeBracket";
 import { scheduleTournament } from "@/shared/utils/generate";
+import { lookToAssignTeam } from "./lookToAssignTeam";
+import { assignTeamToGame } from "./assignTeamToGame";
 
 export const DEFAULT_BRACKET_EDITOR_STATE: BracketEditorState = {
   availableGames: [],
@@ -24,6 +26,7 @@ export const DEFAULT_BRACKET_EDITOR_STATE: BracketEditorState = {
   editing: false,
   lookingForWinnerConnection: null,
   lookingForLoserConnection: null,
+  lookingToAssignTeam: null,
   numSheets: 8,
   readableIdIndex: {},
   selectedDraw: null,
@@ -175,6 +178,19 @@ export function bracketEditorReducer(
         ...state,
         selectedDraw: drawNumber,
       };
+    }
+    case BracketEditorActionName.LookToAssignTeam: {
+      return lookToAssignTeam(state, action.args);
+    }
+    case BracketEditorActionName.CancelLookToAssignTeam: {
+      return {
+        ...state,
+        lookingToAssignTeam: null,
+        availableGames: [],
+      };
+    }
+    case BracketEditorActionName.AssignTeamToGame: {
+      return assignTeamToGame(state, action.args);
     }
     default: {
       return state;

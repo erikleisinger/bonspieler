@@ -16,8 +16,6 @@ export default function Page({
   const [tournament, setTournament] = useState<Tournament | null>(null);
 
   useEffect(() => {
-    const id = Number(unwrappedParams?.id);
-    if (typeof id !== "number") return;
     getTournamentById(unwrappedParams.id).then((data) => setTournament(data));
   }, [unwrappedParams.id]);
 

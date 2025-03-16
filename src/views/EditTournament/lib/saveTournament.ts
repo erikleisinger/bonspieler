@@ -6,17 +6,17 @@ export async function saveTournament(tournament: Tournament) {
   if (!id) {
     await addTournament({
       name,
-      schema: JSON.stringify({
+      schema: {
         stages,
-      }),
+      },
     });
   } else {
     await updateTournament({
       id,
       updates: {
-        schema: JSON.stringify({
+        schema: {
           stages,
-        }),
+        },
       },
     });
   }

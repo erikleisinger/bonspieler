@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { BracketContext } from "@/shared/Bracket/BracketContext";
 
 import { BracketEditingContext } from "@/shared/EditableBracket/BracketEditingContext";
@@ -33,6 +33,7 @@ export default function Brackets({
   readableIdIndex,
   rows,
   schedule,
+  tournamentId,
   updateRows,
 }: {
   appendHeaderChildren?: React.ReactNode;
@@ -49,6 +50,7 @@ export default function Brackets({
   readableIdIndex: { [gameId: string]: string };
   rows: BracketRows;
   schedule: BracketSchedule;
+  tournamentId: Nullable<string>;
   updateRows: (newRows: BracketRows) => void;
 }) {
   function scrollToBracket(bracketIndex: number) {
@@ -84,9 +86,8 @@ export default function Brackets({
     document.removeEventListener("click", cancelSelectedGame);
   }
 
-  const { lookingForLoserConnection, setSelectedDraw } = useContext(
-    BracketEditingContext
-  );
+  const { lookingForLoserConnection, setSelectedDraw, availableGames } =
+    useContext(BracketEditingContext);
 
   const [currentlyViewingBracket, setCurrentlyViewingBracket] = useState(0);
 
@@ -109,6 +110,13 @@ export default function Brackets({
     });
   }
 
+  useEffect(() => {
+    if (!availableGames.length) return;
+    const [firstGameId] = availableGames;
+    if (!firstGameId) return;
+    scrollToGame(firstGameId);
+  }, [availableGames.length]);
+
   return (
     <BracketContext.Provider
       value={{
@@ -125,6 +133,7 @@ export default function Brackets({
         scrollToGame,
         currentlyViewingBracket,
         setCurrentlyViewingBracket,
+        tournamentId,
       }}
     >
       <div className=" grid grid-rows-[auto_1fr] absolute inset-0">

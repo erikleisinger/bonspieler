@@ -19,6 +19,7 @@ export const BracketEditingContext = createContext<{
   numSheets: number;
   numWinners: number[];
   selectedDraw: Nullable<number>;
+  tournamentId: Nullable<string>;
   addGameToRound: ({
     bracketNumber,
     roundNumber,
@@ -73,14 +74,19 @@ export const BracketEditingContext = createContext<{
    * @returns
    */
   updateNumSheets: (newNumSheets: number, withSchedule: boolean) => void;
+  lookToAssignTeam: ({ teamId }: { teamId: string }) => void;
+  lookingToAssignTeam: Nullable<string>;
+  assignTeamToGame: ({ gameId }: { gameId: string }) => void;
 }>({
   availableGames: [],
   editing: false,
   lookingForLoserConnection: null,
   lookingForWinnerConnection: null,
+  lookingToAssignTeam: null,
   numSheets: 8,
   numWinners: [],
   selectedDraw: null,
+  tournamentId: null,
   addGameToRound: editingDisabled,
   addLoserConnection: editingDisabled,
   addWinnerConnection: editingDisabled,
@@ -93,5 +99,7 @@ export const BracketEditingContext = createContext<{
   setSelectedDraw: editingDisabled,
   showEventEditor: editingDisabled,
   toggleSeed: editingDisabled,
+  lookToAssignTeam: editingDisabled,
   updateNumSheets: editingDisabled,
+  assignTeamToGame: editingDisabled,
 });

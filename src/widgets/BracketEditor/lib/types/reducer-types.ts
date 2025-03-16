@@ -24,6 +24,9 @@ export enum BracketEditorActionName {
   RemoveBracket = "removeBracket",
   SetSchedule = "setSchedule",
   ViewDraw = "viewDraw",
+  LookToAssignTeam = "lookToAssignTeam",
+  CancelLookToAssignTeam = "cancelLookToAssignTeam",
+  AssignTeamToGame = "assignTeamToGame",
 }
 
 export interface SetInitialStateAction {
@@ -161,6 +164,25 @@ interface ViewDrawAction {
   };
 }
 
+interface LookToAssignTeamAction {
+  type: BracketEditorActionName.LookToAssignTeam;
+  args: {
+    teamId: string;
+  };
+}
+
+interface CancelLookToAssignTeamAction {
+  type: BracketEditorActionName.CancelLookToAssignTeam;
+  args: null;
+}
+interface AssignTeamToGameAction {
+  type: BracketEditorActionName.AssignTeamToGame;
+  args: {
+    gameId: string;
+    teamId: string;
+  };
+}
+
 export type BracketEditorAction =
   | SetInitialStateAction
   | RemoveWinnerConnectionAction
@@ -179,7 +201,10 @@ export type BracketEditorAction =
   | SetNumSheetsAction
   | RemoveBracketAction
   | SetScheduleAction
-  | ViewDrawAction;
+  | ViewDrawAction
+  | LookToAssignTeamAction
+  | CancelLookToAssignTeamAction
+  | AssignTeamToGameAction;
 
 export interface BracketEditorState {
   availableGames: string[];
@@ -192,6 +217,7 @@ export interface BracketEditorState {
     roundNumber: number;
   }>;
   lookingForLoserConnection: Nullable<string>;
+  lookingToAssignTeam: Nullable<string>;
   numSheets: number;
   readableIdIndex: { [readableId: string]: string };
   rows: BracketRows;

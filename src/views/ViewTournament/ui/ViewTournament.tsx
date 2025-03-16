@@ -46,7 +46,7 @@ export default function TournamentView({
   }
 
   return (
-    <div className="fixed inset-0 overflow-auto gradient-background  bg-center">
+    <div className="fixed inset-0 overflow-auto bg-gradient  bg-center">
       {!viewingStage && (
         <TournamentViewer
           tournament={tournamentClone}

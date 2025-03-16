@@ -116,7 +116,7 @@ export default function TournamentEditor({
         ),
         [TournamentTab.Teams]: (
           <div className="m-auto">
-            <TournamentTeamList />
+            <TournamentTeamList tournamentId={editedTournament.id} />
           </div>
         ),
       }}

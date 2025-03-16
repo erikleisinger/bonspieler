@@ -326,6 +326,38 @@ export type Database = {
           },
         ]
       }
+      team_members: {
+        Row: {
+          created_at: string
+          email: string | null
+          id: number
+          name: string | null
+          team_id: number | null
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          id?: number
+          name?: string | null
+          team_id?: number | null
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          id?: number
+          name?: string | null
+          team_id?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "team_members_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       teams: {
         Row: {
           created_at: string
@@ -344,22 +376,22 @@ export type Database = {
         }
         Relationships: []
       }
-      tournament_schema: {
+      tournaments: {
         Row: {
           created_at: string
-          id: number
+          id: string
           name: string | null
           schema: Json | null
         }
         Insert: {
           created_at?: string
-          id?: number
+          id?: string
           name?: string | null
           schema?: Json | null
         }
         Update: {
           created_at?: string
-          id?: number
+          id?: string
           name?: string | null
           schema?: Json | null
         }

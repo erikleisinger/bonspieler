@@ -1,0 +1,1 @@
+export { getAllTournamentTeams } from "./getAllTournamentTeams";

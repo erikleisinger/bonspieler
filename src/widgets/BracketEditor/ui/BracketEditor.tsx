@@ -53,6 +53,7 @@ export default function BracketEditor({
     readableIdIndex: {},
   },
   tournamentContext = {
+    id: null,
     order: 0,
     startTeams: null,
     endTeams: null,
@@ -324,6 +325,26 @@ export default function BracketEditor({
     });
   }
 
+  function handleLookToAssignTeam({ teamId }: { teamId: string }) {
+    dispatch({
+      type: BracketEditorActionName.LookToAssignTeam,
+      args: {
+        teamId,
+      },
+    });
+  }
+
+  function handleAssignTeamToGame({ gameId }: { gameId: string }) {
+    if (!bracketState.lookingToAssignTeam) return;
+    dispatch({
+      type: BracketEditorActionName.AssignTeamToGame,
+      args: {
+        gameId,
+        teamId: bracketState.lookingToAssignTeam,
+      },
+    });
+  }
+
   function setSelectedDraw(drawNumber: Nullable<number>) {
     dispatch({
       type: BracketEditorActionName.ViewDraw,
@@ -340,6 +361,10 @@ export default function BracketEditor({
     });
     dispatch({
       type: BracketEditorActionName.CancelLookForLoserConnection,
+      args: null,
+    });
+    dispatch({
+      type: BracketEditorActionName.CancelLookToAssignTeam,
       args: null,
     });
   }
@@ -423,7 +448,6 @@ export default function BracketEditor({
     };
 
     const clone = JSON.parse(JSON.stringify(formattedEvent));
-    console.log("clone: ", clone);
     await onSave(clone);
   }
 
@@ -433,9 +457,11 @@ export default function BracketEditor({
         availableGames: bracketState.availableGames,
         editing: bracketState.editing,
         lookingForWinnerConnection: bracketState.lookingForWinnerConnection,
+        lookingToAssignTeam: bracketState.lookingToAssignTeam,
         lookingForLoserConnection: bracketState.lookingForLoserConnection,
         numWinners,
         selectedDraw: bracketState.selectedDraw,
+        tournamentId: tournamentContext.id,
         lookForWinnerConnection: (
           gameId: string,
           gameIndex: string | number,
@@ -490,6 +516,8 @@ export default function BracketEditor({
         setSelectedDraw,
         showEventEditor: (tab) => openEventOptions(tab),
         updateNumSheets,
+        lookToAssignTeam: handleLookToAssignTeam,
+        assignTeamToGame: handleAssignTeamToGame,
       }}
     >
       <div className="fixed inset-0 ">
@@ -540,6 +568,7 @@ export default function BracketEditor({
               <AddNewBracket addBracket={handleAddBracket} />
             }
             nextStageName={tournamentContext.nextStageName}
+            tournamentId={tournamentContext.id}
           >
             <Slideout visible={bracketToEdit !== null}>
               {bracketToEdit !== null && (

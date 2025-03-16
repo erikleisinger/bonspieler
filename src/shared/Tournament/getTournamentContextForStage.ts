@@ -38,6 +38,7 @@ function getTournamentContextForBracketStage(
   }
 
   return {
+    id: tournament.id || null,
     order,
     startTeams,
     endTeams,
@@ -53,6 +54,7 @@ export function getTournamentContextForStage(
   if (!stage?.type) {
     console.warn("could not get context for stage - type is not defined");
     return {
+      id: null,
       order: 0,
       startTeams: 0,
       endTeams: 0,
@@ -64,6 +66,7 @@ export function getTournamentContextForStage(
     return getTournamentContextForBracketStage(stage, tournament);
 
   return {
+    id: tournament.id || null,
     order: 0,
     startTeams: 0,
     endTeams: 0,

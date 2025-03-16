@@ -26,8 +26,6 @@ export default function Bracket({
     deselectAll();
   }
 
-  const connectionsString = JSON.stringify(connections);
-
   const [emptySlots, setEmptySlots] = useState<
     { rowStart: number; rowEnd: number }[][]
   >([]);
@@ -113,7 +111,7 @@ export default function Bracket({
 
     setEmptySlots(empties);
     setRows({ ...gameRowSpanMap });
-  }, [connectionsString, rounds]);
+  }, [JSON.stringify(connections), rounds]);
 
   useEffect(() => {
     calculateRows();

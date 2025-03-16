@@ -16,7 +16,6 @@ export default function AddStage({
   const el = useRef(null);
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      console.log(el?.current && !el.current.contains(event.target));
       if (el?.current && !el.current.contains(event.target)) {
         endAdd();
       }

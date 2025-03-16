@@ -28,9 +28,11 @@ export default function BracketGame({
     availableGames,
     lookingForWinnerConnection,
     lookingForLoserConnection,
+    lookingToAssignTeam,
     addLoserConnection,
     addWinnerConnection,
     selectedDraw,
+    assignTeamToGame,
   } = useContext(BracketEditingContext);
   const { readableIdIndex, selectedGame, selectGame, schedule, nextStageName } =
     useContext(BracketContext);
@@ -50,6 +52,8 @@ export default function BracketGame({
       if (!isAvailable) return;
       addLoserConnection(game.id);
       e.stopPropagation();
+    } else if (lookingToAssignTeam) {
+      assignTeamToGame({ gameId: game.id });
     } else {
       selectGame(game);
     }
@@ -61,14 +65,8 @@ export default function BracketGame({
       className || "",
       " ",
     ];
-    if (lookingForWinnerConnection && isAvailable) {
+    if (availableGames.includes(game.id)) {
       base.push("available");
-    } else if (lookingForWinnerConnection) {
-      base.push("unavailable");
-    } else if (lookingForLoserConnection && isAvailable) {
-      base.push("available");
-    } else if (lookingForLoserConnection) {
-      base.push("unavailable");
     } else if (isSelected) {
       base.push("selected");
     } else if (selectedDraw && selectedDraw === drawNum) {

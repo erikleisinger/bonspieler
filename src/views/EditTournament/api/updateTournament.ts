@@ -4,10 +4,10 @@ export async function updateTournament({
   updates,
 }: {
   id: number;
-  updates: TablesUpdate<"tournament_schema">;
+  updates: TablesUpdate<"tournaments">;
 }) {
   const { data, error } = await client
-    .from("tournament_schema")
+    .from("tournaments")
     .update(updates)
     .eq("id", id);
 

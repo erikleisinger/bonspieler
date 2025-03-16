@@ -12,9 +12,8 @@ export default function Page({ params }) {
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     setLoading(true);
-    getTournamentById(Number(unwrappedParams.id)).then((data) => {
+    getTournamentById(unwrappedParams.id).then((data) => {
       setTournament(data);
-      console.log(data);
       setLoading(false);
     });
   }, [unwrappedParams.id]);

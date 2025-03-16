@@ -4,14 +4,16 @@ import type { BracketDrawTimes } from "@/entities/Bracket";
 
 import { Button } from "@/shared/ui/button";
 import { Label } from "@/shared/ui/label";
-import Typography from "@/shared/ui/typography";
 import { HiOutlinePlus } from "react-icons/hi";
 import EditEventName from "./EditEventName";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { SetEventSheets } from "@/features/SetEventSheets";
 import { SetEventDrawTimes } from "@/features/SetEventDrawTimes";
-import { SetEventTeams } from "@/features/SetEventTeams";
 import { BracketEventInfo } from "@/entities/BracketEvent";
+import { TournamentTeamList } from "@/widgets/TournamentTeamList";
+import { BracketEditingContext } from "@/shared/EditableBracket/BracketEditingContext";
+import { FaPencilAlt } from "react-icons/fa";
+import { EditableBracketTeamList } from "@/features/EditableBracketTeamList";
 export default function BracketEventOptions({
   drawTimes,
   eventName,
@@ -40,7 +42,12 @@ export default function BracketEventOptions({
   const drawTimesContainerId = useId();
   const teamsContainerId = useId();
 
-  const { brackets, connections, schedule } = useContext(BracketContext);
+  const { brackets, connections, schedule, tournamentId } =
+    useContext(BracketContext);
+
+  const { lookToAssignTeam, lookingToAssignTeam } = useContext(
+    BracketEditingContext
+  );
 
   const [selectedTab, setSelectedTab] = useState(initialTab);
 
@@ -113,8 +120,9 @@ export default function BracketEventOptions({
                 <header className="flex justify-between items-center">
                   <Label htmlFor={teamsContainerId}>Teams</Label>
                 </header>
+
                 <div id={teamsContainerId} className="mt-4">
-                  <SetEventTeams numTeams={totalNumTeams} />
+                  <EditableBracketTeamList tournamentId={tournamentId} />
                 </div>
               </div>
             </TabsContent>
