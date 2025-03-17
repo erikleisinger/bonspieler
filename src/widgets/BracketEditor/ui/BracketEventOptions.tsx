@@ -14,6 +14,7 @@ import { TournamentTeamList } from "@/widgets/TournamentTeamList";
 import { BracketEditingContext } from "@/shared/EditableBracket/BracketEditingContext";
 import { FaPencilAlt } from "react-icons/fa";
 import { EditableBracketTeamList } from "@/features/EditableBracketTeamList";
+import { TournamentContext } from "@/entities/Tournament/lib";
 export default function BracketEventOptions({
   drawTimes,
   eventName,
@@ -42,8 +43,7 @@ export default function BracketEventOptions({
   const drawTimesContainerId = useId();
   const teamsContainerId = useId();
 
-  const { brackets, connections, schedule, tournamentId } =
-    useContext(BracketContext);
+  const { brackets, connections, schedule } = useContext(BracketContext);
 
   const { lookToAssignTeam, lookingToAssignTeam } = useContext(
     BracketEditingContext
@@ -122,7 +122,7 @@ export default function BracketEventOptions({
                 </header>
 
                 <div id={teamsContainerId} className="mt-4">
-                  <EditableBracketTeamList tournamentId={tournamentId} />
+                  <EditableBracketTeamList />
                 </div>
               </div>
             </TabsContent>

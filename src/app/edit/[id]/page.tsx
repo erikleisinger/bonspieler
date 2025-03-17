@@ -10,7 +10,7 @@ export default function Page({ params }) {
   const tournamentId = unwrappedParams.id;
 
   return (
-    <TournamentContextProvider tournamentId={tournamentId}>
+    <TournamentContextProvider tournamentId={tournamentId} editable={true}>
       <EditTournament />
     </TournamentContextProvider>
   );

@@ -26,7 +26,6 @@ export const BracketContext = createContext<{
   ) => void;
   currentlyViewingBracket: number;
   setCurrentlyViewingBracket: (bracketIndex: number) => void;
-  tournamentId: Nullable<string>;
 }>({
   brackets: [],
   drawTimes: {},
@@ -41,5 +40,4 @@ export const BracketContext = createContext<{
   scrollToGame: () => {},
   currentlyViewingBracket: 0,
   setCurrentlyViewingBracket: () => {},
-  tournamentId: null,
 });

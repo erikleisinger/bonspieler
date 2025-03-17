@@ -1,5 +1,5 @@
 "use client";
-import { useState, useReducer, useEffect } from "react";
+import { useState, useReducer, useContext } from "react";
 import {
   getNewTeamCount,
   getNewWinnerCount,
@@ -461,7 +461,6 @@ export default function BracketEditor({
         lookingForLoserConnection: bracketState.lookingForLoserConnection,
         numWinners,
         selectedDraw: bracketState.selectedDraw,
-        tournamentId: tournamentContext.id,
         lookForWinnerConnection: (
           gameId: string,
           gameIndex: string | number,
@@ -568,7 +567,6 @@ export default function BracketEditor({
               <AddNewBracket addBracket={handleAddBracket} />
             }
             nextStageName={tournamentContext.nextStageName}
-            tournamentId={tournamentContext.id}
           >
             <Slideout visible={bracketToEdit !== null}>
               {bracketToEdit !== null && (

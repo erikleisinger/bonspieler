@@ -33,7 +33,6 @@ export default function Brackets({
   readableIdIndex,
   rows,
   schedule,
-  tournamentId,
   updateRows,
 }: {
   appendHeaderChildren?: React.ReactNode;
@@ -50,7 +49,6 @@ export default function Brackets({
   readableIdIndex: { [gameId: string]: string };
   rows: BracketRows;
   schedule: BracketSchedule;
-  tournamentId: Nullable<string>;
   updateRows: (newRows: BracketRows) => void;
 }) {
   function scrollToBracket(bracketIndex: number) {
@@ -133,7 +131,6 @@ export default function Brackets({
         scrollToGame,
         currentlyViewingBracket,
         setCurrentlyViewingBracket,
-        tournamentId,
       }}
     >
       <div className=" grid grid-rows-[auto_1fr] absolute inset-0">

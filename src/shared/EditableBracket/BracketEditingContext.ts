@@ -19,7 +19,6 @@ export const BracketEditingContext = createContext<{
   numSheets: number;
   numWinners: number[];
   selectedDraw: Nullable<number>;
-  tournamentId: Nullable<string>;
   addGameToRound: ({
     bracketNumber,
     roundNumber,
@@ -86,7 +85,6 @@ export const BracketEditingContext = createContext<{
   numSheets: 8,
   numWinners: [],
   selectedDraw: null,
-  tournamentId: null,
   addGameToRound: editingDisabled,
   addLoserConnection: editingDisabled,
   addWinnerConnection: editingDisabled,
