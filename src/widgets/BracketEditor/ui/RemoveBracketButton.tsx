@@ -2,14 +2,14 @@ import { useContext } from "react";
 import { BracketContext } from "@/shared/Bracket/BracketContext";
 import { Button } from "@/shared/ui/button";
 import { getBracketName } from "@/entities/Bracket";
+import { scrollToBracket } from "@/entities/Bracket";
 export default function RemoveBracketButton({
   onClick,
   ...props
 }: {
   onClick: (index: number) => void;
 }) {
-  const { currentlyViewingBracket, scrollToBracket } =
-    useContext(BracketContext);
+  const { currentlyViewingBracket } = useContext(BracketContext);
 
   function handleRemoveBracket() {
     onClick(currentlyViewingBracket);

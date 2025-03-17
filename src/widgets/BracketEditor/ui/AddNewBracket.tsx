@@ -11,6 +11,7 @@ import {
   DropdownMenuTrigger,
   DropdownMenuContent,
 } from "@/shared/ui/dropdown-menu";
+import { scrollToBracket } from "@/entities/Bracket";
 export default function AddNewBracket({
   addBracket,
 }: {
@@ -31,7 +32,7 @@ export default function AddNewBracket({
 
   const checkboxId = useId();
 
-  const { brackets, scrollToBracket } = useContext(BracketContext);
+  const { brackets } = useContext(BracketContext);
 
   function handleAddBracket() {
     addBracket({

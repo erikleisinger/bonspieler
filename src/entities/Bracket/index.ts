@@ -11,10 +11,12 @@ export type {
   BracketRows,
   BracketRow,
   BracketSchedule,
-} from "./lib";
+} from "./types";
 export {
   calculateRowSpanForGame,
   getBracketName,
+  scrollToBracket,
+  scrollToGame,
   MAX_BRACKET_COUNT,
   MAX_TEAM_COUNT,
   MAX_WINNER_COUNT,

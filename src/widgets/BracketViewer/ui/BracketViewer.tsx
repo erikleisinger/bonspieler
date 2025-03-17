@@ -5,7 +5,6 @@ import {
   Brackets,
   Bracket,
   BracketRound,
-  getRowSpanForGame,
   BracketGame,
 } from "@/entities/Bracket";
 import { getTournamentContextForStage } from "@/shared/Tournament/getTournamentContextForStage";
@@ -16,7 +15,7 @@ import { useAppDispatch, useAppSelector } from "@/lib/store";
 import { getCurrentTournament } from "@/entities/Tournament";
 import { BracketEventHeader, getSelectedGame } from "@/entities/BracketEvent";
 import { BracketNavigator } from "@/features/bracket/BracketNavigator";
-import { scrollToGame } from "@/entities/Bracket/lib/scrollToGame";
+import { scrollToGame } from "@/entities/Bracket";
 import {
   setBracketEvent,
   setBracketEventRows,
@@ -70,7 +69,7 @@ export default function BracketViewer({
   }
 
   function onGameClick(game: BracketGameType) {
-    dispatch(setSelectedGame(game));
+    dispatch(setSelectedGame(game.id));
     scrollToGame(game.id);
   }
 
@@ -118,7 +117,9 @@ export default function BracketViewer({
                           game={game}
                           connections={connections[game.id]}
                           onClick={onGameClick}
-                          selected={selectedGame?.id === game.id}
+                          selected={
+                            !!selectedGame && selectedGame?.id === game.id
+                          }
                           rows={rows[game.id] || {}}
                           readableId={readableIdIndex[game.id]}
                           drawNumber={schedule[game.id]}

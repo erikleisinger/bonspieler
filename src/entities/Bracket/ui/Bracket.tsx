@@ -1,6 +1,6 @@
 import { useEffect, useCallback } from "react";
 import { calculateRowSpanForGame } from "../lib/calculateRowSpanForGame";
-import type { BracketGame, BracketRowWithId, BracketRows } from "../lib";
+import type { BracketGame, BracketRowWithId, BracketRows } from "../types";
 import GameConnections from "./GameConnections";
 import { BRACKET_CONTAINER_ELEMENT_ID_PREFIX } from "../lib/constants/element-id";
 import { BracketConnections } from "../types";

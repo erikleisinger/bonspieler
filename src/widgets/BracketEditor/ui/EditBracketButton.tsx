@@ -2,13 +2,13 @@ import { useContext } from "react";
 import { BracketContext } from "@/shared/Bracket/BracketContext";
 import { Button } from "@/shared/ui/button";
 import { FaCog } from "react-icons/fa";
+import { scrollToBracket } from "@/entities/Bracket";
 export default function EditBracketButton({
   editBracket,
 }: {
   editBracket: (index: number) => void;
 }) {
-  const { currentlyViewingBracket, scrollToBracket } =
-    useContext(BracketContext);
+  const { currentlyViewingBracket } = useContext(BracketContext);
 
   function handleEditBracket() {
     editBracket(currentlyViewingBracket);

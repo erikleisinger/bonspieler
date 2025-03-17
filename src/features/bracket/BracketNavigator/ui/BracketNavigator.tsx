@@ -3,6 +3,7 @@ import { Button } from "@/shared/ui/button";
 import { FaAngleRight } from "react-icons/fa";
 import { FaAngleLeft } from "react-icons/fa";
 import { BracketContext } from "@/shared/Bracket/BracketContext";
+import { scrollToBracket } from "@/entities/Bracket";
 import {
   getBracketName,
   BRACKET_CONTAINER_ELEMENT_ID_PREFIX,
@@ -45,18 +46,6 @@ export default function BracketNavigator({
       intersectionObservers.forEach((observer) => observer.disconnect());
     };
   }, [numBrackets]);
-
-  function scrollToBracket(bracketIndex: number) {
-    const bracketHeaderEl = document.getElementById(
-      "BRACKET-CONTAINER-" + bracketIndex
-    );
-    if (!bracketHeaderEl) return;
-    bracketHeaderEl.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-      inline: "start",
-    });
-  }
 
   function goBracket(inc: number, bracketIndex: number) {
     const newBracketIndex = bracketIndex + inc;

@@ -5,12 +5,11 @@ import { useMemo } from "react";
 import { useContext } from "react";
 import { BracketEditingContext } from "@/shared/EditableBracket/BracketEditingContext";
 import { BracketContext } from "@/shared/Bracket/BracketContext";
-import { scrollToGame } from "@/entities/Bracket/lib/scrollToGame";
 import { useAppSelector } from "@/lib/store";
 import { getTournamentTeams } from "@/entities/Tournament";
 export default function EditableBracketTeamList() {
   const teams = useAppSelector(getTournamentTeams);
-  const { lookingToAssignTeam, lookToAssignTeam, availableGames } = useContext(
+  const { lookingToAssignTeam, lookToAssignTeam } = useContext(
     BracketEditingContext
   );
 
@@ -42,10 +41,6 @@ export default function EditableBracketTeamList() {
   function beginLookToAssign(teamId: string) {
     lookToAssignTeam({
       teamId,
-    });
-    setTimeout(() => {
-      const [firstGameId] = availableGames;
-      if (firstGameId) scrollToGame(firstGameId);
     });
   }
 

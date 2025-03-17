@@ -18,7 +18,6 @@ import {
 import { useBracketEditorReducer } from "../lib/reducer";
 import { BracketEditingContext } from "@/shared/EditableBracket/BracketEditingContext";
 import { BracketEditorActionName } from "../lib";
-import GameEditOptions from "./GameEditOptions";
 import { generateReadableIdIndex } from "../lib/generateReadableIdIndex";
 import BracketEditorWizard from "./BracketEditorWizard";
 import { Button } from "@/shared/ui/button";
@@ -504,7 +503,6 @@ export default function BracketEditor({
               updateRows={updateRows}
               rows={bracketState.rows}
               readableIdIndex={bracketState.readableIdIndex}
-              infoChildren={<GameEditOptions />}
               appendNavigatorChildren={
                 bracketState.brackets?.length ? (
                   <EditBracketButton

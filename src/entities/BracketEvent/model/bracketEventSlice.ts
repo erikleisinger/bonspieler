@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import type { Nullable } from "@/shared/types";
 import { RootState } from "@/lib/store";
-import { BracketEvent, BracketRows } from "@/entities/Bracket/lib";
+import type { BracketEvent, BracketRows } from "@/entities/Bracket/lib";
 import { BracketGameType } from "@/entities/Bracket";
 
 type ViewableBracketEvent = BracketEvent & {
@@ -48,10 +48,22 @@ export const bracketEventSlice = createSlice({
     },
     setSelectedGame: (
       state,
-      action: PayloadAction<Nullable<BracketGameTypeg>>
+      action: PayloadAction<Nullable<string | BracketGameType>>
     ) => {
       if (!state.bracket) return;
-      state.bracket.selectedGame = action.payload;
+      if (!action.payload) {
+        state.bracket.selectedGame = null;
+        return;
+      } else if (typeof action.payload === "string") {
+        const game = state.bracket.brackets
+          .flat()
+          .flat()
+          .find(({ id }) => id === action.payload);
+        if (!game) return;
+        state.bracket.selectedGame = game;
+      } else {
+        state.bracket.selectedGame = action.payload;
+      }
     },
   },
 });

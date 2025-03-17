@@ -2,17 +2,8 @@
 import { useState } from "react";
 import { TournamentStageType, TournamentStage } from "@/entities/Tournament";
 import { TournamentViewer } from "@/widgets/TournamentViewer";
-import { type BracketRows } from "@/entities/Bracket";
-import { getTournamentContextForStage } from "@/shared/Tournament/getTournamentContextForStage";
-
-import { useAppSelector } from "@/lib/store";
-import { getCurrentTournament } from "@/entities/Tournament";
 import { BracketViewer } from "@/widgets/BracketViewer";
 export default function TournamentView() {
-  const tournament = useAppSelector(getCurrentTournament);
-  const tournamentId = tournament?.id;
-  const stages = tournament?.stages || [];
-
   const [viewingStage, setViewingStage] = useState<TournamentStage | null>(
     null
   );
@@ -21,23 +12,6 @@ export default function TournamentView() {
 
   function onBack() {
     setViewingStage(null);
-  }
-
-  const tournamentContext = getTournamentContextForStage(
-    viewingStage,
-    stages,
-    tournamentId
-  );
-
-  const [rows, setRows] = useState({});
-
-  function updateRows(newRows: BracketRows) {
-    setRows((prevRows) => {
-      return {
-        ...prevRows,
-        ...newRows,
-      };
-    });
   }
 
   return (

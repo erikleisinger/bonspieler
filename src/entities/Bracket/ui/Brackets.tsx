@@ -5,14 +5,15 @@ import { BracketEditingContext } from "@/shared/EditableBracket/BracketEditingCo
 import type {
   BracketConnections,
   BracketGame,
-  BracketRows,
   BracketDrawTimes,
   BracketSchedule,
-} from "../lib";
+} from "../types";
 import BracketGameInfo from "./BracketGameInfo";
 import { scrollToGame } from "../lib/scrollToGame";
 import Slideout from "@/shared/ui/slide-out";
 import { Nullable } from "@/shared/types";
+import { useAppDispatch, useAppSelector } from "@/lib/store";
+import { getSelectedGame, setSelectedGame } from "@/entities/BracketEvent";
 
 export default function Brackets({
   brackets,
@@ -35,36 +36,16 @@ export default function Brackets({
   readableIdIndex: { [gameId: string]: string };
   schedule: BracketSchedule;
 }) {
-  function scrollToBracket(bracketIndex: number) {
-    const bracketHeaderEl = document.getElementById(
-      "BRACKET-CONTAINER-" + bracketIndex
-    );
-    if (!bracketHeaderEl) return;
-    bracketHeaderEl.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-      inline: "start",
-    });
+  const dispatch = useAppDispatch();
+  const selectedGame = useAppSelector(getSelectedGame);
+
+  function cancelSelectedGame() {
+    dispatch(setSelectedGame(null));
   }
 
-  const [selectedGame, setSelectedGame] = useState<BracketGame | null>(null);
-
-  function cancelSelectedGame(e, force = false) {
-    if (!force) {
-      const isBracketInfoContainer = Array.from(e.composedPath()).some((el) => {
-        if (!el?.id) return false;
-        return el.id === "BRACKET_GAME_INFO_CONTAINER";
-      });
-      if (isBracketInfoContainer) return;
-    }
-    setSelectedGame(null);
-
-    document.removeEventListener("click", cancelSelectedGame);
-  }
-
-  const { lookingForLoserConnection, setSelectedDraw, availableGames } =
-    useContext(BracketEditingContext);
-
+  const { lookingForLoserConnection, availableGames } = useContext(
+    BracketEditingContext
+  );
   const [currentlyViewingBracket, setCurrentlyViewingBracket] = useState(0);
 
   useEffect(() => {
@@ -84,9 +65,6 @@ export default function Brackets({
         schedule,
         connections,
         nextStageName,
-        deselectGame: cancelSelectedGame,
-        scrollToBracket,
-        scrollToGame,
         currentlyViewingBracket,
         setCurrentlyViewingBracket,
       }}
@@ -94,14 +72,11 @@ export default function Brackets({
       <div className="relative overflow-auto">
         <div className="flex flex-col gap-16 absolute inset-0">
           <Slideout
-            id="BRACKET_GAME_INFO_CONTAINER"
             visible={!!selectedGame && !lookingForLoserConnection}
             fullHeight={false}
           >
             {selectedGame && (
-              <BracketGameInfo
-                onBack={(e) => cancelSelectedGame(e.nativeEvent, true)}
-              >
+              <BracketGameInfo onBack={cancelSelectedGame}>
                 {selectedGame && !lookingForLoserConnection && infoChildren}
               </BracketGameInfo>
             )}

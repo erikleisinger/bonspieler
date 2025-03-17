@@ -14,16 +14,6 @@ export const BracketContext = createContext<{
   schedule: BracketSchedule;
   connections: BracketConnections;
   nextStageName: Nullable<string>;
-  deselectGame: () => void;
-  selectGame: (game: BracketGame) => void;
-  scrollToBracket: (bracketIndex: number) => void;
-  scrollToGame: (
-    gameId: string,
-    params?: {
-      block?: "start" | "center" | "end";
-      inline?: "start" | "center" | "end";
-    }
-  ) => void;
   currentlyViewingBracket: number;
   setCurrentlyViewingBracket: (bracketIndex: number) => void;
 }>({
@@ -34,10 +24,6 @@ export const BracketContext = createContext<{
   schedule: {},
   connections: {},
   nextStageName: null,
-  deselectGame: () => {},
-  selectGame: () => {},
-  scrollToBracket: () => {},
-  scrollToGame: () => {},
   currentlyViewingBracket: 0,
   setCurrentlyViewingBracket: () => {},
 });

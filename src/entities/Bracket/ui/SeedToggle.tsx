@@ -1,6 +1,6 @@
-import { Checkbox } from "@/shared/ui/checkbox.tsx";
+import { Checkbox } from "@/shared/ui/checkbox";
 import { generateUUID } from "@/shared/utils/generateUUID";
-import type { BracketConnectionTeam, BracketGame } from "../lib";
+import type { BracketConnectionTeam, BracketGame } from "../types";
 import { BracketEditingContext } from "@/shared/EditableBracket/BracketEditingContext";
 import { useContext } from "react";
 import Tooltip from "@/shared/ui/tooltip";

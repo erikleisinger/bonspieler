@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import type { GameConnectionPositionInfo } from "../lib/types/GameConnection";
+import type { GameConnectionPositionInfo } from "../types/GameConnection";
 
 export default function GameConnection({
   gameId,

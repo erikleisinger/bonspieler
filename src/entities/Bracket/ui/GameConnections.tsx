@@ -1,6 +1,6 @@
 import GameConnection from "./GameConnection";
-import type { BracketConnections, BracketGame, BracketRows } from "../lib";
-import type { GameConnectionPositionInfo } from "../lib/types/GameConnection";
+import type { BracketConnections, BracketGame, BracketRows } from "../types";
+import type { GameConnectionPositionInfo } from "../types/GameConnection";
 import { useState, useEffect, useRef, useCallback } from "react";
 import { getBracketGameElement } from "../lib/getBracketGameElement";
 export default function GameConnections({

@@ -8,6 +8,7 @@ import BracketInfo from "./BracketInfo";
 import { HiOutlinePlus } from "react-icons/hi";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { getBracketName } from "@/entities/Bracket";
+import { scrollToBracket } from "@/entities/Bracket";
 export default function EditBracketOptions({
   onClose,
   editEvent,
@@ -17,8 +18,7 @@ export default function EditBracketOptions({
   editEvent: () => void;
   removeBracket: (bracketIndex: number) => void;
 }) {
-  const { brackets, currentlyViewingBracket, scrollToBracket } =
-    useContext(BracketContext);
+  const { brackets, currentlyViewingBracket } = useContext(BracketContext);
 
   const [bracketIndex, setBracketIndex] = useState(0);
 

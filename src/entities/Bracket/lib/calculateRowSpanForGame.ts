@@ -3,8 +3,8 @@ import type {
   BracketConnections,
   BracketGame,
   BracketRows,
-} from "../lib";
-import { BracketRowWithId } from "./types/BracketRows";
+} from "../types";
+import { BracketRowWithId } from "../types/BracketRows";
 export function calculateRowSpanForGame({
   connections,
   game,
