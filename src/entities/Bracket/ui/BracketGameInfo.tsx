@@ -10,7 +10,6 @@ import {
   FaPencilAlt,
   FaTrophy,
   FaTimes,
-  FaDoorOpen,
 } from "react-icons/fa";
 import { DrawTime } from "@/entities/DrawTime";
 import { EditDrawNumber } from "@/features/EditDrawNumber";

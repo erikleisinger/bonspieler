@@ -9,12 +9,6 @@ function editingDisabled() {
 export const BracketEditingContext = createContext<{
   availableGames: string[];
   editing: boolean;
-  lookingForWinnerConnection: Nullable<{
-    gameId: string;
-    gameIndex: number;
-    bracketNumber: number;
-    roundNumber: number;
-  }>;
   lookingForLoserConnection: Nullable<string>;
   numSheets: number;
   numWinners: number[];
@@ -29,14 +23,7 @@ export const BracketEditingContext = createContext<{
     onSuccess?: (game: BracketGame) => void;
   }) => void;
   addLoserConnection: (gameId: string) => void;
-  addWinnerConnection: (destinationGameId: string) => void;
   deselectAll: () => void;
-  lookForWinnerConnection: (
-    gameId: string,
-    gameIndex: number,
-    bracketNumber: number,
-    roundNumber: number
-  ) => void;
   lookForLoserConnection: ({
     gameId,
     bracketNumber,
@@ -54,7 +41,6 @@ export const BracketEditingContext = createContext<{
     bracketNumber: number;
   }) => void;
   removeLoserConnection: (gameId: string) => void;
-  removeWinnerConnection: (gameId: string) => void;
   setSelectedDraw: (drawNumber: Nullable<number>) => void;
   showEventEditor: (tab: string) => void;
   toggleSeed: ({
@@ -80,20 +66,16 @@ export const BracketEditingContext = createContext<{
   availableGames: [],
   editing: false,
   lookingForLoserConnection: null,
-  lookingForWinnerConnection: null,
   lookingToAssignTeam: null,
   numSheets: 8,
   numWinners: [],
   selectedDraw: null,
   addGameToRound: editingDisabled,
   addLoserConnection: editingDisabled,
-  addWinnerConnection: editingDisabled,
   deselectAll: editingDisabled,
   lookForLoserConnection: editingDisabled,
-  lookForWinnerConnection: editingDisabled,
   removeGameFromRound: editingDisabled,
   removeLoserConnection: editingDisabled,
-  removeWinnerConnection: editingDisabled,
   setSelectedDraw: editingDisabled,
   showEventEditor: editingDisabled,
   toggleSeed: editingDisabled,

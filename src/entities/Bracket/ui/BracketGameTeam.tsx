@@ -5,12 +5,10 @@ import { useContext } from "react";
 import { FaSeedling } from "react-icons/fa";
 export default function BracketGameTeam({
   className,
-  onClick,
   showSeed = true,
   team,
 }: {
   className?: string;
-  onClick?: (gameId: string) => void;
   showSeed: boolean;
   team: BracketConnectionTeam;
 }) {

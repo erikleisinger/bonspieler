@@ -10,7 +10,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { SetEventSheets } from "@/features/SetEventSheets";
 import { SetEventDrawTimes } from "@/features/SetEventDrawTimes";
 import { BracketEventInfo } from "@/entities/BracketEvent";
-import { BracketEditingContext } from "@/shared/EditableBracket/BracketEditingContext";
 import { EditableBracketTeamList } from "@/features/EditableBracketTeamList";
 export default function BracketEventOptions({
   drawTimes,

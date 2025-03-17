@@ -15,15 +15,10 @@ import {
   BracketConnections,
   BracketEvent,
 } from "@/entities/Bracket";
-
+import { useBracketEditorReducer } from "../lib/reducer";
 import { BracketEditingContext } from "@/shared/EditableBracket/BracketEditingContext";
-import {
-  BracketEditorActionName,
-  bracketEditorReducer,
-  DEFAULT_BRACKET_EDITOR_STATE,
-} from "../lib";
+import { BracketEditorActionName } from "../lib";
 import GameEditOptions from "./GameEditOptions";
-import { scrollToGame } from "@/entities/Bracket/lib/scrollToGame";
 import { generateReadableIdIndex } from "../lib/generateReadableIdIndex";
 import BracketEditorWizard from "./BracketEditorWizard";
 import { Button } from "@/shared/ui/button";
@@ -125,16 +120,12 @@ export default function BracketEditor({
    * Overall bracket state
    */
 
-  const [bracketState, dispatch] = useReducer(bracketEditorReducer, {
-    ...JSON.parse(JSON.stringify(DEFAULT_BRACKET_EDITOR_STATE)),
-    ...{
-      brackets: data.brackets,
-      connections: data.connections,
-      numSheets: data.numSheets,
-      readableIdIndex: data.readableIdIndex,
-      schedule: data.schedule,
-    },
-    editing: true,
+  const { bracketState, dispatch } = useBracketEditorReducer({
+    brackets: data.brackets,
+    connections: data.connections,
+    numSheets: data.numSheets,
+    readableIdIndex: data.readableIdIndex,
+    schedule: data.schedule,
   });
 
   const [showWizard, setShowWizard] = useState(
@@ -202,30 +193,6 @@ export default function BracketEditor({
     });
     setNumBrackets(numBrackets - 1);
     setBracketToEdit(null);
-  }
-
-  function handleRemoveWinnerConnection(gameId: string) {
-    dispatch({
-      type: BracketEditorActionName.RemoveWinnerConnection,
-      args: {
-        gameId,
-      },
-    });
-  }
-
-  function handleAddWinnerConnection(destinationGameId: string) {
-    const { gameId: originGameId } = bracketState.lookingForWinnerConnection;
-    dispatch({
-      type: BracketEditorActionName.AddWinnerConnection,
-      args: {
-        originGameId,
-        destinationGameId,
-      },
-    });
-    dispatch({
-      type: BracketEditorActionName.CancelLookForWinnerConnection,
-      args: null,
-    });
   }
 
   function handleAddLoserConnection(destinationGameId: string) {
@@ -369,22 +336,6 @@ export default function BracketEditor({
     });
   }
 
-  function cancelLookingListener(e) {
-    const isBracketGame = Array.from(e.composedPath()).some((el) => {
-      if (el?.id === "BRACKET_GAME_INFO_CONTAINER") return false;
-      if (!el?.classList) return false;
-      return el.classList.contains("BRACKET_GAME");
-    });
-    if (!isBracketGame) {
-      deselectAll();
-      removeCancelLookingListener();
-    }
-  }
-
-  function removeCancelLookingListener() {
-    document.removeEventListener("click", cancelLookingListener);
-  }
-
   function updateRows(rowsToAdd: BracketRows) {
     dispatch({
       type: BracketEditorActionName.SetRows,
@@ -393,19 +344,6 @@ export default function BracketEditor({
       },
     });
   }
-
-  const totalNumTeams = (bracketState?.brackets || [])
-    .flat()
-    .flat()
-    .flat()
-    .reduce((all, { id: gameId }) => {
-      return (
-        all +
-        ((bracketState.connections[gameId]?.teams || []).filter(
-          ({ teamId }) => teamId === "seed"
-        )?.length || 0)
-      );
-    }, 0);
 
   const totalNumDraws = Math.max(...Object.values(bracketState.schedule || {}));
 
@@ -456,35 +394,10 @@ export default function BracketEditor({
       value={{
         availableGames: bracketState.availableGames,
         editing: bracketState.editing,
-        lookingForWinnerConnection: bracketState.lookingForWinnerConnection,
         lookingToAssignTeam: bracketState.lookingToAssignTeam,
         lookingForLoserConnection: bracketState.lookingForLoserConnection,
         numWinners,
         selectedDraw: bracketState.selectedDraw,
-        lookForWinnerConnection: (
-          gameId: string,
-          gameIndex: string | number,
-          bracketNumber: string | number,
-          roundNumber: string | number
-        ) => {
-          document.addEventListener("click", cancelLookingListener);
-          dispatch({
-            type: BracketEditorActionName.LookForWinnerConnection,
-            args: {
-              gameId,
-              gameIndex:
-                typeof gameIndex === "string" ? parseInt(gameIndex) : gameIndex,
-              bracketNumber:
-                typeof bracketNumber === "string"
-                  ? parseInt(bracketNumber)
-                  : bracketNumber,
-              roundNumber:
-                typeof roundNumber === "string"
-                  ? parseInt(roundNumber)
-                  : roundNumber,
-            },
-          });
-        },
         lookForLoserConnection: ({
           gameId,
           bracketNumber,
@@ -503,8 +416,6 @@ export default function BracketEditor({
             },
           });
         },
-        addWinnerConnection: handleAddWinnerConnection,
-        removeWinnerConnection: handleRemoveWinnerConnection,
         addLoserConnection: handleAddLoserConnection,
         removeLoserConnection: handleRemoveLoserConnection,
         addGameToRound: handleAddGameToRound,
@@ -520,6 +431,36 @@ export default function BracketEditor({
       }}
     >
       <div className="fixed inset-0 ">
+        <Slideout visible={bracketToEdit !== null}>
+          {bracketToEdit !== null && (
+            <EditBracketOptions
+              onClose={() => {
+                setBracketToEdit(null);
+                setSelectedDraw(null);
+              }}
+              removeBracket={handleRemoveBracket}
+              editEvent={() => openEventOptions()}
+            />
+          )}
+        </Slideout>
+        <Slideout visible={showEventOptions}>
+          {showEventOptions && (
+            <BracketEventOptions
+              initialTab={eventOptionsTab}
+              totalNumDraws={totalNumDraws}
+              totalNumSheets={bracketState.numSheets}
+              numWinners={numWinners}
+              drawTimes={drawTimes}
+              eventName={bracketEventName}
+              setEventName={setBracketEventName}
+              setDrawTimes={setDrawTimes}
+              onClose={() => {
+                setShowEventOptions(false);
+                setSelectedDraw(null);
+              }}
+            />
+          )}
+        </Slideout>
         {!showWizard ? (
           <Brackets
             backButton={
@@ -568,37 +509,6 @@ export default function BracketEditor({
             }
             nextStageName={tournamentContext.nextStageName}
           >
-            <Slideout visible={bracketToEdit !== null}>
-              {bracketToEdit !== null && (
-                <EditBracketOptions
-                  onClose={() => {
-                    setBracketToEdit(null);
-                    setSelectedDraw(null);
-                  }}
-                  removeBracket={handleRemoveBracket}
-                  editEvent={() => openEventOptions()}
-                />
-              )}
-            </Slideout>
-            <Slideout visible={showEventOptions}>
-              {showEventOptions && (
-                <BracketEventOptions
-                  initialTab={eventOptionsTab}
-                  totalNumDraws={totalNumDraws}
-                  totalNumSheets={bracketState.numSheets}
-                  totalNumTeams={totalNumTeams}
-                  numWinners={numWinners}
-                  drawTimes={drawTimes}
-                  eventName={bracketEventName}
-                  setEventName={setBracketEventName}
-                  setDrawTimes={setDrawTimes}
-                  onClose={() => {
-                    setShowEventOptions(false);
-                    setSelectedDraw(null);
-                  }}
-                />
-              )}
-            </Slideout>
             <Button onClick={editEvent}>
               <FaCog /> Event options
             </Button>
