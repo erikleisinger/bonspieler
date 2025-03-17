@@ -1,23 +1,14 @@
 "use client";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { TournamentStageType, TournamentStage } from "@/entities/Tournament";
 import { TournamentViewer } from "@/widgets/TournamentViewer";
 import { Brackets, type BracketRows } from "@/entities/Bracket";
 import { getTournamentContextForStage } from "@/shared/Tournament/getTournamentContextForStage";
-import type { Tournament } from "@/shared/types/Tournament";
-import { generateUUID } from "@/shared/utils/generateUUID";
 import { Button } from "@/shared/ui/button";
 import { FaArrowLeft } from "react-icons/fa";
-export default function TournamentView({
-  tournament = {
-    id: generateUUID(),
-    name: "New Bonspiel",
-    stages: [],
-  },
-}: {
-  tournament?: Tournament;
-}) {
-  const tournamentClone: Tournament = JSON.parse(JSON.stringify(tournament));
+import { TournamentContext } from "@/entities/Tournament/lib";
+export default function TournamentView() {
+  const { id: tournamentId, stages } = useContext(TournamentContext);
 
   const [viewingStage, setViewingStage] = useState<TournamentStage | null>(
     null
@@ -31,7 +22,8 @@ export default function TournamentView({
 
   const tournamentContext = getTournamentContextForStage(
     viewingStage,
-    tournamentClone
+    stages,
+    tournamentId
   );
 
   const [rows, setRows] = useState({});
@@ -47,12 +39,7 @@ export default function TournamentView({
 
   return (
     <div className="fixed inset-0 overflow-auto bg-gradient  bg-center">
-      {!viewingStage && (
-        <TournamentViewer
-          tournament={tournamentClone}
-          onViewStage={setViewingStage}
-        />
-      )}
+      {!viewingStage && <TournamentViewer onViewStage={setViewingStage} />}
       {viewingStage && isBracket && (
         <div className="fixed inset-0">
           <Brackets

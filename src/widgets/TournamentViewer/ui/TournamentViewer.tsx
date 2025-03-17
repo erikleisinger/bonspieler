@@ -4,24 +4,20 @@ import {
   TournamentNavigation,
   TournamentTab,
 } from "@/features/TournamentNavigation";
-import { Tournament } from "@/shared/types/Tournament";
+import { useContext } from "react";
+import { TournamentContext } from "@/entities/Tournament/lib";
 
 export default function TournamentViewer({
   onViewStage,
-  tournament,
 }: {
   onViewStage: (stage: TournamentStage) => void;
-  tournament: Tournament;
 }) {
+  const { stages } = useContext(TournamentContext);
   return (
     <TournamentNavigation
-      tournament={tournament}
       tabsChildren={{
         [TournamentTab.Stages]: (
-          <TournamentStageList
-            stages={tournament.stages}
-            onEditStage={onViewStage}
-          />
+          <TournamentStageList stages={stages} onEditStage={onViewStage} />
         ),
       }}
     ></TournamentNavigation>

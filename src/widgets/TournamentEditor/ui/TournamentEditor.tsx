@@ -7,7 +7,6 @@ import {
   TournamentStageType,
 } from "@/entities/Tournament";
 import { generateUUID } from "@/shared/utils/generateUUID";
-import type { Tournament } from "@/shared/types/Tournament";
 
 import { TournamentStageList } from "@/features/TournamentStageList";
 import {
@@ -16,48 +15,47 @@ import {
 } from "@/features/TournamentNavigation";
 import { TournamentTeamList } from "@/widgets/TournamentTeamList";
 import SaveButton from "@/shared/ui/save-button";
-
+import { useContext } from "react";
+import { TournamentContext } from "@/entities/Tournament/lib";
 export default function TournamentEditor({
   onEditStage,
-  tournament,
   saveTournament,
 }: {
   onEditStage: (stage: TournamentStage) => void;
-  saveTournament: (tournament: Tournament) => Promise<void>;
-  tournament: Tournament;
+  saveTournament: () => Promise<void>;
 }) {
-  const tournamentClone = JSON.parse(JSON.stringify(tournament));
-  const [editedTournament, setEditedTournament] =
-    useState<Tournament>(tournamentClone);
+  const {
+    id: tournamentId,
+    stages,
+    updateTournament,
+  } = useContext(TournamentContext);
 
   function addStage(type: TournamentStageType) {
     const base = JSON.parse(JSON.stringify(DEFAULTS[type]));
     const newStages = [
-      ...editedTournament.stages,
+      ...stages,
       {
         ...base,
         id: generateUUID(),
-        order: editedTournament.stages.length,
+        order: stages.length,
       },
     ];
 
-    setEditedTournament({
-      ...tournament,
+    updateTournament({
       stages: newStages,
     });
   }
 
   function removeStage(stageId: string) {
-    const index = editedTournament.stages.findIndex(({ id }) => id === stageId);
+    const index = stages.findIndex(({ id }) => id === stageId);
     if (index < 0) return;
-    let newStages = [...editedTournament.stages];
+    let newStages = [...stages];
     newStages.splice(index, 1);
     newStages = newStages.map((s, i) => ({
       ...s,
       order: i,
     }));
-    setEditedTournament({
-      ...tournament,
+    updateTournament({
       stages: newStages,
     });
   }
@@ -68,9 +66,9 @@ export default function TournamentEditor({
     currentIndex: number
   ) {
     const newIndex = currentIndex + inc;
-    if (newIndex < 0 || newIndex > editedTournament.stages.length - 1) return;
+    if (newIndex < 0 || newIndex > stages.length - 1) return;
 
-    let newStages = [...editedTournament.stages];
+    let newStages = [...stages];
     const thisStage = [...newStages][currentIndex];
     newStages.splice(currentIndex, 1);
     newStages.splice(newIndex, 0, thisStage);
@@ -79,21 +77,20 @@ export default function TournamentEditor({
       ...stage,
       order: i,
     }));
-    const newTournament = { ...tournament, stages: newStages };
-    setEditedTournament(newTournament);
+
+    updateTournament({ stages: newStages });
   }
 
   const [addingStage, setAddingStage] = useState(false);
 
   return (
     <TournamentNavigation
-      tournament={tournament}
       tabsChildren={{
         [TournamentTab.Stages]: (
           <>
             <div className="flex m-auto pr-4 md:pr-12 w-fit h-fit">
               <TournamentStageList
-                stages={editedTournament.stages}
+                stages={stages}
                 removeStage={removeStage}
                 onEditStage={onEditStage}
                 changeStageOrder={handleChangeStageOrder}
@@ -116,15 +113,13 @@ export default function TournamentEditor({
         ),
         [TournamentTab.Teams]: (
           <div className="m-auto">
-            <TournamentTeamList tournamentId={editedTournament.id} />
+            <TournamentTeamList tournamentId={tournamentId} />
           </div>
         ),
       }}
     >
       <footer className="p-4 flex justify-end bg-glass backdrop-blur-md">
-        <SaveButton
-          onClick={() => saveTournament(editedTournament)}
-        ></SaveButton>
+        <SaveButton onClick={saveTournament}></SaveButton>
       </footer>
     </TournamentNavigation>
   );

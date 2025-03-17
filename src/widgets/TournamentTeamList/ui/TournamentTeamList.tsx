@@ -1,22 +1,14 @@
 import { Badge } from "@/shared/ui/badge";
 import { Button } from "@/shared/ui/button";
 import { FaTrash } from "react-icons/fa";
-import { useEffect, useState } from "react";
-import { getAllTournamentTeams } from "../api";
-import type { Nullable } from "@/shared/types";
-import type { Tables } from "@/shared/api";
+import { useContext } from "react";
+import { TournamentContext } from "@/entities/Tournament/lib";
 export default function TournamentTeamList({
   controlChildren,
-  tournamentId,
 }: {
   controlChildren?: React.ReactNode;
-  tournamentId: Nullable<string>;
 }) {
-  const [teams, setTeams] = useState<Tables<"teams">[]>([]);
-  useEffect(() => {
-    if (!tournamentId) return;
-    getAllTournamentTeams(tournamentId).then((t) => setTeams(t));
-  }, [tournamentId]);
+  const { teams } = useContext(TournamentContext);
   return (
     <div className="flex flex-col gap-2">
       {teams.map((t) => {

@@ -1,24 +1,20 @@
 "use client";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { TournamentStageType, TournamentStage } from "@/entities/Tournament";
 import { TournamentEditor } from "@/widgets/TournamentEditor";
 import { BracketEditor } from "@/widgets/BracketEditor";
 import { BracketEvent } from "@/entities/Bracket";
 import type { Tournament } from "@/shared/types/Tournament";
 import { saveTournament } from "../lib";
-import LoaderFullPage from "@/shared/ui/loader-full-page";
 import { getTournamentContextForStage } from "@/shared/Tournament/getTournamentContextForStage";
-export default function EditTournament({
-  tournament = {
-    name: "New Bonspiel",
-    stages: [],
-  },
-}: {
-  tournament?: Tournament;
-}) {
-  const tournamentClone = JSON.parse(JSON.stringify(tournament));
-  const [editedTournament, setEditedTournament] =
-    useState<Tournament>(tournamentClone);
+import { TournamentContext } from "@/entities/Tournament/lib";
+export default function EditTournament() {
+  const {
+    id: tournamentId,
+    name: tournamentName,
+    stages,
+    updateTournament,
+  } = useContext(TournamentContext);
 
   const [editedStage, setEditedStage] = useState<TournamentStage | null>(null);
 
@@ -31,7 +27,7 @@ export default function EditTournament({
   async function saveBracketEvent(savedEvent: BracketEvent) {
     const { id, order, type } = editedStage;
 
-    const newStages = [...editedTournament.stages];
+    const newStages = [...stages];
     newStages.splice(order, 1, {
       ...savedEvent,
       order,
@@ -39,9 +35,15 @@ export default function EditTournament({
       type,
     });
 
-    const newTournament = { ...editedTournament, stages: newStages };
+    const newTournament = {
+      id: tournamentId,
+      name: tournamentName,
+      stages: newStages,
+    };
 
-    setEditedTournament(newTournament);
+    updateTournament({
+      stages: newStages,
+    });
     await handleSaveTournament(newTournament);
   }
 
@@ -52,19 +54,20 @@ export default function EditTournament({
   const [saving, setSaving] = useState(false);
   async function handleSaveTournament(tournamentToSave: Tournament) {
     setSaving(true);
-    await saveTournament(tournamentToSave);
+    await saveTournament({
+      id: tournamentId,
+      name: tournamentName,
+      stages,
+    });
     setSaving(false);
   }
 
   return (
     <div className="fixed inset-0 overflow-auto  bg-center bg-gradient">
-      {saving && <LoaderFullPage />}
-
       {!editedStage && (
         <TournamentEditor
           onEditStage={onEditStage}
           saveTournament={handleSaveTournament}
-          tournament={editedTournament}
         />
       )}
       {editedStage && isBracket && (
@@ -74,7 +77,8 @@ export default function EditTournament({
           onBack={discardChanges}
           tournamentContext={getTournamentContextForStage(
             editedStage,
-            editedTournament
+            stages,
+            tournamentId
           )}
         />
       )}

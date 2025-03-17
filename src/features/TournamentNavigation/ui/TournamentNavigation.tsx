@@ -1,25 +1,23 @@
-import { useState } from "react";
-import { Tournament } from "@/shared/types/Tournament";
+import { useState, useContext } from "react";
+import { TournamentContext } from "@/entities/Tournament/lib";
 import Typography from "@/shared/ui/typography";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/shared/ui/tabs";
 import { TournamentTab } from "../lib";
 import { cn } from "@/lib/utils";
-import SaveButton from "@/shared/ui/save-button";
 export default function TournamentNavigation({
   children,
   tabsChildren = {
     [TournamentTab.Stages]: <div />,
     [TournamentTab.Teams]: <div />,
   },
-  tournament,
 }: {
   children?: React.ReactNode;
   tabsChildren: {
     [TournamentTab.Stages]: React.ReactNode;
     [TournamentTab.Teams]: React.ReactNode;
   };
-  tournament: Tournament;
 }) {
+  const { name: tournamentName } = useContext(TournamentContext);
   function getClassNames(tab: TournamentTab) {
     return selectedView !== tab ? "z-[1] behind " : "z-10 ahead ";
   }
@@ -34,7 +32,7 @@ export default function TournamentNavigation({
       <div className="z-10">
         <header className="bg-glass p-4 md:p-2 md:pl-8  text-center md:text-left flex justify-center md:justify-between z-10 backdrop-blur-md shadow-sm items-center">
           <Typography tag="h3" className="-mt-1">
-            {tournament.name}
+            {tournamentName}
           </Typography>
           <TabsList className="h-12 w-[300px] hidden md:flex">
             <TabsTrigger value={TournamentTab.Stages} className="h-full grow">

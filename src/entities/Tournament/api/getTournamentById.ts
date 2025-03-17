@@ -1,7 +1,7 @@
-import { client, type Tables } from "@/shared/api";
-export async function getTournamentById(
-  id: number
-): Promise<Tables<"tournaments">> {
+import { client } from "@/shared/api";
+import { Tournament } from "@/shared/types/Tournament";
+
+export async function getTournamentById(id: number): Promise<Tournament> {
   const { data } = await client
     .from("tournaments")
     .select("*")

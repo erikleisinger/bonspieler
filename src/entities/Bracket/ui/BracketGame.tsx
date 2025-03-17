@@ -2,6 +2,7 @@ import "../lib/styles/game.scss";
 import { useContext, useMemo, useEffect, useState, useRef } from "react";
 import { BracketEditingContext } from "@/shared/EditableBracket/BracketEditingContext";
 import { BracketContext } from "@/shared/Bracket/BracketContext";
+import { TournamentContext } from "@/entities/Tournament/lib";
 import BracketGameTeam from "./BracketGameTeam";
 import LoserIndicator from "./LoserIndicator";
 import type { BracketConnection, BracketGame } from "../lib";

@@ -1,9 +1,9 @@
 "use client";
 
-import { use, useEffect, useState } from "react";
+import { use } from "react";
 import { ViewTournament } from "@/views/ViewTournament";
-import { Tournament } from "@/shared/types/Tournament";
-import { getTournamentById } from "@/widgets/TournamentViewer";
+import { TournamentContextProvider } from "@/entities/Tournament";
+
 export default function Page({
   params,
 }: {
@@ -13,15 +13,11 @@ export default function Page({
 }) {
   // Unwrap the entire params object first
   const unwrappedParams = use(params);
-  const [tournament, setTournament] = useState<Tournament | null>(null);
+  const tournamentId = unwrappedParams.id;
 
-  useEffect(() => {
-    getTournamentById(unwrappedParams.id).then((data) => setTournament(data));
-  }, [unwrappedParams.id]);
-
-  return tournament && tournament.id ? (
-    <ViewTournament tournament={tournament} />
-  ) : (
-    <div />
+  return (
+    <TournamentContextProvider tournamentId={tournamentId} editable={false}>
+      <ViewTournament />
+    </TournamentContextProvider>
   );
 }

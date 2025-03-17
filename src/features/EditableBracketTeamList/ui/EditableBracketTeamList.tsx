@@ -1,26 +1,14 @@
 import { Badge } from "@/shared/ui/badge";
 import { Button } from "@/shared/ui/button";
-import { FaTrash } from "react-icons/fa";
 import { FaPencilAlt } from "react-icons/fa";
-import { useEffect, useMemo, useState } from "react";
-import { getAllTournamentTeams } from "@/widgets/TournamentTeamList/api/getAllTournamentTeams";
-import type { Nullable } from "@/shared/types";
-import type { Tables } from "@/shared/api";
+import { useMemo } from "react";
 import { useContext } from "react";
 import { BracketEditingContext } from "@/shared/EditableBracket/BracketEditingContext";
 import { BracketContext } from "@/shared/Bracket/BracketContext";
 import { scrollToGame } from "@/entities/Bracket/lib/scrollToGame";
-export default function EditableBracketTeamList({
-  tournamentId,
-}: {
-  tournamentId: Nullable<string>;
-}) {
-  const [teams, setTeams] = useState<Tables<"teams">[]>([]);
-  useEffect(() => {
-    if (!tournamentId) return;
-    getAllTournamentTeams(tournamentId).then((t) => setTeams(t));
-  }, [tournamentId]);
-
+import { TournamentContext } from "@/entities/Tournament/lib";
+export default function EditableBracketTeamList() {
+  const { teams } = useContext(TournamentContext);
   const { lookingToAssignTeam, lookToAssignTeam, availableGames } = useContext(
     BracketEditingContext
   );
@@ -56,7 +44,6 @@ export default function EditableBracketTeamList({
     });
     setTimeout(() => {
       const [firstGameId] = availableGames;
-      console.log(availableGames);
       if (firstGameId) scrollToGame(firstGameId);
     });
   }

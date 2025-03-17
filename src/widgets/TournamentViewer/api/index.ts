@@ -1,1 +1,0 @@
-export { getTournamentById } from "./getTournamentById";

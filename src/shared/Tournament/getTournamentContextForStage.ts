@@ -13,7 +13,8 @@ import { Tournament } from "../types/Tournament";
  */
 function getTournamentContextForBracketStage(
   stage: TournamentStage,
-  tournament: Tournament
+  stages: TournamentStage[],
+  tournamentId: string
 ): StageTournamentContext {
   const { order } = stage;
   let startTeams = null;
@@ -21,24 +22,21 @@ function getTournamentContextForBracketStage(
   let prevStageName = null;
   let nextStageName = null;
   if (order !== 0) {
-    const lastStage = tournament.stages[order - 1];
+    const lastStage = stages[order - 1];
     const { numWinners, name } = lastStage || {};
     startTeams = getTotalBracketWinners(numWinners);
     prevStageName = name;
   }
 
-  if (
-    order !== tournament.stages.length - 1 &&
-    !!tournament.stages[order + 1]
-  ) {
-    const nextStage = tournament.stages[order + 1];
+  if (order !== stages.length - 1 && !!stages[order + 1]) {
+    const nextStage = stages[order + 1];
     const { name, numTeams } = nextStage;
     endTeams = numTeams;
     nextStageName = name;
   }
 
   return {
-    id: tournament.id || null,
+    id: tournamentId || null,
     order,
     startTeams,
     endTeams,
@@ -49,7 +47,8 @@ function getTournamentContextForBracketStage(
 
 export function getTournamentContextForStage(
   stage: TournamentStage | null,
-  tournament: Tournament
+  stages: TournamentStage[],
+  tournamentId: string
 ): StageTournamentContext {
   if (!stage?.type) {
     console.warn("could not get context for stage - type is not defined");
@@ -63,10 +62,10 @@ export function getTournamentContextForStage(
     };
   }
   if (stage.type === TournamentStageType.Bracket)
-    return getTournamentContextForBracketStage(stage, tournament);
+    return getTournamentContextForBracketStage(stage, stages, tournamentId);
 
   return {
-    id: tournament.id || null,
+    id: tournamentId || null,
     order: 0,
     startTeams: 0,
     endTeams: 0,
