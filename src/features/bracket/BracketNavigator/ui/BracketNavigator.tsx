@@ -2,15 +2,15 @@ import { useEffect, useState, useContext } from "react";
 import { Button } from "@/shared/ui/button";
 import { FaAngleRight } from "react-icons/fa";
 import { FaAngleLeft } from "react-icons/fa";
-import { BRACKET_CONTAINER_ELEMENT_ID_PREFIX } from "../lib/constants/element-id";
 import { BracketContext } from "@/shared/Bracket/BracketContext";
-import { getBracketName } from "../lib";
+import {
+  getBracketName,
+  BRACKET_CONTAINER_ELEMENT_ID_PREFIX,
+} from "@/entities/Bracket";
 export default function BracketNavigator({
   numBrackets,
-  goBracket,
 }: {
   numBrackets: number;
-  goBracket?: (inc: number, bracketIndex: number) => void;
 }) {
   const [intersectionObservers, setIntersectionObservers] = useState<
     IntersectionObserver[]
@@ -45,6 +45,24 @@ export default function BracketNavigator({
       intersectionObservers.forEach((observer) => observer.disconnect());
     };
   }, [numBrackets]);
+
+  function scrollToBracket(bracketIndex: number) {
+    const bracketHeaderEl = document.getElementById(
+      "BRACKET-CONTAINER-" + bracketIndex
+    );
+    if (!bracketHeaderEl) return;
+    bracketHeaderEl.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+      inline: "start",
+    });
+  }
+
+  function goBracket(inc: number, bracketIndex: number) {
+    const newBracketIndex = bracketIndex + inc;
+    if (newBracketIndex < 0 || newBracketIndex > numBrackets) return;
+    scrollToBracket(newBracketIndex);
+  }
 
   return numBrackets ? (
     <div className="bg-white backdrop-blur-md px-4 py-1 text-glass-foreground flex justify-between md:justify-center items-center md:gap-2 rounded-xl shadow-md">

@@ -4,7 +4,6 @@ import {
 } from "@/entities/Tournament";
 import { StageTournamentContext } from "@/shared/types/StageTournamentContext";
 import { getTotalBracketWinners } from "@/shared/Bracket/getTotalBracketWinners";
-import { Tournament } from "../types/Tournament";
 
 /**
  *

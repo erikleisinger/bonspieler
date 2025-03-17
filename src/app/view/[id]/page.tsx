@@ -1,5 +1,6 @@
 "use client";
-
+import { Provider } from "react-redux";
+import { store } from "@/lib/store";
 import { use } from "react";
 import { ViewTournament } from "@/views/ViewTournament";
 import { TournamentContextProvider } from "@/entities/Tournament";
@@ -16,8 +17,10 @@ export default function Page({
   const tournamentId = unwrappedParams.id;
 
   return (
-    <TournamentContextProvider tournamentId={tournamentId} editable={false}>
-      <ViewTournament />
-    </TournamentContextProvider>
+    <Provider store={store}>
+      <TournamentContextProvider tournamentId={tournamentId} editable={false}>
+        <ViewTournament />
+      </TournamentContextProvider>
+    </Provider>
   );
 }

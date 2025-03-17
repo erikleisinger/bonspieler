@@ -6,7 +6,7 @@ export type {
   BracketConnectionSeedTeam,
   BracketConnectionSeedTeamId,
   BracketDrawTimes,
-  BracketGame,
+  BracketGame as BracketGameType,
   BracketEvent,
   BracketRows,
   BracketRow,
@@ -21,3 +21,6 @@ export {
   MIN_TEAM_COUNT,
 } from "./lib";
 export { Bracket, Brackets } from "./ui";
+export { BRACKET_CONTAINER_ELEMENT_ID_PREFIX } from "./lib";
+export { BracketRound } from "./BracketRound";
+export { BracketGame } from "./BracketGame";

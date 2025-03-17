@@ -1,13 +1,14 @@
-import { useEffect, useContext, useCallback, useState } from "react";
-import BracketRound from "./BracketRound";
-import { BracketContext } from "@/shared/Bracket/BracketContext";
-import { BracketEditingContext } from "@/shared/EditableBracket/BracketEditingContext";
+import { useEffect, useCallback } from "react";
 import { calculateRowSpanForGame } from "../lib/calculateRowSpanForGame";
 import type { BracketGame, BracketRowWithId, BracketRows } from "../lib";
 import GameConnections from "./GameConnections";
+import { BRACKET_CONTAINER_ELEMENT_ID_PREFIX } from "../lib/constants/element-id";
+import { BracketConnections } from "../types";
 
 export interface BracketProps {
   bracketNumber: number;
+  children?: React.ReactNode;
+  connections: BracketConnections;
   rounds: BracketGame[][];
   rows: BracketRows;
   setRows: (newRows: BracketRows) => void;
@@ -15,21 +16,12 @@ export interface BracketProps {
 
 export default function Bracket({
   bracketNumber,
+  children,
+  connections,
   rounds,
   rows,
   setRows,
 }: BracketProps) {
-  const { connections, deselectGame } = useContext(BracketContext);
-  const { deselectAll } = useContext(BracketEditingContext);
-  function deselect(e) {
-    deselectGame(e);
-    deselectAll();
-  }
-
-  const [emptySlots, setEmptySlots] = useState<
-    { rowStart: number; rowEnd: number }[][]
-  >([]);
-
   const calculateRows = useCallback(() => {
     const gameRowSpanMap: BracketRows = {};
     const roundSlotMap: ("game" | null)[][] = [];
@@ -77,39 +69,6 @@ export default function Bracket({
       }
     });
 
-    const empties = roundSlotMap.map((round, roundIndex) => {
-      const factor = 2 ** roundIndex;
-      let successiveEmptySlot = 0;
-      let successiveGameSlot = 0;
-      let runningIndex = 0;
-      const emptySlotsArray: { rowStart: number; rowEnd: number }[] = [];
-      round.forEach((slot: "game" | null, index) => {
-        if (slot === "game") {
-          successiveEmptySlot = 0;
-          successiveGameSlot += 1;
-        } else {
-          successiveEmptySlot += 1;
-          successiveGameSlot = 0;
-        }
-        if (successiveGameSlot === factor) {
-          runningIndex += 1;
-          successiveGameSlot = 0;
-        }
-
-        if (successiveEmptySlot === factor) {
-          emptySlotsArray.push({
-            rowStart: index + 2 - factor,
-            rowEnd: index + 2,
-            index: runningIndex,
-            offset: emptySlotsArray.filter(({ index: i }) => i === runningIndex)
-              .length,
-          });
-        }
-      });
-      return emptySlotsArray;
-    });
-
-    setEmptySlots(empties);
     setRows({ ...gameRowSpanMap });
   }, [JSON.stringify(connections), rounds]);
 
@@ -118,28 +77,20 @@ export default function Bracket({
   }, [calculateRows]);
 
   return (
-    <div className="flex  relative">
+    <div className="w-fit">
       <div
-        className="absolute inset-0 "
-        onClick={(e) => deselect(e.nativeEvent)}
-      ></div>
-      <GameConnections
-        connections={connections}
-        games={rounds.flat()}
-        rows={rows}
-      />
-      {rounds.map((games, roundIndex) => {
-        return (
-          <BracketRound
-            games={games}
-            key={"round-" + roundIndex}
+        className="p-0 min-h-screen pr-[100vw] md:pr-[500px]"
+        id={BRACKET_CONTAINER_ELEMENT_ID_PREFIX + bracketNumber}
+      >
+        <div className="flex  relative">
+          <GameConnections
+            connections={connections}
+            games={rounds.flat()}
             rows={rows}
-            roundIndex={roundIndex}
-            bracketNumber={bracketNumber}
-            emptySlots={emptySlots[roundIndex]}
           />
-        );
-      })}
+          {children}
+        </div>
+      </div>
     </div>
   );
 }

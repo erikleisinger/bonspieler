@@ -1,28 +1,25 @@
-import type { BracketConnectionTeam } from "../lib";
-import { BracketContext } from "@/shared/Bracket/BracketContext";
+import type { BracketConnectionTeam } from "../../types";
 import { useAppSelector } from "@/lib/store";
 import { getTournamentTeams } from "@/entities/Tournament";
-import { useContext } from "react";
 import { FaSeedling } from "react-icons/fa";
 export default function BracketGameTeam({
   className,
+  readableId,
   showSeed = true,
   team,
 }: {
   className?: string;
+  readableId: string;
   showSeed: boolean;
   team: BracketConnectionTeam;
 }) {
   const tournamentTeams = useAppSelector(getTournamentTeams);
-  const { readableIdIndex } = useContext(BracketContext);
 
   function getTeamInfo({ isWinner, gameId, teamId }: BracketConnectionTeam) {
     if (teamId) {
       return tournamentTeams.find(({ id }) => id === teamId)?.name || "Unknown";
     } else if (gameId) {
-      return `${isWinner ? "Winner of " : "Loser of "}${
-        readableIdIndex[gameId]
-      }`;
+      return `${isWinner ? "Winner of " : "Loser of "}${readableId}`;
     }
   }
 

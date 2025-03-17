@@ -14,7 +14,7 @@ import {
 import { DrawTime } from "@/entities/DrawTime";
 import { EditDrawNumber } from "@/features/EditDrawNumber";
 
-import BracketGameTeam from "./BracketGameTeam";
+import BracketGameTeam from "../BracketGame/ui/BracketGameTeam";
 import SeedToggle from "./SeedToggle";
 
 export default function BracketGameInfo({

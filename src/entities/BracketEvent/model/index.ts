@@ -1,6 +1,5 @@
-export { BracketEventInfo, BracketEventHeader } from "./ui";
+export { default as bracketEventReducer } from "./bracketEventSlice";
 export {
-  bracketEventReducer,
   getBracketEventBrackets,
   getBracketEventConnections,
   getBracketEventDrawTimes,
@@ -18,4 +17,4 @@ export {
   setBracketEvent,
   setBracketEventRows,
   setSelectedGame,
-} from "./model";
+} from "./bracketEventSlice";

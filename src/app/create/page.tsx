@@ -1,10 +1,14 @@
 "use client";
+import { Provider } from "react-redux";
+import { store } from "@/lib/store";
 import { EditTournament } from "@/views/EditTournament";
 import { TournamentContextProvider } from "@/entities/Tournament";
 export default function CreateTournament() {
   return (
-    <TournamentContextProvider editable={true}>
-      <EditTournament />
-    </TournamentContextProvider>
+    <Provider store={store}>
+      <TournamentContextProvider editable={true}>
+        <EditTournament />
+      </TournamentContextProvider>
+    </Provider>
   );
 }

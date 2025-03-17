@@ -1,19 +1,18 @@
-import { useContext } from "react";
-import { BracketContext } from "@/shared/Bracket/BracketContext";
-
+import { useAppSelector } from "@/lib/store";
+import { getReadableGameId } from "@/entities/BracketEvent";
 export default function LoserIndicator({
   loserTo,
 }: {
   loserTo: string | null;
 }) {
-  const { readableIdIndex } = useContext(BracketContext);
+  const readableLoser = useAppSelector(getReadableGameId)(loserTo);
 
   const baseButtonStyles =
     "text-destructive  rounded-sm  bracket-game__loser-indicator ";
 
   return (
     <div className={baseButtonStyles}>
-      Loser {loserTo ? readableIdIndex[loserTo] : "out"}
+      Loser {loserTo ? readableLoser : "out"}
     </div>
   );
 }

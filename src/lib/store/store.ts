@@ -1,9 +1,11 @@
 import type { Action, ThunkAction } from "@reduxjs/toolkit";
 import { configureStore } from "@reduxjs/toolkit";
 import { tournamentReducer } from "@/entities/Tournament";
+import { bracketEventReducer } from "@/entities/BracketEvent";
 
 export const store = configureStore({
   reducer: {
+    bracketEvent: bracketEventReducer,
     tournament: tournamentReducer,
   },
 });

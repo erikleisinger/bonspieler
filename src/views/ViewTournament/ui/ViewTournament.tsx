@@ -1,14 +1,17 @@
 "use client";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { TournamentStageType, TournamentStage } from "@/entities/Tournament";
 import { TournamentViewer } from "@/widgets/TournamentViewer";
-import { Brackets, type BracketRows } from "@/entities/Bracket";
+import { type BracketRows } from "@/entities/Bracket";
 import { getTournamentContextForStage } from "@/shared/Tournament/getTournamentContextForStage";
-import { Button } from "@/shared/ui/button";
-import { FaArrowLeft } from "react-icons/fa";
-import { TournamentContext } from "@/entities/Tournament/lib";
+
+import { useAppSelector } from "@/lib/store";
+import { getCurrentTournament } from "@/entities/Tournament";
+import { BracketViewer } from "@/widgets/BracketViewer";
 export default function TournamentView() {
-  const { id: tournamentId, stages } = useContext(TournamentContext);
+  const tournament = useAppSelector(getCurrentTournament);
+  const tournamentId = tournament?.id;
+  const stages = tournament?.stages || [];
 
   const [viewingStage, setViewingStage] = useState<TournamentStage | null>(
     null
@@ -42,22 +45,7 @@ export default function TournamentView() {
       {!viewingStage && <TournamentViewer onViewStage={setViewingStage} />}
       {viewingStage && isBracket && (
         <div className="fixed inset-0">
-          <Brackets
-            brackets={viewingStage.brackets}
-            connections={viewingStage.connections}
-            drawTimes={viewingStage.drawTimes}
-            eventName={viewingStage.name}
-            readableIdIndex={viewingStage.readableIdIndex}
-            schedule={viewingStage.schedule}
-            rows={rows}
-            updateRows={updateRows}
-            nextStageName={tournamentContext.nextStageName}
-            backButton={
-              <Button size="icon" variant="ghost" onClick={onBack}>
-                <FaArrowLeft />
-              </Button>
-            }
-          />
+          <BracketViewer stage={viewingStage} onBack={onBack}></BracketViewer>
         </div>
       )}
     </div>

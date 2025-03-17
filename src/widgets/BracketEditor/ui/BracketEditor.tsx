@@ -1,5 +1,5 @@
 "use client";
-import { useState, useReducer, useContext } from "react";
+import { useState } from "react";
 import {
   getNewTeamCount,
   getNewWinnerCount,
@@ -33,6 +33,7 @@ import { Nullable } from "@/shared/types";
 import type { BracketDrawTimes, BracketGame } from "@/entities/Bracket";
 import SaveButton from "@/shared/ui/save-button";
 import { StageTournamentContext } from "@/shared/types/StageTournamentContext";
+import { BracketEventHeader } from "@/entities/BracketEvent";
 
 export default function BracketEditor({
   data = {
@@ -469,57 +470,62 @@ export default function BracketEditor({
           )}
         </Slideout>
         {!showWizard ? (
-          <Brackets
-            backButton={
-              !showWizard && (
-                <Button
-                  size="icon"
-                  variant="ghost"
-                  onClick={() => setShowWizard(true)}
-                >
-                  <FaArrowLeft />
-                </Button>
-              )
-            }
-            brackets={bracketState.brackets}
-            drawTimes={drawTimes}
-            schedule={bracketState.schedule}
-            connections={bracketState.connections}
-            eventName={bracketEventName}
-            updateRows={updateRows}
-            rows={bracketState.rows}
-            readableIdIndex={bracketState.readableIdIndex}
-            infoChildren={<GameEditOptions />}
-            appendHeaderChildren={
-              <div className="flex grow justify-end items-center">
-                <SaveButton
-                  text={["Save Changes", "Saving...", "Changes saved!"]}
-                  onClick={handleSave}
-                >
-                  Save Changes
-                </SaveButton>
-              </div>
-            }
-            appendNavigatorChildren={
-              bracketState.brackets?.length ? (
-                <EditBracketButton
-                  editBracket={(bracketNum: number) =>
-                    setBracketToEdit(bracketNum)
-                  }
-                />
-              ) : (
-                <div />
-              )
-            }
-            prependNavigatorChildren={
-              <AddNewBracket addBracket={handleAddBracket} />
-            }
-            nextStageName={tournamentContext.nextStageName}
-          >
-            <Button onClick={editEvent}>
-              <FaCog /> Event options
-            </Button>
-          </Brackets>
+          <div className=" grid grid-rows-[auto_1fr] absolute inset-0">
+            <BracketEventHeader
+              eventName={bracketEventName}
+              backButton={
+                !showWizard && (
+                  <Button
+                    size="icon"
+                    variant="ghost"
+                    onClick={() => setShowWizard(true)}
+                  >
+                    <FaArrowLeft />
+                  </Button>
+                )
+              }
+              appendHeaderChildren={
+                <div className="flex grow justify-end items-center">
+                  <SaveButton
+                    text={["Save Changes", "Saving...", "Changes saved!"]}
+                    onClick={handleSave}
+                  >
+                    Save Changes
+                  </SaveButton>
+                </div>
+              }
+            ></BracketEventHeader>
+            <Brackets
+              brackets={bracketState.brackets}
+              drawTimes={drawTimes}
+              schedule={bracketState.schedule}
+              connections={bracketState.connections}
+              eventName={bracketEventName}
+              updateRows={updateRows}
+              rows={bracketState.rows}
+              readableIdIndex={bracketState.readableIdIndex}
+              infoChildren={<GameEditOptions />}
+              appendNavigatorChildren={
+                bracketState.brackets?.length ? (
+                  <EditBracketButton
+                    editBracket={(bracketNum: number) =>
+                      setBracketToEdit(bracketNum)
+                    }
+                  />
+                ) : (
+                  <div />
+                )
+              }
+              prependNavigatorChildren={
+                <AddNewBracket addBracket={handleAddBracket} />
+              }
+              nextStageName={tournamentContext.nextStageName}
+            >
+              <Button onClick={editEvent}>
+                <FaCog /> Event options
+              </Button>
+            </Brackets>
+          </div>
         ) : (
           <div />
         )}
