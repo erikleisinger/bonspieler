@@ -1,14 +1,14 @@
 import { Badge } from "@/shared/ui/badge";
 import { Button } from "@/shared/ui/button";
 import { FaTrash } from "react-icons/fa";
-import { useContext } from "react";
-import { TournamentContext } from "@/entities/Tournament/lib";
+import { useAppSelector } from "@/lib/store";
+import { getTournamentTeams } from "@/entities/Tournament";
 export default function TournamentTeamList({
   controlChildren,
 }: {
   controlChildren?: React.ReactNode;
 }) {
-  const { teams } = useContext(TournamentContext);
+  const teams = useAppSelector(getTournamentTeams);
   return (
     <div className="flex flex-col gap-2">
       {teams.map((t) => {

@@ -6,9 +6,10 @@ import { useContext } from "react";
 import { BracketEditingContext } from "@/shared/EditableBracket/BracketEditingContext";
 import { BracketContext } from "@/shared/Bracket/BracketContext";
 import { scrollToGame } from "@/entities/Bracket/lib/scrollToGame";
-import { TournamentContext } from "@/entities/Tournament/lib";
+import { useAppSelector } from "@/lib/store";
+import { getTournamentTeams } from "@/entities/Tournament";
 export default function EditableBracketTeamList() {
-  const { teams } = useContext(TournamentContext);
+  const teams = useAppSelector(getTournamentTeams);
   const { lookingToAssignTeam, lookToAssignTeam, availableGames } = useContext(
     BracketEditingContext
   );

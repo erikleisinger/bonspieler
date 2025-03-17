@@ -2,7 +2,7 @@ import {
   TournamentStageType,
   TournamentStage,
   TournamentBracketStage,
-} from "../types/TournamentStage";
+} from "../../types/TournamentStage";
 const DEFAULT_STAGE = {
   order: 0,
 };

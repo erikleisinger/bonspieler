@@ -1,7 +1,14 @@
 export { TournamentStageRotatableCard } from "./ui";
+export { DEFAULTS, TournamentContextProvider } from "./lib";
 export {
-  type TournamentStage,
-  TournamentStageType,
-  DEFAULTS,
-  TournamentContextProvider,
-} from "./lib";
+  tournamentReducer,
+  getCurrentTournament,
+  getCurrentTournamentStatus,
+  getCurrentTournamentName,
+  getTournamentTeams,
+  initTournamentById,
+  updateTournamentStages,
+} from "./model";
+
+export type { TournamentStage, TournamentTeam, Tournament } from "./types";
+export { TournamentStageType } from "./types";

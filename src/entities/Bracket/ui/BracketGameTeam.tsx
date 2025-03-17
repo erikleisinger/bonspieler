@@ -1,6 +1,7 @@
 import type { BracketConnectionTeam } from "../lib";
 import { BracketContext } from "@/shared/Bracket/BracketContext";
-import { TournamentContext } from "@/entities/Tournament/lib";
+import { useAppSelector } from "@/lib/store";
+import { getTournamentTeams } from "@/entities/Tournament";
 import { useContext } from "react";
 import { FaSeedling } from "react-icons/fa";
 export default function BracketGameTeam({
@@ -12,7 +13,7 @@ export default function BracketGameTeam({
   showSeed: boolean;
   team: BracketConnectionTeam;
 }) {
-  const { teams: tournamentTeams } = useContext(TournamentContext);
+  const tournamentTeams = useAppSelector(getTournamentTeams);
   const { readableIdIndex } = useContext(BracketContext);
 
   function getTeamInfo({ isWinner, gameId, teamId }: BracketConnectionTeam) {

@@ -57,11 +57,13 @@ export default function BracketEditor({
   },
   onBack = () => {},
   onSave = () => {},
+  updateBracketName = () => {},
 }: {
   data?: BracketEvent;
   tournamentContext: StageTournamentContext;
   onBack: () => void;
   onSave: (event: BracketEvent) => void;
+  updateBracketName: (newName: string) => void;
 }) {
   /**
    * Bracket params
@@ -362,6 +364,11 @@ export default function BracketEditor({
   const [eventOptionsTab, setEventOptionsTab] = useState("overview");
   const [bracketEventName, setBracketEventName] = useState(data.name);
 
+  function updateBracketEventName(newName: string) {
+    updateBracketName(newName);
+    setBracketEventName(newName);
+  }
+
   function openEventOptions(tab: string = "overview") {
     setShowEventOptions(true);
     setEventOptionsTab(tab);
@@ -452,7 +459,7 @@ export default function BracketEditor({
               numWinners={numWinners}
               drawTimes={drawTimes}
               eventName={bracketEventName}
-              setEventName={setBracketEventName}
+              setEventName={updateBracketEventName}
               setDrawTimes={setDrawTimes}
               onClose={() => {
                 setShowEventOptions(false);

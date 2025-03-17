@@ -1,7 +1,4 @@
-import {
-  TournamentStage,
-  TournamentStageType,
-} from "../lib/types/TournamentStage";
+import { TournamentStage, TournamentStageType } from "../types/TournamentStage";
 import { Button } from "@/shared/ui/button";
 import Typography from "@/shared/ui/typography";
 import { FaArrowLeft } from "react-icons/fa";

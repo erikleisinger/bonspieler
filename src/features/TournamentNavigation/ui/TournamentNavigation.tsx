@@ -1,9 +1,10 @@
-import { useState, useContext } from "react";
-import { TournamentContext } from "@/entities/Tournament/lib";
+import { useState } from "react";
 import Typography from "@/shared/ui/typography";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/shared/ui/tabs";
 import { TournamentTab } from "../lib";
 import { cn } from "@/lib/utils";
+import { useAppSelector } from "@/lib/store";
+import { getCurrentTournamentName } from "@/entities/Tournament";
 export default function TournamentNavigation({
   children,
   tabsChildren = {
@@ -17,7 +18,7 @@ export default function TournamentNavigation({
     [TournamentTab.Teams]: React.ReactNode;
   };
 }) {
-  const { name: tournamentName } = useContext(TournamentContext);
+  const tournamentName = useAppSelector(getCurrentTournamentName);
   function getClassNames(tab: TournamentTab) {
     return selectedView !== tab ? "z-[1] behind " : "z-10 ahead ";
   }

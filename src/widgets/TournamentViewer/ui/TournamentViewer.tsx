@@ -4,15 +4,16 @@ import {
   TournamentNavigation,
   TournamentTab,
 } from "@/features/TournamentNavigation";
-import { useContext } from "react";
-import { TournamentContext } from "@/entities/Tournament/lib";
+import { useAppSelector } from "@/lib/store";
+import { getCurrentTournament } from "@/entities/Tournament";
 
 export default function TournamentViewer({
   onViewStage,
 }: {
   onViewStage: (stage: TournamentStage) => void;
 }) {
-  const { stages } = useContext(TournamentContext);
+  const tournament = useAppSelector(getCurrentTournament);
+  const stages = tournament?.stages || [];
   return (
     <TournamentNavigation
       tabsChildren={{

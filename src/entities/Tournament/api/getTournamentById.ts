@@ -1,7 +1,7 @@
 import { client } from "@/shared/api";
 import { Tournament } from "@/shared/types/Tournament";
 
-export async function getTournamentById(id: number): Promise<Tournament> {
+export async function getTournamentById(id: string): Promise<Tournament> {
   const { data } = await client
     .from("tournaments")
     .select("*")

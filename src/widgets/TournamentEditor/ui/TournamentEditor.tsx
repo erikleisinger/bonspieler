@@ -15,8 +15,11 @@ import {
 } from "@/features/TournamentNavigation";
 import { TournamentTeamList } from "@/features/TournamentTeamList";
 import SaveButton from "@/shared/ui/save-button";
-import { useContext } from "react";
-import { TournamentContext } from "@/entities/Tournament/lib";
+import { useAppDispatch, useAppSelector } from "@/lib/store";
+import {
+  updateTournamentStages,
+  getCurrentTournament,
+} from "@/entities/Tournament";
 export default function TournamentEditor({
   onEditStage,
   saveTournament,
@@ -24,11 +27,9 @@ export default function TournamentEditor({
   onEditStage: (stage: TournamentStage) => void;
   saveTournament: () => Promise<void>;
 }) {
-  const {
-    id: tournamentId,
-    stages,
-    updateTournament,
-  } = useContext(TournamentContext);
+  const dispatch = useAppDispatch();
+  const tournament = useAppSelector(getCurrentTournament);
+  const stages = tournament?.stages || [];
 
   function addStage(type: TournamentStageType) {
     const base = JSON.parse(JSON.stringify(DEFAULTS[type]));
@@ -40,10 +41,7 @@ export default function TournamentEditor({
         order: stages.length,
       },
     ];
-
-    updateTournament({
-      stages: newStages,
-    });
+    dispatch(updateTournamentStages(newStages));
   }
 
   function removeStage(stageId: string) {
@@ -55,9 +53,7 @@ export default function TournamentEditor({
       ...s,
       order: i,
     }));
-    updateTournament({
-      stages: newStages,
-    });
+    dispatch(updateTournamentStages(newStages));
   }
 
   function handleChangeStageOrder(
@@ -78,7 +74,7 @@ export default function TournamentEditor({
       order: i,
     }));
 
-    updateTournament({ stages: newStages });
+    dispatch(updateTournamentStages(newStages));
   }
 
   const [addingStage, setAddingStage] = useState(false);

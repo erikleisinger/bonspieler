@@ -11,7 +11,8 @@ export function assignTeamToGame(
     teamId: string;
   }
 ) {
-  const { connections: newConnections } = state;
+  const { connections } = state;
+  let newConnections = { ...connections };
   const connection = newConnections[gameId];
   const { teams } = connection || {};
   const alreadyAssignedToGame = teams.find(({ teamId: tid }) => tid === teamId);
@@ -25,7 +26,13 @@ export function assignTeamToGame(
         ...newTeams[availableSlotIndex],
         teamId,
       });
-      newConnections[gameId].teams = newTeams;
+      newConnections = {
+        ...newConnections,
+        [gameId]: {
+          ...connection,
+          teams: newTeams,
+        },
+      };
     }
   }
 

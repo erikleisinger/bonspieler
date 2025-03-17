@@ -1,7 +1,4 @@
-import {
-  TournamentStage,
-  TournamentStageType,
-} from "../lib/types/TournamentStage";
+import { TournamentStage, TournamentStageType } from "../types/TournamentStage";
 import BracketStageCard from "@/shared/Tournament/BracketStageCard";
 import RoundRobinStageCard from "@/shared/Tournament/RoundRobinCard";
 import PointsStageCard from "@/shared/Tournament/PointsStageCard";

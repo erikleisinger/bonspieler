@@ -1,20 +1,21 @@
 "use client";
-import { useState, useContext } from "react";
+import { useState } from "react";
 import { TournamentStageType, TournamentStage } from "@/entities/Tournament";
 import { TournamentEditor } from "@/widgets/TournamentEditor";
 import { BracketEditor } from "@/widgets/BracketEditor";
 import { BracketEvent } from "@/entities/Bracket";
-import type { Tournament } from "@/shared/types/Tournament";
 import { saveTournament } from "../lib";
 import { getTournamentContextForStage } from "@/shared/Tournament/getTournamentContextForStage";
-import { TournamentContext } from "@/entities/Tournament/lib";
+import { useAppDispatch, useAppSelector } from "@/lib/store";
+import {
+  getCurrentTournament,
+  updateTournamentStages,
+} from "@/entities/Tournament";
 export default function EditTournament() {
-  const {
-    id: tournamentId,
-    name: tournamentName,
-    stages,
-    updateTournament,
-  } = useContext(TournamentContext);
+  const dispatch = useAppDispatch();
+  const tournament = useAppSelector(getCurrentTournament);
+  const stages = tournament?.stages || [];
+  const tournamentId = tournament?.id || null;
 
   const [editedStage, setEditedStage] = useState<TournamentStage | null>(null);
 
@@ -24,8 +25,18 @@ export default function EditTournament() {
 
   const isBracket = editedStage?.type === TournamentStageType.Bracket;
 
+  function updateBracketName(newName: string) {
+    const { order } = editedStage;
+    const newStages = [...stages];
+    newStages.splice(order, 1, {
+      ...editedStage,
+      name: newName,
+    });
+    dispatch(updateTournamentStages(newStages));
+  }
+
   async function saveBracketEvent(savedEvent: BracketEvent) {
-    const { id, order, type } = editedStage;
+    const { id, order, type, name } = editedStage;
 
     const newStages = [...stages];
     newStages.splice(order, 1, {
@@ -33,18 +44,11 @@ export default function EditTournament() {
       order,
       id,
       type,
+      name,
     });
 
-    const newTournament = {
-      id: tournamentId,
-      name: tournamentName,
-      stages: newStages,
-    };
-
-    updateTournament({
-      stages: newStages,
-    });
-    await handleSaveTournament(newTournament);
+    dispatch(updateTournamentStages(newStages));
+    await handleSaveTournament();
   }
 
   function discardChanges() {
@@ -52,13 +56,10 @@ export default function EditTournament() {
   }
 
   const [saving, setSaving] = useState(false);
-  async function handleSaveTournament(tournamentToSave: Tournament) {
+  async function handleSaveTournament() {
     setSaving(true);
-    await saveTournament({
-      id: tournamentId,
-      name: tournamentName,
-      stages,
-    });
+    console.log("tournament to save: ", tournament);
+    await saveTournament(tournament);
     setSaving(false);
   }
 
@@ -75,6 +76,7 @@ export default function EditTournament() {
           data={editedStage}
           onSave={saveBracketEvent}
           onBack={discardChanges}
+          updateBracketName={updateBracketName}
           tournamentContext={getTournamentContextForStage(
             editedStage,
             stages,
