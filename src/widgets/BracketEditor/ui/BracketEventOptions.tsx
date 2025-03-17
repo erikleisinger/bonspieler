@@ -10,18 +10,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { SetEventSheets } from "@/features/SetEventSheets";
 import { SetEventDrawTimes } from "@/features/SetEventDrawTimes";
 import { BracketEventInfo } from "@/entities/BracketEvent";
-import { TournamentTeamList } from "@/widgets/TournamentTeamList";
 import { BracketEditingContext } from "@/shared/EditableBracket/BracketEditingContext";
-import { FaPencilAlt } from "react-icons/fa";
 import { EditableBracketTeamList } from "@/features/EditableBracketTeamList";
-import { TournamentContext } from "@/entities/Tournament/lib";
 export default function BracketEventOptions({
   drawTimes,
   eventName,
   initialTab = "overview",
   setDrawTimes,
   setEventName,
-  totalNumTeams,
   totalNumSheets,
   numWinners,
   totalNumDraws,
@@ -32,7 +28,6 @@ export default function BracketEventOptions({
   initialTab: string;
   setDrawTimes: (e: BracketDrawTimes) => void;
   setEventName: (newName: string) => void;
-  totalNumTeams: number;
   totalNumSheets: number;
   numWinners: number[];
   totalNumDraws: number;
@@ -44,10 +39,6 @@ export default function BracketEventOptions({
   const teamsContainerId = useId();
 
   const { brackets, connections, schedule } = useContext(BracketContext);
-
-  const { lookToAssignTeam, lookingToAssignTeam } = useContext(
-    BracketEditingContext
-  );
 
   const [selectedTab, setSelectedTab] = useState(initialTab);
 

@@ -12,7 +12,7 @@ import {
   FaTimes,
   FaDoorOpen,
 } from "react-icons/fa";
-import { DrawTime } from "@/entities/BracketGame";
+import { DrawTime } from "@/entities/DrawTime";
 import { EditDrawNumber } from "@/features/EditDrawNumber";
 
 import BracketGameTeam from "./BracketGameTeam";

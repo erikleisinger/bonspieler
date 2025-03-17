@@ -1,5 +1,5 @@
 "use client";
-import { DrawTime } from "@/entities/BracketGame";
+import { DrawTime } from "@/entities/DrawTime";
 import { useState, useContext, useRef, useEffect, useMemo } from "react";
 import { BracketEditingContext } from "@/shared/EditableBracket/BracketEditingContext";
 import { BracketContext } from "@/shared/Bracket/BracketContext";

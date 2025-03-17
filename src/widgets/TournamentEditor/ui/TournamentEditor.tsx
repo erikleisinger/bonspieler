@@ -13,7 +13,7 @@ import {
   TournamentNavigation,
   TournamentTab,
 } from "@/features/TournamentNavigation";
-import { TournamentTeamList } from "@/widgets/TournamentTeamList";
+import { TournamentTeamList } from "@/features/TournamentTeamList";
 import SaveButton from "@/shared/ui/save-button";
 import { useContext } from "react";
 import { TournamentContext } from "@/entities/Tournament/lib";
@@ -113,7 +113,7 @@ export default function TournamentEditor({
         ),
         [TournamentTab.Teams]: (
           <div className="m-auto">
-            <TournamentTeamList tournamentId={tournamentId} />
+            <TournamentTeamList />
           </div>
         ),
       }}
