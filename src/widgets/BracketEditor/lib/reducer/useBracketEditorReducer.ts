@@ -1,6 +1,8 @@
 import { useReducer } from "react";
-import { bracketEditorReducer } from "../reducer";
-import { DEFAULT_BRACKET_EDITOR_STATE } from "../reducer";
+import {
+  DEFAULT_BRACKET_EDITOR_STATE,
+  bracketEditorReducer,
+} from "./bracketEditorReducer";
 import { BracketConnections, BracketGame } from "@/entities/Bracket";
 import {
   BracketReadableIdIndex,
