@@ -22,6 +22,7 @@ export {
   getLookingForLoserConnection,
   getLookingToAssignTeam,
   addBracketToEvent,
+  assignTeamToGame,
   isGameAvailable,
   setBracketEvent,
   setBracketEventDrawTimes,

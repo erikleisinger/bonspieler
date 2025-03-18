@@ -17,6 +17,7 @@ import {
   setNumWinners,
   setBracketEvent,
   getLookingToAssignTeam,
+  assignTeamToGame,
 } from "@/entities/BracketEvent";
 import { EditDrawNumber } from "@/features/EditDrawNumber";
 import { getBracketEvent } from "@/entities/BracketEvent";
@@ -90,10 +91,17 @@ export default function EditingBracket({
   }
 
   function onGameClick(game: BracketGameType) {
-    if (lookingToAssignTeam) return;
-    console.log("game", game, lookingToAssignTeam);
-    dispatch(setSelectedGame(game));
-    scrollToGame(game.id);
+    if (lookingToAssignTeam) {
+      dispatch(
+        assignTeamToGame({
+          teamId: lookingToAssignTeam,
+          gameId: game.id,
+        })
+      );
+    } else {
+      dispatch(setSelectedGame(game));
+      scrollToGame(game.id);
+    }
   }
 
   const [bracketToEdit, setBracketToEdit] = useState<Nullable<number>>(null);
@@ -109,6 +117,7 @@ export default function EditingBracket({
             eventName={eventName}
             onBack={showWizard ? onEndView : () => setShowWizard(true)}
             onNext={showWizard ? () => setShowWizard(false) : null}
+            onSave={showWizard ? null : handleSave}
           />
 
           {showWizard ? (

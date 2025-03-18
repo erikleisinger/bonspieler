@@ -24,6 +24,7 @@ export {
   getSelectedGame,
   isGameAvailable,
   addBracketToEvent,
+  assignTeamToGame,
   resetBracketEvent,
   setAvailableGames,
   setBracketEvent,

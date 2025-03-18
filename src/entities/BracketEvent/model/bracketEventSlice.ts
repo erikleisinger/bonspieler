@@ -72,6 +72,27 @@ export const bracketEventSlice = createSlice({
         numWinners: [...state.bracket.numWinners, ...action.payload.numWinners],
       };
     },
+    assignTeamToGame: (
+      state,
+      action: PayloadAction<{
+        gameId: string;
+        teamId: string;
+      }>
+    ) => {
+      const { gameId, teamId } = action.payload;
+      const newConnections = { ...(state.bracket?.connections || {}) };
+      const game = newConnections[gameId];
+      const teams = [...game.teams];
+      const teamIndex = teams.findIndex((team) => team.teamId === "seed");
+      if (teamIndex < 0) return;
+      teams.splice(teamIndex, 1, {
+        ...teams[teamIndex],
+        teamId,
+      });
+      newConnections[gameId].teams = teams;
+      state.bracket.connections = newConnections;
+      state.bracket.lookingToAssignTeam = null;
+    },
     resetBracketEvent: (state) => {
       state.bracket = defaultState();
     },
@@ -275,6 +296,7 @@ export const isGameAvailable = createSelector(
 
 export const {
   addBracketToEvent,
+  assignTeamToGame,
   resetBracketEvent,
   setAvailableGames,
   setBracketEvent,
