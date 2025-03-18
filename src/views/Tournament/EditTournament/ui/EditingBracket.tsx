@@ -18,12 +18,14 @@ import {
   setBracketEvent,
   getLookingToAssignTeam,
   assignTeamToGame,
+  getBracketEventId,
+  getBracketEventOrder,
 } from "@/entities/BracketEvent";
 import { EditDrawNumber } from "@/features/EditDrawNumber";
 import { getBracketEvent } from "@/entities/BracketEvent";
 import { updateAndSaveTournament } from "@/entities/Tournament";
 import { TournamentStageContextProvider } from "@/shared/TournamentStage";
-import { BracketOptions } from "@/widgets/Bracket/BracketOptions";
+import { BracketEditor } from "@/widgets/Bracket/BracketEditor";
 import { useState } from "react";
 import { BracketNavigator } from "@/features/Bracket/BracketNavigator";
 import { Button } from "@/shared/ui/button";
@@ -37,6 +39,7 @@ import BracketViewLayout from "@/shared/layouts/BracketViewLayout";
 import EditingBracketHeader from "./EditingBracketHeader";
 import { scrollToGame } from "@/entities/Bracket";
 import GameAvailabilityContextProvider from "./GameAvailabilityContextProvider";
+import { TournamentStageType } from "@/entities/Tournament";
 
 export default function EditingBracket({
   onEndView,
@@ -52,6 +55,8 @@ export default function EditingBracket({
   const numTeams = useAppSelector(getBracketEventNumTeams);
   const numWinners = useAppSelector(getBracketEventNumWinners);
   const lookingToAssignTeam = useAppSelector(getLookingToAssignTeam);
+  const id = useAppSelector(getBracketEventId);
+  const order = useAppSelector(getBracketEventOrder);
   function cancelSelectedGame() {
     dispatch(setSelectedGame(null));
   }
@@ -156,7 +161,7 @@ export default function EditingBracket({
 
         <Slideout visible={bracketToEdit !== null}>
           {bracketToEdit !== null && (
-            <BracketOptions
+            <BracketEditor
               onClose={() => {
                 setBracketToEdit(null);
                 dispatch(setSelectedDraw(null));

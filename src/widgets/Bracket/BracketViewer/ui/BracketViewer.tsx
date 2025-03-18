@@ -29,7 +29,7 @@ export default function BracketViewer({
   }
 
   return (
-    <>
+    <div>
       {brackets.map((rounds, bracketIndex) => {
         return (
           <Bracket
@@ -70,6 +70,6 @@ export default function BracketViewer({
           </Bracket>
         );
       })}
-    </>
+    </div>
   );
 }

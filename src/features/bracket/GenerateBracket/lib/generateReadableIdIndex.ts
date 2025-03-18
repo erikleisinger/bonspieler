@@ -1,5 +1,5 @@
 import type { BracketGameType } from "@/entities/Bracket";
-import { generateReadableId } from "@/shared/utils/generateReadableId";
+import { generateReadableId } from "./generateReadableId";
 export function generateReadableIdIndex(brackets: BracketGameType[][][]) {
   const index: { [gameId: string]: string } = {};
   brackets.forEach((bracket) => {

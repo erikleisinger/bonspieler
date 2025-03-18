@@ -1,5 +1,5 @@
+import { useId } from "react";
 import { Checkbox } from "@/shared/ui/checkbox";
-import { generateUUID } from "@/shared/utils/generateUUID";
 import { useAppDispatch } from "@/lib/store";
 import { updateBracketGameTeam } from "@/entities/BracketEvent";
 import type {
@@ -19,7 +19,7 @@ export default function SeedToggle({
   index: number;
 }) {
   const dispatch = useAppDispatch();
-  const id = generateUUID();
+  const id = useId();
   const isFirstRoundFirstBracket =
     game.bracketNumber === 0 && game.roundNumber === 0;
 

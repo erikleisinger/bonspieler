@@ -24,7 +24,7 @@ export {
   MAX_WINNER_COUNT,
   MIN_TEAM_COUNT,
 } from "./lib";
-export { Bracket, Brackets } from "./ui";
+export { Bracket } from "./ui";
 export { BRACKET_CONTAINER_ELEMENT_ID_PREFIX } from "./lib";
 export { BracketRound } from "./BracketRound";
 export { BracketGame, BracketGameTeam } from "./BracketGame";

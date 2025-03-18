@@ -23,6 +23,7 @@ export {
   getSelectedGame,
   addBracketToEvent,
   assignTeamToGame,
+  removeBracket,
   resetBracketEvent,
   setBracketEvent,
   setBracketEventDrawTimes,

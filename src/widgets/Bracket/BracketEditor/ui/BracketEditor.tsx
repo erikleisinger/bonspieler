@@ -14,15 +14,16 @@ import { HiOutlinePlus } from "react-icons/hi";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { getBracketName } from "@/entities/Bracket";
 import { scrollToBracket } from "@/entities/Bracket";
-export default function BracketOptions({
+import { useAppDispatch } from "@/lib/store";
+import { removeBracket } from "@/entities/BracketEvent";
+export default function BracketEditor({
   onClose,
   editEvent,
-  removeBracket,
 }: {
   onClose: () => void;
   editEvent: () => void;
-  removeBracket: (bracketIndex: number) => void;
 }) {
+  const dispatch = useAppDispatch();
   const currentlyViewingBracket = useAppSelector(getCurrentlyViewingBracket);
   const brackets = useAppSelector(getBracketEventBrackets);
 
@@ -35,6 +36,12 @@ export default function BracketOptions({
   function goBracket(newIndex: number) {
     setBracketIndex(newIndex);
     scrollToBracket(newIndex);
+  }
+
+  function handleRemoveBracket() {
+    onClose();
+    dispatch(removeBracket(bracketIndex));
+    if (currentlyViewingBracket) goBracket(currentlyViewingBracket - 1);
   }
 
   return (
@@ -81,9 +88,7 @@ export default function BracketOptions({
         />
       </div>
       <footer className="flex justify-center">
-        <RemoveBracketButton
-          onClick={() => removeBracket(currentlyViewingBracket)}
-        />
+        <RemoveBracketButton onClick={handleRemoveBracket} />
       </footer>
     </div>
   );

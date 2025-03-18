@@ -8,6 +8,7 @@ import { getTotalBracketWinners } from "@/shared/Bracket/getTotalBracketWinners"
 import { Label } from "@/shared/ui/label";
 import { getNewBracketAndWinnerCount } from "../lib/getNewBracketAndWinnerCount";
 import { TournamentStageContext } from "@/shared/TournamentStage";
+import { generateBracket } from "@/features/Bracket/GenerateBracket";
 interface BracketEditorOptionsProps {
   teamCount: number;
   updateTeamCount: (e: number) => void;
@@ -40,7 +41,7 @@ export default function CreateBracketWizard({
 
   function generateBracketEvent() {
     renderBrackets({
-      ...generateBrackets({
+      ...generateBracket({
         numTeams: teamCount,
         numWinners,
         numSheets,

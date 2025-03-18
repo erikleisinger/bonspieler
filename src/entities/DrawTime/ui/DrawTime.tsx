@@ -14,6 +14,7 @@ export default function DrawTime({
     if (!drawNumber) return "No draw time";
     return format(drawNumber, "h:mm aaa • EEEE, MMM do");
   }, [schedule[gameId], drawTimes[schedule[gameId]]]);
+
   return (
     <div>
       Draw {schedule[gameId]} • {drawTime}
