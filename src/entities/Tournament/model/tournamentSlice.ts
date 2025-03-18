@@ -1,4 +1,9 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import {
+  createAsyncThunk,
+  createSlice,
+  PayloadAction,
+  createSelector,
+} from "@reduxjs/toolkit";
 import {
   getTournamentById,
   getTournamentTeams as getTournamentTeamsQuery,
@@ -13,6 +18,7 @@ import type { Nullable } from "@/shared/types";
 import { RootState } from "@/lib/store";
 import { saveTournament } from "../api";
 import { formatTournamentStage } from "./helpers/formatTournamentStage";
+import { getTotalBracketWinners } from "@/shared/Bracket/getTotalBracketWinners";
 
 interface TournamentState {
   tournament: Nullable<Tournament>;
@@ -79,6 +85,50 @@ export const getCurrentTournamentName = (state: RootState) =>
   state.tournament?.tournament?.name || null;
 
 export const getTournamentTeams = (state: RootState) => state.tournament.teams;
+
+export const getTournamentStages = (state: RootState) =>
+  state.tournament.tournament?.stages || [];
+
+export const getStartTeams = createSelector([getTournamentStages], (stages) => {
+  return (stageIndex: number) => {
+    if (!stageIndex) return null;
+    const prevStage = stages[stageIndex - 1];
+    const { numWinners } = prevStage;
+    return getTotalBracketWinners(numWinners);
+  };
+});
+export const getEndTeams = createSelector([getTournamentStages], (stages) => {
+  return (stageIndex: number) => {
+    if (stageIndex >= stages.length - 1) return null;
+    const nextStage = stages[stageIndex + 1];
+    const { numTeams } = nextStage;
+    return numTeams;
+  };
+});
+
+export const getNextStageName = createSelector(
+  [getTournamentStages],
+  (stages) => {
+    return (stageIndex: number) => {
+      if (stageIndex >= stages.length - 1) return null;
+      const nextStage = stages[stageIndex + 1];
+      const { name = "" } = nextStage || {};
+      return name;
+    };
+  }
+);
+
+export const getPrevStageName = createSelector(
+  [getTournamentStages],
+  (stages) => {
+    return (stageIndex: number) => {
+      if (!stageIndex) return null;
+      const prevStage = stages[stageIndex - 1];
+      const { name = "" } = prevStage || {};
+      return name;
+    };
+  }
+);
 
 export const initTournamentById = createAsyncThunk(
   "tournament/initTournamentById",

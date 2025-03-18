@@ -1,6 +1,11 @@
 import { Button } from "@/shared/ui/button";
-import { useAppDispatch } from "@/lib/store";
+import { useAppDispatch, useAppSelector } from "@/lib/store";
+import {
+  getBracketEventConnections,
+  setBracketSchedule,
+} from "@/entities/BracketEvent";
 import { setNumSheets } from "@/entities/BracketEvent";
+import { scheduleTournament } from "@erikleisinger/bracket-generator";
 export default function CalculateButton({
   active,
   className = "",
@@ -12,8 +17,14 @@ export default function CalculateButton({
   numSheets: number;
   onCalculate: () => void;
 }) {
+  const dispatch = useAppDispatch();
+
+  const connections = useAppSelector(getBracketEventConnections);
+
   function recalculate() {
-    dispatchEvent(setNumSheets(numSheets));
+    dispatch(setNumSheets(numSheets));
+    const { schedule } = scheduleTournament(connections, numSheets);
+    dispatch(setBracketSchedule(schedule));
     onCalculate();
   }
   return (

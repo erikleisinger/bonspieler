@@ -1,6 +1,6 @@
 import {
   BracketConnections,
-  BracketGame,
+  BracketGameType,
   BracketSchedule,
 } from "@/entities/Bracket";
 import { getTotalBracketWinners } from "@/shared/Bracket/getTotalBracketWinners";
@@ -11,7 +11,7 @@ export default function BracketEventInfo({
   schedule,
   winners,
 }: {
-  brackets: BracketGame[][][];
+  brackets: BracketGameType[][][];
   connections: BracketConnections;
   schedule: BracketSchedule;
   winners: number[];

@@ -20,7 +20,6 @@ export default function BracketGame({
 
   className = "",
   drawNumber,
-  nextStageName,
   onClick = () => {},
   readableId,
   rows,
@@ -31,7 +30,6 @@ export default function BracketGame({
   className?: string;
   drawNumber: number;
   onClick?: (game: BracketGame) => void;
-  nextStageName: string;
   readableId: string;
   rows: BracketRow;
   selected: boolean;
@@ -120,9 +118,7 @@ export default function BracketGame({
               teams={connections?.teams || []}
               readableId={readableId}
             />
-            {isFinal && (
-              <BracketGameFinalResult nextStageName={nextStageName} />
-            )}
+            {isFinal && <BracketGameFinalResult />}
           </div>
         </div>
       </div>

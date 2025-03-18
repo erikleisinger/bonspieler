@@ -1,10 +1,9 @@
 import { FaTrophy } from "react-icons/fa";
 import { FaPersonRunning } from "react-icons/fa6";
-export default function BracketGameFinalResult({
-  nextStageName,
-}: {
-  nextStageName: string;
-}) {
+import { useContext } from "react";
+import { TournamentStageContext } from "@/shared/TournamentStage";
+export default function BracketGameFinalResult() {
+  const { nextStageName } = useContext(TournamentStageContext);
   function text() {
     return nextStageName ? (
       <div className="text-sm grow font-semibold min-w-[200px]">

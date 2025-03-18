@@ -13,8 +13,10 @@ import {
   BRACKET_CONTAINER_ELEMENT_ID_PREFIX,
 } from "@/entities/Bracket";
 export default function BracketNavigator({
+  onBracketClick = () => {},
   numBrackets,
 }: {
+  onBracketClick?: (bracketIndex: number) => void;
   numBrackets: number;
 }) {
   const [intersectionObservers, setIntersectionObservers] = useState<
@@ -69,7 +71,12 @@ export default function BracketNavigator({
         <FaAngleLeft />
       </Button>
       <div className=" font-bold">
-        {getBracketName(currentlyViewingBracket)}
+        <Button
+          variant="ghost"
+          onClick={() => onBracketClick(currentlyViewingBracket)}
+        >
+          {getBracketName(currentlyViewingBracket)}
+        </Button>
       </div>
       <Button
         variant="ghost"

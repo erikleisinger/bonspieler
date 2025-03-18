@@ -63,6 +63,17 @@ export const bracketEventSlice = createSlice({
         ),
       };
     },
+    setBracketEventDrawTimes: (
+      state,
+      action: PayloadAction<BracketEvent["drawTimes"]>
+    ) => {
+      if (!state.bracket) return;
+      state.bracket.drawTimes = action.payload;
+    },
+    setBracketEventName: (state, action: PayloadAction<string>) => {
+      if (!state.bracket) return;
+      state.bracket.name = action.payload;
+    },
     setBracketEventRows: (state, action: PayloadAction<BracketRows>) => {
       if (!state.bracket) return;
       const newRows = {
@@ -157,6 +168,9 @@ export const getBracketEventNumSheets = (state: RootState) =>
   state?.bracketEvent?.bracket?.numSheets || 8;
 export const getBracketEventNumWinners = (state: RootState) =>
   state?.bracketEvent?.bracket?.numWinners || [];
+export const getBracketEventOrder = (state: RootState) => {
+  return state?.bracketEvent?.bracket?.order || 0;
+};
 export const getBracketEventReadableIdIndex = (state: RootState) =>
   state?.bracketEvent?.bracket?.readableIdIndex || {};
 export const getBracketEventSchedule = (state: RootState) =>
@@ -216,17 +230,19 @@ export const isGameAvailable = createSelector(
 
 export const {
   resetBracketEvent,
-  setBracketEvent,
-  setBracketEventRows,
-  setCurrentlyViewingBracket,
-  setSelectedGame,
-  setSelectedDraw,
   setAvailableGames,
+  setBracketEvent,
+  setBracketEventDrawTimes,
+  setBracketEventName,
+  setBracketEventRows,
   setBracketSchedule,
+  setCurrentlyViewingBracket,
   setLookingForLoserConnection,
   setNumSheets,
   setNumTeams,
   setNumWinners,
+  setSelectedDraw,
+  setSelectedGame,
   updateBracketGameTeam,
 } = bracketEventSlice.actions;
 
