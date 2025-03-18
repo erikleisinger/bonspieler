@@ -16,6 +16,7 @@ import {
   setNumTeams,
   setNumWinners,
   setBracketEvent,
+  getLookingToAssignTeam,
 } from "@/entities/BracketEvent";
 import { EditDrawNumber } from "@/features/EditDrawNumber";
 import { getBracketEvent } from "@/entities/BracketEvent";
@@ -34,6 +35,7 @@ import { CreateBracketEventWizard } from "@/widgets/Bracket/CreateBracketEventWi
 import BracketViewLayout from "@/shared/layouts/BracketViewLayout";
 import EditingBracketHeader from "./EditingBracketHeader";
 import { scrollToGame } from "@/entities/Bracket";
+import GameAvailabilityContextProvider from "./GameAvailabilityContextProvider";
 
 export default function EditingBracket({
   onEndView,
@@ -48,6 +50,7 @@ export default function EditingBracket({
   const eventName = useAppSelector(getBracketEventName);
   const numTeams = useAppSelector(getBracketEventNumTeams);
   const numWinners = useAppSelector(getBracketEventNumWinners);
+  const lookingToAssignTeam = useAppSelector(getLookingToAssignTeam);
   function cancelSelectedGame() {
     dispatch(setSelectedGame(null));
   }
@@ -87,6 +90,8 @@ export default function EditingBracket({
   }
 
   function onGameClick(game: BracketGameType) {
+    if (lookingToAssignTeam) return;
+    console.log("game", game, lookingToAssignTeam);
     dispatch(setSelectedGame(game));
     scrollToGame(game.id);
   }
@@ -117,7 +122,9 @@ export default function EditingBracket({
               updateNumSheets={(e) => dispatch(setNumSheets(e))}
             />
           ) : (
-            <BracketViewer onGameClick={onGameClick}></BracketViewer>
+            <GameAvailabilityContextProvider>
+              <BracketViewer onGameClick={onGameClick}></BracketViewer>
+            </GameAvailabilityContextProvider>
           )}
         </BracketViewLayout>
 

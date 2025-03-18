@@ -2,12 +2,18 @@ import { Badge } from "@/shared/ui/badge";
 import { Button } from "@/shared/ui/button";
 import { FaPencilAlt } from "react-icons/fa";
 import { useMemo } from "react";
-import { useAppSelector } from "@/lib/store";
+import { useAppDispatch, useAppSelector } from "@/lib/store";
 import { getTournamentTeams } from "@/entities/Tournament";
-import { getBracketEventConnections } from "@/entities/BracketEvent";
+import {
+  getBracketEventConnections,
+  getLookingToAssignTeam,
+  setLookingToAssignTeam,
+} from "@/entities/BracketEvent";
 export default function EditableBracketTeamList() {
+  const dispatch = useAppDispatch();
   const teams = useAppSelector(getTournamentTeams);
   const connections = useAppSelector(getBracketEventConnections);
+  const lookingToAssignTeam = useAppSelector(getLookingToAssignTeam);
 
   const teamAssignmentMap: {
     [teamId: number]: string;
@@ -33,9 +39,7 @@ export default function EditableBracketTeamList() {
   }, [JSON.stringify(connections)]);
 
   function beginLookToAssign(teamId: string) {
-    lookToAssignTeam({
-      teamId,
-    });
+    dispatch(setLookingToAssignTeam(teamId));
   }
 
   return (

@@ -24,6 +24,7 @@ export default function ViewingBracket({
   const bracketStage = useAppSelector(getBracketEvent);
   const brackets = useAppSelector(getBracketEventBrackets);
   const eventName = useAppSelector(getBracketEventName);
+
   function cancelSelectedGame() {
     dispatch(setSelectedGame(null));
   }

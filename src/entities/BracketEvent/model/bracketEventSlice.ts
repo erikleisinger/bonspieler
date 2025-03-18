@@ -26,6 +26,7 @@ const defaultState = (): BracketEventState["bracket"] => ({
   drawTimes: {},
   id: null,
   lookingForLoserConnection: null,
+  lookingToAssignTeam: null,
   name: "",
   numTeams: 16,
   numWinners: [],
@@ -129,6 +130,13 @@ export const bracketEventSlice = createSlice({
     ) => {
       if (!state.bracket) return;
       state.bracket.lookingForLoserConnection = action.payload;
+    },
+    setLookingToAssignTeam: (
+      state,
+      action: PayloadAction<Nullable<string>>
+    ) => {
+      if (!state.bracket) return;
+      state.bracket.lookingToAssignTeam = action.payload;
     },
     setNumSheets: (state, action: PayloadAction<number>) => {
       if (!state.bracket) return;
@@ -249,6 +257,10 @@ export const getAvailableGames = createSelector(
 export const getLookingForLoserConnection = (state: RootState) => {
   return state?.bracketEvent?.bracket?.lookingForLoserConnection || null;
 };
+
+export const getLookingToAssignTeam = (state: RootState) => {
+  return state?.bracketEvent?.bracket?.lookingToAssignTeam || null;
+};
 export const getNumSheets = (state: RootState) => {
   return state?.bracketEvent?.bracket?.numSheets || 8;
 };
@@ -272,6 +284,7 @@ export const {
   setBracketSchedule,
   setCurrentlyViewingBracket,
   setLookingForLoserConnection,
+  setLookingToAssignTeam,
   setNumSheets,
   setNumTeams,
   setNumWinners,
