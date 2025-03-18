@@ -1,5 +1,5 @@
 import { useState, useContext, useId } from "react";
-import { BracketContext } from "@/shared/Bracket/BracketContext";
+
 import { CustomizeBracket } from "@/features/CustomizeBracket";
 import Typography from "@/shared/ui/typography";
 import { Button } from "@/shared/ui/button";
@@ -12,6 +12,8 @@ import {
   DropdownMenuContent,
 } from "@/shared/ui/dropdown-menu";
 import { scrollToBracket } from "@/entities/Bracket";
+import { useAppSelector } from "@/lib/store";
+import { getBracketEventBrackets } from "@/entities/BracketEvent";
 export default function AddNewBracket({
   addBracket,
 }: {
@@ -32,7 +34,7 @@ export default function AddNewBracket({
 
   const checkboxId = useId();
 
-  const { brackets } = useContext(BracketContext);
+  const brackets = useAppSelector(getBracketEventBrackets);
 
   function handleAddBracket() {
     addBracket({

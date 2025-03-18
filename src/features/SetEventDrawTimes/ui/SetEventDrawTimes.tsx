@@ -1,5 +1,6 @@
 import { useContext, useState } from "react";
-import { BracketContext } from "@/shared/Bracket/BracketContext";
+import { useAppSelector } from "@/lib/store";
+import { getBracketEventSchedule } from "@/entities/BracketEvent";
 import DrawTimeValidationContext from "./DrawTimeValidationContext";
 import DrawInfo from "./DrawInfo";
 import { DateTimePicker } from "@/shared/ui/date-time-picker";
@@ -16,7 +17,7 @@ export default function SetEventDrawTimes({
   drawTimes: BracketDrawTimes;
   updateDrawTimes: (newDrawTimes: BracketDrawTimes) => void;
 }) {
-  const { schedule } = useContext(BracketContext);
+  const schedule = useAppSelector(getBracketEventSchedule);
   const [tempDrawTimes, setTempDrawTimes] = useState({ ...drawTimes });
 
   function updateDrawTime(newDate: Date, index: number) {

@@ -1,8 +1,12 @@
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/shared/ui/button";
 import { FaAngleRight } from "react-icons/fa";
 import { FaAngleLeft } from "react-icons/fa";
-import { BracketContext } from "@/shared/Bracket/BracketContext";
+import { useAppDispatch, useAppSelector } from "@/lib/store";
+import {
+  getCurrentlyViewingBracket,
+  setCurrentlyViewingBracket,
+} from "@/entities/BracketEvent";
 import { scrollToBracket } from "@/entities/Bracket";
 import {
   getBracketName,
@@ -17,8 +21,9 @@ export default function BracketNavigator({
     IntersectionObserver[]
   >([]);
 
-  const { currentlyViewingBracket, setCurrentlyViewingBracket } =
-    useContext(BracketContext);
+  const dispatch = useAppDispatch();
+  const currentlyViewingBracket = useAppSelector(getCurrentlyViewingBracket);
+
   useEffect(() => {
     for (let i = 0; i < numBrackets; i++) {
       const el = document.getElementById(
@@ -33,7 +38,7 @@ export default function BracketNavigator({
       const observer = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            setCurrentlyViewingBracket(i);
+            dispatch(setCurrentlyViewingBracket(i));
           }
         });
 

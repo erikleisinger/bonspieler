@@ -5,5 +5,7 @@ export {
   getCurrentTournamentName,
   getTournamentTeams,
   initTournamentById,
+  updateTournamentStage,
   updateTournamentStages,
+  updateAndSaveTournament,
 } from "./tournamentSlice";

@@ -1,7 +1,10 @@
 import type { Nullable } from "@/shared/types";
-import { useContext } from "react";
-import { BracketEditingContext } from "@/shared/EditableBracket/BracketEditingContext";
-import { BracketContext } from "@/shared/Bracket/BracketContext";
+import { useAppSelector, useAppDispatch } from "@/lib/store";
+import {
+  getBracketEventSchedule,
+  getSelectedDraw,
+  setSelectedDraw,
+} from "@/entities/BracketEvent";
 import { Button } from "@/shared/ui/button";
 import { FaEye } from "react-icons/fa";
 import { scrollToGame } from "@/entities/Bracket/lib/scrollToGame";
@@ -10,16 +13,17 @@ export default function SelectDrawNumberButton({
 }: {
   drawNumber: number;
 }) {
-  const { selectedDraw, setSelectedDraw } = useContext(BracketEditingContext);
-  const { schedule } = useContext(BracketContext);
+  const selectedDraw = useAppSelector(getSelectedDraw);
+  const dispatch = useAppDispatch();
+  const schedule = useAppSelector(getBracketEventSchedule);
 
   const variant = selectedDraw === drawNumber ? "default" : "ghost";
 
   function toggleSelected() {
     if (selectedDraw === drawNumber) {
-      setSelectedDraw(null);
+      dispatch(setSelectedDraw(null));
     } else {
-      setSelectedDraw(drawNumber);
+      dispatch(setSelectedDraw(drawNumber));
       scrollToFirstGame();
     }
   }

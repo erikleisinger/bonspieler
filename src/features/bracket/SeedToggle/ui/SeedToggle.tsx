@@ -1,8 +1,11 @@
 import { Checkbox } from "@/shared/ui/checkbox";
 import { generateUUID } from "@/shared/utils/generateUUID";
-import type { BracketConnectionTeam, BracketGame } from "../types";
-import { BracketEditingContext } from "@/shared/EditableBracket/BracketEditingContext";
-import { useContext } from "react";
+import { useAppDispatch } from "@/lib/store";
+import { updateBracketGameTeam } from "@/entities/BracketEvent";
+import type {
+  BracketConnectionTeam,
+  BracketGameType,
+} from "@/entities/Bracket";
 import Tooltip from "@/shared/ui/tooltip";
 export default function SeedToggle({
   className,
@@ -12,10 +15,10 @@ export default function SeedToggle({
 }: {
   className?: string;
   connection: BracketConnectionTeam;
-  game: BracketGame;
+  game: BracketGameType;
   index: number;
 }) {
-  const { toggleSeed } = useContext(BracketEditingContext);
+  const dispatch = useAppDispatch();
   const id = generateUUID();
   const isFirstRoundFirstBracket =
     game.bracketNumber === 0 && game.roundNumber === 0;
@@ -30,17 +33,21 @@ export default function SeedToggle({
 
   function handleToggleSeed(checked: boolean) {
     if (checked) {
-      toggleSeed({
-        gameId: game.id,
-        index,
-        teamId: "seed",
-      });
+      dispatch(
+        updateBracketGameTeam({
+          gameId: game.id,
+          teamIndex: index,
+          updates: { teamId: "seed" },
+        })
+      );
     } else {
-      toggleSeed({
-        gameId: game.id,
-        index,
-        teamId: null,
-      });
+      dispatch(
+        updateBracketGameTeam({
+          gameId: game.id,
+          teamIndex: index,
+          updates: { teamId: null },
+        })
+      );
     }
   }
   return (

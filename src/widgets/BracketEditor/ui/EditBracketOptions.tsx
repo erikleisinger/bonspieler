@@ -1,5 +1,10 @@
 import { useEffect, useContext, useState } from "react";
-import { BracketContext } from "@/shared/Bracket/BracketContext";
+
+import { useAppSelector } from "@/lib/store";
+import {
+  getBracketEventBrackets,
+  getCurrentlyViewingBracket,
+} from "@/entities/BracketEvent";
 import { Button } from "@/shared/ui/button";
 import Typography from "@/shared/ui/typography";
 import RemoveBracketButton from "./RemoveBracketButton";
@@ -18,7 +23,8 @@ export default function EditBracketOptions({
   editEvent: () => void;
   removeBracket: (bracketIndex: number) => void;
 }) {
-  const { brackets, currentlyViewingBracket } = useContext(BracketContext);
+  const currentlyViewingBracket = useAppSelector(getCurrentlyViewingBracket);
+  const brackets = useAppSelector(getBracketEventBrackets);
 
   const [bracketIndex, setBracketIndex] = useState(0);
 

@@ -1,7 +1,11 @@
 import { cn } from "@/lib/utils";
-import { useContext, useMemo } from "react";
-import { BracketContext } from "@/shared/Bracket/BracketContext";
-import { BracketEditingContext } from "@/shared/EditableBracket/BracketEditingContext";
+import { useMemo } from "react";
+import { useAppSelector } from "@/lib/store";
+import {
+  getBracketEventBrackets,
+  getBracketEventDrawTimes,
+  getBracketEventSchedule,
+} from "@/entities/BracketEvent";
 import DrawTime from "@/shared/ui/draw-time";
 import Typography from "@/shared/ui/typography";
 import { Button } from "@/shared/ui/button";
@@ -17,8 +21,10 @@ export default function BracketInfo({
   bracketIndex: number;
   editDrawTimes: () => void;
 }) {
-  const { brackets, schedule, drawTimes } = useContext(BracketContext);
-  const { numWinners } = useContext(BracketEditingContext);
+  const brackets = useAppSelector(getBracketEventBrackets);
+  const schedule = useAppSelector(getBracketEventSchedule);
+  const drawTimes = useAppSelector(getBracketEventDrawTimes);
+  const numWinners = useAppSelector(getNumWinners);
 
   const games = brackets[bracketIndex].flat() || [];
 

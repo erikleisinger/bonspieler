@@ -1,50 +1,102 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction, createSelector } from "@reduxjs/toolkit";
 import type { Nullable } from "@/shared/types";
 import { RootState } from "@/lib/store";
-import type { BracketEvent, BracketRows } from "@/entities/Bracket/lib";
-import { BracketGameType } from "@/entities/Bracket";
+import type { BracketEvent, BracketRows } from "@/entities/Bracket";
+import { BracketGameType, BracketSchedule } from "@/entities/Bracket";
+import { BracketConnectionTeam } from "@erikleisinger/bracket-generator";
 
-type ViewableBracketEvent = BracketEvent & {
-  selectedDraw: Nullable<number>;
-  selectedGame: Nullable<BracketGameType>;
-  rows: BracketRows;
-};
+import type { ViewableBracketEvent } from "../types/ViewableBracketEvent";
 
 interface BracketEventState {
   bracket: Nullable<ViewableBracketEvent>;
 }
 
+const defaultState = (): BracketEventState["bracket"] => ({
+  availableGames: [],
+  brackets: [],
+  connections: {},
+  currentlyViewingBracket: 0,
+  drawTimes: {},
+  id: null,
+  lookingForLoserConnection: null,
+  name: "",
+  numTeams: 16,
+  numWinners: [],
+  numSheets: 8,
+  readableIdIndex: {},
+  selectedDraw: null,
+  selectedGame: null,
+  schedule: {},
+  rows: {},
+});
+
 const initialState: BracketEventState = {
-  bracket: {
-    brackets: [],
-    connections: {},
-    drawTimes: {},
-    id: null,
-    name: "",
-    numTeams: 16,
-    numWinners: [],
-    numSheets: 8,
-    readableIdIndex: {},
-    selectedDraw: null,
-    selectedGame: null,
-    schedule: {},
-    rows: {},
-  },
+  bracket: defaultState(),
 };
 
 export const bracketEventSlice = createSlice({
   name: "bracketEvent",
   initialState,
   reducers: {
-    setBracketEvent: (state, action: PayloadAction<ViewableBracketEvent>) => {
-      state.bracket = action.payload;
+    resetBracketEvent: (state) => {
+      state.bracket = defaultState();
+    },
+    setAvailableGames: (state, action: PayloadAction<string[]>) => {
+      if (!state.bracket) return;
+      state.bracket.availableGames = action.payload;
+    },
+    setBracketEvent: (state, action: PayloadAction<BracketEvent>) => {
+      const games = action.payload.brackets.flat().flat();
+      state.bracket = {
+        ...action.payload,
+        availableGames: [],
+        currentlyViewingBracket: 0,
+        lookingForLoserConnection: null,
+        selectedDraw: null,
+        selectedGame: null,
+        rows: games.reduce(
+          (all, cur) => ({
+            ...all,
+            [cur.id]: { rowStart: 1, rowEnd: 2 },
+          }),
+          {}
+        ),
+      };
     },
     setBracketEventRows: (state, action: PayloadAction<BracketRows>) => {
       if (!state.bracket) return;
-      state.bracket.rows = {
+      const newRows = {
         ...state.bracket.rows,
         ...action.payload,
       };
+      state.bracket.rows = newRows;
+    },
+    setBracketSchedule: (state, action: PayloadAction<BracketSchedule>) => {
+      if (!state.bracket) return;
+      state.bracket.schedule = action.payload;
+    },
+    setCurrentlyViewingBracket: (state, action: PayloadAction<number>) => {
+      if (!state.bracket) return;
+      state.bracket.currentlyViewingBracket = action.payload;
+    },
+    setLookingForLoserConnection: (
+      state,
+      action: PayloadAction<Nullable<string>>
+    ) => {
+      if (!state.bracket) return;
+      state.bracket.lookingForLoserConnection = action.payload;
+    },
+    setNumSheets: (state, action: PayloadAction<number>) => {
+      if (!state.bracket) return;
+      state.bracket.numSheets = action.payload;
+    },
+    setNumTeams: (state, action: PayloadAction<number>) => {
+      if (!state.bracket) return;
+      state.bracket.numTeams = action.payload;
+    },
+    setNumWinners: (state, action: PayloadAction<number[]>) => {
+      if (!state.bracket) return;
+      state.bracket.numWinners = action.payload;
     },
     setSelectedGame: (
       state,
@@ -64,6 +116,27 @@ export const bracketEventSlice = createSlice({
       } else {
         state.bracket.selectedGame = action.payload;
       }
+    },
+    setSelectedDraw: (state, action: PayloadAction<Nullable<number>>) => {
+      if (!state.bracket) return;
+      state.bracket.selectedDraw = action.payload;
+    },
+    updateBracketGameTeam: (
+      state,
+      action: PayloadAction<{
+        gameId: string;
+        teamIndex: number;
+        updates: Partial<BracketConnectionTeam>;
+      }>
+    ) => {
+      const { gameId, teamIndex, updates } = action.payload;
+      const game = state.bracket.connections[gameId];
+      const { teams } = game.teams;
+      const newTeams = [...teams];
+      const newTeam = { ...newTeams[teamIndex], ...updates };
+
+      newTeams.splice(teamIndex, 1, newTeam);
+      state.bracket.connections[gameId].teams = newTeams;
     },
   },
 });
@@ -91,20 +164,70 @@ export const getBracketEventSchedule = (state: RootState) =>
 
 export const getBracketEventSelectedDraw = (state: RootState) =>
   state?.bracketEvent?.bracket?.selectedDraw || null;
+
+const EMPTY_ROWS = {};
+
 export const getBracketEventRows = (state: RootState) =>
-  state?.bracketEvent?.bracket?.rows || {};
+  state?.bracketEvent?.bracket?.rows || EMPTY_ROWS;
 
 export const getSelectedGame = (state: RootState) =>
   state?.bracketEvent?.bracket?.selectedGame || null;
 
-export const getReadableGameId = (state: RootState) => {
-  return (gameId: string | null) => {
-    if (!gameId) return "?";
-    return state?.bracketEvent?.bracket?.readableIdIndex[gameId] || "?";
-  };
+export const getSelectedDraw = (state: RootState) => {
+  return state?.bracketEvent?.bracket?.selectedDraw || null;
 };
 
-export const { setBracketEvent, setBracketEventRows, setSelectedGame } =
-  bracketEventSlice.actions;
+export const getBracketEvent = (state: RootState) =>
+  state?.bracketEvent?.bracket;
+
+export const getReadableGameId = createSelector(
+  [getBracketEventReadableIdIndex],
+  (readableIdIndex) => {
+    return (gameId: string | null) => {
+      if (!gameId) return "?";
+      return readableIdIndex[gameId] || "?";
+    };
+  }
+);
+
+export const getCurrentlyViewingBracket = (state: RootState) => {
+  return state?.bracketEvent?.bracket?.currentlyViewingBracket || 0;
+};
+
+export const getAvailableGames = createSelector(
+  (state: RootState) => state.bracketEvent?.bracket?.availableGames,
+  (availableGames) => availableGames || []
+);
+
+export const getLookingForLoserConnection = (state: RootState) => {
+  return state?.bracketEvent?.bracket?.lookingForLoserConnection || null;
+};
+export const getNumSheets = (state: RootState) => {
+  return state?.bracketEvent?.bracket?.numSheets || 8;
+};
+export const isGameAvailable = createSelector(
+  [getAvailableGames],
+  (availableGames) => {
+    return (gameId: string) => {
+      return availableGames.includes(gameId);
+    };
+  }
+);
+
+export const {
+  resetBracketEvent,
+  setBracketEvent,
+  setBracketEventRows,
+  setCurrentlyViewingBracket,
+  setSelectedGame,
+  setSelectedDraw,
+  setAvailableGames,
+  setBracketSchedule,
+  setLookingForLoserConnection,
+  setNumSheets,
+  setNumTeams,
+  setNumWinners,
+  updateBracketGameTeam,
+} = bracketEventSlice.actions;
 
 export default bracketEventSlice.reducer;

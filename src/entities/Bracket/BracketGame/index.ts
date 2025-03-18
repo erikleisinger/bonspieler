@@ -1,1 +1,1 @@
-export { BracketGame } from "./ui";
+export { BracketGame, BracketGameTeam } from "./ui";

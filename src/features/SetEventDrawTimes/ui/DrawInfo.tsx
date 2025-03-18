@@ -1,6 +1,6 @@
 import { Label } from "@/shared/ui/label";
-import { useContext } from "react";
-import { BracketContext } from "@/shared/Bracket/BracketContext";
+import { useAppSelector } from "@/lib/store";
+import { getBracketEventSchedule } from "@/entities/BracketEvent";
 import { cn } from "@/lib/utils";
 import DrawTimeValidation from "./DrawTimeValidation";
 import SelectDrawNumberButton from "./SelectDrawNumberButton";
@@ -13,7 +13,7 @@ export default function DrawInfo({
   drawNumber: number;
   withValidation?: boolean;
 }) {
-  const { schedule } = useContext(BracketContext);
+  const schedule = useAppSelector(getBracketEventSchedule);
   function getNumGamesForDraw(drawNum: number) {
     return Object.values(schedule).filter((i) => i == drawNum)?.length || 0;
   }

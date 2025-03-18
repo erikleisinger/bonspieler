@@ -1,19 +1,18 @@
 import { useContext } from "react";
-import { BracketContext } from "@/shared/Bracket/BracketContext";
+import { useAppSelector } from "@/lib/store";
+import { getCurrentlyViewingBracket } from "@/entities/BracketEvent";
 import Typography from "@/shared/ui/typography";
 import {
   CustomizeBracket,
   type CustomizeBracketProps,
 } from "@/features/CustomizeBracket";
 export default function BracketEditorBracketOptions({
-  className,
-  teamsEditable,
   teamCount,
   updateTeamCount,
   numWinners,
   updateNumWinners,
 }: CustomizeBracketProps) {
-  const { currentlyViewingBracket } = useContext(BracketContext);
+  const currentlyViewingBracket = useAppSelector(getCurrentlyViewingBracket);
 
   return (
     <>

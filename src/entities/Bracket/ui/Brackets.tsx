@@ -1,52 +1,10 @@
-import React, { useContext, useState, useEffect } from "react";
-import { BracketContext } from "@/shared/Bracket/BracketContext";
-
-import { BracketEditingContext } from "@/shared/EditableBracket/BracketEditingContext";
-import type {
-  BracketConnections,
-  BracketGame,
-  BracketDrawTimes,
-  BracketSchedule,
-} from "../types";
-import BracketGameInfo from "./BracketGameInfo";
+import React, { useEffect } from "react";
 import { scrollToGame } from "../lib/scrollToGame";
-import Slideout from "@/shared/ui/slide-out";
-import { Nullable } from "@/shared/types";
-import { useAppDispatch, useAppSelector } from "@/lib/store";
-import { getSelectedGame, setSelectedGame } from "@/entities/BracketEvent";
+import { useAppSelector } from "@/lib/store";
+import { getAvailableGames } from "@/entities/BracketEvent";
 
-export default function Brackets({
-  brackets,
-  children,
-  connections,
-  drawTimes,
-  infoChildren,
-  nextStageName,
-  readableIdIndex,
-  schedule,
-}: {
-  backButton?: React.ReactNode;
-  brackets: BracketGame[][][];
-  children?: React.ReactNode;
-  connections: BracketConnections;
-  drawTimes: BracketDrawTimes;
-  infoChildren?: React.ReactNode;
-  nextStageName: Nullable<string>;
-  prependNavigatorChildren?: React.ReactNode;
-  readableIdIndex: { [gameId: string]: string };
-  schedule: BracketSchedule;
-}) {
-  const dispatch = useAppDispatch();
-  const selectedGame = useAppSelector(getSelectedGame);
-
-  function cancelSelectedGame() {
-    dispatch(setSelectedGame(null));
-  }
-
-  const { lookingForLoserConnection, availableGames } = useContext(
-    BracketEditingContext
-  );
-  const [currentlyViewingBracket, setCurrentlyViewingBracket] = useState(0);
+export default function Brackets({ children }: { children?: React.ReactNode }) {
+  const availableGames = useAppSelector(getAvailableGames);
 
   useEffect(() => {
     if (!availableGames.length) return;
@@ -56,35 +14,8 @@ export default function Brackets({
   }, [availableGames.length]);
 
   return (
-    <BracketContext.Provider
-      value={{
-        brackets,
-        drawTimes,
-        readableIdIndex,
-        selectedGame,
-        schedule,
-        connections,
-        nextStageName,
-        currentlyViewingBracket,
-        setCurrentlyViewingBracket,
-      }}
-    >
-      <div className="relative overflow-auto">
-        <div className="flex flex-col gap-16 absolute inset-0">
-          <Slideout
-            visible={!!selectedGame && !lookingForLoserConnection}
-            fullHeight={false}
-          >
-            {selectedGame && (
-              <BracketGameInfo onBack={cancelSelectedGame}>
-                {selectedGame && !lookingForLoserConnection && infoChildren}
-              </BracketGameInfo>
-            )}
-          </Slideout>
-
-          {children}
-        </div>
-      </div>
-    </BracketContext.Provider>
+    <div className="relative overflow-auto">
+      <div className="flex flex-col gap-16 absolute inset-0">{children}</div>
+    </div>
   );
 }

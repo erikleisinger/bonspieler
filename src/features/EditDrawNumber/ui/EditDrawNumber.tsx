@@ -1,8 +1,8 @@
 "use client";
 import { DrawTime } from "@/entities/DrawTime";
-import { useState, useContext, useRef, useEffect, useMemo } from "react";
-import { BracketEditingContext } from "@/shared/EditableBracket/BracketEditingContext";
-import { BracketContext } from "@/shared/Bracket/BracketContext";
+import { useState, useRef, useEffect, useMemo } from "react";
+import { useAppDispatch } from "@/lib/store";
+import { setBracketSchedule } from "@/entities/BracketEvent";
 import { Button } from "@/shared/ui/button";
 import { FaPencilAlt } from "react-icons/fa";
 import {
@@ -12,8 +12,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/shared/ui/select";
+import { useAppSelector } from "@/lib/store";
+import {
+  getBracketEventDrawTimes,
+  getBracketEventSchedule,
+} from "@/entities/BracketEvent";
 export default function EditDrawNumber({ gameId }: { gameId: string }) {
-  const { schedule, drawTimes } = useContext(BracketContext);
+  const dispatch = useAppDispatch();
+
+  const schedule = useAppSelector(getBracketEventSchedule);
+  const drawTimes = useAppSelector(getBracketEventDrawTimes);
   const [editing, setEditing] = useState(false);
   const el = useRef(null);
 
@@ -38,13 +46,12 @@ export default function EditDrawNumber({ gameId }: { gameId: string }) {
     return times;
   }, [JSON.stringify(schedule)]);
 
-  const { setSchedule } = useContext(BracketEditingContext);
   function updateDrawTime(newTime) {
     const newSchedule = {
       ...schedule,
       [gameId]: newTime,
     };
-    setSchedule(newSchedule);
+    dispatch(setBracketSchedule(newSchedule));
   }
 
   function beginEdit() {

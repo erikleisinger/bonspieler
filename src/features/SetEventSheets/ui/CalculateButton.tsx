@@ -1,6 +1,6 @@
 import { Button } from "@/shared/ui/button";
-import { useContext } from "react";
-import { BracketEditingContext } from "@/shared/EditableBracket/BracketEditingContext";
+import { useAppDispatch } from "@/lib/store";
+import { setNumSheets } from "@/entities/BracketEvent";
 export default function CalculateButton({
   active,
   className = "",
@@ -12,9 +12,8 @@ export default function CalculateButton({
   numSheets: number;
   onCalculate: () => void;
 }) {
-  const { updateNumSheets } = useContext(BracketEditingContext);
   function recalculate() {
-    updateNumSheets(numSheets, true);
+    dispatchEvent(setNumSheets(numSheets));
     onCalculate();
   }
   return (

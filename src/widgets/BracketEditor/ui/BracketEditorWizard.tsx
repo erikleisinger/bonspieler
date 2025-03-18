@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import type { BracketEditorOptionsProps } from "../lib/types/BracketEditorOptions";
 import { Button } from "@/shared/ui/button";
 import { CustomizeBracketEvent } from "@/features/CustomizeBracketEvent";
@@ -7,22 +7,76 @@ import Typography from "@/shared/ui/typography";
 import ValidationIcon from "@/shared/ui/validation-icon";
 import { getTotalBracketWinners } from "@/shared/Bracket/getTotalBracketWinners";
 import { Label } from "@/shared/ui/label";
+import { getNewBracketAndWinnerCount } from "../lib";
+import {
+  generateTournament,
+  scheduleTournament,
+} from "@erikleisinger/bracket-generator";
+import type { BracketConnections } from "@/entities/Bracket";
+import { generateReadableIdIndex } from "../lib/generateReadableIdIndex";
 export default function BracketEditorWizard({
   teamCount,
   updateTeamCount,
   numWinners,
   updateNumWinners,
   renderBrackets,
-  numBrackets,
-  updateNumBrackets,
   numSheets,
   updateNumSheets,
   maxTeams,
   targetEndTeams,
 }: BracketEditorOptionsProps) {
+  const [numBrackets, setNumBrackets] = useState(numWinners.length);
   const isDisabled = useMemo(() => {
     return !numBrackets;
   }, [numBrackets]);
+
+  function calculateTournamentSchedule(
+    connections: BracketConnections,
+    sheets: number
+  ) {
+    const { schedule: tournamentSchedule } = scheduleTournament(
+      connections,
+      sheets
+    );
+    return tournamentSchedule;
+  }
+  function generateBracketEvent() {
+    const tournament = generateTournament(teamCount, numWinners);
+    const { brackets, connections } = tournament;
+    const tournamentSchedule = calculateTournamentSchedule(
+      connections,
+      numSheets
+    );
+    const readableIdIndex = generateReadableIdIndex(brackets);
+    const schedule = tournamentSchedule;
+
+    renderBrackets({
+      brackets,
+      connections,
+      schedule,
+      readableIdIndex,
+      numSheets,
+      numBrackets,
+      numTeams: teamCount,
+      numWinners,
+    });
+  }
+
+  function updateNumBrackets(newNumBrackets: number) {
+    const { winners, brackets } = getNewBracketAndWinnerCount(
+      newNumBrackets,
+      numBrackets,
+      numWinners
+    );
+    setNumBrackets(brackets);
+    updateNumWinners(winners);
+  }
+
+  function handleUpdateNumWinners(newWinnerCount: number, index: number) {
+    const newWinners = [...numWinners];
+    newWinners[index] = newWinnerCount;
+    updateNumWinners(newWinners);
+  }
 
   const totalWinners = getTotalBracketWinners(numWinners);
   const winnersError = !targetEndTeams
@@ -58,7 +112,7 @@ export default function BracketEditorWizard({
               teamsEditable={false}
               teamCount={teamCount - i}
               numWinners={numWinners[i]}
-              updateNumWinners={(e) => updateNumWinners(Number(e), i)}
+              updateNumWinners={(e) => handleUpdateNumWinners(Number(e), i)}
             />
           </div>
         ))}
@@ -75,7 +129,7 @@ export default function BracketEditorWizard({
 
       <div>
         <Button
-          onClick={renderBrackets}
+          onClick={generateBracketEvent}
           className="w-full"
           disabled={isDisabled}
         >

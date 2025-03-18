@@ -2,7 +2,8 @@
 import { useState } from "react";
 import { TournamentStageType, TournamentStage } from "@/entities/Tournament";
 import { TournamentViewer } from "@/widgets/TournamentViewer";
-import { BracketViewer } from "@/widgets/BracketViewer";
+
+import ViewingBracket from "./ViewingBracket";
 export default function TournamentView() {
   const [viewingStage, setViewingStage] = useState<TournamentStage | null>(
     null
@@ -18,9 +19,7 @@ export default function TournamentView() {
     <div className="fixed inset-0 overflow-auto bg-gradient  bg-center">
       {!viewingStage && <TournamentViewer onViewStage={setViewingStage} />}
       {viewingStage && isBracket && (
-        <div className="fixed inset-0">
-          <BracketViewer stage={viewingStage} onBack={onBack}></BracketViewer>
-        </div>
+        <ViewingBracket bracketStage={viewingStage} onEndView={onBack} />
       )}
     </div>
   );

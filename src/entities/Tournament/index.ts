@@ -7,7 +7,9 @@ export {
   getCurrentTournamentName,
   getTournamentTeams,
   initTournamentById,
+  updateTournamentStage,
   updateTournamentStages,
+  updateAndSaveTournament,
 } from "./model";
 
 export type { TournamentStage, TournamentTeam, Tournament } from "./types";

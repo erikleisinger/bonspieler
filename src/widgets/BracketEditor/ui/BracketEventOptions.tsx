@@ -1,7 +1,13 @@
-import { useState, useId, useContext, useEffect } from "react";
-import { BracketContext } from "@/shared/Bracket/BracketContext";
+import { useState, useId, useEffect } from "react";
+
 import type { BracketDrawTimes } from "@/entities/Bracket";
 
+import { useAppSelector } from "@/lib/store";
+import {
+  getBracketEventBrackets,
+  getBracketEventConnections,
+  getBracketEventSchedule,
+} from "@/entities/BracketEvent";
 import { Button } from "@/shared/ui/button";
 import { Label } from "@/shared/ui/label";
 import { HiOutlinePlus } from "react-icons/hi";
@@ -37,7 +43,9 @@ export default function BracketEventOptions({
   const drawTimesContainerId = useId();
   const teamsContainerId = useId();
 
-  const { brackets, connections, schedule } = useContext(BracketContext);
+  const brackets = useAppSelector(getBracketEventBrackets);
+  const connections = useAppSelector(getBracketEventConnections);
+  const schedule = useAppSelector(getBracketEventSchedule);
 
   const [selectedTab, setSelectedTab] = useState(initialTab);
 

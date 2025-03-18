@@ -5,9 +5,11 @@ export type {
   BracketConnectionRegularTeamId,
   BracketConnectionSeedTeam,
   BracketConnectionSeedTeamId,
+  BracketConnectionTeam,
   BracketDrawTimes,
   BracketGame as BracketGameType,
   BracketEvent,
+  BracketReadableIdIndex,
   BracketRows,
   BracketRow,
   BracketSchedule,
@@ -25,4 +27,4 @@ export {
 export { Bracket, Brackets } from "./ui";
 export { BRACKET_CONTAINER_ELEMENT_ID_PREFIX } from "./lib";
 export { BracketRound } from "./BracketRound";
-export { BracketGame } from "./BracketGame";
+export { BracketGame, BracketGameTeam } from "./BracketGame";

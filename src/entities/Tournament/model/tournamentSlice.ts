@@ -3,9 +3,16 @@ import {
   getTournamentById,
   getTournamentTeams as getTournamentTeamsQuery,
 } from "../api";
-import type { Tournament, TournamentTeam, TournamentStage } from "../types";
+import type {
+  Tournament,
+  TournamentTeam,
+  TournamentStage,
+  TournamentBracketStage,
+} from "../types";
 import type { Nullable } from "@/shared/types";
 import { RootState } from "@/lib/store";
+import { saveTournament } from "../api";
+import { formatTournamentStage } from "./helpers/formatTournamentStage";
 
 interface TournamentState {
   tournament: Nullable<Tournament>;
@@ -23,6 +30,18 @@ export const tournamentSlice = createSlice({
   name: "tournament",
   initialState,
   reducers: {
+    updateTournamentStage: (state, action: PayloadAction<TournamentStage>) => {
+      if (!state?.tournament?.stages) return;
+
+      const { id } = action.payload;
+      const index = (state.tournament?.stages || []).findIndex(
+        (stage) => stage.id === id
+      );
+      if (index < 0) return;
+      const formattedStage = formatTournamentStage(action.payload);
+      if (!formattedStage) return;
+      state.tournament.stages[index] = formattedStage;
+    },
     updateTournamentStages: (
       state,
       action: PayloadAction<TournamentStage[]>
@@ -72,6 +91,25 @@ export const initTournamentById = createAsyncThunk(
   }
 );
 
-export const { updateTournamentStages } = tournamentSlice.actions;
+export const updateAndSaveTournament = createAsyncThunk(
+  "tournament/updateAndSave",
+  async (stage: TournamentStage, { dispatch, getState }) => {
+    // First, update the tournament stage
+    await dispatch(updateTournamentStage(stage));
+
+    // Get the updated tournament from the state
+    const state = getState() as RootState;
+    const updatedTournament = state.tournament.tournament; // Adjust this path based on your actual state structure
+    if (!updatedTournament) return;
+    // Save the tournament
+    const result = await saveTournament(updatedTournament);
+
+    // Return the result if needed
+    return result;
+  }
+);
+
+export const { updateTournamentStage, updateTournamentStages } =
+  tournamentSlice.actions;
 
 export default tournamentSlice.reducer;

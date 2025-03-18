@@ -2,18 +2,12 @@ import { Badge } from "@/shared/ui/badge";
 import { Button } from "@/shared/ui/button";
 import { FaPencilAlt } from "react-icons/fa";
 import { useMemo } from "react";
-import { useContext } from "react";
-import { BracketEditingContext } from "@/shared/EditableBracket/BracketEditingContext";
-import { BracketContext } from "@/shared/Bracket/BracketContext";
 import { useAppSelector } from "@/lib/store";
 import { getTournamentTeams } from "@/entities/Tournament";
+import { getBracketEventConnections } from "@/entities/BracketEvent";
 export default function EditableBracketTeamList() {
   const teams = useAppSelector(getTournamentTeams);
-  const { lookingToAssignTeam, lookToAssignTeam } = useContext(
-    BracketEditingContext
-  );
-
-  const { connections } = useContext(BracketContext);
+  const connections = useAppSelector(getBracketEventConnections);
 
   const teamAssignmentMap: {
     [teamId: number]: string;

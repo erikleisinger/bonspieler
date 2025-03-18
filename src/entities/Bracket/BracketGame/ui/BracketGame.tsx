@@ -1,12 +1,16 @@
 import "./game.scss";
-import { useContext, useMemo, useEffect, useState, useRef } from "react";
-import { BracketEditingContext } from "@/shared/EditableBracket/BracketEditingContext";
+import { useEffect, useState, useRef } from "react";
 import BracketGameTeams from "./BracketGameTeams";
 import BracketGameHeader from "./BracketGameHeader";
 import type { BracketConnection, BracketGame, BracketRow } from "../../types";
 import { GAME_ELEMENT_ID_PREFIX } from "../../lib/constants/element-id";
 import { getRowSpanForGame } from "../lib/getRowSpanForGame";
-
+import { useAppSelector } from "@/lib/store";
+import {
+  getAvailableGames,
+  getSelectedDraw,
+  isGameAvailable,
+} from "@/entities/BracketEvent";
 import { GAME_HEIGHT } from "../../lib/constants/game";
 import BracketGameFinalResult from "./BracketGameFinalResult";
 
@@ -32,11 +36,10 @@ export default function BracketGame({
   rows: BracketRow;
   selected: boolean;
 }) {
-  const { availableGames, selectedDraw } = useContext(BracketEditingContext);
+  const availableGames = useAppSelector(getAvailableGames);
+  const selectedDraw = useAppSelector(getSelectedDraw);
 
-  const isAvailable = useMemo(() => {
-    return availableGames.includes(game.id);
-  }, [availableGames, game.id]);
+  const isAvailable = useAppSelector(isGameAvailable)(game.id);
 
   // function onClick(e) {
   //   if (lookingForWinnerConnection?.gameId) {
