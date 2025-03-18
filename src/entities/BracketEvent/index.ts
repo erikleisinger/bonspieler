@@ -1,7 +1,6 @@
 export { BracketEventInfo, BracketEventHeader } from "./ui";
 export {
   bracketEventReducer,
-  getAvailableGames,
   getBracketEventBrackets,
   getBracketEventConnections,
   getBracketEventDrawTimes,
@@ -22,11 +21,9 @@ export {
   getReadableGameId,
   getSelectedDraw,
   getSelectedGame,
-  isGameAvailable,
   addBracketToEvent,
   assignTeamToGame,
   resetBracketEvent,
-  setAvailableGames,
   setBracketEvent,
   setBracketEventDrawTimes,
   setBracketEventName,

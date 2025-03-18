@@ -1,11 +1,6 @@
 "use client";
 import type { BracketRows, BracketGameType } from "@/entities/Bracket";
-import {
-  Brackets,
-  Bracket,
-  BracketRound,
-  BracketGame,
-} from "@/entities/Bracket";
+import { Bracket, BracketRound, BracketGame } from "@/entities/Bracket";
 import { useAppDispatch, useAppSelector } from "@/lib/store";
 import { getSelectedGame } from "@/entities/BracketEvent";
 import {
@@ -34,7 +29,7 @@ export default function BracketViewer({
   }
 
   return (
-    <Brackets>
+    <>
       {brackets.map((rounds, bracketIndex) => {
         return (
           <Bracket
@@ -75,6 +70,6 @@ export default function BracketViewer({
           </Bracket>
         );
       })}
-    </Brackets>
+    </>
   );
 }

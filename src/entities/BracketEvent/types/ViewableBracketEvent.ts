@@ -5,7 +5,6 @@ import type {
 } from "@/entities/Bracket";
 import type { Nullable } from "@/shared/types";
 export type ViewableBracketEvent = BracketEvent & {
-  availableGames: string[];
   currentlyViewingBracket: number;
   lookingForLoserConnection: Nullable<string>;
   lookingToAssignTeam: Nullable<string>;

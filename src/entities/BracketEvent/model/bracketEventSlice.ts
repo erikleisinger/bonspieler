@@ -19,7 +19,6 @@ interface BracketEventState {
 }
 
 const defaultState = (): BracketEventState["bracket"] => ({
-  availableGames: [],
   brackets: [],
   connections: {},
   currentlyViewingBracket: 0,
@@ -96,15 +95,10 @@ export const bracketEventSlice = createSlice({
     resetBracketEvent: (state) => {
       state.bracket = defaultState();
     },
-    setAvailableGames: (state, action: PayloadAction<string[]>) => {
-      if (!state.bracket) return;
-      state.bracket.availableGames = action.payload;
-    },
     setBracketEvent: (state, action: PayloadAction<BracketEvent>) => {
       const games = action.payload.brackets.flat().flat();
       state.bracket = {
         ...action.payload,
-        availableGames: [],
         currentlyViewingBracket: 0,
         lookingForLoserConnection: null,
         selectedDraw: null,
@@ -270,11 +264,6 @@ export const getCurrentlyViewingBracket = (state: RootState) => {
   return state?.bracketEvent?.bracket?.currentlyViewingBracket || 0;
 };
 
-export const getAvailableGames = createSelector(
-  (state: RootState) => state.bracketEvent?.bracket?.availableGames,
-  (availableGames) => availableGames || []
-);
-
 export const getLookingForLoserConnection = (state: RootState) => {
   return state?.bracketEvent?.bracket?.lookingForLoserConnection || null;
 };
@@ -285,20 +274,11 @@ export const getLookingToAssignTeam = (state: RootState) => {
 export const getNumSheets = (state: RootState) => {
   return state?.bracketEvent?.bracket?.numSheets || 8;
 };
-export const isGameAvailable = createSelector(
-  [getAvailableGames],
-  (availableGames) => {
-    return (gameId: string) => {
-      return availableGames.includes(gameId);
-    };
-  }
-);
 
 export const {
   addBracketToEvent,
   assignTeamToGame,
   resetBracketEvent,
-  setAvailableGames,
   setBracketEvent,
   setBracketEventDrawTimes,
   setBracketEventName,
