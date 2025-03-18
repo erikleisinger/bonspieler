@@ -20,6 +20,7 @@ export {
   getNumSheets,
   getAvailableGames,
   getLookingForLoserConnection,
+  addBracketToEvent,
   isGameAvailable,
   setBracketEvent,
   setBracketEventDrawTimes,

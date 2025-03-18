@@ -1,0 +1,1 @@
+export { generateBracket } from "./lib";

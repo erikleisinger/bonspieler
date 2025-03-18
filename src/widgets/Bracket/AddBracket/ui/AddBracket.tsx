@@ -23,7 +23,7 @@ export default function AddNewBracket({
     isSeeded,
   }: {
     numTeams: number;
-    numWinners: number;
+    numWinners: number[];
     isSeeded: boolean;
   }) => void;
 }) {
@@ -39,7 +39,7 @@ export default function AddNewBracket({
   function handleAddBracket() {
     addBracket({
       numTeams,
-      numWinners,
+      numWinners: [numWinners],
       isSeeded,
     });
     setTimeout(() => {

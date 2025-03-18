@@ -7,6 +7,8 @@ import {
   getSelectedGame,
   setSelectedGame,
   setSelectedDraw,
+  getBracketEventNumSheets,
+  addBracketToEvent,
 } from "@/entities/BracketEvent";
 import { EditDrawNumber } from "@/features/EditDrawNumber";
 import { getBracketEvent } from "@/entities/BracketEvent";
@@ -19,6 +21,8 @@ import { Button } from "@/shared/ui/button";
 import { FaCog } from "react-icons/fa";
 import { Nullable } from "@/shared/types";
 import { BracketEventOptions } from "@/widgets/Bracket/BracketEventOptions";
+import { AddBracket } from "@/widgets/Bracket/AddBracket";
+import { generateBracket } from "@/features/Bracket/GenerateBracket";
 export default function EditingBracket({
   onEndView,
 }: {
@@ -28,12 +32,31 @@ export default function EditingBracket({
   const selectedGame = useAppSelector(getSelectedGame);
   const bracketStage = useAppSelector(getBracketEvent);
   const brackets = useAppSelector(getBracketEventBrackets);
+  const numSheets = useAppSelector(getBracketEventNumSheets);
   function cancelSelectedGame() {
     dispatch(setSelectedGame(null));
   }
 
   async function handleSave() {
     dispatch(updateAndSaveTournament(bracketStage));
+  }
+
+  function onAddBracket({
+    numTeams,
+    numWinners,
+    isSeeded,
+  }: {
+    numTeams: number;
+    numWinners: number[];
+    isSeeded: boolean;
+  }) {
+    const data = generateBracket({
+      numTeams,
+      numWinners,
+      numSheets,
+      isSeeded,
+    });
+    dispatch(addBracketToEvent(data));
   }
 
   const [bracketToEdit, setBracketToEdit] = useState<Nullable<number>>(null);
@@ -86,6 +109,7 @@ export default function EditingBracket({
                   setBracketToEdit(bracketIndex)
                 }
               />
+              <AddBracket addBracket={onAddBracket} />
             </div>
             <Button onClick={() => setShowEventEditor(true)}>
               <FaCog />

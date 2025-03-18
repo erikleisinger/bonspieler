@@ -1,8 +1,15 @@
 import { createSlice, PayloadAction, createSelector } from "@reduxjs/toolkit";
 import type { Nullable } from "@/shared/types";
 import { RootState } from "@/lib/store";
-import type { BracketEvent, BracketRows } from "@/entities/Bracket";
-import { BracketGameType, BracketSchedule } from "@/entities/Bracket";
+import type {
+  BracketEvent,
+  BracketReadableIdIndex,
+  BracketRows,
+  BracketGameType,
+  BracketSchedule,
+  BracketConnections,
+} from "@/entities/Bracket";
+
 import { BracketConnectionTeam } from "@erikleisinger/bracket-generator";
 
 import type { ViewableBracketEvent } from "../types/ViewableBracketEvent";
@@ -38,6 +45,32 @@ export const bracketEventSlice = createSlice({
   name: "bracketEvent",
   initialState,
   reducers: {
+    addBracketToEvent: (
+      state,
+      action: PayloadAction<{
+        brackets: BracketGameType[][][];
+        connections: BracketConnections;
+        schedule: BracketSchedule;
+        readableIdIndex: BracketReadableIdIndex;
+        numTeams: number;
+        numWinners: number[];
+      }>
+    ) => {
+      state.bracket = {
+        ...state.bracket,
+        brackets: [...state.bracket?.brackets, ...action.payload.brackets],
+        connections: {
+          ...state.bracket?.connections,
+          ...action.payload.connections,
+        },
+        readableIdIndex: {
+          ...state.bracket?.readableIdIndex,
+          ...action.payload.readableIdIndex,
+        },
+        schedule: { ...state.bracket?.schedule, ...action.payload.schedule },
+        numWinners: [...state.bracket.numWinners, ...action.payload.numWinners],
+      };
+    },
     resetBracketEvent: (state) => {
       state.bracket = defaultState();
     },
@@ -229,6 +262,7 @@ export const isGameAvailable = createSelector(
 );
 
 export const {
+  addBracketToEvent,
   resetBracketEvent,
   setAvailableGames,
   setBracketEvent,

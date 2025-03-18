@@ -1,7 +1,7 @@
 import { useMemo, useState, useContext } from "react";
 import { Button } from "@/shared/ui/button";
-import { CustomizeBracketEvent } from "@/features/CustomizeBracketEvent";
-import { CustomizeBracket } from "@/features/CustomizeBracket";
+import { CustomizeBracketEvent } from "@/features/Bracket/CustomizeBracketEvent";
+import { CustomizeBracket } from "@/features/Bracket/CustomizeBracket";
 import Typography from "@/shared/ui/typography";
 import ValidationIcon from "@/shared/ui/validation-icon";
 import { getTotalBracketWinners } from "@/shared/Bracket/getTotalBracketWinners";
@@ -14,6 +14,7 @@ import {
 import type { BracketConnections } from "@/entities/Bracket";
 import { generateReadableIdIndex } from "../lib/generateReadableIdIndex";
 import { TournamentStageContext } from "@/shared/TournamentStage";
+import { generateBracket } from "@/features/Bracket/GenerateBracket";
 interface BracketEditorOptionsProps {
   teamCount: number;
   updateTeamCount: (e: number) => void;
@@ -44,35 +45,14 @@ export default function BracketEditorWizard({
     return !numBrackets;
   }, [numBrackets]);
 
-  function calculateTournamentSchedule(
-    connections: BracketConnections,
-    sheets: number
-  ) {
-    const { schedule: tournamentSchedule } = scheduleTournament(
-      connections,
-      sheets
-    );
-    return tournamentSchedule;
-  }
   function generateBracketEvent() {
-    const tournament = generateTournament(teamCount, numWinners);
-    const { brackets, connections } = tournament;
-    const tournamentSchedule = calculateTournamentSchedule(
-      connections,
-      numSheets
-    );
-    const readableIdIndex = generateReadableIdIndex(brackets);
-    const schedule = tournamentSchedule;
-
     renderBrackets({
-      brackets,
-      connections,
-      schedule,
-      readableIdIndex,
+      ...generateBrackets({
+        numTeams: teamCount,
+        numWinners,
+        numSheets,
+      }),
       numSheets,
-      numBrackets,
-      numTeams: teamCount,
-      numWinners,
     });
   }
 
