@@ -2,7 +2,7 @@
 import { Provider } from "react-redux";
 import { store } from "@/lib/store";
 import { use } from "react";
-import { ViewTournament } from "@/views/ViewTournament";
+import { ViewTournament } from "@/views/Tournament/ViewTournament";
 import { TournamentContextProvider } from "@/entities/Tournament";
 
 export default function Page({

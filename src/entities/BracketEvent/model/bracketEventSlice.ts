@@ -231,7 +231,7 @@ export const getReadableGameId = createSelector(
   [getBracketEventReadableIdIndex],
   (readableIdIndex) => {
     return (gameId: string | null) => {
-      if (!gameId) return "?";
+      if (!gameId) return null;
       return readableIdIndex[gameId] || "?";
     };
   }

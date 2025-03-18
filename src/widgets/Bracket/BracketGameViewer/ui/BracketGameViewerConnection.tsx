@@ -46,6 +46,8 @@ export default function BracketGameViewerConnection({
   }
 
   function onClick() {
+    if (isLoser && !gameConnection.loserTo) return;
+    if (isWinner && !gameConnection.winnerTo) return;
     dispatch(
       setSelectedGame(
         isLoser ? gameConnection.loserTo : gameConnection.winnerTo

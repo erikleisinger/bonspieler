@@ -1,9 +1,9 @@
 import { TournamentStage } from "@/entities/Tournament";
-import { TournamentStageList } from "@/features/TournamentStageList";
+import { TournamentStageList } from "@/features/Tournament/TournamentStageList";
 import {
   TournamentNavigation,
   TournamentTab,
-} from "@/features/TournamentNavigation";
+} from "@/features/Tournament/TournamentNavigation";
 import { useAppSelector } from "@/lib/store";
 import { getCurrentTournament } from "@/entities/Tournament";
 

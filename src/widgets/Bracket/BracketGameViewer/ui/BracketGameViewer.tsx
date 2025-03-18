@@ -8,7 +8,6 @@ import {
   getSelectedGame,
   setSelectedGame,
   getBracketEventConnections,
-  getBracketEventBrackets,
 } from "@/entities/BracketEvent";
 import { scrollToGame } from "@/entities/Bracket";
 import BracketGameViewerHeader from "./BracketGameViewerHeader";
@@ -21,7 +20,6 @@ export default function BracketGameViewer({
   drawTimeChildren?: React.ReactNode;
   onBack?: () => void;
 }) {
-  const brackets = useAppSelector(getBracketEventBrackets);
   const connections = useAppSelector(getBracketEventConnections);
 
   const selectedGame = useAppSelector(getSelectedGame);
@@ -36,11 +34,6 @@ export default function BracketGameViewer({
     if (!selectedGame) return null;
     return connections[selectedGame.id];
   }, [connections, selectedGame]);
-
-  const isOnlyBracket = brackets.length === 1;
-
-  const isLastBracket =
-    !isOnlyBracket && brackets.length - 1 === selectedGame?.bracketNumber;
 
   return (
     <div className="text-glass-foreground grid grid-rows-[auto_1fr] min-h-full">

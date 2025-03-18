@@ -6,15 +6,8 @@ import Typography from "@/shared/ui/typography";
 import ValidationIcon from "@/shared/ui/validation-icon";
 import { getTotalBracketWinners } from "@/shared/Bracket/getTotalBracketWinners";
 import { Label } from "@/shared/ui/label";
-import { getNewBracketAndWinnerCount } from "../lib";
-import {
-  generateTournament,
-  scheduleTournament,
-} from "@erikleisinger/bracket-generator";
-import type { BracketConnections } from "@/entities/Bracket";
-import { generateReadableIdIndex } from "../lib/generateReadableIdIndex";
+import { getNewBracketAndWinnerCount } from "../lib/getNewBracketAndWinnerCount";
 import { TournamentStageContext } from "@/shared/TournamentStage";
-import { generateBracket } from "@/features/Bracket/GenerateBracket";
 interface BracketEditorOptionsProps {
   teamCount: number;
   updateTeamCount: (e: number) => void;
@@ -27,7 +20,7 @@ interface BracketEditorOptionsProps {
   updateNumSheets: (e: number) => void;
 }
 
-export default function BracketEditorWizard({
+export default function CreateBracketWizard({
   teamCount,
   updateTeamCount,
   numWinners,

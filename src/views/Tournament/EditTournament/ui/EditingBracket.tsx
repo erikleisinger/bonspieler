@@ -1,4 +1,4 @@
-import { BracketEditor } from "@/widgets/Bracket/BracketEditor";
+import { BracketViewer } from "@/widgets/Bracket/BracketViewer";
 import Slideout from "@/shared/ui/slide-out";
 import { BracketGameViewer } from "@/widgets/Bracket/BracketGameViewer";
 import { useAppDispatch, useAppSelector } from "@/lib/store";
@@ -9,6 +9,13 @@ import {
   setSelectedDraw,
   getBracketEventNumSheets,
   addBracketToEvent,
+  getBracketEventName,
+  getBracketEventNumTeams,
+  getBracketEventNumWinners,
+  setNumSheets,
+  setNumTeams,
+  setNumWinners,
+  setBracketEvent,
 } from "@/entities/BracketEvent";
 import { EditDrawNumber } from "@/features/EditDrawNumber";
 import { getBracketEvent } from "@/entities/BracketEvent";
@@ -23,6 +30,11 @@ import { Nullable } from "@/shared/types";
 import { BracketEventOptions } from "@/widgets/Bracket/BracketEventOptions";
 import { AddBracket } from "@/widgets/Bracket/AddBracket";
 import { generateBracket } from "@/features/Bracket/GenerateBracket";
+import { CreateBracketEventWizard } from "@/widgets/Bracket/CreateBracketEventWizard";
+import BracketViewLayout from "@/shared/layouts/BracketViewLayout";
+import EditingBracketHeader from "./EditingBracketHeader";
+import { scrollToGame } from "@/entities/Bracket";
+
 export default function EditingBracket({
   onEndView,
 }: {
@@ -33,6 +45,9 @@ export default function EditingBracket({
   const bracketStage = useAppSelector(getBracketEvent);
   const brackets = useAppSelector(getBracketEventBrackets);
   const numSheets = useAppSelector(getBracketEventNumSheets);
+  const eventName = useAppSelector(getBracketEventName);
+  const numTeams = useAppSelector(getBracketEventNumTeams);
+  const numWinners = useAppSelector(getBracketEventNumWinners);
   function cancelSelectedGame() {
     dispatch(setSelectedGame(null));
   }
@@ -59,19 +74,57 @@ export default function EditingBracket({
     dispatch(addBracketToEvent(data));
   }
 
+  function renderBracketsFromWizard(newBracketEvent: BracketEvent) {
+    dispatch(
+      setBracketEvent({
+        ...newBracketEvent,
+        id,
+        order,
+        type: TournamentStageType.Bracket,
+      })
+    );
+    setShowWizard(false);
+  }
+
+  function onGameClick(game: BracketGameType) {
+    dispatch(setSelectedGame(game));
+    scrollToGame(game.id);
+  }
+
   const [bracketToEdit, setBracketToEdit] = useState<Nullable<number>>(null);
   const [showEventEditor, setShowEventEditor] = useState(false);
+
+  const [showWizard, setShowWizard] = useState(false);
 
   return (
     <TournamentStageContextProvider stage={bracketStage}>
       <div className="fixed inset-0">
-        <BracketEditor
-          onBack={onEndView}
-          onSave={handleSave}
-          onEditBracket={(bracketIndex: number) =>
-            setBracketToEdit(bracketIndex)
-          }
-        ></BracketEditor>
+        <BracketViewLayout>
+          <EditingBracketHeader
+            eventName={eventName}
+            onBack={showWizard ? onEndView : () => setShowWizard(true)}
+            onNext={showWizard ? () => setShowWizard(false) : null}
+          />
+
+          {showWizard ? (
+            <CreateBracketEventWizard
+              teamCount={numTeams}
+              updateTeamCount={(e) => dispatch(setNumTeams(e))}
+              numWinners={numWinners}
+              updateNumWinners={(e) => dispatch(setNumWinners(e))}
+              renderBrackets={renderBracketsFromWizard}
+              numSheets={numSheets}
+              updateNumSheets={(e) => dispatch(setNumSheets(e))}
+            />
+          ) : (
+            <BracketViewer onGameClick={onGameClick}></BracketViewer>
+          )}
+        </BracketViewLayout>
+
+        {/* 
+        Game edit options 
+        */}
+
         <Slideout visible={!!selectedGame} fullHeight={false}>
           {selectedGame && (
             <BracketGameViewer
@@ -80,6 +133,11 @@ export default function EditingBracket({
             />
           )}
         </Slideout>
+
+        {/*
+            Bracket edit options
+            */}
+
         <Slideout visible={bracketToEdit !== null}>
           {bracketToEdit !== null && (
             <BracketOptions
@@ -90,6 +148,11 @@ export default function EditingBracket({
             />
           )}
         </Slideout>
+
+        {/*
+            Bracket stage edit options
+            */}
+
         <Slideout visible={showEventEditor}>
           {showEventEditor && (
             <BracketEventOptions
@@ -100,6 +163,10 @@ export default function EditingBracket({
             />
           )}
         </Slideout>
+
+        {/*
+          Bracket navigation
+          */}
         {
           <div className="fixed right-4 bottom-4 md:right-8 md:bottom-8 z-40 flex flex-col gap-2 ">
             <div className="flex gap-2 items-center justify-end">
