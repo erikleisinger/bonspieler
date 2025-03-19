@@ -46,6 +46,7 @@ export const bracketEventSlice = createSlice({
     setSelectedGame: reducers.setSelectedGame,
     setSelectedDraw: reducers.setBracketEventField("selectedDraw"),
     updateBracketGameTeam: reducers.updateBracketGameTeam,
+    updateBracketEvent: reducers.updateBracketEvent,
   },
 });
 
@@ -135,6 +136,7 @@ export const {
   setSelectedDraw,
   setSelectedGame,
   updateBracketGameTeam,
+  updateBracketEvent,
 } = bracketEventSlice.actions;
 
 export default bracketEventSlice.reducer;

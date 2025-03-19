@@ -1,7 +1,14 @@
-import { TournamentStage, TournamentStageType } from "../../types";
-import type { BracketEvent } from "@/entities/Bracket";
-import { ViewableBracketEvent } from "@/entities/BracketEvent";
-function formatBracketStage(bracketStage: ViewableBracketEvent): BracketEvent {
+import {
+  TournamentBracketStage,
+  TournamentStage,
+  TournamentStageType,
+  ViewableTournamentBracketStage,
+  ViewableTournamentStage,
+} from "../../types";
+
+function formatBracketStageForSave(
+  bracketStage: ViewableTournamentBracketStage
+): TournamentBracketStage {
   const {
     brackets,
     connections,
@@ -31,9 +38,11 @@ function formatBracketStage(bracketStage: ViewableBracketEvent): BracketEvent {
   };
 }
 
-export function formatTournamentStage(stage: TournamentStage) {
+export function formatTournamentStageForSave(
+  stage: ViewableTournamentStage
+): TournamentStage {
   const { type } = stage;
   if (type === TournamentStageType.Bracket) {
-    return formatBracketStage(stage);
+    return formatBracketStageForSave(stage);
   }
 }

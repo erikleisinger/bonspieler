@@ -3,5 +3,7 @@ export {
   type TournamentStage,
   TournamentStageType,
   type TournamentBracketStage,
+  type ViewableTournamentBracketStage,
+  type ViewableTournamentStage,
 } from "./TournamentStage";
 export type { Tournament } from "./Tournament";

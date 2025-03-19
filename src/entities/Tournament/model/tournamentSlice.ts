@@ -1,32 +1,12 @@
-import {
-  createAsyncThunk,
-  createSlice,
-  PayloadAction,
-  createSelector,
-} from "@reduxjs/toolkit";
-import {
-  getTournamentById,
-  getTournamentTeams as getTournamentTeamsQuery,
-} from "../api";
-import type {
-  Tournament,
-  TournamentTeam,
-  TournamentStage,
-  TournamentBracketStage,
-} from "../types";
-import type { Nullable } from "@/shared/types";
+import { createSlice } from "@reduxjs/toolkit";
+
+import type { TournamentStoreState } from "../types/TournamentStoreState";
 import { RootState } from "@/lib/store";
-import { saveTournament } from "../api";
-import { formatTournamentStage } from "./helpers/formatTournamentStage";
-import { getTotalBracketWinners } from "@/shared/Bracket/getTotalBracketWinners";
+import * as reducers from "./reducers";
+import * as selectors from "./selectors";
+import * as thunks from "./thunks";
 
-interface TournamentState {
-  tournament: Nullable<Tournament>;
-  teams: TournamentTeam[];
-  status: "idle" | "loading" | "failed";
-}
-
-const initialState: TournamentState = {
+const initialState: TournamentStoreState = {
   tournament: null,
   teams: [],
   status: "idle",
@@ -36,26 +16,8 @@ export const tournamentSlice = createSlice({
   name: "tournament",
   initialState,
   reducers: {
-    updateTournamentStage: (state, action: PayloadAction<TournamentStage>) => {
-      if (!state?.tournament?.stages) return;
-
-      const { id } = action.payload;
-      const index = (state.tournament?.stages || []).findIndex(
-        (stage) => stage.id === id
-      );
-      if (index < 0) return;
-      const formattedStage = formatTournamentStage(action.payload);
-      if (!formattedStage) return;
-      state.tournament.stages[index] = formattedStage;
-    },
-    updateTournamentStages: (
-      state,
-      action: PayloadAction<TournamentStage[]>
-    ) => {
-      if (state.tournament) {
-        state.tournament.stages = action.payload;
-      }
-    },
+    updateTournamentStage: reducers.updateTournamentStage,
+    updateTournamentStages: reducers.updateTournamentStages,
   },
   extraReducers: (builder) => {
     builder
@@ -72,7 +34,11 @@ export const tournamentSlice = createSlice({
       })
       .addCase(initTournamentById.rejected, (state) => {
         state.status = "failed";
-      });
+      })
+      .addCase(
+        reducers.updateTournamentStageAction,
+        reducers.updateTournamentStage
+      );
   },
 });
 
@@ -81,83 +47,20 @@ export const getCurrentTournament = (state: RootState) =>
 export const getCurrentTournamentStatus = (state: RootState) =>
   state.tournament.status;
 
-export const getCurrentTournamentName = (state: RootState) =>
-  state.tournament?.tournament?.name || null;
+export const getCurrentTournamentName = selectors.getTournamentField("name");
 
 export const getTournamentTeams = (state: RootState) => state.tournament.teams;
 
-export const getTournamentStages = (state: RootState) =>
-  state.tournament.tournament?.stages || [];
+export const getTournamentStages = selectors.getTournamentField("stages");
 
-export const getStartTeams = createSelector([getTournamentStages], (stages) => {
-  return (stageIndex: number) => {
-    if (!stageIndex) return null;
-    const prevStage = stages[stageIndex - 1];
-    const { numWinners } = prevStage;
-    return getTotalBracketWinners(numWinners);
-  };
-});
-export const getEndTeams = createSelector([getTournamentStages], (stages) => {
-  return (stageIndex: number) => {
-    if (stageIndex >= stages.length - 1) return null;
-    const nextStage = stages[stageIndex + 1];
-    const { numTeams } = nextStage;
-    return numTeams;
-  };
-});
+export const getStartTeams = selectors.getStartTeams;
+export const getEndTeams = selectors.getEndTeams;
+export const getNextStageName = selectors.getNextStageName;
+export const getPrevStageName = selectors.getPrevStageName;
 
-export const getNextStageName = createSelector(
-  [getTournamentStages],
-  (stages) => {
-    return (stageIndex: number) => {
-      if (stageIndex >= stages.length - 1) return null;
-      const nextStage = stages[stageIndex + 1];
-      const { name = "" } = nextStage || {};
-      return name;
-    };
-  }
-);
+export const initTournamentById = thunks.initTournamentById;
 
-export const getPrevStageName = createSelector(
-  [getTournamentStages],
-  (stages) => {
-    return (stageIndex: number) => {
-      if (!stageIndex) return null;
-      const prevStage = stages[stageIndex - 1];
-      const { name = "" } = prevStage || {};
-      return name;
-    };
-  }
-);
-
-export const initTournamentById = createAsyncThunk(
-  "tournament/initTournamentById",
-  async (tournamentId: string) => {
-    const [tournament, teams] = await Promise.all([
-      getTournamentById(tournamentId),
-      getTournamentTeamsQuery(tournamentId),
-    ]);
-    return { tournament, teams };
-  }
-);
-
-export const updateAndSaveTournament = createAsyncThunk(
-  "tournament/updateAndSave",
-  async (stage: TournamentStage, { dispatch, getState }) => {
-    // First, update the tournament stage
-    await dispatch(updateTournamentStage(stage));
-
-    // Get the updated tournament from the state
-    const state = getState() as RootState;
-    const updatedTournament = state.tournament.tournament; // Adjust this path based on your actual state structure
-    if (!updatedTournament) return;
-    // Save the tournament
-    const result = await saveTournament(updatedTournament);
-
-    // Return the result if needed
-    return result;
-  }
-);
+export const updateAndSaveTournament = thunks.updateAndSaveTournament;
 
 export const { updateTournamentStage, updateTournamentStages } =
   tournamentSlice.actions;

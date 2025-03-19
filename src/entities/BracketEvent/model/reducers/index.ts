@@ -7,4 +7,5 @@ export { setBracketEventDrawTimes } from "./setBracketEventDrawTimes";
 export { setBracketEventField } from "./setBracketEventField";
 export { setBracketEventRows } from "./setBracketEventRows";
 export { setSelectedGame } from "./setSelectedGame";
+export { updateBracketEvent } from "./updateBracketEvent";
 export { updateBracketGameTeam } from "./updateBracketGameTeam";

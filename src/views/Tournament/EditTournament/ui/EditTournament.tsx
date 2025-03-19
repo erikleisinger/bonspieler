@@ -1,57 +1,62 @@
-"use client";
 import { useState } from "react";
-import { TournamentStageType, TournamentStage } from "@/entities/Tournament";
-import { TournamentEditor } from "@/widgets/Tournament/TournamentEditor";
-import { BracketEvent } from "@/entities/Bracket";
-import { saveTournament } from "../lib";
-import { useAppDispatch, useAppSelector } from "@/lib/store";
+
+/* Types & enums */
+
 import {
-  getCurrentTournament,
-  updateTournamentStages,
+  TournamentStageType,
+  type TournamentStage,
 } from "@/entities/Tournament";
-import EditingBracket from "./EditingBracket";
+
+/* Store */
+
+import { useAppDispatch, useAppSelector } from "@/lib/store";
+import { getCurrentTournament } from "@/entities/Tournament";
 import { setBracketEvent, resetBracketEvent } from "@/entities/BracketEvent";
+
+/* Components */
+
+import { TournamentEditor } from "@/widgets/Tournament/TournamentEditor";
+
+import EditingStage from "./EditingStage";
+
+/* Utils */
+import { saveTournament } from "../lib";
+
 export default function EditTournament() {
   const dispatch = useAppDispatch();
   const tournament = useAppSelector(getCurrentTournament);
 
-  const [editedStageType, setEditedStageType] =
-    useState<TournamentStageType | null>(null);
+  const [editedStage, setEditedStage] = useState<TournamentStage | null>(null);
 
   function onEditStage(stage: TournamentStage) {
     if (stage.type === TournamentStageType.Bracket) {
       dispatch(setBracketEvent(stage));
-      setEditedStageType(TournamentStageType.Bracket);
+      setEditedStage(stage);
     }
   }
 
-  const isBracket = editedStageType === TournamentStageType.Bracket;
-
-  function discardChanges() {
-    if (editedStageType === TournamentStageType.Bracket) {
+  function endEditStage() {
+    if (!editedStage) return;
+    if (editedStage.type === TournamentStageType.Bracket) {
       dispatch(resetBracketEvent());
     }
-
-    setEditedStageType(null);
+    setEditedStage(null);
   }
 
-  const [saving, setSaving] = useState(false);
   async function handleSaveTournament() {
-    setSaving(true);
+    if (!tournament) return;
     await saveTournament(tournament);
-    setSaving(false);
   }
 
   return (
     <div className="fixed inset-0 overflow-auto  bg-center bg-gradient">
-      {!editedStageType && (
+      {editedStage ? (
+        <EditingStage onBack={endEditStage} stage={editedStage} />
+      ) : (
         <TournamentEditor
           onEditStage={onEditStage}
           saveTournament={handleSaveTournament}
         />
-      )}
-      {editedStageType && isBracket && (
-        <EditingBracket onEndView={discardChanges} />
       )}
     </div>
   );

@@ -1,6 +1,12 @@
-import { BracketViewer } from "@/widgets/Bracket/BracketViewer";
-import Slideout from "@/shared/ui/slide-out";
-import { BracketGameViewer } from "@/widgets/Bracket/BracketGameViewer";
+import { useState } from "react";
+
+// Types & enums
+
+import type { BracketEvent, BracketGameType } from "@/entities/Bracket";
+import type { Nullable } from "@/shared/types";
+
+/* Store */
+
 import { useAppDispatch, useAppSelector } from "@/lib/store";
 import {
   getBracketEventBrackets,
@@ -14,32 +20,39 @@ import {
   setNumSheets,
   setNumTeams,
   setNumWinners,
-  setBracketEvent,
   getLookingToAssignTeam,
   assignTeamToGame,
   getBracketEventId,
   getBracketEventOrder,
+  updateBracketEvent,
 } from "@/entities/BracketEvent";
-import { EditDrawNumber } from "@/features/EditDrawNumber";
 import { getBracketEvent } from "@/entities/BracketEvent";
 import { updateAndSaveTournament } from "@/entities/Tournament";
-import { TournamentStageContextProvider } from "@/shared/TournamentStage";
-import { BracketEditor } from "@/widgets/Bracket/BracketEditor";
-import { useState } from "react";
-import { BracketNavigator } from "@/features/Bracket/BracketNavigator";
-import { Button } from "@/shared/ui/button";
-import { FaCog } from "react-icons/fa";
-import { Nullable } from "@/shared/types";
-import { BracketEventOptions } from "@/widgets/Bracket/BracketEventOptions";
+
+/* Context */
+
+import GameAvailabilityContextProvider from "./GameAvailabilityContextProvider";
+
+/* Components */
+
 import { AddBracket } from "@/widgets/Bracket/AddBracket";
-import { generateBracket } from "@/features/Bracket/GenerateBracket";
+import { BracketEditor } from "@/widgets/Bracket/BracketEditor";
+import { BracketEventOptions } from "@/widgets/Bracket/BracketEventOptions";
+import { BracketGameViewer } from "@/widgets/Bracket/BracketGameViewer";
+import { BracketNavigator } from "@/features/Bracket/BracketNavigator";
+import { BracketViewer } from "@/widgets/Bracket/BracketViewer";
+import { Button } from "@/shared/ui/button";
 import { CreateBracketEventWizard } from "@/widgets/Bracket/CreateBracketEventWizard";
+import { EditDrawNumber } from "@/features/EditDrawNumber";
+import { FaCog } from "react-icons/fa";
+import { TournamentStageContextProvider } from "@/shared/TournamentStage";
 import BracketViewLayout from "@/shared/layouts/BracketViewLayout";
 import EditingBracketHeader from "./EditingBracketHeader";
+import Slideout from "@/shared/ui/slide-out";
+
+/* Utils */
+
 import { scrollToGame } from "@/entities/Bracket";
-import type { BracketEvent, BracketGameType } from "@/entities/Bracket";
-import GameAvailabilityContextProvider from "./GameAvailabilityContextProvider";
-import { TournamentStageType } from "@/entities/Tournament";
 
 export default function EditingBracket({
   onEndView,
@@ -55,25 +68,18 @@ export default function EditingBracket({
   const numTeams = useAppSelector(getBracketEventNumTeams);
   const numWinners = useAppSelector(getBracketEventNumWinners);
   const lookingToAssignTeam = useAppSelector(getLookingToAssignTeam);
-  const id = useAppSelector(getBracketEventId);
-  const order = useAppSelector(getBracketEventOrder);
+
   function cancelSelectedGame() {
     dispatch(setSelectedGame(null));
   }
 
   async function handleSave() {
+    if (!bracketStage) return;
     dispatch(updateAndSaveTournament(bracketStage));
   }
 
   function renderBracketsFromWizard(newBracketEvent: BracketEvent) {
-    dispatch(
-      setBracketEvent({
-        ...newBracketEvent,
-        id,
-        order,
-        type: TournamentStageType.Bracket,
-      })
-    );
+    dispatch(updateBracketEvent(newBracketEvent));
     setShowWizard(false);
   }
 
