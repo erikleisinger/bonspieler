@@ -10,25 +10,14 @@ export default function BracketEventInfo({
   connections,
   schedule,
   winners,
+  numTeams,
 }: {
   brackets: BracketGameType[][][];
   connections: BracketConnections;
   schedule: BracketSchedule;
   winners: number[];
+  numTeams: number;
 }) {
-  const numTeams = (brackets || [])
-    .flat()
-    .flat()
-    .flat()
-    .reduce((all, { id: gameId }) => {
-      return (
-        all +
-        ((connections[gameId]?.teams || []).filter(
-          ({ teamId }) => teamId === "seed"
-        )?.length || 0)
-      );
-    }, 0);
-
   const numDraws = !Object.values(schedule || {})?.length
     ? 0
     : Math.max(...Object.values(schedule || {}));

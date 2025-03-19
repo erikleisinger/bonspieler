@@ -31,6 +31,7 @@ export default function TournamentStageInfo({
             schedule={stage.schedule}
             connections={stage.connections}
             brackets={stage.brackets}
+            numTeams={stage.numTeams}
             winners={stage.numWinners}
           />
         )}

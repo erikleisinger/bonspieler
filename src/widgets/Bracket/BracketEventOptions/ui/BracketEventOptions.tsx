@@ -16,12 +16,17 @@ import { SetEventSheets } from "@/features/SetEventSheets";
 import { SetStageDrawTimes } from "@/features/Stage/SetStageDrawTimes";
 import { BracketEventInfo } from "@/entities/BracketEvent";
 import { EditableBracketTeamList } from "@/features/Bracket/EditableBracketTeamList";
+import SaveButton from "@/shared/ui/save-button";
 export default function BracketEventOptions({
   initialTab = "overview",
   onClose,
+  onSave,
+  onEndView,
 }: {
   initialTab: string;
   onClose: () => void;
+  onSave: () => void;
+  onEndView: () => void;
 }) {
   const drawTimesContainerId = useId();
   const teamsContainerId = useId();
@@ -49,21 +54,25 @@ export default function BracketEventOptions({
         </Button>
       </header>
       <div className="relative">
-        <div className="absolute inset-0 overflow-auto">
-          <Tabs value={selectedTab} onValueChange={setSelectedTab}>
-            <TabsList className="w-full grid grid-cols-3">
-              <TabsTrigger value="overview" className="grow">
-                Overview
-              </TabsTrigger>
-              <TabsTrigger value="schedule" className="grow">
-                Schedule
-              </TabsTrigger>
-              <TabsTrigger value="teams" className="grow">
-                Teams
-              </TabsTrigger>
-            </TabsList>
-            <TabsContent value="overview">
-              <div className=" bg-glass p-4 rounded-md">
+        <Tabs
+          value={selectedTab}
+          onValueChange={setSelectedTab}
+          className="absolute inset-0 overflow-auto grid grid-rows-[auto_1fr] gap-4"
+        >
+          <TabsList className="w-full grid grid-cols-3">
+            <TabsTrigger value="overview" className="grow">
+              Overview
+            </TabsTrigger>
+            <TabsTrigger value="schedule" className="grow">
+              Schedule
+            </TabsTrigger>
+            <TabsTrigger value="teams" className="grow">
+              Teams
+            </TabsTrigger>
+          </TabsList>
+          <TabsContent value="overview" className="relative ">
+            <div className="  grid grid-rows-[auto_1fr] gap-4 absolute inset-0">
+              <div className="bg-glass p-4 rounded-md">
                 <BracketEventInfo
                   brackets={brackets}
                   connections={connections}
@@ -71,36 +80,44 @@ export default function BracketEventOptions({
                   winners={numWinners}
                 />
               </div>
-            </TabsContent>
-            <TabsContent value="schedule">
-              <div className=" bg-glass p-4">
-                <SetEventSheets />
-              </div>
-              <div className="mt-4 bg-glass p-4 flex flex-col">
-                <header className="flex justify-between items-center">
-                  <Label htmlFor={drawTimesContainerId}>Draw schedule</Label>
-                </header>
-                <div
-                  id={drawTimesContainerId}
-                  className="mt-4 flex flex-col gap-2"
-                >
-                  <SetStageDrawTimes />
-                </div>
-              </div>
-            </TabsContent>
-            <TabsContent value="teams">
-              <div className="mt-4 bg-glass p-4 flex flex-col">
-                <header className="flex justify-between items-center">
-                  <Label htmlFor={teamsContainerId}>Teams</Label>
-                </header>
 
-                <div id={teamsContainerId} className="mt-4">
-                  <EditableBracketTeamList />
+              <div className="flex items-end ">
+                <div className="w-full flex justify-center">
+                  <SaveButton onClick={onSave} className="w-[300px]">
+                    Save
+                  </SaveButton>
                 </div>
               </div>
-            </TabsContent>
-          </Tabs>
-        </div>
+            </div>
+          </TabsContent>
+          <TabsContent value="schedule">
+            <div className=" bg-glass p-4">
+              <SetEventSheets />
+            </div>
+            <div className="mt-4 bg-glass p-4 flex flex-col">
+              <header className="flex justify-between items-center">
+                <Label htmlFor={drawTimesContainerId}>Draw schedule</Label>
+              </header>
+              <div
+                id={drawTimesContainerId}
+                className="mt-4 flex flex-col gap-2"
+              >
+                <SetStageDrawTimes />
+              </div>
+            </div>
+          </TabsContent>
+          <TabsContent value="teams">
+            <div className="mt-4 bg-glass p-4 flex flex-col">
+              <header className="flex justify-between items-center">
+                <Label htmlFor={teamsContainerId}>Teams</Label>
+              </header>
+
+              <div id={teamsContainerId} className="mt-4">
+                <EditableBracketTeamList />
+              </div>
+            </div>
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   );

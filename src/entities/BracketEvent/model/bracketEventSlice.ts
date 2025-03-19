@@ -1,6 +1,6 @@
 import { createSlice, createSelector } from "@reduxjs/toolkit";
 import type { Nullable } from "@/shared/types";
-import { RootState } from "@/lib/store";
+import type { RootState } from "@/lib/store";
 import type { BracketEvent } from "@/entities/Bracket";
 import type { ViewableBracketEvent } from "../types/ViewableBracketEvent";
 import { defaultState } from "./default-state";

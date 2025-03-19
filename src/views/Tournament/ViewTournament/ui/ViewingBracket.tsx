@@ -36,7 +36,7 @@ export default function ViewingBracket({
 
   return (
     <TournamentStageContextProvider stage={bracketStage}>
-      <div className="fixed inset-0">
+      <div className="absolute inset-0">
         <BracketViewLayout>
           <ViewingBracketHeader onBack={onEndView} eventName={eventName} />
           <BracketViewer onGameClick={onGameClick}></BracketViewer>
@@ -46,7 +46,7 @@ export default function ViewingBracket({
           {selectedGame && <BracketGameViewer onBack={cancelSelectedGame} />}
         </Slideout>
         {
-          <div className="fixed right-4 bottom-4 md:right-8 md:bottom-8 z-40 flex flex-col gap-2 ">
+          <div className="absolute right-4 bottom-4 md:right-8 md:bottom-8 z-40 flex flex-col gap-2 ">
             <div className="flex gap-2 items-center justify-end">
               <BracketNavigator numBrackets={brackets?.length || 0} />
             </div>

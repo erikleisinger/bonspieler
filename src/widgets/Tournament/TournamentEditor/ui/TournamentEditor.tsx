@@ -20,6 +20,7 @@ import {
   updateTournamentStages,
   getCurrentTournament,
 } from "@/entities/Tournament";
+import { getTotalBracketWinners } from "@/shared/Bracket/getTotalBracketWinners";
 export default function TournamentEditor({
   onEditStage,
   saveTournament,
@@ -33,12 +34,18 @@ export default function TournamentEditor({
 
   function addStage(type: TournamentStageType) {
     const base = JSON.parse(JSON.stringify(DEFAULTS[type]));
+    let numTeams = 16;
+    if (stages.length > 0) {
+      numTeams =
+        getTotalBracketWinners(stages[stages.length - 1].numWinners) || 4;
+    }
     const newStages = [
       ...stages,
       {
         ...base,
         id: generateUUID(),
         order: stages.length,
+        numTeams,
       },
     ];
     dispatch(updateTournamentStages(newStages));

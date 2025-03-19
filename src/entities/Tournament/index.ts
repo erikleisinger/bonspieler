@@ -1,4 +1,8 @@
-export { TournamentStageRotatableCard, LoadTournament } from "./ui";
+export {
+  TournamentStageRotatableCard,
+  LoadTournament,
+  TournamentListItem,
+} from "./ui";
 export { DEFAULTS } from "./lib";
 export * from "./model";
 

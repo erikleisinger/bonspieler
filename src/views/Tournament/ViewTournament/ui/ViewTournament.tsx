@@ -29,7 +29,7 @@ export default function TournamentView() {
   }
 
   return (
-    <div className="fixed inset-0 overflow-auto bg-gradient  bg-center">
+    <div className="absolute inset-0 overflow-auto   bg-center">
       {!editedStageType && <TournamentViewer onViewStage={onViewStage} />}
       {editedStageType && isBracket && <ViewingBracket onEndView={onBack} />}
     </div>

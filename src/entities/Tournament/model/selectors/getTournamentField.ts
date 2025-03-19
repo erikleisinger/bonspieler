@@ -1,5 +1,5 @@
 import { Tournament } from "../../types";
-import { RootState } from "@/lib/store";
+import type { RootState } from "@/lib/store";
 
 export function getTournamentField<K extends keyof Tournament>(field: K) {
   return (state: RootState): Tournament[K] | null => {

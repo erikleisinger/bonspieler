@@ -49,7 +49,7 @@ export default function EditTournament() {
   }
 
   return (
-    <div className="fixed inset-0 overflow-auto  bg-center bg-gradient">
+    <>
       {editedStage ? (
         <EditingStage onBack={endEditStage} stage={editedStage} />
       ) : (
@@ -58,6 +58,6 @@ export default function EditTournament() {
           saveTournament={handleSaveTournament}
         />
       )}
-    </div>
+    </>
   );
 }

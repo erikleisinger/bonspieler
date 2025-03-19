@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Typography from "@/shared/ui/typography";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/shared/ui/tabs";
 import { TournamentTab } from "../lib";
@@ -20,29 +20,41 @@ export default function TournamentNavigation({
 }) {
   const tournamentName = useAppSelector(getCurrentTournamentName);
   function getClassNames(tab: TournamentTab) {
+    if (!initialized) {
+      return selectedView !== tab ? "z-[1] " : "z-10 ";
+    }
     return selectedView !== tab ? "z-[1] behind " : "z-10 ahead ";
   }
 
   const [selectedView, setSelectedView] = useState("stages");
+  const [initialized, setInitialized] = useState(false);
+
+  function handleChangeView(newTab: TournamentTab) {
+    if (!initialized) setInitialized(true);
+    setSelectedView(newTab);
+  }
   return (
     <Tabs
-      className="fixed inset-0 grid grid-rows-[auto,1fr,auto]"
+      className="absolute inset-0 grid grid-rows-[auto,1fr,auto]"
       value={selectedView}
-      onValueChange={setSelectedView}
+      onValueChange={handleChangeView}
     >
       <div className="z-10">
-        <header className="bg-glass p-4 md:p-2 md:pl-8  text-center md:text-left flex justify-center md:justify-between z-10 backdrop-blur-md shadow-sm items-center">
-          <Typography tag="h3" className="-mt-1">
-            {tournamentName}
-          </Typography>
-          <TabsList className="h-12 w-[300px] hidden md:flex">
-            <TabsTrigger value={TournamentTab.Stages} className="h-full grow">
-              Stages
-            </TabsTrigger>
-            <TabsTrigger value={TournamentTab.Teams} className="h-full grow">
-              Teams
-            </TabsTrigger>
-          </TabsList>
+        <header className="relative">
+          <div className=" p-4 md:p-2 md:pl-8  text-center md:text-left flex justify-center md:justify-between z-10   items-center relative z-10">
+            <Typography tag="h3" className="-mt-1">
+              {tournamentName}
+            </Typography>
+            <TabsList className="h-12 w-[300px] hidden md:flex">
+              <TabsTrigger value={TournamentTab.Stages} className="h-full grow">
+                Stages
+              </TabsTrigger>
+              <TabsTrigger value={TournamentTab.Teams} className="h-full grow">
+                Teams
+              </TabsTrigger>
+            </TabsList>
+          </div>
+          <div className="absolute inset-0 bg-slate-500/5 backdrop-blur-sm z-[3]" />
         </header>
         <nav className="md:hidden flex">
           <TabsList className="h-12  grow mx-2 my-1">
@@ -55,14 +67,14 @@ export default function TournamentNavigation({
           </TabsList>
         </nav>
       </div>
+
       <div
-        className="relative"
+        className="relative z-10"
         style={{
           transformStyle: "preserve-3d",
           perspective: "1000px",
         }}
       >
-        <div className="absolute inset-0 bg-slate-500/5 backdrop-blur-sm z-[3]" />
         <TabsContent
           value={TournamentTab.Stages}
           style={{
@@ -93,8 +105,10 @@ export default function TournamentNavigation({
         >
           {tabsChildren[TournamentTab.Teams]}
         </TabsContent>
+        <div className="absolute inset-0 bg-slate-500/5 backdrop-blur-sm z-[3]" />
       </div>
-      {children || <div />}
+
+      <div className="z-10">{children || <div />}</div>
     </Tabs>
   );
 }

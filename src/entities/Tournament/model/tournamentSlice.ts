@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 import type { TournamentStoreState } from "../types/TournamentStoreState";
-import { RootState } from "@/lib/store";
+import type { RootState } from "@/lib/store";
 import * as reducers from "./reducers";
 import * as selectors from "./selectors";
 import * as thunks from "./thunks";

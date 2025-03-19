@@ -18,10 +18,10 @@ import { useAppDispatch } from "@/lib/store";
 import { removeBracket } from "@/entities/BracketEvent";
 export default function BracketEditor({
   onClose,
-  editEvent,
+  editDrawTimes,
 }: {
   onClose: () => void;
-  editEvent: () => void;
+  editDrawTimes: () => void;
 }) {
   const dispatch = useAppDispatch();
   const currentlyViewingBracket = useAppSelector(getCurrentlyViewingBracket);
@@ -84,7 +84,7 @@ export default function BracketEditor({
         <BracketInfo
           className="bg-glass"
           bracketIndex={bracketIndex}
-          editDrawTimes={editEvent}
+          editDrawTimes={editDrawTimes}
         />
       </div>
       <footer className="flex justify-center">

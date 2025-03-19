@@ -63,12 +63,16 @@ export default function AddBracket() {
   return (
     <DropdownMenu open={menuOpen} onOpenChange={setMenuOpen}>
       <DropdownMenuTrigger asChild>
-        <Button variant="secondary" size="icon">
+        <Button variant={menuOpen ? "default" : "secondary"} size="icon">
           <FaPlus />
         </Button>
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent className="bg-glass text-glass-foreground backdrop-blur-md p-4">
+      <DropdownMenuContent
+        className="bg-glass text-glass-foreground backdrop-blur-md p-4"
+        side="right"
+        align="start"
+      >
         <div>
           <header className="mb-4">
             <Typography tag="h5">Add Bracket</Typography>
