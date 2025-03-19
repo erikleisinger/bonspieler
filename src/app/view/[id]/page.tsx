@@ -3,7 +3,7 @@ import { Provider } from "react-redux";
 import { store } from "@/lib/store";
 import { use } from "react";
 import { ViewTournament } from "@/views/Tournament/ViewTournament";
-import { TournamentContextProvider } from "@/entities/Tournament";
+import { LoadTournament } from "@/entities/Tournament";
 
 export default function Page({
   params,
@@ -18,9 +18,9 @@ export default function Page({
 
   return (
     <Provider store={store}>
-      <TournamentContextProvider tournamentId={tournamentId} editable={false}>
+      <LoadTournament tournamentId={tournamentId} editable={false}>
         <ViewTournament />
-      </TournamentContextProvider>
+      </LoadTournament>
     </Provider>
   );
 }

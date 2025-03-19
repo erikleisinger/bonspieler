@@ -8,6 +8,7 @@ export type ViewableBracketEvent = BracketEvent & {
   currentlyViewingBracket: number;
   lookingForLoserConnection: Nullable<string>;
   lookingToAssignTeam: Nullable<string>;
+  order: number;
   selectedDraw: Nullable<number>;
   selectedGame: Nullable<BracketGameType>;
   rows: BracketRows;

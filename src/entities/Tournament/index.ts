@@ -1,5 +1,5 @@
-export { TournamentStageRotatableCard } from "./ui";
-export { DEFAULTS, TournamentContextProvider } from "./lib";
+export { TournamentStageRotatableCard, LoadTournament } from "./ui";
+export { DEFAULTS } from "./lib";
 export {
   tournamentReducer,
   getCurrentTournament,

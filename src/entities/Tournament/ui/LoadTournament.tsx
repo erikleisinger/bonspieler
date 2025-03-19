@@ -7,9 +7,9 @@ import {
   initTournamentById,
   getCurrentTournament,
   getCurrentTournamentStatus,
-} from "../../model";
+} from "../model";
 
-export default function TournamentContextProvider({
+export default function LoadTournament({
   children,
   tournamentId,
 }: {

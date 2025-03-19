@@ -12,21 +12,14 @@ import {
   DropdownMenuContent,
 } from "@/shared/ui/dropdown-menu";
 import { scrollToBracket } from "@/entities/Bracket";
-import { useAppSelector } from "@/lib/store";
-import { getBracketEventBrackets } from "@/entities/BracketEvent";
-export default function AddNewBracket({
-  addBracket,
-}: {
-  addBracket: ({
-    numTeams,
-    numWinners,
-    isSeeded,
-  }: {
-    numTeams: number;
-    numWinners: number[];
-    isSeeded: boolean;
-  }) => void;
-}) {
+import { useAppSelector, useAppDispatch } from "@/lib/store";
+import {
+  getBracketEventBrackets,
+  getBracketEventNumSheets,
+  addBracketToEvent,
+} from "@/entities/BracketEvent";
+import { generateBracket } from "@/features/Bracket/GenerateBracket";
+export default function AddBracket() {
   const [numTeams, setNumTeams] = useState(2);
   const [numWinners, setNumWinners] = useState(1);
   const [isSeeded, setIsSeeded] = useState(true);
@@ -34,7 +27,27 @@ export default function AddNewBracket({
 
   const checkboxId = useId();
 
+  const dispatch = useAppDispatch();
   const brackets = useAppSelector(getBracketEventBrackets);
+  const numSheets = useAppSelector(getBracketEventNumSheets);
+
+  function addBracket({
+    numTeams,
+    numWinners,
+    isSeeded,
+  }: {
+    numTeams: number;
+    numWinners: number[];
+    isSeeded: boolean;
+  }) {
+    const data = generateBracket({
+      numTeams,
+      numWinners,
+      numSheets,
+      isSeeded,
+    });
+    dispatch(addBracketToEvent(data));
+  }
 
   function handleAddBracket() {
     addBracket({

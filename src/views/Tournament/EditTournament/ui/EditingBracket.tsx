@@ -8,7 +8,6 @@ import {
   setSelectedGame,
   setSelectedDraw,
   getBracketEventNumSheets,
-  addBracketToEvent,
   getBracketEventName,
   getBracketEventNumTeams,
   getBracketEventNumWinners,
@@ -38,6 +37,7 @@ import { CreateBracketEventWizard } from "@/widgets/Bracket/CreateBracketEventWi
 import BracketViewLayout from "@/shared/layouts/BracketViewLayout";
 import EditingBracketHeader from "./EditingBracketHeader";
 import { scrollToGame } from "@/entities/Bracket";
+import type { BracketEvent, BracketGameType } from "@/entities/Bracket";
 import GameAvailabilityContextProvider from "./GameAvailabilityContextProvider";
 import { TournamentStageType } from "@/entities/Tournament";
 
@@ -63,24 +63,6 @@ export default function EditingBracket({
 
   async function handleSave() {
     dispatch(updateAndSaveTournament(bracketStage));
-  }
-
-  function onAddBracket({
-    numTeams,
-    numWinners,
-    isSeeded,
-  }: {
-    numTeams: number;
-    numWinners: number[];
-    isSeeded: boolean;
-  }) {
-    const data = generateBracket({
-      numTeams,
-      numWinners,
-      numSheets,
-      isSeeded,
-    });
-    dispatch(addBracketToEvent(data));
   }
 
   function renderBracketsFromWizard(newBracketEvent: BracketEvent) {
@@ -197,7 +179,7 @@ export default function EditingBracket({
                   setBracketToEdit(bracketIndex)
                 }
               />
-              <AddBracket addBracket={onAddBracket} />
+              <AddBracket />
             </div>
             <Button onClick={() => setShowEventEditor(true)}>
               <FaCog />
