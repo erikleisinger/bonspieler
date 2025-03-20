@@ -12,10 +12,8 @@ export function updateTournamentStage(
   const index = (state.tournament?.stages || []).findIndex(
     (stage) => stage.id === id
   );
-  console.log("found index: ", index);
   if (index < 0) return;
   const formattedStage = formatTournamentStageForSave(action.payload);
-  console.log("formatted stage: ", formattedStage);
   if (!formattedStage) return;
   state.tournament.stages[index] = formattedStage;
 }

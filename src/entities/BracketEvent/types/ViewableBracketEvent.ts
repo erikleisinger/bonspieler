@@ -1,15 +1,14 @@
-import type {
-  BracketEvent,
-  BracketRows,
-  BracketGameType,
-} from "@/entities/Bracket";
 import type { Nullable } from "@/shared/types";
-export type ViewableBracketEvent = BracketEvent & {
+import type { BracketRows } from "@/entities/Bracket";
+
+export type ViewableBracketEvent = {
+  id: Nullable<string>;
+  name: string;
   currentlyViewingBracket: number;
   lookingForLoserConnection: Nullable<string>;
   lookingToAssignTeam: Nullable<string>;
-  order: number;
+  num_start_teams: number;
+  num_end_teams: number;
   selectedDraw: Nullable<number>;
-  selectedGame: Nullable<BracketGameType>;
   rows: BracketRows;
 };

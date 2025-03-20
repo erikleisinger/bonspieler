@@ -6,7 +6,7 @@ export default function BracketGameHeader({
   loserTo,
 }: {
   readableId: string;
-  drawNumber: string;
+  drawNumber: number;
   loserTo: Nullable<string>;
 }) {
   return (

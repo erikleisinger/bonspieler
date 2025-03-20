@@ -1,10 +1,7 @@
 import type { Nullable } from "@/shared/types";
 import { useAppSelector, useAppDispatch } from "@/lib/store";
-import {
-  getBracketEventSchedule,
-  getSelectedDraw,
-  setSelectedDraw,
-} from "@/entities/BracketEvent";
+import { getSelectedDraw, setSelectedDraw } from "@/entities/BracketEvent";
+import { getBracketEventSchedule } from "@/entities/Bracket/BracketGame";
 import { Button } from "@/shared/ui/button";
 import { FaEye } from "react-icons/fa";
 import { scrollToGame } from "@/entities/Bracket/lib/scrollToGame";

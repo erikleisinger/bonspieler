@@ -5,6 +5,7 @@ import LoaderFullPage from "@/shared/ui/loader-full-page";
 import { useAppDispatch, useAppSelector } from "@/lib/store";
 import {
   initTournamentById,
+  initNewTournament,
   getCurrentTournament,
   getCurrentTournamentStatus,
 } from "../model";
@@ -24,8 +25,11 @@ export default function LoadTournament({
   const tournament = useAppSelector(getCurrentTournament);
 
   useEffect(() => {
-    if (!tournamentId) return;
-    dispatch(initTournamentById(tournamentId));
+    if (tournamentId) {
+      dispatch(initTournamentById(tournamentId));
+    } else {
+      dispatch(initNewTournament());
+    }
   }, [tournamentId]);
 
   return !tournament || status !== "idle" ? (

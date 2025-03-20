@@ -3,34 +3,41 @@ import { TournamentStageContext } from "@/shared/TournamentStage";
 import type { BracketConnectionTeam } from "../../types";
 import { useAppSelector } from "@/lib/store";
 import { getTournamentTeams } from "@/entities/Tournament";
-import { getReadableGameId } from "@/entities/BracketEvent";
+import { getReadableGameId } from "@/entities/Bracket/BracketGame";
 import { FaSeedling, FaRunning } from "react-icons/fa";
+import { OriginConnection } from "../../BracketGameConnections";
 export default function BracketGameTeam({
   className,
-  team,
+  connection,
+  isSeed,
 }: {
   className?: string;
-  team: BracketConnectionTeam;
+  connection: OriginConnection;
+  isSeed: boolean;
 }) {
   const { prevStageName } = useContext(TournamentStageContext);
   const tournamentTeams = useAppSelector(getTournamentTeams);
-  const readableId = useAppSelector(getReadableGameId)(team.gameId);
-  function getTeamInfo({ isWinner, gameId, teamId }: BracketConnectionTeam) {
-    if (isSeed) {
-      if (!prevStageName) {
-        return tournamentTeams.find(({ id }) => id === teamId)?.name || "";
-      } else {
-        return "From " + prevStageName;
-      }
-    }
-    if (teamId) {
-      return tournamentTeams.find(({ id }) => id === teamId)?.name || "Unknown";
-    } else if (gameId) {
+  const readableId = useAppSelector((state) =>
+    getReadableGameId(state, connection.gameId)
+  );
+  function getTeamInfo({ isWinner, gameId }: BracketConnectionTeam) {
+    if (gameId) {
       return `${isWinner ? "Winner of " : "Loser of "}${readableId}`;
     }
-  }
+    // if (isSeed) {
+    //   if (!prevStageName) {
+    //     return tournamentTeams.find(({ id }) => id === teamId)?.name || "";
+    //   } else {
+    //     return "From " + prevStageName;
+    //   }
+    // }
 
-  const isSeed = team?.teamId === "seed";
+    // if (teamId) {
+    //   return tournamentTeams.find(({ id }) => id === teamId)?.name || "Unknown";
+    // } else if (gameId) {
+    //   return `${isWinner ? "Winner of " : "Loser of "}${readableId}`;
+    // }
+  }
 
   return (
     <div
@@ -46,7 +53,7 @@ export default function BracketGameTeam({
           ) : (
             <FaSeedling className="text-emerald-500" />
           ))}
-        <div>{getTeamInfo(team)}</div>
+        <div>{getTeamInfo(connection)}</div>
       </div>
 
       <div className="text-gray-300">0</div>

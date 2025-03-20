@@ -6,12 +6,19 @@ import { useAppDispatch, useAppSelector } from "@/lib/store";
 import { getSelectedGame } from "@/entities/BracketEvent";
 import {
   setBracketEventRows,
-  getBracketEventBrackets,
   getBracketEventConnections,
-  getBracketEventReadableIdIndex,
   getBracketEventRows,
-  getBracketEventSchedule,
 } from "@/entities/BracketEvent";
+import {
+  getWinnerConnections,
+  getOriginConnections,
+  getLoserConnections,
+} from "@/entities/Bracket/BracketGameConnections";
+import {
+  getBracketEventBrackets,
+  getBracketEventReadableIdIndex,
+  getBracketEventSchedule,
+} from "@/entities/Bracket/BracketGame";
 
 export default function BracketViewer({
   onGameClick,
@@ -25,6 +32,9 @@ export default function BracketViewer({
   const rows = useAppSelector(getBracketEventRows);
   const schedule = useAppSelector(getBracketEventSchedule);
   const selectedGame = useAppSelector(getSelectedGame);
+  const winnerConnections = useAppSelector(getWinnerConnections);
+  const originConnections = useAppSelector(getOriginConnections);
+  const loserConnections = useAppSelector(getLoserConnections);
   function updateRows(newRows: BracketRows) {
     dispatch(setBracketEventRows(newRows));
   }
@@ -36,6 +46,8 @@ export default function BracketViewer({
           <Bracket
             key={"bracket-" + bracketIndex}
             connections={connections}
+            winnerConnections={winnerConnections}
+            originConnections={originConnections}
             rounds={rounds}
             setRows={updateRows}
             rows={rows}
@@ -49,22 +61,25 @@ export default function BracketViewer({
                   rows={rows}
                   roundIndex={roundIndex}
                 >
-                  {games.map((game: BracketGameType) => {
-                    return (
-                      <BracketGame
-                        key={game.id}
-                        game={game}
-                        connections={connections[game.id]}
-                        onClick={onGameClick}
-                        selected={
-                          !!selectedGame && selectedGame?.id === game.id
-                        }
-                        rows={rows[game.id] || {}}
-                        readableId={readableIdIndex[game.id]}
-                        drawNumber={schedule[game.id]}
-                      />
-                    );
-                  })}
+                  {games &&
+                    games.map((game: BracketGameType) => {
+                      return (
+                        <BracketGame
+                          key={game.id}
+                          game={game}
+                          winnerConnection={winnerConnections[game.id]}
+                          loserConnection={loserConnections[game.id]}
+                          originConnections={originConnections[game.id] || []}
+                          onClick={onGameClick}
+                          selected={
+                            !!selectedGame && selectedGame?.id === game.id
+                          }
+                          rows={rows[game.id] || {}}
+                          readableId={readableIdIndex[game.id]}
+                          drawNumber={schedule[game.id]}
+                        />
+                      );
+                    })}
                 </BracketRound>
               );
             })}

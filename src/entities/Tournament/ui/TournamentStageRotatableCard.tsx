@@ -5,22 +5,27 @@ import PointsStageCard from "@/shared/Tournament/PointsStageCard";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import TournamentStageInfo from "./TournamentStageInfo";
+import { AddStageCardLoading } from "@/features/Tournament/AddStage";
 
 export default function TournamentStageRotatableCard({
   children,
   className = "",
   editStage,
+  isRemoving,
   removeStage,
   stage,
 }: {
   children?: React.ReactNode;
   className?: string;
   editStage: (stage: TournamentStage) => void;
+  isRemoving: boolean;
   removeStage: (stageId: string) => void;
   stage: TournamentStage;
 }) {
   const [showDetails, setShowDetails] = useState(false);
-  return (
+  return isRemoving ? (
+    <AddStageCardLoading />
+  ) : (
     <div
       className={cn(
         " relative tournament-card rotatable pointer-events-auto w-[90vw]  sm:w-[300px] md:w-[350px]  aspect-[4/5]",

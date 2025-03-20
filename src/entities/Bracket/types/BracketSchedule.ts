@@ -1,3 +1,5 @@
+import { Nullable } from "@/shared/types";
+
 export interface BracketSchedule {
-  [gameId: string]: number;
+  [gameId: string]: Nullable<number>;
 }

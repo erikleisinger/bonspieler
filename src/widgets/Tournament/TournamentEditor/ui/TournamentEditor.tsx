@@ -19,8 +19,11 @@ import { useAppDispatch, useAppSelector } from "@/lib/store";
 import {
   updateTournamentStages,
   getCurrentTournament,
+  addTournamentStage,
+  getCurrentTournamentId,
+  deleteTournamentStage,
+  updateTournamentStageOrder,
 } from "@/entities/Tournament";
-import { getTotalBracketWinners } from "@/shared/Bracket/getTotalBracketWinners";
 export default function TournamentEditor({
   onEditStage,
   saveTournament,
@@ -30,40 +33,24 @@ export default function TournamentEditor({
 }) {
   const dispatch = useAppDispatch();
   const tournament = useAppSelector(getCurrentTournament);
+  const tournamentId = useAppSelector(getCurrentTournamentId);
   const stages = tournament?.stages || [];
 
   function addStage(type: TournamentStageType) {
-    const base = JSON.parse(JSON.stringify(DEFAULTS[type]));
-    let numTeams = 16;
-    if (stages.length > 0) {
-      numTeams =
-        getTotalBracketWinners(stages[stages.length - 1].numWinners) || 4;
-    }
-    const newStages = [
-      ...stages,
-      {
-        ...base,
-        id: generateUUID(),
-        order: stages.length,
-        numTeams,
-      },
-    ];
-    dispatch(updateTournamentStages(newStages));
+    dispatch(
+      addTournamentStage({
+        tournamentId,
+        stageType: type,
+      })
+    );
   }
 
-  function removeStage(stageId: string) {
-    const index = stages.findIndex(({ id }) => id === stageId);
-    if (index < 0) return;
-    let newStages = [...stages];
-    newStages.splice(index, 1);
-    newStages = newStages.map((s, i) => ({
-      ...s,
-      order: i,
-    }));
-    dispatch(updateTournamentStages(newStages));
+  async function removeStage(stageId: string) {
+    await dispatch(deleteTournamentStage(stageId));
+    await dispatch(updateTournamentStageOrder());
   }
 
-  function handleChangeStageOrder(
+  async function handleChangeStageOrder(
     inc: number,
     stage: TournamentStage,
     currentIndex: number
@@ -81,7 +68,8 @@ export default function TournamentEditor({
       order: i,
     }));
 
-    dispatch(updateTournamentStages(newStages));
+    await dispatch(updateTournamentStages(newStages));
+    await dispatch(updateTournamentStageOrder());
   }
 
   const [addingStage, setAddingStage] = useState(false);

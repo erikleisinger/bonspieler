@@ -28,11 +28,10 @@ export default function TournamentStageInfo({
       <div className=" p-4">
         {stage.type === TournamentStageType.Bracket && (
           <BracketEventInfo
-            schedule={stage.schedule}
-            connections={stage.connections}
-            brackets={stage.brackets}
-            numTeams={stage.numTeams}
-            winners={stage.numWinners}
+            numStartTeams={stage.num_start_teams}
+            numEndTeams={stage.num_end_teams}
+            numDraws={stage.draws}
+            numBrackets={stage.num_brackets}
           />
         )}
       </div>

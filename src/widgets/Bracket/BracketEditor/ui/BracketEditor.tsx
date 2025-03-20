@@ -1,10 +1,8 @@
 import { useEffect, useState } from "react";
 
 import { useAppSelector } from "@/lib/store";
-import {
-  getBracketEventBrackets,
-  getCurrentlyViewingBracket,
-} from "@/entities/BracketEvent";
+import { getCurrentlyViewingBracket } from "@/entities/BracketEvent";
+import { getBracketEventBrackets } from "@/entities/Bracket/BracketGame";
 import { Button } from "@/shared/ui/button";
 import Typography from "@/shared/ui/typography";
 import RemoveBracketButton from "./RemoveBracketButton";
@@ -15,7 +13,7 @@ import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { getBracketName } from "@/entities/Bracket";
 import { scrollToBracket } from "@/entities/Bracket";
 import { useAppDispatch } from "@/lib/store";
-import { removeBracket } from "@/entities/BracketEvent";
+import { removeBracketFromEvent } from "@/entities/BracketEvent";
 export default function BracketEditor({
   onClose,
   editDrawTimes,
@@ -40,7 +38,7 @@ export default function BracketEditor({
 
   function handleRemoveBracket() {
     onClose();
-    dispatch(removeBracket(bracketIndex));
+    dispatch(removeBracketFromEvent(bracketIndex));
     if (currentlyViewingBracket) goBracket(currentlyViewingBracket - 1);
   }
 

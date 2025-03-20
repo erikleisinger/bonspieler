@@ -1,12 +1,22 @@
 import { useLayoutEffect, useRef, useState } from "react";
 import type { TournamentStage } from "@/entities/Tournament";
-import { TournamentStageRotatableCard } from "@/entities/Tournament";
+import {
+  TournamentStageRotatableCard,
+  getTournamentAddStageStatus,
+  getTournamentRemovingStage,
+} from "@/entities/Tournament";
+import { AddStageCardLoading } from "@/features/Tournament/AddStage";
 
 import gsap from "gsap";
 import { Flip } from "gsap/Flip";
 import { useGSAP } from "@gsap/react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { Button } from "@/shared/ui/button";
+import { useAppDispatch, useAppSelector } from "@/lib/store";
+import {
+  fetchTournamentStages,
+  getCurrentTournamentId,
+} from "@/entities/Tournament";
 gsap.registerPlugin(Flip);
 gsap.registerPlugin(useGSAP);
 export default function TournamentStageList({
@@ -24,6 +34,16 @@ export default function TournamentStageList({
   onEditStage?: (stage: TournamentStage) => void;
   removeStage?: (stageId: string) => void;
 }) {
+  const dispatch = useAppDispatch();
+  const tournamentId = useAppSelector(getCurrentTournamentId);
+  const addingStageStatus = useAppSelector(getTournamentAddStageStatus);
+  const removingStage = useAppSelector(getTournamentRemovingStage);
+  const isAdding = addingStageStatus === "loading";
+  useLayoutEffect(() => {
+    if (!tournamentId) return;
+    dispatch(fetchTournamentStages(tournamentId));
+  }, []);
+
   const flipStateRef = useRef<Flip.FlipState>(null);
   const [flipping, setFlipping] = useState(false);
   function setFlipState() {
@@ -35,6 +55,7 @@ export default function TournamentStageList({
       setFlipState();
       return;
     }
+    if (flipping) return;
     Flip.from(flipStateRef.current, {
       duration: 0.8,
       ease: "power4.out",
@@ -47,7 +68,7 @@ export default function TournamentStageList({
         setFlipping(false);
       },
     });
-  }, [stages]);
+  }, [stages, isAdding]);
 
   function handleChangeOrder(
     event: MouseEvent,
@@ -74,6 +95,7 @@ export default function TournamentStageList({
             className="ANIMATED_CARD"
             stage={stage}
             removeStage={removeStage}
+            isRemoving={!!removingStage && removingStage === stage.id}
             editStage={onEditStage}
           >
             {changeStageOrder ? (
@@ -108,6 +130,8 @@ export default function TournamentStageList({
           </TournamentStageRotatableCard>
         );
       })}
+
+      {isAdding && <AddStageCardLoading />}
     </div>
   );
 }

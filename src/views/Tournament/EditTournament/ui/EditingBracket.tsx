@@ -9,12 +9,10 @@ import type { Nullable } from "@/shared/types";
 
 import { useAppDispatch, useAppSelector } from "@/lib/store";
 import {
-  getBracketEventBrackets,
   getSelectedGame,
   setSelectedGame,
   setSelectedDraw,
   getBracketEventNumSheets,
-  getBracketEventName,
   getBracketEventNumTeams,
   getBracketEventNumWinners,
   setNumSheets,
@@ -22,10 +20,30 @@ import {
   setNumWinners,
   getLookingToAssignTeam,
   assignTeamToGame,
+  saveBracketEvent,
   updateBracketEvent,
 } from "@/entities/BracketEvent";
+import {
+  setWinnerConnections,
+  setLoserConnections,
+  setOriginConnections,
+} from "@/entities/Bracket/BracketGameConnections";
+
+import { getCurrentTournamentId } from "@/entities/Tournament";
+import {
+  getBracketEventBrackets,
+  saveBracketGames,
+  setBracketEventBrackets,
+  getBracketEventReadableIdIndex,
+  setBracketEventReadableIdIndex,
+  setBracketEventSchedule,
+  setBracketEventGameIndex,
+} from "@/entities/Bracket/BracketGame";
+import { setDrawTimes } from "@/entities/DrawTime";
+import { saveBracketConnections } from "@/entities/Bracket/BracketGameConnections";
 import { getBracketEvent } from "@/entities/BracketEvent";
 import { updateAndSaveTournament } from "@/entities/Tournament";
+import { getDrawTimes, saveDrawTimes } from "@/entities/DrawTime";
 
 /* Context */
 
@@ -55,6 +73,7 @@ import Slideout from "@/shared/ui/slide-out";
 /* Utils */
 
 import { scrollToGame } from "@/entities/Bracket";
+import { GeneratedBracket } from "@/features/Bracket/GenerateBracket";
 
 export default function EditingBracket({
   onEndView,
@@ -69,6 +88,9 @@ export default function EditingBracket({
   const numTeams = useAppSelector(getBracketEventNumTeams);
   const numWinners = useAppSelector(getBracketEventNumWinners);
   const lookingToAssignTeam = useAppSelector(getLookingToAssignTeam);
+  const tournamentId = useAppSelector(getCurrentTournamentId);
+  const readableIdIndex = useAppSelector(getBracketEventReadableIdIndex);
+  const drawTimes = useAppSelector(getDrawTimes);
 
   function cancelSelectedGame() {
     dispatch(setSelectedGame(null));
@@ -76,11 +98,54 @@ export default function EditingBracket({
 
   async function handleSave() {
     if (!bracketStage) return;
-    dispatch(updateAndSaveTournament(bracketStage));
+    const { id, connections } = bracketStage;
+    await dispatch(
+      saveBracketGames({
+        tournamentId,
+        bracketStageId: id,
+        brackets,
+        readableIdIndex,
+      })
+    );
+
+    await dispatch(
+      saveBracketConnections({
+        tournamentId,
+        bracketStageId: id,
+        connections,
+      })
+    );
+    await dispatch(
+      saveDrawTimes({
+        tournamentId,
+        stageId: id,
+        drawTimes,
+      })
+    );
+    await dispatch(saveBracketEvent());
+    // dispatch(updateAndSaveTournament(bracketStage));
   }
 
-  function renderBracketsFromWizard(newBracketEvent: BracketEvent) {
+  function renderBracketsFromWizard(newBracketEvent: GeneratedBracket) {
+    const {
+      brackets,
+      originConnections,
+      winnerConnections,
+      loserConnections,
+      gameIndex,
+      readableIdIndex,
+      drawTimes,
+      schedule,
+    } = newBracketEvent;
+    dispatch(setOriginConnections(originConnections));
+    dispatch(setWinnerConnections(winnerConnections));
+    dispatch(setLoserConnections(loserConnections));
+    dispatch(setBracketEventBrackets(brackets));
+    dispatch(setBracketEventReadableIdIndex(readableIdIndex));
+    dispatch(setBracketEventGameIndex(gameIndex));
     dispatch(updateBracketEvent(newBracketEvent));
+    dispatch(setDrawTimes(drawTimes));
+    dispatch(setBracketEventSchedule(schedule));
     setShowWizard(false);
   }
 
@@ -93,7 +158,7 @@ export default function EditingBracket({
         })
       );
     } else {
-      dispatch(setSelectedGame(game));
+      dispatch(setSelectedGame(game.id));
       scrollToGame(game.id);
     }
   }

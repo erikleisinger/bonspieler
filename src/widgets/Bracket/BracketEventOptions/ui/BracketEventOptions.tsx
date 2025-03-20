@@ -3,10 +3,9 @@ import { useState, useId, useEffect } from "react";
 import { useAppSelector } from "@/lib/store";
 import {
   getBracketEventBrackets,
-  getBracketEventConnections,
-  getBracketEventSchedule,
   getBracketEventNumWinners,
 } from "@/entities/BracketEvent";
+import { getBracketEventSchedule } from "@/entities/Bracket/BracketGame";
 import { Button } from "@/shared/ui/button";
 import { Label } from "@/shared/ui/label";
 import { HiOutlinePlus } from "react-icons/hi";
@@ -32,7 +31,6 @@ export default function BracketEventOptions({
   const teamsContainerId = useId();
 
   const brackets = useAppSelector(getBracketEventBrackets);
-  const connections = useAppSelector(getBracketEventConnections);
   const schedule = useAppSelector(getBracketEventSchedule);
   const numWinners = useAppSelector(getBracketEventNumWinners);
   const [selectedTab, setSelectedTab] = useState(initialTab);
@@ -75,7 +73,6 @@ export default function BracketEventOptions({
               <div className="bg-glass p-4 rounded-md">
                 <BracketEventInfo
                   brackets={brackets}
-                  connections={connections}
                   schedule={schedule}
                   winners={numWinners}
                 />

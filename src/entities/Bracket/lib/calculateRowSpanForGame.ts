@@ -5,14 +5,22 @@ import type {
   BracketRows,
 } from "../types";
 import { BracketRowWithId } from "../types/BracketRows";
+import type {
+  OriginConnections,
+  WinnerConnections,
+} from "@/entities/Bracket/BracketGameConnections";
 export function calculateRowSpanForGame({
   connections,
+  winnerConnections,
+  originConnections,
   game,
   roundIndex,
   rowsIndex,
   rowsArray,
 }: {
   connections: BracketConnections;
+  winnerConnections: WinnerConnections;
+  originConnections: OriginConnections;
   game: BracketGame;
   roundIndex: number;
   rowsIndex: BracketRows;
@@ -22,7 +30,7 @@ export function calculateRowSpanForGame({
    * Find all games in previous round that are connected to this game
    * I.e. the winners of those games advance to the game being placed.
    */
-  const gameConnections = (connections[game.id]?.teams || [])
+  const gameConnections = (originConnections[game.id] || [])
     .filter(({ gameId, isWinner }) => !!gameId && isWinner)
     .sort((a, b) => {
       const aRows = rowsIndex[a.gameId]?.rowEnd || 0;

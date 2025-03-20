@@ -33,6 +33,7 @@ export type BracketConnectionTeam =
   | BracketConnectionEmptyTeam;
 
 export interface BracketConnection {
+  id?: Nullable<string>;
   winnerTo: Nullable<string>;
   loserTo: Nullable<string>;
   teams: BracketConnectionTeam[];

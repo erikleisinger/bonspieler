@@ -79,6 +79,48 @@ export type Database = {
           },
         ]
       }
+      draws: {
+        Row: {
+          created_at: string
+          draw_number: number | null
+          id: string
+          time: string | null
+          tournament_id: string | null
+          tournament_stage_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          draw_number?: number | null
+          id?: string
+          time?: string | null
+          tournament_id?: string | null
+          tournament_stage_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          draw_number?: number | null
+          id?: string
+          time?: string | null
+          tournament_id?: string | null
+          tournament_stage_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "draws_tournament_id_fkey"
+            columns: ["tournament_id"]
+            isOneToOne: false
+            referencedRelation: "tournaments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "draws_tournament_stage_id_fkey"
+            columns: ["tournament_stage_id"]
+            isOneToOne: false
+            referencedRelation: "tournament_stages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       event_stages: {
         Row: {
           created_at: string
@@ -138,6 +180,116 @@ export type Database = {
         }
         Relationships: []
       }
+      game_connections: {
+        Row: {
+          created_at: string
+          destination_game_id: string | null
+          id: string
+          origin_game_id: string | null
+          tournament_id: string | null
+          tournament_stage_id: string | null
+          winner: boolean | null
+        }
+        Insert: {
+          created_at?: string
+          destination_game_id?: string | null
+          id?: string
+          origin_game_id?: string | null
+          tournament_id?: string | null
+          tournament_stage_id?: string | null
+          winner?: boolean | null
+        }
+        Update: {
+          created_at?: string
+          destination_game_id?: string | null
+          id?: string
+          origin_game_id?: string | null
+          tournament_id?: string | null
+          tournament_stage_id?: string | null
+          winner?: boolean | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "game_connections_destination_game_id_fkey"
+            columns: ["destination_game_id"]
+            isOneToOne: false
+            referencedRelation: "games"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "game_connections_origin_game_id_fkey"
+            columns: ["origin_game_id"]
+            isOneToOne: false
+            referencedRelation: "games"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "game_connections_tournament_id_fkey"
+            columns: ["tournament_id"]
+            isOneToOne: false
+            referencedRelation: "tournaments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "game_connections_tournament_stage_id_fkey"
+            columns: ["tournament_stage_id"]
+            isOneToOne: false
+            referencedRelation: "tournament_stages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      games: {
+        Row: {
+          created_at: string
+          draw_number: number | null
+          group_number: number | null
+          id: string
+          is_seed: boolean | null
+          readable_id: string | null
+          round_number: number | null
+          tournament_id: string | null
+          tournament_stage_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          draw_number?: number | null
+          group_number?: number | null
+          id?: string
+          is_seed?: boolean | null
+          readable_id?: string | null
+          round_number?: number | null
+          tournament_id?: string | null
+          tournament_stage_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          draw_number?: number | null
+          group_number?: number | null
+          id?: string
+          is_seed?: boolean | null
+          readable_id?: string | null
+          round_number?: number | null
+          tournament_id?: string | null
+          tournament_stage_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "games_tournament_id_fkey"
+            columns: ["tournament_id"]
+            isOneToOne: false
+            referencedRelation: "tournaments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "games_tournament_stage_id_fkey"
+            columns: ["tournament_stage_id"]
+            isOneToOne: false
+            referencedRelation: "tournament_stages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       pools: {
         Row: {
           created_at: string
@@ -166,6 +318,42 @@ export type Database = {
             columns: ["event_stage_id"]
             isOneToOne: false
             referencedRelation: "event_stages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      team_game_connections: {
+        Row: {
+          created_at: string
+          game_id: string | null
+          id: string
+          team_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          game_id?: string | null
+          id?: string
+          team_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          game_id?: string | null
+          id?: string
+          team_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "team_game_connections_game_id_fkey"
+            columns: ["game_id"]
+            isOneToOne: false
+            referencedRelation: "games"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "team_game_connections_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
             referencedColumns: ["id"]
           },
         ]
@@ -231,24 +419,71 @@ export type Database = {
           },
         ]
       }
-      tournaments: {
+      tournament_stages: {
         Row: {
           created_at: string
           id: string
           name: string | null
+          num_end_teams: number | null
+          num_start_teams: number | null
+          order: number | null
           schema: Json | null
+          tournament_id: string | null
+          type: string | null
         }
         Insert: {
           created_at?: string
           id?: string
           name?: string | null
+          num_end_teams?: number | null
+          num_start_teams?: number | null
+          order?: number | null
           schema?: Json | null
+          tournament_id?: string | null
+          type?: string | null
         }
         Update: {
           created_at?: string
           id?: string
           name?: string | null
+          num_end_teams?: number | null
+          num_start_teams?: number | null
+          order?: number | null
           schema?: Json | null
+          tournament_id?: string | null
+          type?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tournament_stages_tournament_id_fkey"
+            columns: ["tournament_id"]
+            isOneToOne: false
+            referencedRelation: "tournaments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tournaments: {
+        Row: {
+          created_at: string
+          end_date: string | null
+          id: string
+          name: string | null
+          start_date: string | null
+        }
+        Insert: {
+          created_at?: string
+          end_date?: string | null
+          id?: string
+          name?: string | null
+          start_date?: string | null
+        }
+        Update: {
+          created_at?: string
+          end_date?: string | null
+          id?: string
+          name?: string | null
+          start_date?: string | null
         }
         Relationships: []
       }

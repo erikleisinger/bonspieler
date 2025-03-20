@@ -1,6 +1,6 @@
 import { Label } from "@/shared/ui/label";
 import { useAppSelector } from "@/lib/store";
-import { getBracketEventSchedule } from "@/entities/BracketEvent";
+import { getBracketEventSchedule } from "@/entities/Bracket/BracketGame";
 import { cn } from "@/lib/utils";
 import DrawTimeValidation from "./DrawTimeValidation";
 import SelectDrawNumberButton from "./SelectDrawNumberButton";

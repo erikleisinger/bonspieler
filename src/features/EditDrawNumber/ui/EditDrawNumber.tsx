@@ -2,7 +2,6 @@
 import { DrawTime } from "@/entities/DrawTime";
 import { useState, useRef, useEffect, useMemo } from "react";
 import { useAppDispatch } from "@/lib/store";
-import { setBracketSchedule } from "@/entities/BracketEvent";
 import { Button } from "@/shared/ui/button";
 import { FaPencilAlt } from "react-icons/fa";
 import {
@@ -13,15 +12,17 @@ import {
   SelectValue,
 } from "@/shared/ui/select";
 import { useAppSelector } from "@/lib/store";
+
+import { getDrawTimes } from "@/entities/DrawTime";
 import {
-  getBracketEventDrawTimes,
   getBracketEventSchedule,
-} from "@/entities/BracketEvent";
+  setBracketEventSchedule,
+} from "@/entities/Bracket/BracketGame";
 export default function EditDrawNumber({ gameId }: { gameId: string }) {
   const dispatch = useAppDispatch();
 
   const schedule = useAppSelector(getBracketEventSchedule);
-  const drawTimes = useAppSelector(getBracketEventDrawTimes);
+  const drawTimes = useAppSelector(getDrawTimes);
   const [editing, setEditing] = useState(false);
   const el = useRef(null);
 
@@ -47,11 +48,12 @@ export default function EditDrawNumber({ gameId }: { gameId: string }) {
   }, [JSON.stringify(schedule)]);
 
   function updateDrawTime(newTime) {
+    console.log("new time: ", newTime);
     const newSchedule = {
       ...schedule,
       [gameId]: newTime,
     };
-    dispatch(setBracketSchedule(newSchedule));
+    dispatch(setBracketEventSchedule(newSchedule));
   }
 
   function beginEdit() {
@@ -83,7 +85,7 @@ export default function EditDrawNumber({ gameId }: { gameId: string }) {
     </div>
   ) : (
     <div className="flex gap-2 items-center">
-      <DrawTime gameId={gameId} schedule={schedule} drawTimes={drawTimes} />
+      <DrawTime drawNumber={schedule[gameId]} />
       <Button variant="ghost" size="icon" onClick={beginEdit}>
         <FaPencilAlt />
       </Button>

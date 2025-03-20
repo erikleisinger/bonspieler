@@ -14,10 +14,10 @@ import {
 import { scrollToBracket } from "@/entities/Bracket";
 import { useAppSelector, useAppDispatch } from "@/lib/store";
 import {
-  getBracketEventBrackets,
   getBracketEventNumSheets,
   addBracketToEvent,
 } from "@/entities/BracketEvent";
+import { getBracketEventBrackets } from "@/entities/Bracket/BracketGame";
 import { generateBracket } from "@/features/Bracket/GenerateBracket";
 export default function AddBracket() {
   const [numTeams, setNumTeams] = useState(2);
@@ -31,7 +31,7 @@ export default function AddBracket() {
   const brackets = useAppSelector(getBracketEventBrackets);
   const numSheets = useAppSelector(getBracketEventNumSheets);
 
-  function addBracket({
+  async function addBracket({
     numTeams,
     numWinners,
     isSeeded,
@@ -45,8 +45,9 @@ export default function AddBracket() {
       numWinners,
       numSheets,
       isSeeded,
+      bracketIndex: brackets.length,
     });
-    dispatch(addBracketToEvent(data));
+    await dispatch(addBracketToEvent(data));
   }
 
   function handleAddBracket() {

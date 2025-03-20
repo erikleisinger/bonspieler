@@ -11,8 +11,11 @@ import {
 
 import { useAppDispatch, useAppSelector } from "@/lib/store";
 import { getCurrentTournament } from "@/entities/Tournament";
-import { setBracketEvent, resetBracketEvent } from "@/entities/BracketEvent";
+import { resetBracketEvent, setBracketEvent } from "@/entities/BracketEvent";
 
+import { initBracketConnections } from "@/entities/Bracket/BracketGameConnections";
+import { initBracketGames } from "@/entities/Bracket/BracketGame";
+import { initDrawTimesForStage } from "@/entities/DrawTime";
 /* Components */
 
 import { TournamentEditor } from "@/widgets/Tournament/TournamentEditor";
@@ -28,11 +31,15 @@ export default function EditTournament() {
 
   const [editedStage, setEditedStage] = useState<TournamentStage | null>(null);
 
-  function onEditStage(stage: TournamentStage) {
+  async function onEditStage(stage: TournamentStage) {
     if (stage.type === TournamentStageType.Bracket) {
-      dispatch(setBracketEvent(stage));
-      setEditedStage(stage);
+      console.log("stage: ", stage);
+      await dispatch(initBracketGames(stage.id));
+      await dispatch(initBracketConnections(stage.id));
+      await dispatch(setBracketEvent(stage));
+      await dispatch(initDrawTimesForStage(stage.id));
     }
+    setEditedStage(stage);
   }
 
   function endEditStage() {

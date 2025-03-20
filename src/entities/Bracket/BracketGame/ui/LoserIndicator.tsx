@@ -1,11 +1,13 @@
 import { useAppSelector } from "@/lib/store";
-import { getReadableGameId } from "@/entities/BracketEvent";
+import { getReadableGameId } from "@/entities/Bracket/BracketGame";
 export default function LoserIndicator({
   loserTo,
 }: {
   loserTo: string | null;
 }) {
-  const readableLoser = useAppSelector(getReadableGameId)(loserTo);
+  const readableLoser = useAppSelector((state) =>
+    getReadableGameId(state, loserTo)
+  );
 
   const baseButtonStyles =
     "text-destructive  rounded-sm  bracket-game__loser-indicator ";

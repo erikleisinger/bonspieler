@@ -1,20 +1,21 @@
-import { createSlice, createSelector } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import type { Nullable } from "@/shared/types";
 import type { RootState } from "@/lib/store";
 import type { BracketEvent } from "@/entities/Bracket";
 import type { ViewableBracketEvent } from "../types/ViewableBracketEvent";
 import { defaultState } from "./default-state";
 import * as reducers from "./reducers";
+import * as thunks from "./thunks";
 
 export interface BracketEventState {
-  bracket: Nullable<ViewableBracketEvent>;
+  bracket: ViewableBracketEvent;
 }
 
 export interface BracketEventStoreState {
-  bracket: BracketEvent;
+  bracket: ViewableBracketEvent;
 }
 
-const initialState: BracketEventState = {
+const initialState: BracketEventStoreState = {
   bracket: defaultState(),
 };
 
@@ -22,15 +23,11 @@ export const bracketEventSlice = createSlice({
   name: "bracketEvent",
   initialState,
   reducers: {
-    addBracketToEvent: reducers.addBracketToEvent,
     assignTeamToGame: reducers.assignTeamToGame,
-    removeBracket: reducers.removeBracket,
     resetBracketEvent: reducers.resetBracketEvent,
     setBracketEvent: reducers.setBracketEvent,
-    setBracketEventDrawTimes: reducers.setBracketEventDrawTimes,
     setBracketEventName: reducers.setBracketEventField("name"),
     setBracketEventRows: reducers.setBracketEventRows,
-    setBracketSchedule: reducers.setBracketEventField("schedule"),
     setCurrentlyViewingBracket: reducers.setBracketEventField(
       "currentlyViewingBracket"
     ),
@@ -43,10 +40,22 @@ export const bracketEventSlice = createSlice({
     setNumSheets: reducers.setBracketEventField("numSheets"),
     setNumTeams: reducers.setBracketEventField("numTeams"),
     setNumWinners: reducers.setBracketEventField("numWinners"),
-    setSelectedGame: reducers.setSelectedGame,
     setSelectedDraw: reducers.setBracketEventField("selectedDraw"),
     updateBracketGameTeam: reducers.updateBracketGameTeam,
     updateBracketEvent: reducers.updateBracketEvent,
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(thunks.initBracketEvent.fulfilled, (state, action) => {
+        return state;
+      })
+      .addCase(thunks.setSelectedGame.fulfilled, (state, action) => {
+        if (!state.bracket) return;
+        state.bracket.selectedGame = action.payload;
+      })
+      .addCase(thunks.removeBracketFromEvent.fulfilled, (state, action) => {
+        console.log("removed bracket");
+      });
   },
 });
 
@@ -54,8 +63,7 @@ export const getBracketEventBrackets = (state: RootState) =>
   state?.bracketEvent?.bracket?.brackets || [];
 export const getBracketEventConnections = (state: RootState) =>
   state?.bracketEvent?.bracket?.connections || {};
-export const getBracketEventDrawTimes = (state: RootState) =>
-  state?.bracketEvent?.bracket?.drawTimes || {};
+
 export const getBracketEventId = (state: RootState) =>
   state?.bracketEvent?.bracket?.id || null;
 export const getBracketEventName = (state: RootState) =>
@@ -69,10 +77,6 @@ export const getBracketEventNumWinners = (state: RootState) =>
 export const getBracketEventOrder = (state: RootState) => {
   return state?.bracketEvent?.bracket?.order || 0;
 };
-export const getBracketEventReadableIdIndex = (state: RootState) =>
-  state?.bracketEvent?.bracket?.readableIdIndex || {};
-export const getBracketEventSchedule = (state: RootState) =>
-  state?.bracketEvent?.bracket?.schedule || {};
 
 export const getBracketEventSelectedDraw = (state: RootState) =>
   state?.bracketEvent?.bracket?.selectedDraw || null;
@@ -92,16 +96,6 @@ export const getSelectedDraw = (state: RootState) => {
 export const getBracketEvent = (state: RootState) =>
   state?.bracketEvent?.bracket;
 
-export const getReadableGameId = createSelector(
-  [getBracketEventReadableIdIndex],
-  (readableIdIndex) => {
-    return (gameId: string | null) => {
-      if (!gameId) return null;
-      return readableIdIndex[gameId] || "?";
-    };
-  }
-);
-
 export const getCurrentlyViewingBracket = (state: RootState) => {
   return state?.bracketEvent?.bracket?.currentlyViewingBracket || 0;
 };
@@ -117,16 +111,17 @@ export const getNumSheets = (state: RootState) => {
   return state?.bracketEvent?.bracket?.numSheets || 8;
 };
 
+export const initBracketEvent = thunks.initBracketEvent;
+export const setSelectedGame = thunks.setSelectedGame;
+export const addBracketToEvent = thunks.addBracketToEvent;
+export const removeBracketFromEvent = thunks.removeBracketFromEvent;
+export const saveBracketEvent = thunks.saveBracketEvent;
 export const {
-  addBracketToEvent,
   assignTeamToGame,
-  removeBracket,
   resetBracketEvent,
   setBracketEvent,
-  setBracketEventDrawTimes,
   setBracketEventName,
   setBracketEventRows,
-  setBracketSchedule,
   setCurrentlyViewingBracket,
   setLookingForLoserConnection,
   setLookingToAssignTeam,
@@ -134,7 +129,6 @@ export const {
   setNumTeams,
   setNumWinners,
   setSelectedDraw,
-  setSelectedGame,
   updateBracketGameTeam,
   updateBracketEvent,
 } = bracketEventSlice.actions;

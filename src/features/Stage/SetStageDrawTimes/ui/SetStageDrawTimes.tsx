@@ -1,26 +1,21 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 
-import { getBracketEventSchedule } from "@/entities/BracketEvent";
+import { getBracketEventSchedule } from "@/entities/Bracket/BracketGame";
 import DrawTimeValidationContext from "./DrawTimeValidationContext";
 import DrawInfo from "./DrawInfo";
 import { DateTimePicker } from "@/shared/ui/date-time-picker";
 import SetterButton from "./SetterButton";
 import { useAppDispatch, useAppSelector } from "@/lib/store";
-import {
-  getNumSheets,
-  getBracketEventDrawTimes,
-  setBracketEventDrawTimes,
-} from "@/entities/BracketEvent";
+import { getNumSheets } from "@/entities/BracketEvent";
+import { getDrawTimes, setDrawTimes } from "@/entities/DrawTime";
 import { formatISO, parseISO } from "date-fns";
 export default function SetStageDrawTimes() {
   const dispatch = useAppDispatch();
   const schedule = useAppSelector(getBracketEventSchedule);
-  const drawTimes = useAppSelector(getBracketEventDrawTimes);
+  const drawTimes = useAppSelector(getDrawTimes);
   const numSheets = useAppSelector(getNumSheets);
 
-  const numDraws = useMemo(() => {
-    return Math.max(...Object.values(schedule));
-  }, [JSON.stringify(schedule)]);
+  const numDraws = Object.keys(drawTimes).length;
 
   const [tempDrawTimes, setTempDrawTimes] = useState(
     Object.entries({ ...drawTimes }).reduce((all, [key, value]) => {
@@ -38,7 +33,7 @@ export default function SetStageDrawTimes() {
   }
 
   function updateDrawTimes() {
-    dispatch(setBracketEventDrawTimes(tempDrawTimes));
+    dispatch(setDrawTimes(tempDrawTimes));
   }
 
   function getISOTime(date?: string) {

@@ -5,12 +5,19 @@ import GameConnections from "./GameConnections";
 import { BRACKET_CONTAINER_ELEMENT_ID_PREFIX } from "../lib/constants/element-id";
 import { BracketConnections } from "../types";
 
+import type {
+  WinnerConnections,
+  OriginConnections,
+} from "@/entities/Bracket/BracketGameConnections";
+
 export interface BracketProps {
   bracketNumber: number;
   children?: React.ReactNode;
   connections: BracketConnections;
   rounds: BracketGame[][];
   rows: BracketRows;
+  winnerConnections: WinnerConnections;
+  originConnections: OriginConnections;
   setRows: (newRows: BracketRows) => void;
 }
 
@@ -20,6 +27,8 @@ export default function Bracket({
   connections,
   rounds,
   rows,
+  winnerConnections,
+  originConnections,
   setRows,
 }: BracketProps) {
   const calculateRows = useCallback(() => {
@@ -40,6 +49,8 @@ export default function Bracket({
               roundIndex,
               rowsIndex: gameRowSpanMap,
               rowsArray: all,
+              winnerConnections,
+              originConnections,
             }),
           ];
         },
@@ -85,6 +96,8 @@ export default function Bracket({
         <div className="flex  relative">
           <GameConnections
             connections={connections}
+            winnerConnections={winnerConnections}
+            originConnections={originConnections}
             games={rounds.flat()}
             rows={rows}
           />

@@ -1,23 +1,19 @@
 import { useMemo } from "react";
-import { format } from "date-fns";
-export default function DrawTime({
-  gameId,
-  schedule,
-  drawTimes,
-}: {
-  gameId: string;
-  schedule: { [gameId: string]: number };
-  drawTimes: { [drawNum: number]: Date };
-}) {
+import { useAppSelector } from "@/lib/store";
+import { getDrawTimeByNumber } from "../model";
+import { format, parseISO } from "date-fns";
+export default function DrawTime({ drawNumber }: { drawNumber: number }) {
+  const drawTimeIso = useAppSelector((state) =>
+    getDrawTimeByNumber(state, drawNumber)
+  );
   const drawTime = useMemo(() => {
-    const drawNumber = drawTimes[schedule[gameId]];
-    if (!drawNumber) return "No draw time";
-    return format(drawNumber, "h:mm aaa • EEEE, MMM do");
-  }, [schedule[gameId], drawTimes[schedule[gameId]]]);
+    if (!drawTimeIso) return "No draw time";
+    return format(parseISO(drawTimeIso), "h:mm aaa • EEEE, MMM do");
+  }, [drawTimeIso]);
 
   return (
     <div>
-      Draw {schedule[gameId]} • {drawTime}
+      Draw {drawNumber} • {drawTime}
     </div>
   );
 }

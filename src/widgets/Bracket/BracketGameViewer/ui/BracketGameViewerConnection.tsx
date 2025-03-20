@@ -1,24 +1,21 @@
-import { BracketGameType } from "@/entities/Bracket";
+import type { Nullable } from "@/shared/types";
 import { FaTrophy, FaHeartBroken } from "react-icons/fa";
 import { useAppSelector, useAppDispatch } from "@/lib/store";
-import {
-  getBracketEventConnections,
-  setSelectedGame,
-  getReadableGameId,
-} from "@/entities/BracketEvent";
+import { setSelectedGame } from "@/entities/BracketEvent";
+import { getReadableGameId } from "@/entities/Bracket/BracketGame";
 export default function BracketGameViewerConnection({
-  game,
+  connection,
   isWinner = false,
   isLoser = false,
 }: {
-  game: BracketGameType;
+  connection: Nullable<string>;
   isWinner?: boolean;
   isLoser?: boolean;
 }) {
   const dispatch = useAppDispatch();
-  const gameConnection = useAppSelector(getBracketEventConnections)[game.id];
-  const readableId = useAppSelector(getReadableGameId)(
-    isWinner ? gameConnection.winnerTo : gameConnection.loserTo
+
+  const readableId = useAppSelector((state) =>
+    getReadableGameId(state, connection)
   );
 
   function icon() {
@@ -46,13 +43,8 @@ export default function BracketGameViewerConnection({
   }
 
   function onClick() {
-    if (isLoser && !gameConnection.loserTo) return;
-    if (isWinner && !gameConnection.winnerTo) return;
-    dispatch(
-      setSelectedGame(
-        isLoser ? gameConnection.loserTo : gameConnection.winnerTo
-      )
-    );
+    if (!connection) return;
+    dispatch(setSelectedGame(connection));
   }
 
   return (

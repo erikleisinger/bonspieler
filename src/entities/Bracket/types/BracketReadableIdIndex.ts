@@ -1,3 +1,5 @@
+import { Nullable } from "@/shared/types";
+
 export interface BracketReadableIdIndex {
-  [gameId: string]: string;
+  [gameId: string]: Nullable<string>;
 }

@@ -2,11 +2,17 @@ import { Action, ThunkAction } from "@reduxjs/toolkit";
 import { configureStore } from "@reduxjs/toolkit";
 import { tournamentReducer } from "@/entities/Tournament";
 import { bracketEventReducer } from "@/entities/BracketEvent";
+import { bracketConnectionsReducer } from "@/entities/Bracket/BracketGameConnections";
+import { bracketGamesReducer } from "@/entities/Bracket/BracketGame";
+import { drawTimeSlice } from "@/entities/DrawTime";
 
 export const store = configureStore({
   reducer: {
     tournament: tournamentReducer,
     bracketEvent: bracketEventReducer,
+    bracketConnections: bracketConnectionsReducer,
+    bracketGames: bracketGamesReducer,
+    drawTimes: drawTimeSlice.reducer,
   },
 });
 

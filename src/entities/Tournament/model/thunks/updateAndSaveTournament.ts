@@ -12,7 +12,6 @@ export const updateAndSaveTournament = createAsyncThunk(
     // Get the updated tournament from the state
     const state = getState() as RootState;
     const updatedTournament = state.tournament.tournament; // Adjust this path based on your actual state structure
-    console.log("updated tournament: ", updatedTournament);
     if (!updatedTournament) return;
     // Save the tournament
     const result = await saveTournament(updatedTournament);

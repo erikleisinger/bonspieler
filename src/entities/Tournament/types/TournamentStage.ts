@@ -11,8 +11,8 @@ interface TournamentStageBase {
   id: Nullable<string>;
   order: number;
   name: string;
-  numWinners: number[];
-  numTeams: number;
+  num_start_teams: number;
+  num_end_teams: number;
 }
 
 export type TournamentBracketStage = TournamentStageBase & {

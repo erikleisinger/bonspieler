@@ -1,19 +1,12 @@
-import type { BracketEventState } from "./bracketEventSlice";
-export const defaultState = (): BracketEventState["bracket"] => ({
-  brackets: [],
-  connections: {},
+import type { BracketEventStoreState } from "./bracketEventSlice";
+export const defaultState = (): BracketEventStoreState["bracket"] => ({
   currentlyViewingBracket: 0,
-  drawTimes: {},
   id: null,
   lookingForLoserConnection: null,
   lookingToAssignTeam: null,
   name: "",
-  numTeams: 16,
-  numWinners: [],
-  numSheets: 8,
-  readableIdIndex: {},
+  num_start_teams: 16,
+  num_end_teams: 1,
   selectedDraw: null,
-  selectedGame: null,
-  schedule: {},
   rows: {},
 });

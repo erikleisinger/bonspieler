@@ -2,11 +2,14 @@ import { cn } from "@/lib/utils";
 import { useMemo } from "react";
 import { useAppSelector } from "@/lib/store";
 import {
-  getBracketEventBrackets,
   getBracketEventDrawTimes,
-  getBracketEventSchedule,
   getBracketEventNumWinners,
 } from "@/entities/BracketEvent";
+import { getDrawTimes } from "@/entities/DrawTime";
+import {
+  getGamesForBracket,
+  getBracketEventSchedule,
+} from "@/entities/Bracket/BracketGame";
 import DrawTime from "@/shared/ui/draw-time";
 import Typography from "@/shared/ui/typography";
 import { Button } from "@/shared/ui/button";
@@ -22,22 +25,19 @@ export default function BracketInfo({
   bracketIndex: number;
   editDrawTimes: () => void;
 }) {
-  const brackets = useAppSelector(getBracketEventBrackets);
   const schedule = useAppSelector(getBracketEventSchedule);
-  const drawTimes = useAppSelector(getBracketEventDrawTimes);
+  const drawTimes = useAppSelector(getDrawTimes);
   const numWinners = useAppSelector(getBracketEventNumWinners);
 
-  const games = brackets[bracketIndex].flat() || [];
+  const games = useAppSelector((state) =>
+    getGamesForBracket(state, bracketIndex)
+  );
 
   const drawNumbers = useMemo(() => {
-    return games
-      .reduce((all, { id }) => {
-        const drawNum = schedule[id];
-        if (!all.includes(drawNum)) return [...all, drawNum];
-        return all;
-      }, [])
-      .sort((a, b) => a - b);
-  }, [games, schedule]);
+    return Array.from({ length: Object.keys(drawTimes).length }).map(
+      (_, i) => i + 1
+    );
+  }, [drawTimes]);
 
   const bracketWinners = numWinners[bracketIndex];
   const numGames = games?.length || 0;
