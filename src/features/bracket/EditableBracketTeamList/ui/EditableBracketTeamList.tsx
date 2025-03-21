@@ -5,38 +5,33 @@ import { useMemo } from "react";
 import { useAppDispatch, useAppSelector } from "@/lib/store";
 import { getTournamentTeams } from "@/entities/Tournament";
 import {
-  getBracketEventConnections,
   getLookingToAssignTeam,
   setLookingToAssignTeam,
 } from "@/entities/BracketEvent";
 export default function EditableBracketTeamList() {
   const dispatch = useAppDispatch();
   const teams = useAppSelector(getTournamentTeams);
-  const connections = useAppSelector(getBracketEventConnections);
   const lookingToAssignTeam = useAppSelector(getLookingToAssignTeam);
 
   const teamAssignmentMap: {
     [teamId: number]: string;
   } = useMemo(() => {
-    return Object.entries(connections).reduce(
-      (allAssignments, [gameId, connection]) => {
-        const { teams = [] } = connection || {};
-        return {
-          ...allAssignments,
-          ...teams.reduce((all, current) => {
-            const { teamId } = current;
-            if (!!teamId && teamId !== "seed")
-              return {
-                ...all,
-                [teamId]: gameId,
-              };
-            return all;
-          }, {}),
-        };
-      },
-      {}
-    );
-  }, [JSON.stringify(connections)]);
+    return Object.entries({}).reduce((allAssignments, [gameId, connection]) => {
+      const { teams = [] } = connection || {};
+      return {
+        ...allAssignments,
+        ...teams.reduce((all, current) => {
+          const { teamId } = current;
+          if (!!teamId && teamId !== "seed")
+            return {
+              ...all,
+              [teamId]: gameId,
+            };
+          return all;
+        }, {}),
+      };
+    }, {});
+  }, []);
 
   function beginLookToAssign(teamId: string) {
     dispatch(setLookingToAssignTeam(teamId));

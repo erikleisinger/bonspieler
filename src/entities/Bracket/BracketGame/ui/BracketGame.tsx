@@ -2,7 +2,7 @@ import "./game.scss";
 import { useEffect, useState, useRef, useContext } from "react";
 import BracketGameTeams from "./BracketGameTeams";
 import BracketGameHeader from "./BracketGameHeader";
-import type { BracketConnection, BracketGame, BracketRow } from "../../types";
+import type { BracketGame, BracketRow } from "../../types";
 import { GAME_ELEMENT_ID_PREFIX } from "../../lib/constants/element-id";
 import { getRowSpanForGame } from "../lib/getRowSpanForGame";
 import { useAppSelector } from "@/lib/store";
@@ -72,6 +72,11 @@ export default function BracketGame({
 
   const isFinal = !winnerConnection;
 
+  function handleClick(e: MouseEvent<HTMLElement>) {
+    e.stopPropagation();
+    onClick(game);
+  }
+
   return (
     <div
       key={game.id}
@@ -93,7 +98,7 @@ export default function BracketGame({
               className
             }
             id={GAME_ELEMENT_ID_PREFIX + game.id}
-            onClick={() => onClick(game)}
+            onMouseDown={handleClick}
           >
             <BracketGameHeader
               readableId={readableId}

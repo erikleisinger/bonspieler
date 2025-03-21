@@ -1,6 +1,15 @@
 import React from "react";
 
-type TypographyTag = "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "p" | "span";
+type TypographyTag =
+  | "h1"
+  | "h2"
+  | "h3"
+  | "h4"
+  | "h5"
+  | "h6"
+  | "p"
+  | "span"
+  | "overline";
 
 export default function Typography({
   className = "",
@@ -29,10 +38,18 @@ export default function Typography({
         return "text-base";
       case "span":
         return "text-base";
+      case "overline":
+        return "text-xs uppercase tracking-widest leading-[1]";
       default:
         return "text-base";
     }
   }
-  const Tag = tag;
+  function getTag() {
+    if (tag === "overline") {
+      return "span";
+    }
+    return tag;
+  }
+  const Tag = getTag();
   return <Tag className={getClassName() + " " + className}>{children}</Tag>;
 }

@@ -3,20 +3,14 @@ import { calculateRowSpanForGame } from "../lib/calculateRowSpanForGame";
 import type { BracketGame, BracketRowWithId, BracketRows } from "../types";
 import GameConnections from "./GameConnections";
 import { BRACKET_CONTAINER_ELEMENT_ID_PREFIX } from "../lib/constants/element-id";
-import { BracketConnections } from "../types";
 
-import type {
-  WinnerConnections,
-  OriginConnections,
-} from "@/entities/Bracket/BracketGameConnections";
+import type { OriginConnections } from "@/entities/Bracket/BracketGameConnections";
 
 export interface BracketProps {
   bracketNumber: number;
   children?: React.ReactNode;
-  connections: BracketConnections;
   rounds: BracketGame[][];
   rows: BracketRows;
-  winnerConnections: WinnerConnections;
   originConnections: OriginConnections;
   setRows: (newRows: BracketRows) => void;
 }
@@ -24,10 +18,8 @@ export interface BracketProps {
 export default function Bracket({
   bracketNumber,
   children,
-  connections,
   rounds,
   rows,
-  winnerConnections,
   originConnections,
   setRows,
 }: BracketProps) {
@@ -44,12 +36,10 @@ export default function Bracket({
           return [
             ...all,
             calculateRowSpanForGame({
-              connections,
               game,
               roundIndex,
               rowsIndex: gameRowSpanMap,
               rowsArray: all,
-              winnerConnections,
               originConnections,
             }),
           ];
@@ -61,7 +51,8 @@ export default function Bracket({
         gameRowSpanMap[gameId] = rest;
       });
       const largestValue =
-        gamePositions[gamePositions.length - 1].rowEnd + 2 ** roundIndex;
+        (gamePositions[gamePositions.length - 1]?.rowEnd || 0) +
+        2 ** roundIndex;
       const gameRowSpanArray: ("game" | null)[] = new Array(largestValue).fill(
         null
       );
@@ -81,7 +72,7 @@ export default function Bracket({
     });
 
     setRows({ ...gameRowSpanMap });
-  }, [JSON.stringify(connections), rounds]);
+  }, [JSON.stringify(originConnections), rounds]);
 
   useEffect(() => {
     calculateRows();
@@ -95,8 +86,6 @@ export default function Bracket({
       >
         <div className="flex  relative">
           <GameConnections
-            connections={connections}
-            winnerConnections={winnerConnections}
             originConnections={originConnections}
             games={rounds.flat()}
             rows={rows}

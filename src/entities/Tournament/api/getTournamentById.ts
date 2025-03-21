@@ -46,7 +46,7 @@ export async function getTournamentById(
     .select("*")
     .eq("id", tournamentId)
     .single();
-  const { id, name } = data;
+  const { id, name, start_date, end_date } = data;
   const stages = await getTournamentStages(id);
   const games = await getTournamentGames(id);
   const connections = await getTournamentGameConnections(id);
@@ -54,6 +54,8 @@ export async function getTournamentById(
   return {
     id,
     name,
+    start_date,
+    end_date,
     stages,
   };
 }

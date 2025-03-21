@@ -11,12 +11,14 @@ export default function TournamentNavigation({
     [TournamentTab.Stages]: <div />,
     [TournamentTab.Teams]: <div />,
   },
+  tournamentChildren,
 }: {
   children?: React.ReactNode;
   tabsChildren: {
     [TournamentTab.Stages]: React.ReactNode;
     [TournamentTab.Teams]: React.ReactNode;
   };
+  tournamentChildren?: React.ReactNode;
 }) {
   const tournamentName = useAppSelector(getCurrentTournamentName);
   function getClassNames(tab: TournamentTab) {
@@ -41,19 +43,6 @@ export default function TournamentNavigation({
     >
       <div className="z-10">
         <header className="relative">
-          <div className=" p-4 md:p-2 md:pl-8  text-center md:text-left flex justify-center md:justify-between z-10   items-center relative z-10">
-            <Typography tag="h3" className="-mt-1">
-              {tournamentName}
-            </Typography>
-            <TabsList className="h-12 w-[300px] hidden md:flex">
-              <TabsTrigger value={TournamentTab.Stages} className="h-full grow">
-                Stages
-              </TabsTrigger>
-              <TabsTrigger value={TournamentTab.Teams} className="h-full grow">
-                Teams
-              </TabsTrigger>
-            </TabsList>
-          </div>
           <div className="absolute inset-0 bg-slate-500/5 backdrop-blur-sm z-[3]" />
         </header>
         <nav className="md:hidden flex">
@@ -108,7 +97,7 @@ export default function TournamentNavigation({
         <div className="absolute inset-0 bg-slate-500/5 backdrop-blur-sm z-[3]" />
       </div>
 
-      <div className="z-10">{children || <div />}</div>
+      <footer className="z-10">{children || <footer />}</footer>
     </Tabs>
   );
 }

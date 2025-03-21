@@ -10,31 +10,28 @@ import { getNewBracketAndWinnerCount } from "../lib/getNewBracketAndWinnerCount"
 import { TournamentStageContext } from "@/shared/TournamentStage";
 import { generateBracket } from "@/features/Bracket/GenerateBracket";
 interface BracketEditorOptionsProps {
-  teamCount: number;
-  updateTeamCount: (e: number) => void;
-  numWinners: number[];
-  updateNumWinners: (e: number[]) => void;
+  initialNumBrackets?: number;
+  initialNumSheets?: number;
+  initialNumWinners?: number[];
+  initialTeamCount?: number;
   renderBrackets: () => void;
-  numBrackets: number;
-  updateNumBrackets: (e: number) => void;
-  numSheets: number;
-  updateNumSheets: (e: number) => void;
 }
 
 export default function CreateBracketWizard({
-  teamCount,
-  updateTeamCount,
-  numWinners,
-  updateNumWinners,
+  initialTeamCount = 16,
+  initialNumWinners = [1],
+  initialNumSheets = 8,
   renderBrackets,
-  numSheets,
-  updateNumSheets,
 }: BracketEditorOptionsProps) {
   const { startTeams: maxTeams, endTeams: targetEndTeams } = useContext(
     TournamentStageContext
   );
 
+  const [numWinners, setNumWinners] = useState(initialNumWinners);
+  const [numTeams, setNumTeams] = useState(initialTeamCount);
   const [numBrackets, setNumBrackets] = useState(numWinners.length);
+  const [numSheets, setNumSheets] = useState(initialNumSheets);
+
   const isDisabled = useMemo(() => {
     return !numBrackets;
   }, [numBrackets]);
@@ -42,7 +39,7 @@ export default function CreateBracketWizard({
   function generateBracketEvent() {
     renderBrackets({
       ...generateBracket({
-        numTeams: teamCount,
+        numTeams,
         numWinners,
         numSheets,
       }),
@@ -57,13 +54,13 @@ export default function CreateBracketWizard({
       numWinners
     );
     setNumBrackets(brackets);
-    updateNumWinners(winners);
+    setNumWinners(winners);
   }
 
   function handleUpdateNumWinners(newWinnerCount: number, index: number) {
     const newWinners = [...numWinners];
     newWinners[index] = newWinnerCount;
-    updateNumWinners(newWinners);
+    setNumWinners(newWinners);
   }
 
   const totalWinners = getTotalBracketWinners(numWinners);
@@ -76,12 +73,12 @@ export default function CreateBracketWizard({
   return (
     <div className="flex flex-col gap-4 justify-between  p-8">
       <CustomizeBracketEvent
-        teamCount={teamCount}
-        updateTeamCount={updateTeamCount}
+        teamCount={numTeams}
+        updateTeamCount={setNumTeams}
         numWinners={numWinners}
-        updateNumWinners={updateNumWinners}
+        updateNumWinners={setNumWinners}
         numSheets={numSheets}
-        updateNumSheets={updateNumSheets}
+        updateNumSheets={setNumSheets}
         numBrackets={numBrackets}
         updateNumBrackets={updateNumBrackets}
         maxTeams={maxTeams}
@@ -98,7 +95,7 @@ export default function CreateBracketWizard({
             <CustomizeBracket
               bracketIndex={i}
               teamsEditable={false}
-              teamCount={teamCount - i}
+              teamCount={numTeams - i}
               numWinners={numWinners[i]}
               updateNumWinners={(e) => handleUpdateNumWinners(Number(e), i)}
             />

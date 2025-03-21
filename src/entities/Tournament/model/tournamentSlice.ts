@@ -21,6 +21,9 @@ export const tournamentSlice = createSlice({
   initialState,
   reducers: {
     initBlankTournament: reducers.initBlankTournament,
+    setCurrentTournamentName: reducers.setCurrentTournamentName,
+    setTournamentEndDate: reducers.setTournamentEndDate,
+    setTournamentStartDate: reducers.setTournamentStartDate,
     updateTournamentStage: reducers.updateTournamentStage,
     updateTournamentStages: reducers.updateTournamentStages,
   },
@@ -120,6 +123,10 @@ export const getCurrentTournamentStatus = (state: RootState) =>
 
 export const getCurrentTournamentName = selectors.getTournamentField("name");
 
+export const getTournamentStartDate =
+  selectors.getTournamentField("start_date");
+export const getTournamentEndDate = selectors.getTournamentField("end_date");
+
 export const getTournamentTeams = (state: RootState) => state.tournament.teams;
 export const getTournamentStagesStatus = (state: RootState) =>
   state.tournament.stagesStatus;
@@ -129,6 +136,7 @@ export const getTournamentAddStageStatus = (state: RootState) =>
 export const getTournamentRemovingStage = (state: RootState) =>
   state.tournament.removingStage;
 export const getTournamentStages = selectors.getTournamentField("stages");
+
 export const getCurrentTournamentId = selectors.getTournamentField("id");
 
 export const getStartTeams = selectors.getStartTeams;
@@ -145,6 +153,9 @@ export const updateTournamentStageOrder = thunks.updateTournamentStageOrder;
 export const updateAndSaveTournament = thunks.updateAndSaveTournament;
 
 export const {
+  setCurrentTournamentName,
+  setTournamentStartDate,
+  setTournamentEndDate,
   updateTournamentStage,
   updateTournamentStages,
   initBlankTournament,

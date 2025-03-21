@@ -1,7 +1,6 @@
 "use client";
 import { DrawTime } from "@/entities/DrawTime";
-import { useState, useRef, useEffect, useMemo } from "react";
-import { useAppDispatch } from "@/lib/store";
+import { useState, useRef, useEffect } from "react";
 import { Button } from "@/shared/ui/button";
 import { FaPencilAlt } from "react-icons/fa";
 import {
@@ -11,18 +10,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/shared/ui/select";
-import { useAppSelector } from "@/lib/store";
-
-import { getDrawTimes } from "@/entities/DrawTime";
-import {
-  getBracketEventSchedule,
-  setBracketEventSchedule,
-} from "@/entities/Bracket/BracketGame";
-export default function EditDrawNumber({ gameId }: { gameId: string }) {
-  const dispatch = useAppDispatch();
-
-  const schedule = useAppSelector(getBracketEventSchedule);
-  const drawTimes = useAppSelector(getDrawTimes);
+import { Nullable } from "@/shared/types";
+export default function EditDrawNumber({
+  gameId,
+  availableDrawTimes = [],
+  setDrawTime = () => {},
+  drawTime,
+}: {
+  gameId: string;
+  availableDrawTimes: number[];
+  setDrawTime: (drawTime: number) => void;
+  drawTime: Nullable<number>;
+}) {
   const [editing, setEditing] = useState(false);
   const el = useRef(null);
 
@@ -39,22 +38,6 @@ export default function EditDrawNumber({ gameId }: { gameId: string }) {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [el, selectOpen]);
-  const drawTimeOptions = useMemo(() => {
-    const times = [];
-    Object.values(schedule).forEach((val) => {
-      if (!times.includes(val)) times.push(val);
-    });
-    return times;
-  }, [JSON.stringify(schedule)]);
-
-  function updateDrawTime(newTime) {
-    console.log("new time: ", newTime);
-    const newSchedule = {
-      ...schedule,
-      [gameId]: newTime,
-    };
-    dispatch(setBracketEventSchedule(newSchedule));
-  }
 
   function beginEdit() {
     setSelectOpen(true);
@@ -66,14 +49,14 @@ export default function EditDrawNumber({ gameId }: { gameId: string }) {
       <Select
         open={selectOpen}
         onOpenChange={setSelectOpen}
-        value={`${schedule[gameId]}`}
-        onValueChange={updateDrawTime}
+        value={`${drawTime}`}
+        onValueChange={(e) => setDrawTime(parseInt(e))}
       >
         <SelectTrigger className="w-[180px]">
-          <SelectValue placeholder="Draw">Draw {schedule[gameId]}</SelectValue>
+          <SelectValue placeholder="Draw">Draw {drawTime}</SelectValue>
         </SelectTrigger>
         <SelectContent>
-          {drawTimeOptions.map((t) => {
+          {availableDrawTimes.map((t) => {
             return (
               <SelectItem value={t} key={t}>
                 Draw {t}
@@ -85,7 +68,7 @@ export default function EditDrawNumber({ gameId }: { gameId: string }) {
     </div>
   ) : (
     <div className="flex gap-2 items-center">
-      <DrawTime drawNumber={schedule[gameId]} />
+      <DrawTime drawNumber={drawTime} />
       <Button variant="ghost" size="icon" onClick={beginEdit}>
         <FaPencilAlt />
       </Button>

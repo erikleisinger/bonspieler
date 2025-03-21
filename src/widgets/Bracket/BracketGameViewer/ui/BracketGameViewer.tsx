@@ -17,10 +17,8 @@ import BracketGameViewerConnection from "./BracketGameViewerConnection";
 
 export default function BracketGameViewer({
   drawTimeChildren,
-  onBack = () => {},
 }: {
   drawTimeChildren?: React.ReactNode;
-  onBack?: () => void;
 }) {
   const selectedGame = useAppSelector(getSelectedGame);
   const winnerConnection = useAppSelector((state) =>
@@ -52,7 +50,7 @@ export default function BracketGameViewer({
 
   return (
     <div className="text-glass-foreground grid grid-rows-[auto_1fr] min-h-full">
-      <BracketGameViewerHeader close={onBack} game={selectedGame}>
+      <BracketGameViewerHeader game={selectedGame}>
         {drawTimeChildren}
       </BracketGameViewerHeader>
 

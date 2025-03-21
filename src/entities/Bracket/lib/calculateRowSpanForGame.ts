@@ -1,25 +1,17 @@
 import type {
   BracketConnectionRegularTeam,
-  BracketConnections,
   BracketGame,
   BracketRows,
 } from "../types";
 import { BracketRowWithId } from "../types/BracketRows";
-import type {
-  OriginConnections,
-  WinnerConnections,
-} from "@/entities/Bracket/BracketGameConnections";
+import type { OriginConnections } from "@/entities/Bracket/BracketGameConnections";
 export function calculateRowSpanForGame({
-  connections,
-  winnerConnections,
   originConnections,
   game,
   roundIndex,
   rowsIndex,
   rowsArray,
 }: {
-  connections: BracketConnections;
-  winnerConnections: WinnerConnections;
   originConnections: OriginConnections;
   game: BracketGame;
   roundIndex: number;

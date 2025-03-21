@@ -9,6 +9,7 @@ import { useAppDispatch, useAppSelector } from "@/lib/store";
 import { getNumSheets } from "@/entities/BracketEvent";
 import { getDrawTimes, setDrawTimes } from "@/entities/DrawTime";
 import { formatISO, parseISO } from "date-fns";
+import InputDate from "@/shared/input/InputDate";
 export default function SetStageDrawTimes() {
   const dispatch = useAppDispatch();
   const schedule = useAppSelector(getBracketEventSchedule);
@@ -26,9 +27,9 @@ export default function SetStageDrawTimes() {
     }, {})
   );
 
-  function updateDrawTime(newDate: Date, index: number) {
+  function updateDrawTime(newDate: string, index: number) {
     const newDrawTimes = { ...tempDrawTimes };
-    newDrawTimes[index] = formatISO(newDate);
+    newDrawTimes[index] = newDate;
     setTempDrawTimes(newDrawTimes);
   }
 
@@ -51,13 +52,13 @@ export default function SetStageDrawTimes() {
       {Array.from({ length: numDraws }).map((_, i) => {
         return (
           <DrawInfo key={i} drawNumber={i + 1} withValidation={true}>
-            <DateTimePicker
-              id={"draw-time-" + i}
-              date={getISOTime(tempDrawTimes[i + 1])}
+            <InputDate
+              id={`draw-time-${i}`}
+              date={tempDrawTimes[i + 1]}
               setDate={(e: Date) => updateDrawTime(e, i + 1)}
-              min={tempDrawTimes[i]}
-              max={tempDrawTimes[i + 2]}
+              minDate={tempDrawTimes[i]}
               side="left"
+              maxDate={tempDrawTimes[i + 2]}
             />
           </DrawInfo>
         );

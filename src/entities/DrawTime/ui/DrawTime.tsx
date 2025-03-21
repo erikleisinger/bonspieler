@@ -2,7 +2,12 @@ import { useMemo } from "react";
 import { useAppSelector } from "@/lib/store";
 import { getDrawTimeByNumber } from "../model";
 import { format, parseISO } from "date-fns";
-export default function DrawTime({ drawNumber }: { drawNumber: number }) {
+import { Nullable } from "@/shared/types";
+export default function DrawTime({
+  drawNumber,
+}: {
+  drawNumber: Nullable<number>;
+}) {
   const drawTimeIso = useAppSelector((state) =>
     getDrawTimeByNumber(state, drawNumber)
   );

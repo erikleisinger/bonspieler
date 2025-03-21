@@ -1,1 +1,0 @@
-export { TournamentEditor } from "./ui";

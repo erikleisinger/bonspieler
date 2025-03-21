@@ -5,6 +5,7 @@ import { bracketEventReducer } from "@/entities/BracketEvent";
 import { bracketConnectionsReducer } from "@/entities/Bracket/BracketGameConnections";
 import { bracketGamesReducer } from "@/entities/Bracket/BracketGame";
 import { drawTimeSlice } from "@/entities/DrawTime";
+import { createChangeLogMiddleware } from "./change-log";
 
 export const store = configureStore({
   reducer: {
@@ -14,6 +15,8 @@ export const store = configureStore({
     bracketGames: bracketGamesReducer,
     drawTimes: drawTimeSlice.reducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(createChangeLogMiddleware()),
 });
 
 // Infer the type of `store`

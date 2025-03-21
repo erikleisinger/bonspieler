@@ -15,9 +15,9 @@ export default function GlobalLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="fixed inset-0 grid grid-rows-[auto,1fr] bg-gradient">
-      <header className="p-4 bg-glass backdrop-blur-md">
-        <Link href="/tournaments">
+    <div className="fixed inset-0 grid grid-rows-[auto_1fr] bg-gradient ">
+      <header className="p-4 bg-glass backdrop-blur-md shadow-md z-50">
+        <Link href="/tournaments" className="flex justify-center ">
           <h1
             className={cn(
               koulen.className,
@@ -29,7 +29,7 @@ export default function GlobalLayout({
           </h1>
         </Link>
       </header>
-      <div className="relative overflow-hidden">{children}</div>
+      <div className="relative overflow-hidden z-10">{children}</div>
     </div>
   );
 }

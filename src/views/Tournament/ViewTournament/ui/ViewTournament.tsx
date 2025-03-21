@@ -3,7 +3,7 @@ import { useState } from "react";
 import { TournamentStageType, TournamentStage } from "@/entities/Tournament";
 import { TournamentViewer } from "@/widgets/Tournament/TournamentViewer";
 import { useAppDispatch } from "@/lib/store";
-import { setBracketEvent, resetBracketEvent } from "@/entities/BracketEvent";
+import { setBracketEvent, resetBracket } from "@/entities/BracketEvent";
 import ViewingBracket from "./ViewingBracket";
 export default function TournamentView() {
   const dispatch = useAppDispatch();
@@ -22,7 +22,7 @@ export default function TournamentView() {
 
   function onBack() {
     if (editedStageType === TournamentStageType.Bracket) {
-      dispatch(resetBracketEvent());
+      dispatch(resetBracket());
     }
 
     setEditedStageType(null);

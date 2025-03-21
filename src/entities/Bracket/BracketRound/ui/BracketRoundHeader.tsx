@@ -14,7 +14,7 @@ export default function BracketRoundHeader({
   //   }, [games, schedule, drawTimes]);
 
   return (
-    <header className="sticky  right-0 top-2 z-10 p-2 text-glass-foreground font-semibold bg-glass shadow-sm backdrop-blur-sm text-center mx-1 rounded-sm pointer-events-auto">
+    <header className="sticky  right-0 top-2 z-[1] p-2 text-glass-foreground font-semibold bg-glass shadow-sm backdrop-blur-sm text-center mx-1 rounded-sm pointer-events-auto">
       <div>Round {roundNumber}</div>
     </header>
   );

@@ -53,11 +53,9 @@ export async function updateTournamentStages(
 export async function updateTournament({
   id,
   name,
-  updates,
 }: {
   id: string;
   name: string;
-  updates: TablesUpdate<"tournaments">;
 }) {
   const { data, error } = await client
     .from("tournaments")
@@ -67,8 +65,5 @@ export async function updateTournament({
     .eq("id", id)
     .select("id")
     .single();
-  const { schema } = updates || {};
-  const { stages = [] } = schema || {};
-  await updateTournamentStages(id, stages);
   return data.id;
 }

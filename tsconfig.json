@@ -24,6 +24,6 @@
       "@/types": ["./shared/types/index.ts"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "test/generateFirstBracketGames.js", "test/closestInSequence.js", "test/findPower.js", "test/utils.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "test/generateFirstBracketGames.js", "test/closestInSequence.js", "test/findPower.js", "test/utils.js", "src/shared/hooks/useElementSizetsx"],
   "exclude": ["node_modules"]
 }

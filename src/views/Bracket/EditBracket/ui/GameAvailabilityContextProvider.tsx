@@ -4,11 +4,9 @@ import { useAppSelector } from "@/lib/store";
 import {
   getLookingToAssignTeam,
   getLookingForLoserConnection,
-  getBracketEventConnections,
   setLookingForLoserConnection,
   setLookingToAssignTeam,
 } from "@/entities/BracketEvent";
-import { BracketConnections } from "@/entities/Bracket";
 import { useAppDispatch } from "@/lib/store";
 export default function GameAvailabilityContextProvider({
   children,
@@ -20,34 +18,24 @@ export default function GameAvailabilityContextProvider({
   const lookingForLoserConnection = useAppSelector(
     getLookingForLoserConnection
   );
-  const connections: BracketConnections = useAppSelector(
-    getBracketEventConnections
-  );
 
   const [availableGameIds, setAvailableGameIds] = useState<string[]>([]);
 
   useEffect(() => {
     if (!lookingToAssignTeam && !lookingForLoserConnection) return;
     if (lookingToAssignTeam) {
-      const available = Object.entries(connections).reduce(
-        (acc, [key, value]) => {
-          const { teams } = value;
-          if (teams.some(({ teamId }) => teamId === lookingToAssignTeam))
-            return acc;
-          if (!teams.some(({ teamId }) => teamId === "seed")) return acc;
-          return [...acc, key];
-        },
-        []
-      );
+      const available = Object.entries({}).reduce((acc, [key, value]) => {
+        const { teams } = value;
+        if (teams.some(({ teamId }) => teamId === lookingToAssignTeam))
+          return acc;
+        if (!teams.some(({ teamId }) => teamId === "seed")) return acc;
+        return [...acc, key];
+      }, []);
       setAvailableGameIds(available);
     } else {
       return;
     }
-  }, [
-    lookingToAssignTeam,
-    lookingForLoserConnection,
-    JSON.stringify(connections),
-  ]);
+  }, [lookingToAssignTeam, lookingForLoserConnection]);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {

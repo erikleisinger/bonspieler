@@ -13,16 +13,26 @@ export interface BracketWinnerConnectionsState {
   originConnections: OriginConnections;
 }
 
-const initialState: BracketWinnerConnectionsState = {
-  loserConnections: {},
-  winnerConnections: {},
-  originConnections: {},
-};
+function defaultState() {
+  return {
+    loserConnections: {},
+    winnerConnections: {},
+    originConnections: {},
+  };
+}
+
+const initialState: BracketWinnerConnectionsState = defaultState();
 
 export const bracketConnectionsSlice = createSlice({
   name: "bracketConnections",
   initialState,
   reducers: {
+    resetState(state) {
+      state.loserConnections = defaultState().loserConnections;
+      state.winnerConnections = defaultState().winnerConnections;
+      state.originConnections = defaultState().originConnections;
+    },
+
     setLoserConnections: (state, action) => {
       state.loserConnections = action.payload;
     },
@@ -54,11 +64,16 @@ export const bracketConnectionsSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(thunks.initBracketConnections.fulfilled, (state, action) => {
-        const { winnerConnections, loserConnections, originConnections } =
-          action.payload;
+        const {
+          winnerConnections,
+          loserConnections,
+          originConnections,
+          connections,
+        } = action.payload;
         state.winnerConnections = winnerConnections;
         state.loserConnections = loserConnections;
         state.originConnections = originConnections;
+        state.initialConnections = connections;
       })
       .addCase(thunks.saveBracketConnections.fulfilled, (state, action) => {
         console.log("connections saved!");
@@ -73,6 +88,7 @@ export const {
   updateLoserConnections,
   updateOriginConnections,
   updateWinnerConnections,
+  resetState,
 } = bracketConnectionsSlice.actions;
 export const getWinnerConnections = (state: RootState) =>
   state.bracketConnections.winnerConnections;

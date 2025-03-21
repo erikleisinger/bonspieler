@@ -1,5 +1,4 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { fetchBracketEvent } from "../api";
 import { GeneratedBracket } from "@/features/Bracket/GenerateBracket";
 import {
   updateOriginConnections,
@@ -10,8 +9,10 @@ import {
   addBracket,
   updateBracketEventGameIndex,
   updateBracketEventReadableIdIndex,
-  getBracketEventBrackets,
 } from "@/entities/Bracket/BracketGame";
+import { updateNumWinners, updateNumTeams } from "../bracketEventSlice";
+import { getBracketEndTeams } from "../helpers";
+import { getTotalBracketWinners } from "@/shared/Bracket/getTotalBracketWinners";
 
 export const addBracketToEvent = createAsyncThunk(
   "bracketEvent/addBracketToEvent",
@@ -23,9 +24,13 @@ export const addBracketToEvent = createAsyncThunk(
       brackets,
       readableIdIndex,
       gameIndex,
+      numTeams,
+      numWinners,
     } = newBracketEvent;
-
     const [bracketToAdd] = brackets;
+
+    dispatch(updateNumWinners(getTotalBracketWinners(numWinners)));
+    dispatch(updateNumTeams(numTeams));
     dispatch(updateLoserConnections(loserConnections));
     dispatch(updateWinnerConnections(winnerConnections));
     dispatch(updateOriginConnections(originConnections));

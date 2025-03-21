@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 // Types & enums
 
-import type { BracketEvent, BracketGameType } from "@/entities/Bracket";
+import type { BracketGameType, BracketSchedule } from "@/entities/Bracket";
 import type { Nullable } from "@/shared/types";
 
 /* Store */
@@ -14,8 +14,6 @@ import {
   setSelectedDraw,
   getBracketEventNumSheets,
   getBracketEventNumTeams,
-  getBracketEventNumWinners,
-  setNumSheets,
   setNumTeams,
   setNumWinners,
   getLookingToAssignTeam,
@@ -27,6 +25,9 @@ import {
   setWinnerConnections,
   setLoserConnections,
   setOriginConnections,
+  getLoserConnections,
+  getWinnerConnections,
+  getOriginConnections,
 } from "@/entities/Bracket/BracketGameConnections";
 
 import { getCurrentTournamentId } from "@/entities/Tournament";
@@ -38,11 +39,11 @@ import {
   setBracketEventReadableIdIndex,
   setBracketEventSchedule,
   setBracketEventGameIndex,
+  getBracketEventSchedule,
 } from "@/entities/Bracket/BracketGame";
 import { setDrawTimes } from "@/entities/DrawTime";
 import { saveBracketConnections } from "@/entities/Bracket/BracketGameConnections";
 import { getBracketEvent } from "@/entities/BracketEvent";
-import { updateAndSaveTournament } from "@/entities/Tournament";
 import { getDrawTimes, saveDrawTimes } from "@/entities/DrawTime";
 
 /* Context */
@@ -52,7 +53,7 @@ import GameAvailabilityContextProvider from "./GameAvailabilityContextProvider";
 /* Components */
 
 import { AddBracket } from "@/widgets/Bracket/AddBracket";
-import { BracketEditor } from "@/widgets/Bracket/BracketEditor";
+import { BracketEditor } from "@/widgets/Bracket/BracketOptions";
 import { BracketEventOptions } from "@/widgets/Bracket/BracketEventOptions";
 import { BracketGameViewer } from "@/widgets/Bracket/BracketGameViewer";
 import { BracketNavigator } from "@/features/Bracket/BracketNavigator";
@@ -74,23 +75,43 @@ import Slideout from "@/shared/ui/slide-out";
 
 import { scrollToGame } from "@/entities/Bracket";
 import { GeneratedBracket } from "@/features/Bracket/GenerateBracket";
+import { getAvailableDrawsForBracketGame } from "@/features/EditDrawNumber";
+import useElementSize from "@/shared/hooks/useElementSize";
+import { cn } from "@/lib/utils";
 
 export default function EditingBracket({
   onEndView,
 }: {
   onEndView: () => void;
 }) {
+  const scroller = useRef(null);
+  const { height } = useElementSize(scroller);
+
+  const sidebar = useRef(null);
+  const { width: sidebarWidth } = useElementSize(sidebar);
+
   const dispatch = useAppDispatch();
   const selectedGame = useAppSelector(getSelectedGame);
   const bracketStage = useAppSelector(getBracketEvent);
   const brackets = useAppSelector(getBracketEventBrackets);
   const numSheets = useAppSelector(getBracketEventNumSheets);
   const numTeams = useAppSelector(getBracketEventNumTeams);
-  const numWinners = useAppSelector(getBracketEventNumWinners);
   const lookingToAssignTeam = useAppSelector(getLookingToAssignTeam);
   const tournamentId = useAppSelector(getCurrentTournamentId);
   const readableIdIndex = useAppSelector(getBracketEventReadableIdIndex);
   const drawTimes = useAppSelector(getDrawTimes);
+  const schedule = useAppSelector(getBracketEventSchedule);
+  const winnerConnections = useAppSelector(getWinnerConnections);
+  const loserConnections = useAppSelector(getLoserConnections);
+  const originConnections = useAppSelector(getOriginConnections);
+
+  const availableDrawTimes: number[] = getAvailableDrawsForBracketGame({
+    gameId: selectedGame?.id,
+    schedule,
+    winnerConnections,
+    loserConnections,
+    originConnections,
+  });
 
   function cancelSelectedGame() {
     dispatch(setSelectedGame(null));
@@ -136,6 +157,8 @@ export default function EditingBracket({
       readableIdIndex,
       drawTimes,
       schedule,
+      numTeams,
+      numWinners,
     } = newBracketEvent;
     dispatch(setOriginConnections(originConnections));
     dispatch(setWinnerConnections(winnerConnections));
@@ -146,6 +169,8 @@ export default function EditingBracket({
     dispatch(updateBracketEvent(newBracketEvent));
     dispatch(setDrawTimes(drawTimes));
     dispatch(setBracketEventSchedule(schedule));
+    dispatch(setNumTeams(numTeams));
+    dispatch(setNumWinners(numWinners.reduce((a, c) => a + c, 0)));
     setShowWizard(false);
   }
 
@@ -187,132 +212,183 @@ export default function EditingBracket({
     }
   }
 
+  function handleUpdateDrawTime(newTime: number) {
+    if (!selectedGame?.id) return;
+    const newSchedule = {
+      ...schedule,
+      [selectedGame.id]: newTime,
+    };
+    dispatch(setBracketEventSchedule(newSchedule));
+  }
+
+  const anyModalOpen =
+    !!selectedGame?.id || bracketToEdit !== null || showEventEditor;
+
   return (
     <TournamentStageContextProvider stage={bracketStage}>
-      <div className="absolute inset-0 grid grid-cols-[auto,1fr] ">
-        <div className="p-2 px-4 sticky top-0 flex flex-col gap-2">
-          <Button size="icon" variant="ghost" onClick={onEndView}>
-            <FaArrowLeft />
-          </Button>
-          <div className="h-2" />
-
-          <Button
-            size="icon"
-            variant={showWizard ? "default" : "secondary"}
-            onClick={() => setShowWizard(!showWizard)}
-            disabled={!brackets?.length}
+      <div
+        className="absolute inset-0 grid  overflow-auto "
+        style={{
+          gridTemplateColumns: `1fr ${sidebarWidth}px`,
+        }}
+        ref={scroller}
+      >
+        {showWizard ? (
+          <CreateBracketEventWizard
+            renderBrackets={renderBracketsFromWizard}
+            initialTeamCount={numTeams}
+          />
+        ) : (
+          <GameAvailabilityContextProvider>
+            <BracketViewer onGameClick={onGameClick}></BracketViewer>
+          </GameAvailabilityContextProvider>
+        )}
+        <div
+          className="sticky right-0 top-0   z-20 grid grid-cols-[auto,1fr]"
+          style={{
+            height: height + "px",
+          }}
+        >
+          <div
+            ref={sidebar}
+            className={cn(
+              " backdrop-blur-md  shadow-lg py-2  px-4   flex flex-col gap-2 z-10",
+              anyModalOpen ? "bg-white/70" : "bg-glass"
+            )}
           >
-            <FaWandMagicSparkles />
-          </Button>
-          {!showWizard && (
-            <>
-              <AddBracket />
-              <Button
-                size="icon"
-                variant={
-                  showEventEditor && editorTab === "schedule"
-                    ? "default"
-                    : "secondary"
-                }
-                onClick={() => toggleEventEditor("schedule")}
-              >
-                <FaCalendarAlt />
-              </Button>
-              <Button
-                size="icon"
-                variant={
-                  showEventEditor && editorTab === "teams"
-                    ? "default"
-                    : "secondary"
-                }
-                onClick={() => toggleEventEditor("teams")}
-              >
-                <FaUserFriends />
-              </Button>
-              <Button
-                size="icon"
-                variant={
-                  showEventEditor && editorTab === "overview"
-                    ? "default"
-                    : "secondary"
-                }
-                onClick={() => toggleEventEditor("overview")}
-              >
-                <FaCog />
-              </Button>
-            </>
-          )}
-        </div>
-        <div className="relative">
-          <div className="absolute inset-0 overflow-auto">
-            {showWizard ? (
-              <CreateBracketEventWizard
-                teamCount={numTeams}
-                updateTeamCount={(e) => dispatch(setNumTeams(e))}
-                numWinners={numWinners}
-                updateNumWinners={(e) => dispatch(setNumWinners(e))}
-                renderBrackets={renderBracketsFromWizard}
-                numSheets={numSheets}
-                updateNumSheets={(e) => dispatch(setNumSheets(e))}
-              />
-            ) : (
-              <GameAvailabilityContextProvider>
-                <BracketViewer onGameClick={onGameClick}></BracketViewer>
-              </GameAvailabilityContextProvider>
+            <Button size="icon" variant="ghost" onClick={onEndView}>
+              <FaArrowLeft />
+            </Button>
+            <div className="h-2" />
+
+            <Button
+              size="icon"
+              variant={
+                showWizard ? "default" : anyModalOpen ? "secondary" : "ghost"
+              }
+              onClick={() => setShowWizard(!showWizard)}
+              disabled={!brackets?.length}
+            >
+              <FaWandMagicSparkles />
+            </Button>
+            {!showWizard && (
+              <>
+                <AddBracket
+                  buttonVariant={anyModalOpen ? "secondary" : "ghost"}
+                />
+                <Button
+                  size="icon"
+                  variant={
+                    showEventEditor && editorTab === "schedule"
+                      ? "default"
+                      : anyModalOpen
+                      ? "secondary"
+                      : "ghost"
+                  }
+                  onClick={() => toggleEventEditor("schedule")}
+                >
+                  <FaCalendarAlt />
+                </Button>
+                <Button
+                  size="icon"
+                  variant={
+                    showEventEditor && editorTab === "teams"
+                      ? "default"
+                      : anyModalOpen
+                      ? "secondary"
+                      : "ghost"
+                  }
+                  onClick={() => toggleEventEditor("teams")}
+                >
+                  <FaUserFriends />
+                </Button>
+                <Button
+                  size="icon"
+                  variant={
+                    showEventEditor && editorTab === "overview"
+                      ? "default"
+                      : anyModalOpen
+                      ? "secondary"
+                      : "ghost"
+                  }
+                  onClick={() => toggleEventEditor("overview")}
+                >
+                  <FaCog />
+                </Button>
+              </>
             )}
           </div>
-        </div>
-      </div>
-
-      {/* 
+          <div
+            className="relative"
+            style={{
+              height: height + "px",
+            }}
+          >
+            {/* 
         Game edit options 
         */}
 
-      <Slideout visible={!!selectedGame} fullHeight={false}>
-        {selectedGame && (
-          <BracketGameViewer
-            onBack={cancelSelectedGame}
-            drawTimeChildren={<EditDrawNumber gameId={selectedGame?.id} />}
-          />
-        )}
-      </Slideout>
-
-      {/*
+            <Slideout
+              visible={!!selectedGame}
+              fullHeight={false}
+              nudgeLeftPx={sidebarWidth}
+            >
+              {selectedGame && (
+                <BracketGameViewer
+                  onBack={cancelSelectedGame}
+                  drawTimeChildren={
+                    <EditDrawNumber
+                      gameId={selectedGame?.id}
+                      availableDrawTimes={availableDrawTimes}
+                      setDrawTime={handleUpdateDrawTime}
+                      drawTime={schedule[selectedGame.id]}
+                    />
+                  }
+                />
+              )}
+            </Slideout>
+            {/*
             Bracket edit options
             */}
 
-      <Slideout visible={bracketToEdit !== null}>
-        {bracketToEdit !== null && (
-          <BracketEditor
-            onClose={() => {
-              setBracketToEdit(null);
-              dispatch(setSelectedDraw(null));
-            }}
-            editDrawTimes={() => toggleEventEditor("schedule")}
-          />
-        )}
-      </Slideout>
+            <Slideout
+              visible={bracketToEdit !== null}
+              nudgeLeftPx={sidebarWidth}
+            >
+              {bracketToEdit !== null && (
+                <BracketEditor
+                  onClose={() => {
+                    setBracketToEdit(null);
+                    dispatch(setSelectedDraw(null));
+                  }}
+                  editDrawTimes={() => toggleEventEditor("schedule")}
+                />
+              )}
+            </Slideout>
 
-      {/*
+            {/*
             Bracket stage edit options
             */}
 
-      <Slideout visible={showEventEditor}>
-        {showEventEditor && (
-          <BracketEventOptions
-            initialTab={editorTab}
-            onSave={handleSave}
-            onClose={closeEventEditor}
-            onEndView={onEndView}
-          />
-        )}
-      </Slideout>
+            <Slideout visible={showEventEditor} nudgeLeftPx={sidebarWidth}>
+              {showEventEditor && (
+                <BracketEventOptions
+                  initialTab={editorTab}
+                  onSave={handleSave}
+                  onClose={closeEventEditor}
+                  onEndView={onEndView}
+                />
+              )}
+            </Slideout>
+          </div>
+        </div>
+      </div>
 
       {/*
           Bracket navigation
           */}
       {
-        <div className="fixed right-4 bottom-4 md:right-8 md:bottom-8 z-40 flex flex-col gap-2 ">
+        <div className="fixed right-4 bottom-4 md:right-24 md:bottom-8 z-10 flex flex-col gap-2 ">
           <div className="flex gap-2 items-center justify-end">
             <BracketNavigator
               numBrackets={brackets?.length || 0}

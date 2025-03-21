@@ -1,5 +1,8 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { saveBracketGames as saveBracketGamesMutation } from "../api";
+import {
+  saveBracketGames as saveBracketGamesMutation,
+  removeGamesByIds,
+} from "../api";
 import type {
   BracketGameType,
   BracketReadableIdIndex,
@@ -7,6 +10,7 @@ import type {
 import {
   getBracketEventReadableIdIndex,
   getBracketEventSchedule,
+  getRemovedGameIds,
 } from "../bracketGamesSlice";
 import { getDrawTimes } from "@/entities/DrawTime";
 
@@ -28,6 +32,7 @@ export const saveBracketGames = createAsyncThunk(
     const state = getState();
     const readableIdIndex = { ...getBracketEventReadableIdIndex(state) };
     const schedule = { ...getBracketEventSchedule(state) };
+    const removedGameIds = [...getRemovedGameIds(state)];
 
     const formattedGames = formatBracketGamesForSave({
       bracketStageId,
@@ -38,6 +43,9 @@ export const saveBracketGames = createAsyncThunk(
       schedule,
     });
 
-    await saveBracketGamesMutation(formattedGames);
+    await Promise.all([
+      saveBracketGamesMutation(formattedGames),
+      removeGamesByIds(removedGameIds),
+    ]);
   }
 );

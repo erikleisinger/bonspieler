@@ -15,14 +15,20 @@ interface BracketGamesState {
   brackets: BracketGameType[][][];
   readableIdIndex: BracketReadableIdIndex;
   schedule: BracketSchedule;
+  removedGameIds: string[];
 }
 
-const initialState: BracketGamesState = {
-  gameIndex: {},
-  brackets: [],
-  readableIdIndex: {},
-  schedule: {},
-};
+function defaultState() {
+  return {
+    gameIndex: {},
+    brackets: [],
+    readableIdIndex: {},
+    schedule: {},
+    removedGameIds: [],
+  };
+}
+
+const initialState: BracketGamesState = defaultState();
 
 export const bracketGamesSlice = createSlice({
   name: "bracketGames",
@@ -36,6 +42,12 @@ export const bracketGamesSlice = createSlice({
       const newBrackets = [...state.brackets];
       newBrackets.splice(action.payload, 1);
       state.brackets = newBrackets;
+    },
+    resetState(state) {
+      state.brackets = defaultState().brackets;
+      state.gameIndex = defaultState().gameIndex;
+      state.readableIdIndex = defaultState().readableIdIndex;
+      state.schedule = defaultState().schedule;
     },
     setBracketEventBrackets: (
       state,
@@ -83,6 +95,9 @@ export const bracketGamesSlice = createSlice({
         ...action.payload,
       };
     },
+    updateRemovedGameIds: (state, action: PayloadAction<string[]>) => {
+      state.removedGameIds = [...state.removedGameIds, ...action.payload];
+    },
   },
 
   extraReducers: (builder) => {
@@ -109,6 +124,10 @@ export const getBracketEventReadableIdIndex = (state: RootState) => {
   return state.bracketGames.readableIdIndex;
 };
 
+export const getRemovedGameIds = (state: RootState) => {
+  return state.bracketGames.removedGameIds;
+};
+
 export const getGameById = createSelector(
   [getBracketEventGameIndex, (state, gameId?: Nullable<string>) => gameId],
   (gameIndex, gameId) => {
@@ -131,7 +150,7 @@ export const getReadableGameId = createSelector(
 export const getGamesForBracket = createSelector(
   [getBracketEventBrackets, (state, bracketIndex: number) => bracketIndex],
   (brackets, bracketIndex) => {
-    return brackets[bracketIndex].flat();
+    return (brackets[bracketIndex] || []).flat();
   }
 );
 
@@ -143,6 +162,13 @@ export const getDrawNumberForGame = createSelector(
   [getBracketEventSchedule, (state, gameId: string) => gameId],
   (schedule, gameId) => {
     return schedule[gameId] || null;
+  }
+);
+
+export const getBracketByIndex = createSelector(
+  [getBracketEventBrackets, (state, bracketIndex: number) => bracketIndex],
+  (brackets, bracketIndex) => {
+    return brackets[bracketIndex];
   }
 );
 
@@ -158,6 +184,8 @@ export const {
   setBracketEventSchedule,
   updateBracketEventGameIndex,
   updateBracketEventReadableIdIndex,
+  updateRemovedGameIds,
+  resetState,
 } = bracketGamesSlice.actions;
 
 export default bracketGamesSlice.reducer;

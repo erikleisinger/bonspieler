@@ -11,8 +11,8 @@ export function scrollToGame(
 ) {
   const gameEl = getBracketGameElement(gameId);
   if (!gameEl) return;
-  gameEl.scrollIntoView({
-    behavior: "smooth",
-    ...params,
-  });
+  // gameEl.scrollIntoView({
+  //   behavior: "smooth",
+  //   ...params,
+  // });
 }

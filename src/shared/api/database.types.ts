@@ -469,6 +469,7 @@ export type Database = {
           end_date: string | null
           id: string
           name: string | null
+          num_sheets: number | null
           start_date: string | null
         }
         Insert: {
@@ -476,6 +477,7 @@ export type Database = {
           end_date?: string | null
           id?: string
           name?: string | null
+          num_sheets?: number | null
           start_date?: string | null
         }
         Update: {
@@ -483,6 +485,7 @@ export type Database = {
           end_date?: string | null
           id?: string
           name?: string | null
+          num_sheets?: number | null
           start_date?: string | null
         }
         Relationships: []

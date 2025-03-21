@@ -3,21 +3,14 @@ import type { BracketConnections, BracketGame, BracketRows } from "../types";
 import type { GameConnectionPositionInfo } from "../types/GameConnection";
 import { useState, useEffect, useRef, useCallback } from "react";
 import { getBracketGameElement } from "../lib/getBracketGameElement";
-import type {
-  WinnerConnections,
-  OriginConnections,
-} from "@/entities/BracketGameConnections";
+import type { OriginConnections } from "@/entities/BracketGameConnections";
 export default function GameConnections({
   games,
-  connections,
   rows,
-  winnerConnections,
   originConnections,
 }: {
   games: BracketGame[];
-  connections: BracketConnections;
   rows: BracketRows;
-  winnerConnections: WinnerConnections;
   originConnections: OriginConnections;
 }) {
   const [connectionPositions, setConnectionPositions] = useState<{
@@ -80,7 +73,7 @@ export default function GameConnections({
       };
     });
     setConnectionPositions(positions);
-  }, [games, connections, rows]);
+  }, [games, originConnections, rows]);
 
   useEffect(() => {
     calculateConnectionPositions();

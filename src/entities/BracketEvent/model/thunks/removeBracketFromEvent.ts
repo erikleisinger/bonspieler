@@ -6,6 +6,8 @@ import {
   removeBracket,
   setBracketEventGameIndex,
   setBracketEventReadableIdIndex,
+  getBracketByIndex,
+  updateRemovedGameIds,
 } from "@/entities/Bracket/BracketGame";
 import {
   getLoserConnections,
@@ -14,13 +16,17 @@ import {
   setLoserConnections,
   setOriginConnections,
   setWinnerConnections,
+  updateRemovedConnections,
 } from "@/entities/Bracket/BracketGameConnections";
+import { updateNumTeams, updateNumWinners } from "../bracketEventSlice";
+import { getBracketEndTeams, getBracketStartTeams } from "../helpers";
 
 export const removeBracketFromEvent = createAsyncThunk(
   "bracketEvent/removeBracketFromEvent",
   async (bracketIndex: number, { dispatch, getState }) => {
     const state = getState();
     const games = getGamesForBracket(state, bracketIndex);
+    const bracket = getBracketByIndex(state, bracketIndex);
     const readableIdIndex = { ...getBracketEventReadableIdIndex(state) };
     const gameIndex = { ...getBracketEventGameIndex(state) };
     const winnerConnections = { ...getWinnerConnections(state) };
@@ -40,6 +46,12 @@ export const removeBracketFromEvent = createAsyncThunk(
     dispatch(setLoserConnections(loserConnections));
     dispatch(setOriginConnections(originConnections));
     dispatch(removeBracket(bracketIndex));
+    dispatch(updateNumTeams(-1 * getBracketStartTeams(bracket)));
+    dispatch(updateNumWinners(-1 * getBracketEndTeams(bracket)));
+
+    const removedGameIds = games.map(({ id }) => id);
+    dispatch(updateRemovedConnections(removedGameIds));
+    dispatch(updateRemovedGameIds(removedGameIds));
 
     return bracketIndex;
   }

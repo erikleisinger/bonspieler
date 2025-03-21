@@ -82,12 +82,7 @@ export default function TournamentStageList({
   }
 
   return (
-    <div
-      className="flex gap-12 items-center relative  w-fit px-4 md:px-12"
-      style={{
-        justifyContent: !stages?.length ? "center" : "flex-start",
-      }}
-    >
+    <div className="flex gap-12 items-center relative  w-fit px-4 md:px-12 justify-start">
       {stages.map((stage, i) => {
         return (
           <TournamentStageRotatableCard

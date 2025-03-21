@@ -9,11 +9,11 @@ import { useAppSelector } from "@/lib/store";
 import { DrawTime } from "@/entities/DrawTime";
 export default function BracketGameViewerHeader({
   children,
-  close,
+
   game,
 }: {
   children?: React.ReactNode;
-  close: () => void;
+
   game: BracketGameType;
 }) {
   const readableId = useAppSelector((state) =>
@@ -44,13 +44,6 @@ export default function BracketGameViewerHeader({
           )}
         </div>
       </div>
-
-      <Button variant="ghost" size="icon" onClick={close}>
-        <HiOutlinePlus
-          className="rotate-45"
-          style={{ width: "1.5rem", height: "1.5rem" }}
-        />
-      </Button>
     </header>
   );
 }

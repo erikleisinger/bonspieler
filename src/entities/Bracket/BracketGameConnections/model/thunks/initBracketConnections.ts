@@ -5,25 +5,31 @@ import type {
   LoserConnections,
   OriginConnections,
 } from "../../types/Connections";
+import { Tables } from "@/shared/api";
 
-interface ReturnType {
+interface ViewableConnections {
   winnerConnections: WinnerConnections;
   loserConnections: LoserConnections;
   originConnections: OriginConnections;
 }
 
+interface ReturnType extends ViewableConnections {
+  connections: Tables<"game_connections">[];
+}
+
 export const initBracketConnections = createAsyncThunk(
   "tournament/initBracketConnections",
-  async (bracketEventId: string): ReturnType => {
+  async (bracketEventId: string): Promise<ReturnType> => {
     const connections = await fetchBracketEventConnections(bracketEventId);
     if (!connections) {
       return {
         winnerConnections: {},
         loserConnections: {},
         originConnections: {},
+        connections: [],
       };
     }
-    return connections?.reduce<ReturnType>(
+    const viewableConnections = connections?.reduce<ViewableConnections>(
       (all, current) => {
         const { winner, origin_game_id, destination_game_id } = current;
         const allClone = { ...all };
@@ -60,5 +66,10 @@ export const initBracketConnections = createAsyncThunk(
         originConnections: {},
       }
     );
+
+    return {
+      ...viewableConnections,
+      connections,
+    };
   }
 );

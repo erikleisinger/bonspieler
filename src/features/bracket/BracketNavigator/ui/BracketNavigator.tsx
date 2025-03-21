@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/shared/ui/button";
-import { FaAngleRight } from "react-icons/fa";
-import { FaAngleLeft } from "react-icons/fa";
+import { FaAngleRight, FaAngleLeft, FaCog } from "react-icons/fa";
+
 import { useAppDispatch, useAppSelector } from "@/lib/store";
 import {
   getCurrentlyViewingBracket,
@@ -13,7 +13,7 @@ import {
   BRACKET_CONTAINER_ELEMENT_ID_PREFIX,
 } from "@/entities/Bracket";
 export default function BracketNavigator({
-  onBracketClick = () => {},
+  onBracketClick,
   numBrackets,
 }: {
   onBracketClick?: (bracketIndex: number) => void;
@@ -61,20 +61,26 @@ export default function BracketNavigator({
   }
 
   return numBrackets ? (
-    <div className="bg-white backdrop-blur-md px-4 py-1 text-glass-foreground flex justify-between md:justify-center items-center md:gap-2 rounded-xl shadow-md">
+    <div className="min-w-[250px] min-h-[40px] bg-white backdrop-blur-md overflow-hidden text-glass-foreground flex justify-between md:justify-center items-center md:gap-2 rounded-xl shadow-md">
       <Button
         variant="ghost"
         disabled={!currentlyViewingBracket}
         onClick={() => goBracket(-1, currentlyViewingBracket)}
-        className={numBrackets === 1 ? "invisible" : ""}
+        className={numBrackets === 1 ? "hidden" : ""}
       >
         <FaAngleLeft />
       </Button>
-      <div className=" font-bold">
+      <div className=" font-bold grow h-full ">
         <Button
           variant="ghost"
-          onClick={() => onBracketClick(currentlyViewingBracket)}
+          className="grow w-full  h-full"
+          onClick={
+            onBracketClick
+              ? () => onBracketClick(currentlyViewingBracket)
+              : () => {}
+          }
         >
+          {onBracketClick && <FaCog />}
           {getBracketName(currentlyViewingBracket)}
         </Button>
       </div>
@@ -82,7 +88,7 @@ export default function BracketNavigator({
         variant="ghost"
         disabled={currentlyViewingBracket === numBrackets - 1}
         onClick={() => goBracket(+1, currentlyViewingBracket)}
-        className={numBrackets === 1 ? "invisible" : ""}
+        className={numBrackets === 1 ? "hidden" : ""}
       >
         <FaAngleRight />
       </Button>

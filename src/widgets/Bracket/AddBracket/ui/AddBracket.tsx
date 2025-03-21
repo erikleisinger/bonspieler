@@ -19,7 +19,11 @@ import {
 } from "@/entities/BracketEvent";
 import { getBracketEventBrackets } from "@/entities/Bracket/BracketGame";
 import { generateBracket } from "@/features/Bracket/GenerateBracket";
-export default function AddBracket() {
+export default function AddBracket({
+  buttonVariant = "secondary",
+}: {
+  buttonVariant?: "default" | "secondary" | "ghost";
+}) {
   const [numTeams, setNumTeams] = useState(2);
   const [numWinners, setNumWinners] = useState(1);
   const [isSeeded, setIsSeeded] = useState(true);
@@ -64,7 +68,7 @@ export default function AddBracket() {
   return (
     <DropdownMenu open={menuOpen} onOpenChange={setMenuOpen}>
       <DropdownMenuTrigger asChild>
-        <Button variant={menuOpen ? "default" : "secondary"} size="icon">
+        <Button variant={menuOpen ? "default" : buttonVariant} size="icon">
           <FaPlus />
         </Button>
       </DropdownMenuTrigger>

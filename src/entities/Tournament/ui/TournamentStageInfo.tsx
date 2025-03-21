@@ -31,7 +31,6 @@ export default function TournamentStageInfo({
             numStartTeams={stage.num_start_teams}
             numEndTeams={stage.num_end_teams}
             numDraws={stage.draws}
-            numBrackets={stage.num_brackets}
           />
         )}
       </div>

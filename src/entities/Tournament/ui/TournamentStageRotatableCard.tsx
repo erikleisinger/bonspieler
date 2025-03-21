@@ -28,7 +28,7 @@ export default function TournamentStageRotatableCard({
   ) : (
     <div
       className={cn(
-        " relative tournament-card rotatable pointer-events-auto w-[90vw]  sm:w-[300px] md:w-[350px]  aspect-[4/5]",
+        " relative tournament-card rotatable pointer-events-auto w-[90vw]  sm:w-[100px] md:w-[300px]  aspect-[4/5] rounded-3xl",
         showDetails ? "rotated" : "",
         className
       )}

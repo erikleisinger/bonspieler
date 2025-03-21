@@ -24,7 +24,7 @@ export const bracketEventSlice = createSlice({
   initialState,
   reducers: {
     assignTeamToGame: reducers.assignTeamToGame,
-    resetBracketEvent: reducers.resetBracketEvent,
+    resetState: reducers.resetState,
     setBracketEvent: reducers.setBracketEvent,
     setBracketEventName: reducers.setBracketEventField("name"),
     setBracketEventRows: reducers.setBracketEventRows,
@@ -38,11 +38,13 @@ export const bracketEventSlice = createSlice({
       "lookingToAssignTeam"
     ),
     setNumSheets: reducers.setBracketEventField("numSheets"),
-    setNumTeams: reducers.setBracketEventField("numTeams"),
-    setNumWinners: reducers.setBracketEventField("numWinners"),
+    setNumTeams: reducers.setBracketEventField("num_start_teams"),
+    setNumWinners: reducers.setBracketEventField("num_end_teams"),
     setSelectedDraw: reducers.setBracketEventField("selectedDraw"),
     updateBracketGameTeam: reducers.updateBracketGameTeam,
     updateBracketEvent: reducers.updateBracketEvent,
+    updateNumWinners: reducers.updateNumWinners,
+    updateNumTeams: reducers.updateNumTeams,
   },
   extraReducers: (builder) => {
     builder
@@ -61,8 +63,6 @@ export const bracketEventSlice = createSlice({
 
 export const getBracketEventBrackets = (state: RootState) =>
   state?.bracketEvent?.bracket?.brackets || [];
-export const getBracketEventConnections = (state: RootState) =>
-  state?.bracketEvent?.bracket?.connections || {};
 
 export const getBracketEventId = (state: RootState) =>
   state?.bracketEvent?.bracket?.id || null;
@@ -116,9 +116,11 @@ export const setSelectedGame = thunks.setSelectedGame;
 export const addBracketToEvent = thunks.addBracketToEvent;
 export const removeBracketFromEvent = thunks.removeBracketFromEvent;
 export const saveBracketEvent = thunks.saveBracketEvent;
+export const resetBracket = thunks.resetAll;
+
 export const {
   assignTeamToGame,
-  resetBracketEvent,
+  resetState,
   setBracketEvent,
   setBracketEventName,
   setBracketEventRows,
@@ -131,6 +133,8 @@ export const {
   setSelectedDraw,
   updateBracketGameTeam,
   updateBracketEvent,
+  updateNumTeams,
+  updateNumWinners,
 } = bracketEventSlice.actions;
 
 export default bracketEventSlice.reducer;

@@ -1,23 +1,12 @@
-import { Tournament } from "@/shared/types/Tournament";
-import { addTournament, updateTournament } from "../api";
+import { updateTournament } from "../api";
+import type { Tournament } from "@/entities/Tournament";
 export async function saveTournament(tournament: Tournament) {
-  const { id, stages, name } = tournament;
+  const { id, name, start_date, end_date } = tournament;
 
-  if (!id) {
-    await addTournament({
-      name,
-      schema: {
-        stages,
-      },
-    });
-  } else {
-    await updateTournament({
-      id,
-      updates: {
-        schema: {
-          stages,
-        },
-      },
-    });
-  }
+  await updateTournament({
+    id,
+    name,
+    start_date,
+    end_date,
+  });
 }
