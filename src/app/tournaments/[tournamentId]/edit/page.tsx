@@ -8,7 +8,7 @@ import { tournamentSlice } from "@/entities/Tournament";
 export default function Page({ params }) {
   // Unwrap the entire params object first
   const unwrappedParams = use(params);
-  const tournamentId = unwrappedParams.id;
+  const { tournamentId } = unwrappedParams;
 
   return (
     <StoreLoader slices={[tournamentSlice]}>

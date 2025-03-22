@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { FaCalendarAlt } from "react-icons/fa";
-import { format, compareAsc, compareDesc, parseISO } from "date-fns";
+import { parseISO } from "date-fns";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/shared/ui/button";
@@ -60,7 +60,6 @@ export function DateTimePicker({
   const disabledDefs = React.useMemo(() => {
     const min = getDate(minDate);
     const max = getDate(maxDate);
-    console.log("min max: ", min, max, minDate, maxDate);
 
     return [
       ...(min ? [{ before: min }] : []),

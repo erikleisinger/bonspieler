@@ -103,7 +103,6 @@ export const bracketGamesSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(thunks.initBracketGames.fulfilled, (state, action) => {
       const { gameIndex, brackets, readableIdIndex, schedule } = action.payload;
-      console.log("new schedule: ", action.payload);
       state.gameIndex = gameIndex;
       state.brackets = brackets;
       state.readableIdIndex = readableIdIndex;

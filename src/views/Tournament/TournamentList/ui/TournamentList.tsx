@@ -17,7 +17,7 @@ export default function TournamentList() {
     <LoaderFullPage />
   ) : (
     tournaments.map((t) => (
-      <Link key={t.id} href={"tournaments/edit/" + t.id}>
+      <Link key={t.id} href={"tournaments/" + t.id + "/edit"}>
         <TournamentListItem tournament={t} />
       </Link>
     ))

@@ -144,7 +144,6 @@ export default function EditingBracket({
       })
     );
     await dispatch(saveBracketEvent());
-    // dispatch(updateAndSaveTournament(bracketStage));
   }
 
   function renderBracketsFromWizard(newBracketEvent: GeneratedBracket) {

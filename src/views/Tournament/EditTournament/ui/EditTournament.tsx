@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
+
 /* Types & enums */
 
 import {
@@ -37,10 +38,12 @@ export default function EditTournament() {
 
   const [editedStage, setEditedStage] = useState<TournamentStage | null>(null);
 
+  const params = useParams();
   async function onEditStage(stage: TournamentStage) {
     if (stage.type === TournamentStageType.Bracket) {
-      console.log("stage: ", stage);
-      router.push("/brackets/edit/" + stage.id);
+      router.push(
+        `/tournaments/${params.tournamentId}/stages/brackets/${stage.id}/edit/`
+      );
       // await dispatch(initBracketGames(stage.id));
       // await dispatch(initBracketConnections(stage.id));
       // await dispatch(setBracketEvent(stage));

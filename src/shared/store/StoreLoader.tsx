@@ -93,7 +93,7 @@ export default function StoreLoader({
         mountedSlicesRef.current.delete(name);
       });
     };
-  }, [store, sliceNames, debugMode, slices]);
+  }, [store, sliceNames, slices]);
 
   return <>{loaded ? children : <LoaderFullPage />}</>;
 }
