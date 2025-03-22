@@ -13,10 +13,7 @@ import { LoadBracket } from "@/widgets/Bracket/BracketEditor";
 import { TournamentStageContextProvider } from "@/shared/TournamentStage";
 import GameAvailabilityContextProvider from "./GameAvailabilityContextProvider";
 import { BracketViewer } from "@/widgets/Bracket/BracketViewer";
-import {
-  BracketEditorToolbar,
-  BracketEditorToolbarState,
-} from "@/widgets/Bracket/BracketEditorToolbar";
+import { BracketEditorToolbar } from "@/widgets/Bracket/BracketEditorToolbar";
 import { useBracketEditorToolbarState } from "../lib";
 import useElementSize from "@/shared/hooks/useElementSize";
 import EditBracketModalController from "./EditBracketModalController";

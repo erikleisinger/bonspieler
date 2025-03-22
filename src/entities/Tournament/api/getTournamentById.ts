@@ -7,7 +7,7 @@ async function getTournamentStages(tournamentId: string) {
     .select("*")
     .eq("tournament_id", tournamentId);
   return data?.reduce((all, cur) => {
-    const { schema, id, name, order, num_start_teams } = cur;
+    const { schema, id, name, order, num_start_teams, type } = cur;
     const parsedSchema = JSON.parse(schema);
     return [
       ...all,
@@ -17,6 +17,7 @@ async function getTournamentStages(tournamentId: string) {
         name,
         order,
         numTeams: num_start_teams,
+        type,
       },
     ].sort((a, b) => a.order - b.order);
   }, []);

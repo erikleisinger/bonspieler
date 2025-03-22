@@ -7,6 +7,7 @@ import Typography from "@/shared/ui/typography";
 import { BracketGameViewer } from "@/widgets/Bracket/BracketGameViewer";
 import { AssignTeams } from "@/widgets/Bracket/AssignTeams";
 import { BracketOptions } from "@/widgets/Bracket/BracketOptions";
+import { useSaveBracket } from "../lib";
 export default function EditBracketModalController({
   setState,
   state,
@@ -15,6 +16,8 @@ export default function EditBracketModalController({
   setState: (state: BracketEditorToolbarState) => void;
   state: BracketEditorToolbarState;
 }) {
+  const { save: saveBracket } = useSaveBracket();
+
   return (
     <>
       <div className="pointer-events-auto">
@@ -22,7 +25,10 @@ export default function EditBracketModalController({
           fullHeight={true}
           visible={state === BracketEditorToolbarState.ViewingEvent}
         >
-          <BracketEventOptions onClose={() => setState(null)} />
+          <BracketEventOptions
+            onClose={() => setState(null)}
+            onSave={saveBracket}
+          />
         </Slideout>
         <Slideout
           fullHeight={true}

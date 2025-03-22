@@ -1,3 +1,4 @@
+import StoreProvider from "@/shared/store/StoreProvider";
 import type { Metadata } from "next";
 import "./globals.css";
 import GlobalLayout from "./global-layout";
@@ -14,7 +15,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={` antialiased `}>
-        <GlobalLayout>{children}</GlobalLayout>
+        <StoreProvider>
+          <GlobalLayout>{children}</GlobalLayout>
+        </StoreProvider>
       </body>
     </html>
   );

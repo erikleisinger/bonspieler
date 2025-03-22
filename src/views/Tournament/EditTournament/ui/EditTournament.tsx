@@ -46,7 +46,6 @@ export default function EditTournament() {
       // await dispatch(setBracketEvent(stage));
       // await dispatch(initDrawTimesForStage(stage.id));
     }
-    setEditedStage(stage);
   }
 
   function endEditStage() {
@@ -63,7 +62,7 @@ export default function EditTournament() {
   }
 
   return (
-    <div className="h-full grid grid-cols-1 absolute inset-0 p-8">
+    <div className="h-full grid grid-cols-1 absolute inset-0 p-8 overflow-auto">
       <div className="relative h-full w-full">
         <div className="bg-glass p-6 rounded-2xl w-fit backdrop-blur-md shadow-sm">
           <Typography tag="h3">Schedule</Typography>

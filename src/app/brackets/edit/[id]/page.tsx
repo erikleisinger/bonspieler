@@ -1,7 +1,11 @@
 "use client";
-import { Provider } from "react-redux";
+import StoreLoader from "@/shared/store/StoreLoader";
+import { drawTimeSlice } from "@/entities/DrawTime";
+import { bracketEventSlice } from "@/entities/BracketEvent";
+import { bracketConnectionsSlice } from "@/entities/Bracket/BracketGameConnections";
+import { bracketGamesSlice } from "@/entities/Bracket/BracketGame";
+import { tournamentSlice } from "@/entities/Tournament";
 
-import { store } from "@/lib/store";
 import { use } from "react";
 import { EditBracketView } from "@/views/Bracket/EditBracket";
 
@@ -11,8 +15,16 @@ export default function Page({ params }) {
   const stageId = unwrappedParams.id;
 
   return (
-    <Provider store={store}>
+    <StoreLoader
+      slices={[
+        drawTimeSlice,
+        bracketEventSlice,
+        bracketConnectionsSlice,
+        bracketGamesSlice,
+        tournamentSlice,
+      ]}
+    >
       <EditBracketView stageId={stageId} />
-    </Provider>
+    </StoreLoader>
   );
 }
