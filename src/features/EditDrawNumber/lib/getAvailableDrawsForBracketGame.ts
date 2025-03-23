@@ -4,7 +4,6 @@ import {
   OriginConnections,
   WinnerConnections,
 } from "@/entities/Bracket/BracketGameConnections";
-import { min } from "date-fns";
 
 export function getAvailableDrawsForBracketGame({
   gameId,
@@ -19,6 +18,7 @@ export function getAvailableDrawsForBracketGame({
   loserConnections: LoserConnections;
   originConnections: OriginConnections;
 }) {
+  if (!gameId) return [];
   const numDraws = Math.max(...Object.values(schedule));
   const nextWinnerGame = winnerConnections[gameId];
   const nextLoserGame = loserConnections[gameId];
@@ -39,6 +39,8 @@ export function getAvailableDrawsForBracketGame({
   if (nextGames?.length) {
     maxDraw = Math.max(...nextGames.map((gameId) => schedule[gameId])) - 1;
   }
+
+  console.log(minDraw, maxDraw);
 
   const availableDraws = [];
   for (let i = minDraw; i <= maxDraw; i++) {

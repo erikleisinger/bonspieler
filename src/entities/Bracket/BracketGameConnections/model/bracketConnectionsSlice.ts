@@ -5,12 +5,12 @@ import type {
   OriginConnections,
 } from "../types/Connections";
 import type { RootState } from "@/lib/store";
-import * as thunks from "./thunks";
 import { Nullable } from "@/shared/types";
 export interface BracketWinnerConnectionsState {
   loserConnections: LoserConnections;
   winnerConnections: WinnerConnections;
   originConnections: OriginConnections;
+  removedConnections: string[];
 }
 
 function defaultState() {
@@ -18,6 +18,7 @@ function defaultState() {
     loserConnections: {},
     winnerConnections: {},
     originConnections: {},
+    removedConnections: [],
   };
 }
 
@@ -31,65 +32,52 @@ export const bracketConnectionsSlice = createSlice({
       state.loserConnections = defaultState().loserConnections;
       state.winnerConnections = defaultState().winnerConnections;
       state.originConnections = defaultState().originConnections;
+      state.removedConnections = defaultState().removedConnections;
     },
-
-    setLoserConnections: (state, action) => {
-      state.loserConnections = action.payload;
-    },
-    updateLoserConnections: (state, action) => {
+    addConnections: (state, action) => {
+      const { loserConnections, winnerConnections, originConnections } =
+        action.payload;
       state.loserConnections = {
         ...state.loserConnections,
-        ...action.payload,
+        ...(loserConnections || {}),
       };
-    },
-    setOriginConnections: (state, action) => {
-      state.originConnections = action.payload;
-    },
-    updateOriginConnections: (state, action) => {
-      state.originConnections = {
-        ...state.originConnections,
-        ...action.payload,
-      };
-    },
-    setWinnerConnections: (state, action) => {
-      state.winnerConnections = action.payload;
-    },
-    updateWinnerConnections: (state, action) => {
       state.winnerConnections = {
         ...state.winnerConnections,
-        ...action.payload,
+        ...(winnerConnections || {}),
+      };
+      state.originConnections = {
+        ...state.originConnections,
+        ...(originConnections || {}),
       };
     },
-  },
-  extraReducers: (builder) => {
-    builder
-      .addCase(thunks.initBracketConnections.fulfilled, (state, action) => {
-        const {
-          winnerConnections,
-          loserConnections,
-          originConnections,
-          connections,
-        } = action.payload;
-        state.winnerConnections = winnerConnections;
-        state.loserConnections = loserConnections;
-        state.originConnections = originConnections;
-        state.initialConnections = connections;
-      })
-      .addCase(thunks.saveBracketConnections.fulfilled, (state, action) => {
-        console.log("connections saved!");
+    removeConnections: (state, action) => {
+      const gameIds = action.payload;
+      const removed: string[] = [];
+      gameIds.forEach((gameId) => {
+        removed.push(gameId);
+        delete state.loserConnections[gameId];
+        delete state.winnerConnections[gameId];
+        delete state.originConnections[gameId];
       });
+
+      state.removedConnections = [
+        ...state.removedConnections,
+        ...removed.filter((id) => !state.removedConnections.includes(id)),
+      ];
+    },
+    setConnections: (state, action) => {
+      const { loserConnections, winnerConnections, originConnections } =
+        action.payload;
+      state.loserConnections = loserConnections || {};
+      state.winnerConnections = winnerConnections || {};
+      state.originConnections = originConnections || {};
+    },
   },
 });
 
-export const {
-  setWinnerConnections,
-  setLoserConnections,
-  setOriginConnections,
-  updateLoserConnections,
-  updateOriginConnections,
-  updateWinnerConnections,
-  resetState,
-} = bracketConnectionsSlice.actions;
+export const { addConnections, removeConnections, setConnections, resetState } =
+  bracketConnectionsSlice.actions;
+
 export const getWinnerConnections = (state: RootState) =>
   state.bracketConnections.winnerConnections;
 
@@ -124,8 +112,5 @@ export const getOriginConnectionsForGame = createSelector(
     return connections[gameId] || null;
   }
 );
-
-export const initBracketConnections = thunks.initBracketConnections;
-export const saveBracketConnections = thunks.saveBracketConnections;
 
 export default bracketConnectionsSlice.reducer;

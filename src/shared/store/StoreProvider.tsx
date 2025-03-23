@@ -1,21 +1,20 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { useRef } from "react";
 import { Provider } from "react-redux";
-import { makeStore, AppStore } from "@/lib/store";
-import { Nullable } from "../types";
+import { getStore } from "@/lib/store";
 
-// Redux provider component for Next.js App Router
-export default function ReduxProvider({
-  children,
-}: {
+interface AppProviderProps {
   children: React.ReactNode;
-}) {
-  // Use useRef to ensure the store persists across re-renders
-  const storeRef = useRef<Nullable<AppStore>>(null);
-  if (!storeRef.current) {
-    storeRef.current = makeStore();
-  }
+}
 
-  return <Provider store={storeRef.current}>{children}</Provider>;
+/**
+ * Main provider component that ensures a consistent store instance is used
+ * throughout the application
+ */
+export default function AppProvider({ children }: AppProviderProps) {
+  // Get the singleton store instance
+  const { store } = getStore();
+
+  return <Provider store={store}>{children}</Provider>;
 }

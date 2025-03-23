@@ -9,7 +9,6 @@ export default function EditTournamentName() {
   const dispatch = useAppDispatch();
   const name = useAppSelector(getCurrentTournamentName);
   function setName(newName: string) {
-    console.log("set name: ", newName);
     dispatch(setCurrentTournamentName(newName));
   }
 

@@ -12,12 +12,10 @@ import {
 } from "@/shared/ui/select";
 import { Nullable } from "@/shared/types";
 export default function EditDrawNumber({
-  gameId,
   availableDrawTimes = [],
   setDrawTime = () => {},
   drawTime,
 }: {
-  gameId: string;
   availableDrawTimes: number[];
   setDrawTime: (drawTime: number) => void;
   drawTime: Nullable<number>;

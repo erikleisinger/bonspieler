@@ -1,3 +1,3 @@
-export { formatGameForDisplay } from "./formatGameForDisplay";
-export { formatGameForSave } from "./formatGameForSave";
 export { formatBracketGamesForSave } from "./formatBracketGamesForSave";
+export { generateReadableIdIndex } from "./generateReadableIdIndex";
+export { generateGameIndex } from "./generateGameIndex";

@@ -1,0 +1,1 @@
+export { useGetTournamentsQuery } from "./getTournaments";

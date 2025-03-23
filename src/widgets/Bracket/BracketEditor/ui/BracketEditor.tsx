@@ -6,34 +6,24 @@ import type { BracketGameType } from "@/entities/Bracket";
 
 import { useAppDispatch, useAppSelector } from "@/lib/store";
 import {
-  getSelectedGame,
-  setSelectedGame,
-  setSelectedDraw,
-  getBracketEventNumSheets,
-  getBracketEventNumTeams,
-  setNumTeams,
-  setNumWinners,
   getLookingToAssignTeam,
   assignTeamToGame,
-  saveBracketEvent,
-  updateBracketEvent,
 } from "@/entities/BracketEvent";
+import { setSelectedGame } from "@/widgets/Bracket/BracketViewer";
 
 /** Context */
 
 import GameAvailabilityContextProvider from "./GameAvailabilityContextProvider";
 
 /**Components */
+
 import { BracketViewer } from "@/widgets/Bracket/BracketViewer";
+
 /* Utils */
 
 import { scrollToGame } from "@/entities/Bracket";
 
-export default function EditingBracket({
-  onEndView,
-}: {
-  onEndView: () => void;
-}) {
+export default function BracketEditor() {
   const dispatch = useAppDispatch();
 
   const lookingToAssignTeam = useAppSelector(getLookingToAssignTeam);

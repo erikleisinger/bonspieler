@@ -2,7 +2,6 @@ import {
   generateTournament,
   scheduleTournament,
 } from "@erikleisinger/bracket-generator";
-import { generateReadableIdIndex } from "./generateReadableIdIndex";
 import type { BracketConnections, BracketDrawTimes } from "@/entities/Bracket";
 import type {
   OriginConnections,
@@ -40,7 +39,6 @@ export function generateBracket({
     connections,
     numSheets
   );
-  const readableIdIndex = generateReadableIdIndex(brackets);
   const schedule = tournamentSchedule;
 
   const { winnerConnections, loserConnections, originConnections } =
@@ -78,30 +76,6 @@ export function generateBracket({
         originConnections: {},
       }
     );
-  // let seededConnections = connections;
-  // if (!isSeeded) {
-  //   seededConnections = {};
-  //   Object.entries(connections).forEach(([key, value]) => {
-  //     seededConnections[key] = {
-  //       ...value,
-  //       teams: value.teams.map((team) => ({
-  //         ...team,
-  //         teamId: team.teamId === "seed" ? null : team.teamId,
-  //         isSeed: false,
-  //       })),
-  //     };
-  //   });
-  // }
-
-  const gameIndex = brackets
-    .flat()
-    .flat()
-    .reduce((all, current) => {
-      return {
-        ...all,
-        [current.id]: current,
-      };
-    }, {});
 
   const drawTimes: BracketDrawTimes = {};
   const numDrawTimes = Math.max(...Object.values(schedule));
@@ -117,16 +91,23 @@ export function generateBracket({
       }))
     )
   );
-
-  return {
+  console.log("generate: ", {
     brackets: bracketsWithCorrectBracketNumber,
     drawTimes,
-    gameIndex,
     loserConnections,
     numTeams,
     numWinners,
     originConnections,
-    readableIdIndex,
+    schedule,
+    winnerConnections,
+  });
+  return {
+    brackets: bracketsWithCorrectBracketNumber,
+    drawTimes,
+    loserConnections,
+    numTeams,
+    numWinners,
+    originConnections,
     schedule,
     winnerConnections,
   };

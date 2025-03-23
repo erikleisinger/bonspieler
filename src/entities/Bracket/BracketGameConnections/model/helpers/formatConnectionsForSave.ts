@@ -1,4 +1,3 @@
-import type { BracketConnections } from "@/entities/Bracket";
 import type {
   WinnerConnections,
   LoserConnections,

@@ -1,32 +1,24 @@
-import { useEffect, useState } from "react";
-
-import { useAppSelector } from "@/lib/store";
-import { getCurrentlyViewingBracket } from "@/entities/BracketEvent";
-import { getBracketEventBrackets } from "@/entities/Bracket/BracketGame";
+import { useState } from "react";
 import { Button } from "@/shared/ui/button";
 import Typography from "@/shared/ui/typography";
 import RemoveBracketButton from "./RemoveBracketButton";
 import BracketInfo from "./BracketInfo";
 
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
-import { getBracketName } from "@/entities/Bracket";
+import { BracketGameType, getBracketName } from "@/entities/Bracket";
 import { scrollToBracket } from "@/entities/Bracket";
-import { useAppDispatch } from "@/lib/store";
-import { removeBracketFromEvent } from "@/entities/BracketEvent";
-export default function BracketEditor({
+export default function BracketOptions({
+  brackets = [],
   editDrawTimes,
+  onClose = () => {},
+  removeBracket = () => {},
 }: {
+  brackets: BracketGameType[][][];
   editDrawTimes: () => void;
+  onClose: () => void;
+  removeBracket: (bracketIndex: number) => void;
 }) {
-  const dispatch = useAppDispatch();
-  const currentlyViewingBracket = useAppSelector(getCurrentlyViewingBracket);
-  const brackets = useAppSelector(getBracketEventBrackets);
-
   const [bracketIndex, setBracketIndex] = useState(0);
-
-  useEffect(() => {
-    setBracketIndex(currentlyViewingBracket);
-  }, []);
 
   function goBracket(newIndex: number) {
     setBracketIndex(newIndex);
@@ -35,8 +27,8 @@ export default function BracketEditor({
 
   function handleRemoveBracket() {
     onClose();
-    dispatch(removeBracketFromEvent(bracketIndex));
-    if (currentlyViewingBracket) goBracket(currentlyViewingBracket - 1);
+    removeBracket(bracketIndex);
+    if (bracketIndex) goBracket(bracketIndex - 1);
   }
 
   return (
@@ -76,7 +68,10 @@ export default function BracketEditor({
         />
       </div>
       <footer className="flex justify-center">
-        <RemoveBracketButton onClick={handleRemoveBracket} />
+        <RemoveBracketButton
+          onClick={handleRemoveBracket}
+          bracketNumber={bracketIndex}
+        />
       </footer>
     </div>
   );

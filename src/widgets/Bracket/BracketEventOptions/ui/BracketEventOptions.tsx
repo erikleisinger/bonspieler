@@ -1,11 +1,12 @@
 import { useAppSelector } from "@/lib/store";
 import {
-  getBracketEventBrackets,
+  getBracketEventNumTeams,
   getBracketEventNumWinners,
 } from "@/entities/BracketEvent";
-import { getBracketEventSchedule } from "@/entities/Bracket/BracketGame";
-import { Button } from "@/shared/ui/button";
-import { HiOutlinePlus } from "react-icons/hi";
+import {
+  getBracketGamesSchedule,
+  getBracketGames,
+} from "@/entities/Bracket/BracketGame";
 import { EditStageName } from "@/features/Stage/EditStageName";
 import { BracketEventInfo } from "@/entities/BracketEvent";
 import SaveButton from "@/shared/ui/save-button";
@@ -17,9 +18,11 @@ export default function BracketEventOptions({
   onClose: () => void;
   onSave: () => void;
 }) {
-  const brackets = useAppSelector(getBracketEventBrackets);
-  const schedule = useAppSelector(getBracketEventSchedule);
-  const numWinners = useAppSelector(getBracketEventNumWinners);
+  const brackets = useAppSelector(getBracketGames);
+  const schedule = useAppSelector(getBracketGamesSchedule);
+  const numEndTeams = useAppSelector(getBracketEventNumWinners);
+
+  const numStartTeams = useAppSelector(getBracketEventNumTeams);
 
   return (
     <div className="p-4 grid grid-rows-[auto_1fr_auto] absolute inset-0">
@@ -31,9 +34,8 @@ export default function BracketEventOptions({
           <div className="  grid grid-rows-[auto_1fr] gap-4 absolute inset-0">
             <div className="bg-glass p-4 rounded-md">
               <BracketEventInfo
-                brackets={brackets}
-                schedule={schedule}
-                winners={numWinners}
+                numStartTeams={numStartTeams}
+                numEndTeams={numEndTeams}
               />
             </div>
 

@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useLayoutEffect } from "react";
 import { Reducer } from "@reduxjs/toolkit";
-import { useAppStore } from "@/lib/store";
+import { useAppStore, getStore } from "@/lib/store";
 import LoaderFullPage from "../ui/loader-full-page";
+import { PersistGate } from "redux-persist/integration/react";
 
 interface SliceConfig {
   name: string;
@@ -26,12 +27,16 @@ export default function StoreLoader({
   slices = [],
   children,
 }: StoreLoaderProps) {
-  const store = useAppStore();
+  const { store, persistor } = useAppStore();
+
   const [loaded, setLoaded] = useState(false);
   const mountedSlicesRef = useRef(new Set<string>());
 
   // Create a stable slices dependency
-  const sliceNames = slices.map((s) => s.name).join(",");
+  const sliceNames = slices.map((s) => s.name || s.reducerPath).join(",");
+  useLayoutEffect(() => {
+    setLoaded(false);
+  }, []);
 
   useEffect(() => {
     if (!store.moduleRefCounts) {
@@ -43,7 +48,9 @@ export default function StoreLoader({
 
     // Load all slices
     slices.forEach((slice) => {
-      const { name, reducer, initialState } = slice;
+      const { name: sliceName, reducer, initialState, reducerPath } = slice;
+
+      const name = sliceName || reducerPath;
 
       // Initialize or increment the reference counter
       store.moduleRefCounts[name] = (store.moduleRefCounts[name] || 0) + 1;
@@ -95,5 +102,16 @@ export default function StoreLoader({
     };
   }, [store, sliceNames, slices]);
 
-  return <>{loaded ? children : <LoaderFullPage />}</>;
+  // Use the persistor from the store
+  return (
+    <>
+      {loaded ? (
+        <PersistGate loading={<LoaderFullPage />} persistor={store._persistor}>
+          {children}
+        </PersistGate>
+      ) : (
+        <LoaderFullPage />
+      )}
+    </>
+  );
 }

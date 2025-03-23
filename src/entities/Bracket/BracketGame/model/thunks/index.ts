@@ -1,2 +1,3 @@
 export { initBracketGames } from "./initBracketGames";
-export { saveBracketGames } from "./saveBracketGames";
+export { addBracketGames } from "./addBracketGames";
+export { removeBracketGames } from "./removeBracketGames";

@@ -1,29 +1,21 @@
 import type { Nullable } from "@/shared/types";
-import { useAppSelector, useAppDispatch } from "@/lib/store";
-import { getSelectedDraw, setSelectedDraw } from "@/entities/BracketEvent";
-import { getBracketEventSchedule } from "@/entities/Bracket/BracketGame";
+import { useAppSelector } from "@/lib/store";
+import { getBracketGamesSchedule } from "@/entities/Bracket/BracketGame";
 import { Button } from "@/shared/ui/button";
 import { FaEye } from "react-icons/fa";
 import { scrollToGame } from "@/entities/Bracket/lib/scrollToGame";
 export default function SelectDrawNumberButton({
   drawNumber,
+  onClick,
+  selected,
 }: {
   drawNumber: number;
+  onClick: () => void;
+  selected: boolean;
 }) {
-  const selectedDraw = useAppSelector(getSelectedDraw);
-  const dispatch = useAppDispatch();
-  const schedule = useAppSelector(getBracketEventSchedule);
+  const schedule = useAppSelector(getBracketGamesSchedule);
 
-  const variant = selectedDraw === drawNumber ? "default" : "ghost";
-
-  function toggleSelected() {
-    if (selectedDraw === drawNumber) {
-      dispatch(setSelectedDraw(null));
-    } else {
-      dispatch(setSelectedDraw(drawNumber));
-      scrollToFirstGame();
-    }
-  }
+  const variant = selected ? "default" : "ghost";
 
   function findFirstGameForDrawNumber(): Nullable<string> {
     const first = Object.entries(schedule).find(([_, drawNum]) => {
@@ -39,7 +31,7 @@ export default function SelectDrawNumberButton({
     if (gameId) scrollToGame(gameId);
   }
   return (
-    <Button size="icon" variant={variant} onClick={toggleSelected}>
+    <Button size="icon" variant={variant} onClick={onClick}>
       <FaEye />
     </Button>
   );

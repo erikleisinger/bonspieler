@@ -1,4 +1,5 @@
 import type { Tournament } from "../types";
+import Typography from "@/shared/ui/typography";
 export default function TournamentListItem({
   tournament,
 }: {
@@ -6,7 +7,8 @@ export default function TournamentListItem({
 }) {
   return (
     <div className="p-2 bg-glass hover:bg-black/5 cursor-pointer">
-      {tournament.name}
+      <Typography tag="overline">{tournament.id}</Typography>
+      <Typography tag="h4">{tournament.name}</Typography>
     </div>
   );
 }

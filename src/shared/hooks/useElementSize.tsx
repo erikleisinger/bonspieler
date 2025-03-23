@@ -70,7 +70,7 @@ function useElementSize(elementRef) {
       mutationObserver.disconnect();
       observedElementRef.current = null;
     };
-  }, [ref, updateSize]);
+  }, [ref?.current, updateSize]);
 
   // Add another effect to watch for ref changes
   useEffect(() => {

@@ -13,7 +13,7 @@ export default function Page({ params }) {
   return (
     <StoreLoader slices={[tournamentSlice]}>
       <LoadTournament tournamentId={tournamentId} editable={true}>
-        <EditTournament />
+        <EditTournament tournamentId={tournamentId} />
       </LoadTournament>
     </StoreLoader>
   );

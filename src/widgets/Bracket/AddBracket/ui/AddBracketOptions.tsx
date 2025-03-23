@@ -10,21 +10,18 @@ import { scrollToBracket } from "@/entities/Bracket";
 import { useAppSelector, useAppDispatch } from "@/lib/store";
 import {
   getBracketEventNumSheets,
-  addBracketToEvent,
+  updateNumTeams,
+  updateNumWinners,
 } from "@/entities/BracketEvent";
-import { getBracketEventBrackets } from "@/entities/Bracket/BracketGame";
+import {
+  getBracketGames,
+  addBracketGames,
+} from "@/entities/Bracket/BracketGame";
 import { generateBracket } from "@/features/Bracket/GenerateBracket";
-export default function AddBracket() {
-  const [numTeams, setNumTeams] = useState(2);
-  const [numWinners, setNumWinners] = useState(1);
-  const [isSeeded, setIsSeeded] = useState(true);
-  const checkboxId = useId();
-
-  const dispatch = useAppDispatch();
-  const brackets = useAppSelector(getBracketEventBrackets);
-  const numSheets = useAppSelector(getBracketEventNumSheets);
-
-  async function addBracket({
+export default function AddBracket({
+  onAdd = () => {},
+}: {
+  onAdd?: ({
     numTeams,
     numWinners,
     isSeeded,
@@ -32,19 +29,19 @@ export default function AddBracket() {
     numTeams: number;
     numWinners: number[];
     isSeeded: boolean;
-  }) {
-    const data = generateBracket({
-      numTeams,
-      numWinners,
-      numSheets,
-      isSeeded,
-      bracketIndex: brackets.length,
-    });
-    await dispatch(addBracketToEvent(data));
-  }
+  }) => void;
+}) {
+  const [numTeams, setNumTeams] = useState(2);
+  const [numWinners, setNumWinners] = useState(1);
+  const [isSeeded, setIsSeeded] = useState(true);
+  const checkboxId = useId();
+
+  const dispatch = useAppDispatch();
+  const brackets = useAppSelector(getBracketGames);
+  const numSheets = useAppSelector(getBracketEventNumSheets);
 
   function handleAddBracket() {
-    addBracket({
+    onAdd({
       numTeams,
       numWinners: [numWinners],
       isSeeded,

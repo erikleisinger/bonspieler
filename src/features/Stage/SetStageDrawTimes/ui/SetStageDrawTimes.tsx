@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { getBracketEventSchedule } from "@/entities/Bracket/BracketGame";
+import { getBracketGamesSchedule } from "@/entities/Bracket/BracketGame";
 import DrawTimeValidationContext from "./DrawTimeValidationContext";
 import DrawInfo from "./DrawInfo";
 import { DateTimePicker } from "@/shared/ui/date-time-picker";
@@ -12,7 +12,7 @@ import { formatISO, parseISO } from "date-fns";
 import InputDate from "@/shared/input/InputDate";
 export default function SetStageDrawTimes() {
   const dispatch = useAppDispatch();
-  const schedule = useAppSelector(getBracketEventSchedule);
+  const schedule = useAppSelector(getBracketGamesSchedule);
   const drawTimes = useAppSelector(getDrawTimes);
   const numSheets = useAppSelector(getNumSheets);
 

@@ -20,15 +20,11 @@ export const saveDrawTimes = createAsyncThunk(
     const state = getState();
     const initialDrawTimes = { ...getInitialDrawTimes(state) };
 
-    console.log("initialTimes: ", initialDrawTimes);
-
     const formatted = formatDrawTimesForSave({
       tournamentId,
       stageId,
       drawTimes,
     });
-    console.log("draw times: ", drawTimes);
-    console.log("formatted: ", formatted);
     const data = await saveDrawTimesMutation(formatted, stageId);
     return data;
   }

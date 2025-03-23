@@ -1,15 +1,9 @@
 import { cn } from "@/lib/utils";
 import { useMemo } from "react";
 import { useAppSelector } from "@/lib/store";
-import {
-  getBracketEventDrawTimes,
-  getBracketEventNumWinners,
-} from "@/entities/BracketEvent";
+import { getBracketEventNumWinners } from "@/entities/BracketEvent";
 import { getDrawTimes } from "@/entities/DrawTime";
-import {
-  getGamesForBracket,
-  getBracketEventSchedule,
-} from "@/entities/Bracket/BracketGame";
+import { getGamesForBracket } from "@/entities/Bracket/BracketGame";
 import DrawTime from "@/shared/ui/draw-time";
 import Typography from "@/shared/ui/typography";
 import { Button } from "@/shared/ui/button";
@@ -25,7 +19,6 @@ export default function BracketInfo({
   bracketIndex: number;
   editDrawTimes: () => void;
 }) {
-  const schedule = useAppSelector(getBracketEventSchedule);
   const drawTimes = useAppSelector(getDrawTimes);
   const numWinners = useAppSelector(getBracketEventNumWinners);
 

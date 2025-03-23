@@ -1,23 +1,22 @@
 "use client";
-
+import { useState } from "react";
+import { useAppDispatch } from "@/lib/store";
+import type { Nullable } from "@/shared/types";
 import type { BracketRows, BracketGameType } from "@/entities/Bracket";
 import { Bracket, BracketRound, BracketGame } from "@/entities/Bracket";
-import { useAppDispatch, useAppSelector } from "@/lib/store";
-import { getSelectedGame } from "@/entities/BracketEvent";
-import {
-  setBracketEventRows,
-  getBracketEventRows,
-} from "@/entities/BracketEvent";
+import { useAppSelector } from "@/lib/store";
+
 import {
   getWinnerConnections,
   getOriginConnections,
   getLoserConnections,
 } from "@/entities/Bracket/BracketGameConnections";
 import {
-  getBracketEventBrackets,
-  getBracketEventReadableIdIndex,
-  getBracketEventSchedule,
+  getBracketGames,
+  getBracketGamesReadableIdIndex,
+  getBracketGamesSchedule,
 } from "@/entities/Bracket/BracketGame";
+import { getSelectedGame, setSelectedGame, getSelectedDraw } from "../model";
 
 export default function BracketViewer({
   onGameClick,
@@ -25,16 +24,43 @@ export default function BracketViewer({
   onGameClick: (game: BracketGameType) => void;
 }) {
   const dispatch = useAppDispatch();
-  const brackets = useAppSelector(getBracketEventBrackets);
-  const readableIdIndex = useAppSelector(getBracketEventReadableIdIndex);
-  const rows = useAppSelector(getBracketEventRows);
-  const schedule = useAppSelector(getBracketEventSchedule);
-  const selectedGame = useAppSelector(getSelectedGame);
+  const brackets = useAppSelector(getBracketGames);
+  const readableIdIndex = useAppSelector(getBracketGamesReadableIdIndex);
+  const schedule = useAppSelector(getBracketGamesSchedule);
   const winnerConnections = useAppSelector(getWinnerConnections);
   const originConnections = useAppSelector(getOriginConnections);
   const loserConnections = useAppSelector(getLoserConnections);
-  function updateRows(newRows: BracketRows) {
-    dispatch(setBracketEventRows(newRows));
+  const selectedDraw = useAppSelector(getSelectedDraw);
+  const selectedGame = useAppSelector(getSelectedGame);
+
+  const [rows, setRows] = useState<BracketRows>({});
+
+  function updateRows(rows: BracketRows) {
+    setRows((prev) => ({
+      ...prev,
+      ...rows,
+    }));
+  }
+
+  function defaultOnGameClick(game: BracketGameType) {
+    if (!game?.id) return;
+    dispatch(setSelectedGame(game.id));
+  }
+
+  const handleGameClick = (game: BracketGameType) => {
+    if (onGameClick) {
+      onGameClick(game);
+    } else {
+      defaultOnGameClick(game);
+    }
+  };
+
+  function isGameSelected(gameId: string) {
+    if (selectedGame?.id && gameId === selectedGame.id) return true;
+    if (!selectedDraw) return false;
+    const gameDrawNum = schedule[gameId];
+    if (gameDrawNum === selectedDraw) return true;
+    return false;
   }
 
   return (
@@ -67,10 +93,8 @@ export default function BracketViewer({
                             winnerConnection={winnerConnections[game.id]}
                             loserConnection={loserConnections[game.id]}
                             originConnections={originConnections[game.id] || []}
-                            onClick={onGameClick}
-                            selected={
-                              !!selectedGame && selectedGame?.id === game.id
-                            }
+                            onClick={handleGameClick}
+                            selected={isGameSelected(game.id)}
                             rows={rows[game.id] || {}}
                             readableId={readableIdIndex[game.id]}
                             drawNumber={schedule[game.id]}

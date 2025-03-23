@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-
 import type { TournamentStoreState } from "../types/TournamentStoreState";
 import type { RootState } from "@/lib/store";
 import * as reducers from "./reducers";
@@ -8,6 +7,7 @@ import * as thunks from "./thunks";
 
 const initialState: TournamentStoreState = {
   tournament: null,
+  stages: [],
   teams: [],
   status: "idle",
   stagesStatus: "idle",
@@ -21,6 +21,11 @@ export const tournamentSlice = createSlice({
   initialState,
   reducers: {
     initBlankTournament: reducers.initBlankTournament,
+    setCurrentTournamentId: (state, action) => {
+      if (!state.tournament) return;
+      const { id } = action.payload;
+      state.tournament.id = id;
+    },
     setCurrentTournamentName: reducers.setCurrentTournamentName,
     setTournamentEndDate: reducers.setTournamentEndDate,
     setTournamentStartDate: reducers.setTournamentStartDate,
@@ -31,18 +36,7 @@ export const tournamentSlice = createSlice({
     builder
       // Handle the action types defined by the `incrementAsync` thunk defined below.
       // This lets the slice reducer update the state with request status and results.
-      .addCase(initTournamentById.pending, (state) => {
-        state.status = "loading";
-      })
-      .addCase(initTournamentById.fulfilled, (state, action) => {
-        state.status = "idle";
-        const { teams, tournament } = action.payload;
-        state.teams = teams;
-        state.tournament = tournament;
-      })
-      .addCase(initTournamentById.rejected, (state) => {
-        state.status = "failed";
-      })
+
       .addCase(initNewTournament.pending, (state) => {
         state.status = "loading";
       })
@@ -66,53 +60,12 @@ export const tournamentSlice = createSlice({
       .addCase(updateAndSaveTournament.rejected, (state) => {
         state.status = "failed";
       })
-      .addCase(addTournamentStage.pending, (state) => {
-        state.stageAddStatus = "loading";
-      })
-      .addCase(addTournamentStage.fulfilled, (state, action) => {
-        state.stageAddStatus = "idle";
-        const newStages = [...state.tournament.stages, action.payload];
-        state.tournament.stages = newStages;
-      })
-      .addCase(addTournamentStage.rejected, (state) => {
-        state.stageAddStatus = "failed";
-      })
-      .addCase(deleteTournamentStage.pending, (state, action) => {
-        state.removingStage = action.meta.arg;
-        state.stageRemoveStatus = "loading";
-      })
-      .addCase(deleteTournamentStage.fulfilled, (state, action) => {
-        state.stageRemoveStatus = "idle";
-        state.removingStage = null;
-        state.tournament.stages = state.tournament.stages.filter(
-          (stage) => stage.id !== action.payload
-        );
-      })
-      .addCase(deleteTournamentStage.rejected, (state) => {
-        state.stageRemoveStatus = "failed";
-        state.removingStage = null;
-      })
-      .addCase(fetchTournamentStages.pending, (state) => {
-        state.stagesStatus = "loading";
-      })
-      .addCase(fetchTournamentStages.fulfilled, (state, action) => {
-        state.stagesStatus = "idle";
-        if (!state.tournament) return;
-        state.tournament.stages = action.payload;
-      })
-      .addCase(fetchTournamentStages.rejected, (state) => {
-        state.stagesStatus = "failed";
-      })
 
       .addCase(
         reducers.updateTournamentStageAction,
         reducers.updateTournamentStage
       )
-      .addCase(reducers.updateTournamentIdAction, reducers.updateTournamentId)
-      .addCase(thunks.updateTournamentStageOrder.fulfilled, (state, action) => {
-        if (!state.tournament) return;
-        state.tournament.stages = action.payload;
-      });
+      .addCase(reducers.updateTournamentIdAction, reducers.updateTournamentId);
   },
 });
 
@@ -135,24 +88,23 @@ export const getTournamentAddStageStatus = (state: RootState) =>
   state.tournament.stageAddStatus;
 export const getTournamentRemovingStage = (state: RootState) =>
   state.tournament.removingStage;
-export const getTournamentStages = selectors.getTournamentField("stages");
 
 export const getCurrentTournamentId = selectors.getTournamentField("id");
+
+export const getCurrentTournamentStages = (state: RootState) => {
+  return state.tournament.stages || [];
+};
 
 export const getStartTeams = selectors.getStartTeams;
 export const getEndTeams = selectors.getEndTeams;
 export const getNextStageName = selectors.getNextStageName;
 export const getPrevStageName = selectors.getPrevStageName;
 
-export const initTournamentById = thunks.initTournamentById;
 export const initNewTournament = thunks.initNewTournament;
-export const fetchTournamentStages = thunks.getTournamentStages;
-export const addTournamentStage = thunks.addTournamentStage;
-export const deleteTournamentStage = thunks.deleteTournamentStage;
-export const updateTournamentStageOrder = thunks.updateTournamentStageOrder;
 export const updateAndSaveTournament = thunks.updateAndSaveTournament;
 
 export const {
+  setCurrentTournamentId,
   setCurrentTournamentName,
   setTournamentStartDate,
   setTournamentEndDate,

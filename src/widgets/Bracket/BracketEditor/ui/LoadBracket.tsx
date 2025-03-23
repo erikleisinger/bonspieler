@@ -1,8 +1,41 @@
+import { useEffect, useLayoutEffect } from "react";
+
+import { useFetchDrawTimesForStageQuery } from "@/entities/DrawTime";
+import {
+  useGetBracketConnectionsQuery,
+  useGetBracketGamesQuery,
+  useGetTournamentStageByIdQuery,
+} from "@/shared/api";
+
 import { useAppDispatch } from "@/lib/store";
-import { useState, useLayoutEffect } from "react";
-import { initBracketConnections } from "@/entities/Bracket/BracketGameConnections";
-import { initBracketGames } from "@/entities/Bracket/BracketGame";
-import { initDrawTimesForStage } from "@/entities/DrawTime";
+
+/**
+ * Id and tournament id
+ */
+
+import {
+  setBracketEventTournamentId,
+  setBracketEventId,
+  setBracketEventOrder,
+  setBracketEventName,
+} from "@/entities/BracketEvent";
+
+/**
+ * Games
+ */
+
+import {
+  initBracketGames,
+  setBracketGamesSchedule,
+  resetState,
+} from "@/entities/Bracket/BracketGame";
+
+/**
+ * Connections
+ */
+
+import { setConnections } from "@/entities/Bracket/BracketGameConnections";
+
 import LoaderFullPage from "@/shared/ui/loader-full-page";
 export default function LoadBracket({
   children,
@@ -12,18 +45,86 @@ export default function LoadBracket({
   stageId: string;
 }) {
   const dispatch = useAppDispatch();
-  const [loading, setLoading] = useState(true);
+
+  /**
+   * Id and tournament id
+   */
+
+  const { isLoading: isLoadingStage, data: stageData } =
+    useGetTournamentStageByIdQuery(stageId, {
+      refetchOnMountOrArgChange: true,
+      skip: !stageId,
+    });
+
+  useEffect(() => {
+    if (stageData) {
+      const { id, tournament_id, order, name } = stageData;
+      if (id) {
+        dispatch(setBracketEventId(id));
+      }
+      if (tournament_id) {
+        dispatch(setBracketEventTournamentId(tournament_id));
+      }
+      if (order) {
+        dispatch(setBracketEventOrder(order));
+      }
+      dispatch(setBracketEventName(name));
+    }
+  }, [stageData, dispatch]);
+
+  /**
+   * Bracket games
+   */
+
+  const { isLoading: isLoadingGames, data: gamesData } =
+    useGetBracketGamesQuery(stageId, {
+      refetchOnMountOrArgChange: true,
+      skip: !stageId,
+    });
 
   useLayoutEffect(() => {
-    Promise.all([
-      dispatch(initBracketGames(stageId)),
-      dispatch(initBracketConnections(stageId)),
-
-      dispatch(initDrawTimesForStage(stageId)),
-    ]).then(() => {
-      setLoading(false);
-    });
+    dispatch(resetState());
   }, []);
 
-  return loading ? <LoaderFullPage /> : <>{children}</>;
+  useEffect(() => {
+    if (gamesData) {
+      const { brackets, schedule } = gamesData;
+
+      if (brackets) {
+        dispatch(initBracketGames(brackets));
+      }
+
+      if (schedule) {
+        dispatch(setBracketGamesSchedule(schedule));
+      }
+    }
+  }, [gamesData, dispatch]);
+
+  const isLoadingDrawTimes = false;
+  // const { isLoading: isLoadingDrawTimes } =
+  //   useFetchDrawTimesForStageQuery(stageId);
+
+  /**
+   * Get Bracket Connections
+   */
+
+  const { isLoading: isLoadingConnections, data: connections } =
+    useGetBracketConnectionsQuery(stageId, {
+      refetchOnMountOrArgChange: true,
+      skip: !stageId,
+    });
+
+  useEffect(() => {
+    if (connections) {
+      dispatch(setConnections(connections));
+    }
+  }, [connections, dispatch]);
+
+  const isLoading =
+    isLoadingGames ||
+    isLoadingDrawTimes ||
+    isLoadingConnections ||
+    isLoadingStage;
+
+  return isLoading ? <LoaderFullPage /> : <>{children}</>;
 }

@@ -1,40 +1,69 @@
 import "./animation.scss";
+import type { Tables } from "@/shared/api";
 import { AddStage, AddStageCard } from "@/features/Tournament/AddStage";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { TournamentStage, TournamentStageType } from "@/entities/Tournament";
 import { TournamentStageList } from "@/features/Tournament/TournamentStageList";
-import { useAppDispatch, useAppSelector } from "@/lib/store";
 import {
-  updateTournamentStages,
-  getCurrentTournament,
-  addTournamentStage,
-  getCurrentTournamentId,
-  deleteTournamentStage,
-  updateTournamentStageOrder,
-} from "@/entities/Tournament";
+  useGetTournamentStagesQuery,
+  useAddTournamentStageMutation,
+  useRemoveTournamentStageMutation,
+  useUpdateTournamentStagesMutation,
+} from "@/shared/api";
 export default function TournamentStageEditor({
   onEditStage,
+  tournamentId,
 }: {
   onEditStage: (stage: TournamentStage) => void;
+  tournamentId: string;
 }) {
-  const dispatch = useAppDispatch();
-  const tournament = useAppSelector(getCurrentTournament);
-  const tournamentId = useAppSelector(getCurrentTournamentId);
-  const stages = tournament?.stages || [];
+  const { data: stages } = useGetTournamentStagesQuery(tournamentId, {
+    refetchOnMountOrArgChange: false,
+    skip: !tournamentId,
+  });
 
-  function addStage(type: TournamentStageType) {
-    dispatch(
-      addTournamentStage({
-        tournamentId,
-        stageType: type,
-      })
-    );
+  const [editedStages, setEditedStages] = useState<
+    Tables<"tournament_stages">[]
+  >([]);
+
+  useEffect(() => {
+    setEditedStages(stages || []);
+  }, [stages]);
+
+  const [doAddStage] = useAddTournamentStageMutation();
+
+  const [addingStage, setAddingStage] = useState(false);
+
+  async function addStage(type: TournamentStageType) {
+    setAddingStage(true);
+    await doAddStage({
+      tournamentId,
+      stageToAdd: {
+        type,
+        name: "New Stage",
+        order: editedStages.length,
+      },
+    });
+    setAddingStage(false);
   }
+
+  const [doRemoveStage] = useRemoveTournamentStageMutation();
+
+  const [removingStage, setRemovingStage] = useState<string | null>(null);
 
   async function removeStage(stageId: string) {
-    await dispatch(deleteTournamentStage(stageId));
-    await dispatch(updateTournamentStageOrder());
+    setRemovingStage(stageId);
+    const newStages = [...editedStages];
+    const index = newStages.findIndex((stage) => stage.id === stageId);
+    newStages.splice(index, 1);
+    setEditedStages(newStages);
+    await doRemoveStage(stageId);
+    setRemovingStage(null);
   }
+
+  const [addStageMenuOpen, setAddStageMenuOpen] = useState(false);
+
+  const [doUpdateStages] = useUpdateTournamentStagesMutation();
 
   async function handleChangeStageOrder(
     inc: number,
@@ -54,27 +83,31 @@ export default function TournamentStageEditor({
       order: i,
     }));
 
-    await dispatch(updateTournamentStages(newStages));
-    await dispatch(updateTournamentStageOrder());
-  }
+    setEditedStages(newStages);
 
-  const [addingStage, setAddingStage] = useState(false);
+    await doUpdateStages({
+      tournamentId,
+      updates: newStages,
+    });
+  }
 
   return (
     <>
       <div className="flex  pr-4 md:pr-12 w-fit h-fit">
         <TournamentStageList
-          stages={stages}
+          stages={editedStages}
           removeStage={removeStage}
+          removingStage={removingStage}
           onEditStage={onEditStage}
           changeStageOrder={handleChangeStageOrder}
+          addingStage={addingStage}
         ></TournamentStageList>
-        <AddStageCard onClick={() => setAddingStage(true)} />
+        <AddStageCard onClick={() => setAddStageMenuOpen(true)} />
       </div>
       <AddStage
         addStage={addStage}
-        endAdd={() => setAddingStage(false)}
-        active={addingStage}
+        endAdd={() => setAddStageMenuOpen(false)}
+        active={addStageMenuOpen}
       />
     </>
   );

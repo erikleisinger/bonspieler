@@ -1,16 +1,18 @@
-import { useMemo } from "react";
 import { Button } from "@/shared/ui/button";
-import { FaSeedling, FaEye } from "react-icons/fa";
+import { FaEye } from "react-icons/fa";
 
 import { BracketGameTeam } from "@/entities/Bracket";
 import { useAppDispatch, useAppSelector } from "@/lib/store";
-import { getSelectedGame } from "@/entities/BracketEvent";
+import {
+  getSelectedGame,
+  setSelectedGame,
+} from "@/widgets/Bracket/BracketViewer";
 import {
   getWinnerConnectionsForGame,
   getLoserConnectionsForGame,
   getOriginConnectionsForGame,
 } from "@/entities/Bracket/BracketGameConnections";
-import { setSelectedGame } from "@/entities/BracketEvent";
+
 import { scrollToGame } from "@/entities/Bracket";
 import BracketGameViewerHeader from "./BracketGameViewerHeader";
 import BracketGameViewerConnection from "./BracketGameViewerConnection";

@@ -1,3 +1,4 @@
+"use client";
 import { Progress } from "./progress";
 
 export default function LoaderFullPage({ text = "" }: { text?: string }) {

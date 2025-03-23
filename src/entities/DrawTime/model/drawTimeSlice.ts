@@ -4,7 +4,7 @@ import type { BracketDrawTimes } from "@/entities/Bracket";
 import * as thunks from "./thunks";
 import { RootState } from "@/lib/store";
 import { Nullable } from "@/shared/types";
-
+import { drawTimesApi } from "./api";
 export interface DrawTimeState {
   drawTimes: BracketDrawTimes;
   initialDrawTimes: BracketDrawTimes;
@@ -34,13 +34,20 @@ export const drawTimeSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(
-      thunks.initDrawTimesForStage.fulfilled,
-      (state, action: PayloadAction<BracketDrawTimes>) => {
-        state.drawTimes = action.payload;
-        state.initialDrawTimes = { ...action.payload };
-      }
-    );
+    builder
+      .addCase(
+        thunks.initDrawTimesForStage.fulfilled,
+        (state, action: PayloadAction<BracketDrawTimes>) => {
+          state.drawTimes = action.payload;
+          state.initialDrawTimes = { ...action.payload };
+        }
+      )
+      .addMatcher(
+        drawTimesApi.endpoints.fetchDrawTimesForStage.matchFulfilled,
+        (state, action) => {
+          state.drawTimes = action.payload;
+        }
+      );
   },
 });
 

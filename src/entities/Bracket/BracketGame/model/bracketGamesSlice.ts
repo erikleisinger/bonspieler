@@ -16,6 +16,7 @@ interface BracketGamesState {
   readableIdIndex: BracketReadableIdIndex;
   schedule: BracketSchedule;
   removedGameIds: string[];
+  stageId: Nullable<string>;
 }
 
 function defaultState() {
@@ -25,6 +26,7 @@ function defaultState() {
     readableIdIndex: {},
     schedule: {},
     removedGameIds: [],
+    stageId: null,
   };
 }
 
@@ -34,10 +36,6 @@ export const bracketGamesSlice = createSlice({
   name: "bracketGames",
   initialState,
   reducers: {
-    addBracket: (state, action: PayloadAction<BracketGameType[][]>) => {
-      const newBrackets = [...state.brackets, action.payload];
-      state.brackets = newBrackets;
-    },
     removeBracket(state, action: PayloadAction<number>) {
       const newBrackets = [...state.brackets];
       newBrackets.splice(action.payload, 1);
@@ -49,19 +47,41 @@ export const bracketGamesSlice = createSlice({
       state.readableIdIndex = defaultState().readableIdIndex;
       state.schedule = defaultState().schedule;
     },
-    setBracketEventBrackets: (
+    setBracketGames: (state, action: PayloadAction<BracketGameType[][][]>) => {
+      if (
+        !!state.brackets?.length &&
+        state.brackets.length < action.payload?.length
+      ) {
+        console.warn(
+          "Cannot add bracket games when it already exists. use updateBracketGames instead, or first call resetState"
+        );
+        return;
+      }
+      state.brackets = action.payload;
+    },
+    updateBracketGames: (
       state,
       action: PayloadAction<BracketGameType[][][]>
     ) => {
-      state.brackets = action.payload;
+      state.brackets = [...state.brackets, ...action.payload];
     },
-    setBracketEventReadableIdIndex: (
+    setBracketGamesReadableIdIndex: (
       state,
       action: PayloadAction<BracketReadableIdIndex>
     ) => {
+      if (
+        !!Object.keys(state.readableIdIndex).length &&
+        Object.keys(state.readableIdIndex).length <
+          Object.keys(action.payload)?.length
+      ) {
+        console.warn(
+          "Cannot add bracket games readable id index when it already exists. use updateBracketGamesReadableIdIndex instead, or first call resetState"
+        );
+        return;
+      }
       state.readableIdIndex = action.payload;
     },
-    updateBracketEventReadableIdIndex: (
+    updateBracketGamesReadableIdIndex: (
       state,
       action: PayloadAction<BracketReadableIdIndex>
     ) => {
@@ -70,21 +90,31 @@ export const bracketGamesSlice = createSlice({
         ...action.payload,
       };
     },
-    setBracketEventSchedule: (
+    setBracketGamesSchedule: (
       state,
       action: PayloadAction<BracketSchedule>
     ) => {
       state.schedule = action.payload;
     },
-    setBracketEventGameIndex: (
+    setBracketGameIndex: (
       state,
       action: PayloadAction<{
         [gameId: string]: BracketGameType;
       }>
     ) => {
+      if (
+        !!Object.keys(state.gameIndex).length &&
+        Object.keys(state.gameIndex).length <
+          Object.keys(action.payload)?.length
+      ) {
+        console.warn(
+          "Cannot add bracket games index when it already exists. use updateBracketGameIndex instead, or first call resetState"
+        );
+        return;
+      }
       state.gameIndex = action.payload;
     },
-    updateBracketEventGameIndex: (
+    updateBracketGameIndex: (
       state,
       action: PayloadAction<{
         [gameId: string]: BracketGameType;
@@ -96,30 +126,30 @@ export const bracketGamesSlice = createSlice({
       };
     },
     updateRemovedGameIds: (state, action: PayloadAction<string[]>) => {
-      state.removedGameIds = [...state.removedGameIds, ...action.payload];
+      state.removedGameIds = [
+        ...state.removedGameIds,
+        ...action.payload.filter((id) => !state.removedGameIds.includes(id)),
+      ];
     },
-  },
-
-  extraReducers: (builder) => {
-    builder.addCase(thunks.initBracketGames.fulfilled, (state, action) => {
-      const { gameIndex, brackets, readableIdIndex, schedule } = action.payload;
-      state.gameIndex = gameIndex;
-      state.brackets = brackets;
-      state.readableIdIndex = readableIdIndex;
-      state.schedule = schedule;
-    });
-    builder.addCase(thunks.saveBracketGames.fulfilled, (state, action) => {
-      console.log("saved bracket games!");
-    });
   },
 });
 
-export const getBracketEventGameIndex = (state: RootState) =>
-  state.bracketGames.gameIndex;
-export const getBracketEventBrackets = (state: RootState) =>
-  state.bracketGames.brackets;
+export const getBracketEventGamesStageId = (state: RootState) =>
+  state.bracketGames.stageId;
 
-export const getBracketEventReadableIdIndex = (state: RootState) => {
+export const getBracketGameIndex = (state: RootState) =>
+  state.bracketGames.gameIndex;
+
+const getBracketGamesState = (state: RootState) => state.bracketGames;
+
+export const getBracketGames = createSelector(
+  [getBracketGamesState],
+  (bracketGamesState) => {
+    return bracketGamesState.brackets;
+  }
+);
+
+export const getBracketGamesReadableIdIndex = (state: RootState) => {
   return state.bracketGames.readableIdIndex;
 };
 
@@ -128,16 +158,17 @@ export const getRemovedGameIds = (state: RootState) => {
 };
 
 export const getGameById = createSelector(
-  [getBracketEventGameIndex, (state, gameId?: Nullable<string>) => gameId],
+  [getBracketGameIndex, (state, gameId?: Nullable<string>) => gameId],
   (gameIndex, gameId) => {
     if (!gameId) return null;
+    console.log("get game by id: ", gameId, gameIndex[gameId]);
     return gameIndex[gameId] || null;
   }
 );
 
 export const getReadableGameId = createSelector(
   [
-    getBracketEventReadableIdIndex,
+    getBracketGamesReadableIdIndex,
     (state, gameId?: Nullable<string>) => gameId,
   ],
   (readableIdIndex, gameId) => {
@@ -147,44 +178,45 @@ export const getReadableGameId = createSelector(
 );
 
 export const getGamesForBracket = createSelector(
-  [getBracketEventBrackets, (state, bracketIndex: number) => bracketIndex],
+  [getBracketGames, (state, bracketIndex: number) => bracketIndex],
   (brackets, bracketIndex) => {
     return (brackets[bracketIndex] || []).flat();
   }
 );
 
-export const getBracketEventSchedule = (state: RootState) => {
+export const getBracketGamesSchedule = (state: RootState) => {
   return state.bracketGames.schedule;
 };
 
 export const getDrawNumberForGame = createSelector(
-  [getBracketEventSchedule, (state, gameId: string) => gameId],
+  [getBracketGamesSchedule, (state, gameId: string) => gameId],
   (schedule, gameId) => {
     return schedule[gameId] || null;
   }
 );
 
 export const getBracketByIndex = createSelector(
-  [getBracketEventBrackets, (state, bracketIndex: number) => bracketIndex],
+  [getBracketGames, (state, bracketIndex: number) => bracketIndex],
   (brackets, bracketIndex) => {
     return brackets[bracketIndex];
   }
 );
 
-export const initBracketGames = thunks.initBracketGames;
-export const saveBracketGames = thunks.saveBracketGames;
-
 export const {
-  addBracket,
   removeBracket,
-  setBracketEventBrackets,
-  setBracketEventGameIndex,
-  setBracketEventReadableIdIndex,
-  setBracketEventSchedule,
-  updateBracketEventGameIndex,
-  updateBracketEventReadableIdIndex,
+  setBracketGames,
+  setBracketGameIndex,
+  setBracketGamesReadableIdIndex,
+  setBracketGamesSchedule,
+  updateBracketGameIndex,
+  updateBracketGamesReadableIdIndex,
+  updateBracketGames,
   updateRemovedGameIds,
   resetState,
 } = bracketGamesSlice.actions;
+
+export const initBracketGames = thunks.initBracketGames;
+export const addBracketGames = thunks.addBracketGames;
+export const removeBracketGames = thunks.removeBracketGames;
 
 export default bracketGamesSlice.reducer;

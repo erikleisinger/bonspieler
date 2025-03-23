@@ -1,9 +1,7 @@
-import { Button } from "@/shared/ui/button";
-import { HiOutlinePlus } from "react-icons/hi";
 import { scrollToGame } from "@/entities/Bracket";
 import type { BracketGameType } from "@/entities/Bracket";
 import { getDrawTimes } from "@/entities/DrawTime";
-import { getBracketEventSchedule } from "@/entities/Bracket/BracketGame";
+import { getBracketGamesSchedule } from "@/entities/Bracket/BracketGame";
 import { getReadableGameId } from "@/entities/Bracket/BracketGame";
 import { useAppSelector } from "@/lib/store";
 import { DrawTime } from "@/entities/DrawTime";
@@ -20,7 +18,7 @@ export default function BracketGameViewerHeader({
     getReadableGameId(state, game.id)
   );
   const drawTimes = useAppSelector(getDrawTimes);
-  const schedule = useAppSelector(getBracketEventSchedule);
+  const schedule = useAppSelector(getBracketGamesSchedule);
   return (
     <header className="flex justify-between  p-4 px-6 ">
       <div>

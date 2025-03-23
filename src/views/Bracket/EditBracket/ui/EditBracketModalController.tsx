@@ -8,6 +8,8 @@ import { BracketGameViewer } from "@/widgets/Bracket/BracketGameViewer";
 import { AssignTeams } from "@/widgets/Bracket/AssignTeams";
 import { BracketOptions } from "@/widgets/Bracket/BracketOptions";
 import { useSaveBracket } from "../lib";
+import { EditDrawNumber } from "@/features/EditDrawNumber";
+import { useBracketData, useSetBracketData } from "../../helpers";
 export default function EditBracketModalController({
   setState,
   state,
@@ -17,6 +19,31 @@ export default function EditBracketModalController({
   state: BracketEditorToolbarState;
 }) {
   const { save: saveBracket } = useSaveBracket();
+
+  const { availableDrawTimes, brackets } = useBracketData();
+  const { removeBracket, addBracket } = useSetBracketData();
+
+  function handleRemoveBracket(bracketIndex: number) {
+    removeBracket(bracketIndex);
+  }
+
+  function handleAddBracket({
+    numTeams,
+    numWinners,
+    isSeeded,
+  }: {
+    numTeams: number;
+    numWinners: number[];
+    isSeeded: boolean;
+  }) {
+    addBracket({
+      numTeams,
+      numWinners,
+      isSeeded,
+    });
+
+    setState(null);
+  }
 
   return (
     <>
@@ -58,21 +85,28 @@ export default function EditBracketModalController({
           fullHeight={true}
           visible={state === BracketEditorToolbarState.AddingBracket}
         >
-          <AddBracketOptions />
+          <AddBracketOptions onAdd={handleAddBracket} />
         </Slideout>
         <Slideout
           fullHeight={true}
           visible={state === BracketEditorToolbarState.ViewingGame}
         >
           {state === BracketEditorToolbarState.ViewingGame && (
-            <BracketGameViewer />
+            <BracketGameViewer
+              drawTimeChildren={
+                <EditDrawNumber availableDrawTimes={availableDrawTimes} />
+              }
+            ></BracketGameViewer>
           )}
         </Slideout>
         <Slideout
           fullHeight={true}
           visible={state === BracketEditorToolbarState.ViewingBracket}
         >
-          <BracketOptions />
+          <BracketOptions
+            brackets={brackets}
+            removeBracket={handleRemoveBracket}
+          />
         </Slideout>
       </div>
     </>

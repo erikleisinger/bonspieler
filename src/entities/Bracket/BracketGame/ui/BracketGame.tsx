@@ -5,8 +5,6 @@ import BracketGameHeader from "./BracketGameHeader";
 import type { BracketGame, BracketRow } from "../../types";
 import { GAME_ELEMENT_ID_PREFIX } from "../../lib/constants/element-id";
 import { getRowSpanForGame } from "../lib/getRowSpanForGame";
-import { useAppSelector } from "@/lib/store";
-import { getSelectedDraw } from "@/entities/BracketEvent";
 import { GAME_HEIGHT } from "../../lib/constants/game";
 import BracketGameFinalResult from "./BracketGameFinalResult";
 import { GameAvailabilityContext } from "@/shared/Bracket/GameAvailabilityContext";
@@ -37,7 +35,6 @@ export default function BracketGame({
   loserConnection: Nullable<string>;
   originConnections: OriginConnection[];
 }) {
-  const selectedDraw = useAppSelector(getSelectedDraw);
   const { availableGameIds } = useContext(GameAvailabilityContext);
   const isAvailable = availableGameIds.includes(game.id);
 
@@ -50,8 +47,6 @@ export default function BracketGame({
     if (isAvailable) {
       base.push("available");
     } else if (selected) {
-      base.push("selected");
-    } else if (selectedDraw && selectedDraw === drawNumber) {
       base.push("selected");
     }
     return base.join(" ");

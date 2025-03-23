@@ -1,8 +1,8 @@
 import { Button } from "@/shared/ui/button";
 import { useAppDispatch, useAppSelector } from "@/lib/store";
 import {
-  setBracketEventSchedule,
-  getBracketEventBrackets,
+  setBracketGamesSchedule,
+  getBracketGames,
 } from "@/entities/Bracket/BracketGame";
 import { getDrawTimes, setDrawTimes } from "@/entities/DrawTime";
 import { getOriginConnections } from "@/entities/Bracket/BracketGameConnections";
@@ -22,7 +22,7 @@ export default function CalculateButton({
   const dispatch = useAppDispatch();
 
   const originConnections = useAppSelector(getOriginConnections);
-  const brackets = useAppSelector(getBracketEventBrackets);
+  const brackets = useAppSelector(getBracketGames);
   const drawTimes = useAppSelector(getDrawTimes);
 
   function structureConnections() {
@@ -46,7 +46,7 @@ export default function CalculateButton({
     dispatch(setNumSheets(numSheets));
 
     const { schedule } = scheduleTournament(structureConnections(), numSheets);
-    dispatch(setBracketEventSchedule(schedule));
+    dispatch(setBracketGamesSchedule(schedule));
     const newNumDrawTimes = Math.max(...Object.values(schedule));
     const newDrawTimes = Array.from({ length: newNumDrawTimes }).reduce(
       (all, _, i) => {

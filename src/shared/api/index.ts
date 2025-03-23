@@ -13,3 +13,7 @@ export type {
   TablesInsert,
   TablesUpdate,
 } from "./database.types";
+
+export * from "./model";
+export * from "./queries";
+export * from "./mutations";

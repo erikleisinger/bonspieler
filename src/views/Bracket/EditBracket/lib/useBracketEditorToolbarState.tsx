@@ -1,11 +1,16 @@
 import { useState, useEffect } from "react";
+import type { Nullable } from "@/shared/types";
 import { BracketEditorToolbarState } from "@/widgets/Bracket/BracketEditorToolbar";
 import { useAppSelector, useAppDispatch } from "@/lib/store";
-import { getSelectedGame, setSelectedGame } from "@/entities/BracketEvent";
+
+import {
+  getSelectedGame,
+  setSelectedGame,
+} from "@/widgets/Bracket/BracketViewer";
 export default function useBracketEditorToolbarState({
   toolbarRefs,
 }: {
-  toolbarRefs: React.RefObject<HTMLDivElement>[];
+  toolbarRefs: React.RefObject<Nullable<HTMLDivElement>>[];
 }) {
   const dispatch = useAppDispatch();
   const selectedGame = useAppSelector(getSelectedGame);
@@ -41,6 +46,7 @@ export default function useBracketEditorToolbarState({
   function checkClickInsideRef(event: MouseEvent) {
     if (!toolbarRefs?.length) return true;
     return toolbarRefs.some((ref) => {
+      if (!ref?.current) return false;
       return ref.current && ref.current.contains(event.target);
     });
   }

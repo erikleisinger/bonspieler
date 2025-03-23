@@ -1,7 +1,7 @@
 import type { Nullable } from "@/shared/types";
 import { FaTrophy, FaHeartBroken } from "react-icons/fa";
 import { useAppSelector, useAppDispatch } from "@/lib/store";
-import { setSelectedGame } from "@/entities/BracketEvent";
+import { setSelectedGame } from "@/widgets/Bracket/BracketViewer";
 import { getReadableGameId } from "@/entities/Bracket/BracketGame";
 export default function BracketGameViewerConnection({
   connection,
