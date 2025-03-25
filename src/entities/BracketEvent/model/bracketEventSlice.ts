@@ -52,7 +52,7 @@ export const getBracketEventId = (state: RootState) =>
 export const getBracketEventName = (state: RootState) =>
   state?.bracketEvent?.bracket?.name || "";
 export const getBracketEventNumTeams = (state: RootState) =>
-  state?.bracketEvent?.bracket?.numTeams || 16;
+  state?.bracketEvent?.bracket?.num_start_teams || 16;
 export const getBracketEventNumSheets = (state: RootState) =>
   state?.bracketEvent?.bracket?.numSheets || 8;
 

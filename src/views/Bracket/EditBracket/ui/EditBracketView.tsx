@@ -10,7 +10,7 @@ import {
   TournamentStageListItemContainer,
   TournamentStageListItemContent,
 } from "@/features/Tournament/TournamentStageList";
-import { getBracketStartTeams } from "../../helpers/getBracketStartTeams";
+import { getBracketStartTeams } from "@/entities/Bracket";
 export default function EditBracketView() {
   const brackets = useAppSelector(getBracketGames);
   /** Get stage for Tournament Context */

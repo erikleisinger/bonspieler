@@ -65,6 +65,7 @@ export default function BracketOptions({
           className="bg-glass"
           bracketIndex={bracketIndex}
           editDrawTimes={editDrawTimes}
+          bracket={brackets[bracketIndex]}
         />
       </div>
       <footer className="flex justify-center">

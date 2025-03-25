@@ -9,14 +9,19 @@ import Typography from "@/shared/ui/typography";
 import { Button } from "@/shared/ui/button";
 import { FaPencilAlt } from "react-icons/fa";
 import { DrawInfo } from "@/features/Stage/SetStageDrawTimes";
+import { BracketGameType } from "@/entities/Bracket";
+
+import { getBracketEndTeams } from "@/entities/Bracket";
 export default function BracketInfo({
   className = "",
   bracketIndex,
+  bracket,
   editDrawTimes,
   ...props
 }: {
   className?: string;
   bracketIndex: number;
+  bracket: BracketGameType[][];
   editDrawTimes: () => void;
 }) {
   const drawTimes = useAppSelector(getDrawTimes);
@@ -32,7 +37,6 @@ export default function BracketInfo({
     );
   }, [drawTimes]);
 
-  const bracketWinners = numWinners[bracketIndex];
   const numGames = games?.length || 0;
   return (
     <>
@@ -40,8 +44,9 @@ export default function BracketInfo({
         <div className="flex justify-between">
           Games <strong>{numGames}</strong>
         </div>
+
         <div className="flex justify-between">
-          Teams advancing <strong>{bracketWinners}</strong>
+          Teams advancing <strong>{getBracketEndTeams(bracket)}</strong>
         </div>
       </div>
       <div className="p-4 pt-8 flex justify-between">

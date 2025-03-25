@@ -1,6 +1,9 @@
 import { useAppDispatch, useAppSelector } from "@/lib/store";
 
-import { getBracketEvent } from "@/entities/BracketEvent";
+import {
+  getBracketEventEndTeams,
+  getBracketEventStartTeams,
+} from "@/entities/Bracket";
 /**
  * Bracket id & tournament id
  */
@@ -9,8 +12,8 @@ import {
   getBracketEventId,
   getBracketEventTournamentId,
   getBracketEventName,
-  getBracketEventNumTeams,
-  getBracketEventNumWinners,
+  setNumTeams,
+  setNumWinners,
 } from "@/entities/BracketEvent";
 
 /**
@@ -39,6 +42,7 @@ import {
   getBracketGamesReadableIdIndex,
   getRemovedGameIds,
 } from "@/entities/Bracket/BracketGame";
+import {} from "../../helpers";
 
 export default function useSaveBracket() {
   const dispatch = useAppDispatch();
@@ -53,8 +57,6 @@ export default function useSaveBracket() {
   const removedGameIds = useAppSelector(getRemovedGameIds);
 
   const bracketName = useAppSelector(getBracketEventName);
-  const numTeams = useAppSelector(getBracketEventNumTeams);
-  const numWinners = useAppSelector(getBracketEventNumWinners);
 
   const [saveConnections] = useSaveBracketConnectionsMutation();
   const [saveGames] = useSaveBracketGamesMutation();
@@ -92,14 +94,18 @@ export default function useSaveBracket() {
       connections,
     });
 
+    const startTeams = getBracketEventStartTeams(brackets);
+    const endTeams = getBracketEventEndTeams(brackets);
     await updateStage({
       tournamentStageId: bracketId,
       updates: {
         name: bracketName,
-        num_start_teams: numTeams,
-        num_end_teams: numWinners,
+        num_start_teams: startTeams,
+        num_end_teams: endTeams,
       },
     });
+    dispatch(setNumTeams(startTeams));
+    dispatch(setNumWinners(endTeams));
   }
 
   return {

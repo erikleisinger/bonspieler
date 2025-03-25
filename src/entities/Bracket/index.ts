@@ -23,6 +23,10 @@ export {
   MAX_TEAM_COUNT,
   MAX_WINNER_COUNT,
   MIN_TEAM_COUNT,
+  getBracketEndTeams,
+  getBracketEventEndTeams,
+  getBracketEventStartTeams,
+  getBracketStartTeams,
 } from "./lib";
 export { Bracket } from "./ui";
 export { BRACKET_CONTAINER_ELEMENT_ID_PREFIX } from "./lib";

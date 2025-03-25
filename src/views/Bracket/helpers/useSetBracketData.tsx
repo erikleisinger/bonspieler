@@ -30,8 +30,7 @@ import {
 import { useAppDispatch, useAppSelector } from "@/lib/store";
 
 import { generateBracket } from "@/features/Bracket/GenerateBracket";
-import { getBracketStartTeams } from "./getBracketStartTeams";
-import { getBracketEndTeams } from "./getBracketEndTeams";
+import { getBracketStartTeams, getBracketEndTeams } from "@/entities/Bracket";
 export default function useSetBracketData() {
   const dispatch = useAppDispatch();
   const brackets = useAppSelector(getBracketGames);
