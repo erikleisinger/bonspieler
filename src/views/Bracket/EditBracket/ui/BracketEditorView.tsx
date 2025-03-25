@@ -16,8 +16,17 @@ import { BracketEditorToolbar } from "@/widgets/Bracket/BracketEditorToolbar";
 import { useBracketEditorToolbarState } from "../lib";
 import useElementSize from "@/shared/hooks/useElementSize";
 import EditBracketModalController from "./EditBracketModalController";
+import { cn } from "@/lib/utils";
 
-export default function BracketEditorView() {
+export default function BracketEditorView({
+  children,
+  className,
+  offsetLeftPx = 0,
+}: {
+  children?: React.ReactNode;
+  className?: string;
+  offsetLeftPx?: number;
+}) {
   const dispatch = useAppDispatch();
   const lookingToAssignTeam = useAppSelector(getLookingToAssignTeam);
   const selectedGame = useAppSelector(getSelectedGame);
@@ -55,11 +64,20 @@ export default function BracketEditorView() {
 
   return (
     <GameAvailabilityContextProvider>
-      <div className="absolute inset-0">
+      <div
+        className={cn("absolute inset-0", className)}
+        style={{
+          left: offsetLeftPx * -1 + "px",
+        }}
+      >
         <main
-          className="absolute inset-0 overflow-auto grid grid-cols-[auto,1fr,auto]"
+          className="absolute inset-0 overflow-auto grid grid-cols-[auto,auto,1fr,auto]"
           ref={el}
+          style={{
+            paddingLeft: offsetLeftPx + "px",
+          }}
         >
+          {children ? children : <div />}
           <div
             className="sticky left-0 top-0 z-20"
             style={{
@@ -67,10 +85,11 @@ export default function BracketEditorView() {
             }}
           >
             <div
-              className="absolute  left-0 h-full  pointer-events-none z-40 overflow-hidden "
+              className="absolute  h-full  pointer-events-none z-40 overflow-hidden "
               style={{
-                right: toolbarWidth + "px",
+                right: (toolbarWidth || 0) + offsetLeftPx + "px",
                 width: `calc(${containerWidth}px - ${toolbarWidth}px)`,
+                left: offsetLeftPx * -1 + "px",
               }}
             >
               <div ref={modalController}>
@@ -86,6 +105,7 @@ export default function BracketEditorView() {
             onGameClick={onGameClick}
             selectedGameId={selectedGame?.id}
           />
+
           <div
             className="sticky right-0 top-0 bg-glass z-20 backdrop-blur-md "
             ref={toolbar}

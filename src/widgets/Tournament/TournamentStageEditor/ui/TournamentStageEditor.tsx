@@ -1,15 +1,20 @@
 import "./animation.scss";
 import type { Tables } from "@/shared/api";
-import { AddStage, AddStageCard } from "@/features/Tournament/AddStage";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { TournamentStage, TournamentStageType } from "@/entities/Tournament";
-import { TournamentStageList } from "@/features/Tournament/TournamentStageList";
+import {
+  TournamentStageList2,
+  TournamentStageListItemContainer,
+} from "@/features/Tournament/TournamentStageList";
 import {
   useGetTournamentStagesQuery,
-  useAddTournamentStageMutation,
+  useAddTournamentStagesMutation,
   useRemoveTournamentStageMutation,
   useUpdateTournamentStagesMutation,
+  useRemoveTournamentStagesMutation,
 } from "@/shared/api";
+import { generateUUID } from "@/shared/utils/generateUUID";
+import { FaPencilAlt, FaCheck } from "react-icons/fa";
 export default function TournamentStageEditor({
   onEditStage,
   tournamentId,
@@ -18,33 +23,29 @@ export default function TournamentStageEditor({
   tournamentId: string;
 }) {
   const { data: stages } = useGetTournamentStagesQuery(tournamentId, {
-    refetchOnMountOrArgChange: false,
+    refetchOnMountOrArgChange: true,
     skip: !tournamentId,
   });
+
+  const [editing, setEditing] = useState(false);
 
   const [editedStages, setEditedStages] = useState<
     Tables<"tournament_stages">[]
   >([]);
 
-  useEffect(() => {
-    setEditedStages(stages || []);
-  }, [stages]);
+  const [doAddStages] = useAddTournamentStagesMutation();
 
-  const [doAddStage] = useAddTournamentStageMutation();
-
-  const [addingStage, setAddingStage] = useState(false);
-
-  async function addStage(type: TournamentStageType) {
-    setAddingStage(true);
-    await doAddStage({
-      tournamentId,
-      stageToAdd: {
-        type,
-        name: "New Stage",
-        order: editedStages.length,
-      },
+  async function addStage(type: TournamentStageType, index: number) {
+    let newStages = [...(editedStages || [])];
+    const newId = generateUUID();
+    newStages.splice(index, 0, {
+      id: newId,
+      name: "New Stage",
+      type,
+      order: index,
     });
-    setAddingStage(false);
+    newStages = sortStages(newStages);
+    setEditedStages(newStages);
   }
 
   const [doRemoveStage] = useRemoveTournamentStageMutation();
@@ -61,54 +62,114 @@ export default function TournamentStageEditor({
     setRemovingStage(null);
   }
 
-  const [addStageMenuOpen, setAddStageMenuOpen] = useState(false);
-
   const [doUpdateStages] = useUpdateTournamentStagesMutation();
 
-  async function handleChangeStageOrder(
-    inc: number,
-    stage: TournamentStage,
-    currentIndex: number
-  ) {
-    const newIndex = currentIndex + inc;
-    if (newIndex < 0 || newIndex > stages.length - 1) return;
-
-    let newStages = [...stages];
-    const thisStage = [...newStages][currentIndex];
-    newStages.splice(currentIndex, 1);
-    newStages.splice(newIndex, 0, thisStage);
-
+  function sortStages(stagesToSort: TournamentStage[]) {
+    let newStages = [...stagesToSort];
     newStages = newStages.map((stage, i) => ({
       ...stage,
-      order: i,
+      order: i + 1,
     }));
+    return newStages;
+  }
 
-    setEditedStages(newStages);
+  function updateStages(newStages) {
+    setEditedStages(newStages || stages);
+  }
 
-    await doUpdateStages({
-      tournamentId,
-      updates: newStages,
-    });
+  function beginEdit() {
+    setEditedStages(stages);
+    setEditing(true);
+  }
+
+  const [doRemoveStages] = useRemoveTournamentStagesMutation();
+
+  function getDeletedStages() {
+    return stages?.filter(
+      ({ id }) => !editedStages.some(({ id: stageId }) => id === stageId)
+    );
+  }
+
+  function getAddedStages() {
+    return editedStages?.filter(
+      ({ id }) => !stages.some(({ id: stageId }) => id === stageId)
+    );
+  }
+
+  function getUpdatedStages() {
+    return editedStages?.filter(({ id }) =>
+      stages.some(({ id: stageId }) => id === stageId)
+    );
+  }
+
+  async function toggleEdit() {
+    if (editing) {
+      const deletedStages = getDeletedStages();
+      if (deletedStages?.length) {
+        await doRemoveStages({
+          tournamentId,
+          tournamentStageIds: deletedStages.map(({ id }) => id),
+        });
+      }
+
+      const addedStages = getAddedStages();
+      console.log("added stages: ", addedStages);
+
+      if (addedStages?.length) {
+        await doAddStages({
+          tournamentId,
+          stages: addedStages.map((s) => ({
+            ...s,
+            tournament_id: tournamentId,
+          })),
+        });
+      }
+
+      const updatedStages = getUpdatedStages();
+      console.log("updated: ", updatedStages);
+      if (updatedStages.length) {
+        await doUpdateStages({
+          tournamentId,
+          updates: updatedStages.map((s) => ({
+            ...s,
+            tournament_id: tournamentId,
+          })),
+        });
+      }
+
+      setEditing(false);
+    } else {
+      beginEdit();
+    }
   }
 
   return (
     <>
       <div className="flex  pr-4 md:pr-12 w-fit h-fit">
-        <TournamentStageList
-          stages={editedStages}
+        <TournamentStageList2
+          stages={editing ? editedStages : stages}
           removeStage={removeStage}
-          removingStage={removingStage}
-          onEditStage={onEditStage}
-          changeStageOrder={handleChangeStageOrder}
-          addingStage={addingStage}
-        ></TournamentStageList>
-        <AddStageCard onClick={() => setAddStageMenuOpen(true)} />
+          onEditStage={!editing ? onEditStage : null}
+          onAddStage={editing ? addStage : null}
+          onUpdateStages={editing ? updateStages : null}
+        >
+          <div>
+            <TournamentStageListItemContainer
+              successful={editing}
+              active={!editing}
+              onClick={toggleEdit}
+            >
+              <div className="p-6 flex items-center justify-center relative min-w-[150px] ">
+                {editing ? (
+                  <FaCheck className="text-[2rem] text-slate-500/70 group-hover:text-emerald-500" />
+                ) : (
+                  <FaPencilAlt className="text-[1.5rem] text-slate-500/70 group-hover:text-indigo-500" />
+                )}
+              </div>
+            </TournamentStageListItemContainer>
+          </div>
+        </TournamentStageList2>
       </div>
-      <AddStage
-        addStage={addStage}
-        endAdd={() => setAddStageMenuOpen(false)}
-        active={addStageMenuOpen}
-      />
     </>
   );
 }

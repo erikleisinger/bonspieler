@@ -23,6 +23,7 @@ export default function EditTournament({
   const router = useRouter();
   const params = useParams();
   async function onEditStage(stage: TournamentStage) {
+    console.log("edit stge", stage);
     if (stage.type === TournamentStageType.Bracket) {
       router.push(
         `/tournaments/${params.tournamentId}/stages/brackets/${stage.id}/edit/`
@@ -33,12 +34,14 @@ export default function EditTournament({
   return (
     <div className="h-full grid grid-cols-1 absolute inset-0 p-8 overflow-auto">
       <div className="relative h-full w-full">
-        <div className="bg-glass p-6 rounded-2xl w-fit backdrop-blur-md shadow-sm">
+        {/* <div className="bg-glass p-6 rounded-2xl w-fit backdrop-blur-md shadow-sm">
           <Typography tag="h3">Schedule</Typography>
           <TournamentOptions />
-        </div>
-        <div className="bg-glass p-6 rounded-2xl w-fit backdrop-blur-md shadow-sm">
-          <Typography tag="h3">Stages</Typography>
+        </div> */}
+        <div className="">
+          <Typography tag="h3" className="mb-6 ml-10">
+            Stages
+          </Typography>
           <TournamentStageEditor
             onEditStage={onEditStage}
             tournamentId={tournamentId}

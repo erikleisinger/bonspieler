@@ -16,7 +16,7 @@
 
     &.rotated {
       .tournament-stage__rotatable-card--content {
-        transform: rotateY(180deg);
+        transform: rotateY(-180deg);
       }
       .tournament-stage__section.back {
         pointer-events: all;

@@ -89,6 +89,9 @@ export default {
       animation: {
         progress: "progress 1s infinite linear",
       },
+      fontFamily: {
+        koulen: ["var(--font-koulen)"],
+      },
     },
   },
   plugins: [require("tailwindcss-animate")],

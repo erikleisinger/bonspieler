@@ -7,17 +7,9 @@ import { FaPlus } from "react-icons/fa";
 import { Checkbox } from "@/shared/ui/checkbox";
 import { Label } from "@/shared/ui/label";
 import { scrollToBracket } from "@/entities/Bracket";
-import { useAppSelector, useAppDispatch } from "@/lib/store";
-import {
-  getBracketEventNumSheets,
-  updateNumTeams,
-  updateNumWinners,
-} from "@/entities/BracketEvent";
-import {
-  getBracketGames,
-  addBracketGames,
-} from "@/entities/Bracket/BracketGame";
-import { generateBracket } from "@/features/Bracket/GenerateBracket";
+import { useAppSelector } from "@/lib/store";
+
+import { getBracketGames } from "@/entities/Bracket/BracketGame";
 export default function AddBracket({
   onAdd = () => {},
 }: {
@@ -35,10 +27,7 @@ export default function AddBracket({
   const [numWinners, setNumWinners] = useState(1);
   const [isSeeded, setIsSeeded] = useState(true);
   const checkboxId = useId();
-
-  const dispatch = useAppDispatch();
   const brackets = useAppSelector(getBracketGames);
-  const numSheets = useAppSelector(getBracketEventNumSheets);
 
   function handleAddBracket() {
     onAdd({

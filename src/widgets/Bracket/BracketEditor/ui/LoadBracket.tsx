@@ -83,7 +83,7 @@ export default function LoadBracket({
     });
 
   useLayoutEffect(() => {
-    dispatch(resetState());
+    // dispatch(resetState());
   }, []);
 
   useEffect(() => {

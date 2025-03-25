@@ -9,6 +9,7 @@ import {
   OriginConnections,
   WinnerConnections,
   removeConnections,
+  addConnections,
 } from "@/entities/Bracket/BracketGameConnections";
 import {
   initBracketGames,
@@ -45,16 +46,29 @@ export default function useSetBracketData() {
     numWinners: number[];
     isSeeded: boolean;
   }) {
-    const data = generateBracket({
+    const {
+      brackets: newBrackets,
+      loserConnections,
+      originConnections,
+      winnerConnections,
+    } = generateBracket({
       numTeams,
       numWinners,
       numSheets,
       isSeeded,
       bracketIndex: brackets.length,
     });
-    await dispatch(addBracketGames(data.brackets));
+
+    await dispatch(addBracketGames(newBrackets));
     dispatch(updateNumTeams(numTeams));
     dispatch(updateNumWinners(numWinners.reduce((a, c) => a + c, 0)));
+    dispatch(
+      addConnections({
+        originConnections,
+        winnerConnections,
+        loserConnections,
+      })
+    );
   }
 
   function removeBracket(bracketIndex: number) {

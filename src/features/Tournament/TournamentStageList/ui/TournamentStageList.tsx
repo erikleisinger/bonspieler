@@ -1,3 +1,4 @@
+import "./stages.scss";
 import { useLayoutEffect, useRef, useState } from "react";
 import type { TournamentStage } from "@/entities/Tournament";
 import type { Nullable } from "@/shared/types";
@@ -36,25 +37,25 @@ export default function TournamentStageList({
     flipStateRef.current = Flip.getState(".ANIMATED_CARD");
   }
 
-  useLayoutEffect(() => {
-    if (!flipStateRef.current) {
-      setFlipState();
-      return;
-    }
-    if (flipping) return;
-    Flip.from(flipStateRef.current, {
-      duration: 0.8,
-      ease: "power4.out",
-      stagger: 0.1,
-      onStart: () => {
-        setFlipping(true);
-      },
-      onComplete: () => {
-        setFlipState();
-        setFlipping(false);
-      },
-    });
-  }, [JSON.stringify(stages), addingStage]);
+  // useLayoutEffect(() => {
+  //   if (!flipStateRef.current) {
+  //     setFlipState();
+  //     return;
+  //   }
+  //   if (flipping) return;
+  //   Flip.from(flipStateRef.current, {
+  //     duration: 0.8,
+  //     ease: "power4.out",
+  //     stagger: 0.1,
+  //     onStart: () => {
+  //       setFlipping(true);
+  //     },
+  //     onComplete: () => {
+  //       setFlipState();
+  //       setFlipping(false);
+  //     },
+  //   });
+  // }, [JSON.stringify(stages), addingStage]);
 
   function handleChangeOrder(
     event: MouseEvent,
@@ -73,7 +74,8 @@ export default function TournamentStageList({
         return (
           <TournamentStageRotatableCard
             key={stage.id}
-            className="ANIMATED_CARD"
+            className="ANIMATED_CARD card-inner"
+            index={i}
             stage={stage}
             removeStage={removeStage}
             isRemoving={!!removingStage && removingStage === stage.id}

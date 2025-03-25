@@ -48,6 +48,7 @@ export default function BracketGameTeam({
     >
       <div className="flex gap-2 items-center">
         {isSeed &&
+          !connection?.gameId &&
           (prevStageName ? (
             <FaRunning className="text-indigo-500" />
           ) : (

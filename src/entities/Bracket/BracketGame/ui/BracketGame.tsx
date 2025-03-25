@@ -89,7 +89,7 @@ export default function BracketGame({
         >
           <div
             className={
-              " flex flex-col text-foreground p-2  game__container  relative bg-glass text-glass-foreground backdrop-blur shadow-sm " +
+              " flex flex-col text-foreground p-2  game__container  relative bg-glass text-glass-foreground backdrop-blur-sm shadow-sm " +
               className
             }
             id={GAME_ELEMENT_ID_PREFIX + game.id}

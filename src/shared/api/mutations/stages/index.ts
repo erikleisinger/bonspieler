@@ -1,4 +1,5 @@
 export { useUpdateTournamentStageMutation } from "./updateTournamentStage";
-export { useAddTournamentStageMutation } from "./addTournamentStage";
 export { useRemoveTournamentStageMutation } from "./removeTournamentStage";
 export { useUpdateTournamentStagesMutation } from "./updateTournamentStages";
+export { useRemoveTournamentStagesMutation } from "./removeTournamentStages";
+export { useAddTournamentStagesMutation } from "./addTournamentStages";
