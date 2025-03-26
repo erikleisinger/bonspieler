@@ -45,10 +45,10 @@
   dependencies:
     tslib "^2.4.0"
 
-"@erikleisinger/bracket-generator@1.0.19":
-  version "1.0.19"
-  resolved "https://npm.pkg.github.com/download/@erikleisinger/bracket-generator/1.0.19/baa378c6b762c987a66c7fb5955b17dbdf5bf351#baa378c6b762c987a66c7fb5955b17dbdf5bf351"
-  integrity sha512-xpNepudLVswuTqXQgZlO2B+Uo+PvjrNuZ2rqdDCkexIBMN+KJPGyS96n5PV7JCkyjGIS8GtxJ+auCxjzUSWkqQ==
+"@erikleisinger/bracket-generator@1.1.0":
+  version "1.1.0"
+  resolved "https://npm.pkg.github.com/download/@erikleisinger/bracket-generator/1.1.0/2a536a86915267681a02cefa16c6f6751b242ed5#2a536a86915267681a02cefa16c6f6751b242ed5"
+  integrity sha512-gXIJcYwxG8hJohOJ5XJtZM9yul7IobF2wGdeXMNAz31cWZEHtJ9ena4A7Ter9KTtgyb2pWGvRuW80G7KEl4Saw==
 
 "@eslint-community/eslint-utils@^4.2.0", "@eslint-community/eslint-utils@^4.4.0":
   version "4.4.1"

@@ -7,7 +7,7 @@ import {
 import { getDrawTimes, setDrawTimes } from "@/entities/DrawTime";
 import { getOriginConnections } from "@/entities/Bracket/BracketGameConnections";
 import { setNumSheets } from "@/entities/BracketEvent";
-import { scheduleTournament } from "@erikleisinger/bracket-generator";
+import { scheduleTournament } from "@/shared/utils/generateTournament";
 export default function CalculateButton({
   active,
   className = "",
@@ -25,27 +25,10 @@ export default function CalculateButton({
   const brackets = useAppSelector(getBracketGames);
   const drawTimes = useAppSelector(getDrawTimes);
 
-  function structureConnections() {
-    const games = brackets.flat().flat();
-    return games.reduce((all, { id: gameId }) => {
-      return {
-        ...all,
-        [gameId]: {
-          teams: originConnections[gameId] || [
-            {
-              gameId: null,
-            },
-            { gameId: null },
-          ],
-        },
-      };
-    }, {});
-  }
-
   function recalculate() {
     dispatch(setNumSheets(numSheets));
 
-    const { schedule } = scheduleTournament(structureConnections(), numSheets);
+    const { schedule } = scheduleTournament(originConnections, numSheets);
     dispatch(setBracketGamesSchedule(schedule));
     const newNumDrawTimes = Math.max(...Object.values(schedule));
     const newDrawTimes = Array.from({ length: newNumDrawTimes }).reduce(

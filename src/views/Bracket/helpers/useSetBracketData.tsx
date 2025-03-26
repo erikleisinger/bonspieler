@@ -39,7 +39,7 @@ import { useAppDispatch, useAppSelector } from "@/lib/store";
 
 import { generateBracket } from "@/features/Bracket/GenerateBracket";
 import { getBracketStartTeams, getBracketEndTeams } from "@/entities/Bracket";
-import { scheduleTournament } from "@erikleisinger/bracket-generator";
+import { scheduleTournament } from "@/shared/utils/generateTournament";
 import { flattenConnections } from "@/entities/Bracket/BracketGameConnections";
 export default function useSetBracketData() {
   const dispatch = useAppDispatch();
@@ -71,13 +71,7 @@ export default function useSetBracketData() {
     });
 
     const { schedule: newSchedule } = scheduleTournament(
-      flattenConnections({
-        brackets: [...currentBrackets, ...brackets],
-        originConnections: {
-          ...currentOriginConnections,
-          ...originConnections,
-        },
-      }),
+      originConnections,
       currentNumSheets
     );
 

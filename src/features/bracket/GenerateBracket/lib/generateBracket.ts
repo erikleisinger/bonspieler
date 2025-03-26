@@ -1,20 +1,16 @@
 import {
   generateTournament,
   scheduleTournament,
-} from "@erikleisinger/bracket-generator";
+} from "@/shared/utils/generateTournament";
 import type { BracketConnections, BracketDrawTimes } from "@/entities/Bracket";
-import type {
-  OriginConnections,
-  WinnerConnections,
-  LoserConnections,
-} from "@/entities/Bracket/BracketGameConnections";
+import type { OriginConnections } from "@/entities/Bracket/BracketGameConnections";
 import type { GeneratedBracket } from "../types";
 function calculateTournamentSchedule(
-  connections: BracketConnections,
+  originConnections: OriginConnections,
   sheets: number
 ) {
   const { schedule: tournamentSchedule } = scheduleTournament(
-    connections,
+    originConnections,
     sheets
   );
   return tournamentSchedule;
@@ -35,47 +31,15 @@ export function generateBracket({
 }): GeneratedBracket {
   const tournament = generateTournament(numTeams, numWinners);
   const { brackets, connections } = tournament;
+
+  const { originConnections, loserConnections, winnerConnections } =
+    connections;
+
   const tournamentSchedule = calculateTournamentSchedule(
-    connections,
+    originConnections,
     numSheets
   );
   const schedule = tournamentSchedule;
-
-  const { winnerConnections, loserConnections, originConnections } =
-    Object.entries(connections).reduce<{
-      winnerConnections: WinnerConnections;
-      loserConnections: LoserConnections;
-      originConnections: OriginConnections;
-    }>(
-      (all, [gameId, connection]) => {
-        const { winnerTo, loserTo, teams } = connection;
-        return {
-          winnerConnections: {
-            ...all.winnerConnections,
-            [gameId]: winnerTo || null,
-          },
-          loserConnections: {
-            ...all.loserConnections,
-            [gameId]: loserTo || null,
-          },
-          originConnections: {
-            ...all.originConnections,
-            [gameId]: teams.map((t) => {
-              const { isWinner, gameId } = t;
-              return {
-                isWinner,
-                gameId,
-              };
-            }),
-          },
-        };
-      },
-      {
-        winnerConnections: {},
-        loserConnections: {},
-        originConnections: {},
-      }
-    );
 
   const drawTimes: BracketDrawTimes = {};
   const numDrawTimes = Math.max(...Object.values(schedule));
