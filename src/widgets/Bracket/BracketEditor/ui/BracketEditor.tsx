@@ -13,8 +13,6 @@ import { setSelectedGame } from "@/widgets/Bracket/BracketViewer";
 
 /** Context */
 
-import GameAvailabilityContextProvider from "./GameAvailabilityContextProvider";
-
 /**Components */
 
 import { BracketViewer } from "@/widgets/Bracket/BracketViewer";
@@ -42,9 +40,5 @@ export default function BracketEditor() {
     }
   }
 
-  return (
-    <GameAvailabilityContextProvider>
-      <BracketViewer onGameClick={onGameClick}></BracketViewer>
-    </GameAvailabilityContextProvider>
-  );
+  return <BracketViewer onGameClick={onGameClick}></BracketViewer>;
 }

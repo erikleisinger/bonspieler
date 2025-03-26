@@ -1,7 +1,7 @@
 import { Button } from "@/shared/ui/button";
-import { FaEye } from "react-icons/fa";
+import { FaEye, FaPencilAlt, FaTrashAlt } from "react-icons/fa";
 
-import { BracketGameTeam } from "@/entities/Bracket";
+import { BracketGameTeam, BracketGameType } from "@/entities/Bracket";
 import { useAppDispatch, useAppSelector } from "@/lib/store";
 import {
   getSelectedGame,
@@ -16,11 +16,17 @@ import {
 import { scrollToGame } from "@/entities/Bracket";
 import BracketGameViewerHeader from "./BracketGameViewerHeader";
 import BracketGameViewerConnection from "./BracketGameViewerConnection";
+import { Nullable } from "@/shared/types";
 
 export default function BracketGameViewer({
   drawTimeChildren,
+
+  onEditLoserConnection,
+  onRemoveLoserConnection,
 }: {
   drawTimeChildren?: React.ReactNode;
+  onEditLoserConnection?: (game: Nullable<BracketGameType>) => void;
+  onRemoveLoserConnection?: (game: Nullable<BracketGameType>) => void;
 }) {
   const selectedGame = useAppSelector(getSelectedGame);
   const winnerConnection = useAppSelector((state) =>
@@ -86,10 +92,35 @@ export default function BracketGameViewer({
               isWinner={true}
               connection={winnerConnection}
             />
-            <BracketGameViewerConnection
-              isLoser={true}
-              connection={loserConnection}
-            />
+            <div className="flex items-center">
+              <div className="grow">
+                <BracketGameViewerConnection
+                  isLoser={true}
+                  connection={loserConnection}
+                />
+              </div>
+
+              {onEditLoserConnection && (
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  className="ml-2 shrink"
+                  onClick={() => onEditLoserConnection(selectedGame)}
+                >
+                  <FaPencilAlt />
+                </Button>
+              )}
+              {onRemoveLoserConnection && !!loserConnection && (
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  className="ml-2 shrink"
+                  onClick={() => onRemoveLoserConnection(selectedGame)}
+                >
+                  <FaTrashAlt />
+                </Button>
+              )}
+            </div>
           </div>
         </div>
       )}

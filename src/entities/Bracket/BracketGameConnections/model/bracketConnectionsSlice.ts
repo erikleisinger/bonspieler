@@ -1,4 +1,4 @@
-import { createSlice, createSelector } from "@reduxjs/toolkit";
+import { createSlice, createSelector, PayloadAction } from "@reduxjs/toolkit";
 import type {
   WinnerConnections,
   LoserConnections,
@@ -95,6 +95,50 @@ export const bracketConnectionsSlice = createSlice({
         ...removed.filter((id) => !state.removedConnections.includes(id)),
       ];
     },
+    removeLoserConnectionForGame: (state, action: PayloadAction<string>) => {
+      const gameId = action.payload;
+      const currentLoserDestination = state.loserConnections[gameId];
+      if (!currentLoserDestination) {
+        console.warn("could not remove loser connection, as it does not exist");
+        return;
+      }
+      state.loserConnections[gameId] = null;
+
+      const newDestinationOrigins = (
+        state.originConnections[currentLoserDestination] || []
+      ).map((o) => ({
+        ...o,
+        gameId: o.gameId === gameId ? null : o.gameId,
+      }));
+      state.originConnections[currentLoserDestination] = newDestinationOrigins;
+    },
+    setLoserConnectionForGame: (
+      state,
+      action: PayloadAction<{
+        gameId: string;
+        destinationGameId: string;
+      }>
+    ) => {
+      const { gameId, destinationGameId } = action.payload;
+
+      const newDestinationOrigins =
+        state.originConnections[destinationGameId] || [];
+      const availableIndex = newDestinationOrigins.findIndex((o) => !o.gameId);
+      if (availableIndex < 0) {
+        console.warn(
+          "cannot assign loser connection: destination game is unavailable."
+        );
+        return;
+      }
+      newDestinationOrigins.splice(availableIndex, 1, {
+        isWinner: false,
+        gameId,
+      });
+
+      state.originConnections[destinationGameId] = newDestinationOrigins;
+
+      state.loserConnections[gameId] = destinationGameId;
+    },
     setConnections: (state, action) => {
       const { loserConnections, winnerConnections, originConnections } =
         action.payload;
@@ -105,8 +149,14 @@ export const bracketConnectionsSlice = createSlice({
   },
 });
 
-export const { addConnections, removeConnections, setConnections, resetState } =
-  bracketConnectionsSlice.actions;
+export const {
+  addConnections,
+  removeConnections,
+  removeLoserConnectionForGame,
+  setConnections,
+  setLoserConnectionForGame,
+  resetState,
+} = bracketConnectionsSlice.actions;
 
 export const getWinnerConnections = (state: RootState) =>
   state.bracketConnections.winnerConnections;

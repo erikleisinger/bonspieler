@@ -52,7 +52,7 @@ export function generateBracket({
       rounds.map((games) =>
         games.map((game) => ({
           ...game,
-          bracketNumber: thisBracketIndex,
+          bracketNumber: thisBracketIndex + bracketIndex,
         }))
       )
   );

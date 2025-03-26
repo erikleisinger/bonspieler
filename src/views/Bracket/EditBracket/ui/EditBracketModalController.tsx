@@ -10,6 +10,10 @@ import { BracketOptions } from "@/widgets/Bracket/BracketOptions";
 import { useSaveBracket } from "../lib";
 import { EditDrawNumber } from "@/features/EditDrawNumber";
 import { useBracketData, useSetBracketData } from "../../helpers";
+import { BracketGameType } from "@/entities/Bracket";
+import { useAppDispatch } from "@/lib/store";
+import { setLookingForLoserConnection } from "@/widgets/Bracket/BracketEditor";
+import { removeLoserConnectionForGame } from "@/entities/Bracket/BracketGameConnections";
 export default function EditBracketModalController({
   setState,
   state,
@@ -18,6 +22,8 @@ export default function EditBracketModalController({
   setState: (state: BracketEditorToolbarState) => void;
   state: BracketEditorToolbarState;
 }) {
+  const dispatch = useAppDispatch();
+
   const { save: saveBracket } = useSaveBracket();
 
   const { availableDrawTimes, brackets } = useBracketData();
@@ -43,6 +49,15 @@ export default function EditBracketModalController({
     });
 
     setState(null);
+  }
+
+  function lookForLoserConnection(game: BracketGameType) {
+    dispatch(setLookingForLoserConnection(game));
+  }
+
+  function handleRemoveLoserConnection(game: BracketGameType) {
+    if (!game?.id) return;
+    dispatch(removeLoserConnectionForGame(game.id));
   }
 
   return (
@@ -93,10 +108,12 @@ export default function EditBracketModalController({
         >
           {state === BracketEditorToolbarState.ViewingGame && (
             <BracketGameViewer
+              onEditLoserConnection={lookForLoserConnection}
+              onRemoveLoserConnection={handleRemoveLoserConnection}
               drawTimeChildren={
                 <EditDrawNumber availableDrawTimes={availableDrawTimes} />
               }
-            ></BracketGameViewer>
+            />
           )}
         </Slideout>
         <Slideout

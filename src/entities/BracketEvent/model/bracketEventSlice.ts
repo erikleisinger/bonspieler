@@ -25,9 +25,6 @@ export const bracketEventSlice = createSlice({
     resetState: reducers.resetState,
     setBracketEvent: reducers.setBracketEvent,
     setBracketEventName: reducers.setBracketEventField("name"),
-    setLookingForLoserConnection: reducers.setBracketEventField(
-      "lookingForLoserConnection"
-    ),
     setLookingToAssignTeam: reducers.setBracketEventField(
       "lookingToAssignTeam"
     ),
@@ -68,10 +65,6 @@ export const getBracketEventOrder = (state: RootState) => {
 export const getBracketEvent = (state: RootState) =>
   state?.bracketEvent?.bracket;
 
-export const getLookingForLoserConnection = (state: RootState) => {
-  return state?.bracketEvent?.bracket?.lookingForLoserConnection || null;
-};
-
 export const getLookingToAssignTeam = (state: RootState) => {
   return state?.bracketEvent?.bracket?.lookingToAssignTeam || null;
 };
@@ -91,7 +84,6 @@ export const {
   setBracketEventTournamentId,
   setBracketEventId,
   setBracketEventOrder,
-  setLookingForLoserConnection,
   setLookingToAssignTeam,
   setNumSheets,
   setNumTeams,

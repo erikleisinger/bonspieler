@@ -1,7 +1,6 @@
 import type { BracketEventStoreState } from "./bracketEventSlice";
 export const defaultState = (): BracketEventStoreState["bracket"] => ({
   id: null,
-  lookingForLoserConnection: null,
   lookingToAssignTeam: null,
   name: "",
   num_start_teams: 16,

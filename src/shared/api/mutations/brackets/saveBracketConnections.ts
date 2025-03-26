@@ -14,10 +14,6 @@ export async function saveBracketConnectionsMutation({
   tournamentStageId: string;
   connections: Tables<"game_connections">[];
 }) {
-  await client
-    .from("game_connections")
-    .delete()
-    .eq("tournament_stage_id", tournamentStageId);
   const { data } = await client.from("game_connections").insert(connections);
   return data;
 }

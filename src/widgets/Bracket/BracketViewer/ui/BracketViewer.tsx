@@ -19,8 +19,10 @@ import {
 import { getSelectedGame, setSelectedGame, getSelectedDraw } from "../model";
 
 export default function BracketViewer({
+  availableGameIds = [],
   onGameClick,
 }: {
+  availableGameIds: string[];
   onGameClick: (game: BracketGameType) => void;
 }) {
   const dispatch = useAppDispatch();
@@ -98,6 +100,7 @@ export default function BracketViewer({
                             rows={rows[game.id] || {}}
                             readableId={readableIdIndex[game.id]}
                             drawNumber={schedule[game.id]}
+                            available={availableGameIds.includes(game.id)}
                           />
                         );
                       })}

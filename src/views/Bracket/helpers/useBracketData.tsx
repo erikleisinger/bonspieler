@@ -20,6 +20,7 @@ import {
 import { getSelectedGame } from "@/widgets/Bracket/BracketViewer";
 import { getDrawTimes } from "@/entities/DrawTime";
 import { getBracketEvent } from "@/entities/BracketEvent";
+import { isLookingForLoserConnection } from "@/widgets/Bracket/BracketEditor";
 
 import { getAvailableDrawsForBracketGame } from "@/features/EditDrawNumber";
 
@@ -38,6 +39,7 @@ export default function useBracketData() {
   const loserConnections = useAppSelector(getLoserConnections);
   const originConnections = useAppSelector(getOriginConnections);
   const gameIndex = useAppSelector(getBracketGameIndex);
+  const lookingForLoserConnection = useAppSelector(isLookingForLoserConnection);
 
   // const availableDrawTimes: number[] = getAvailableDrawsForBracketGame({
   //   gameId: selectedGame?.id,
@@ -64,5 +66,6 @@ export default function useBracketData() {
     loserConnections,
     originConnections,
     gameIndex,
+    lookingForLoserConnection,
   };
 }

@@ -7,6 +7,7 @@ import { bracketConnectionsSlice } from "@/entities/Bracket/BracketGameConnectio
 import { bracketGamesSlice } from "@/entities/Bracket/BracketGame";
 import { tournamentSlice } from "@/entities/Tournament";
 import { bracketViewerSlice } from "@/widgets/Bracket/BracketViewer";
+import { bracketEditorSlice } from "@/widgets/Bracket/BracketEditor";
 import { EditBracketView } from "@/views/Bracket/EditBracket";
 import { use } from "react";
 export default function Page({ params }) {
@@ -21,6 +22,7 @@ export default function Page({ params }) {
         bracketGamesSlice,
         tournamentSlice,
         bracketViewerSlice,
+        bracketEditorSlice,
       ]}
     >
       <LoadBracket stageId={bracketId}>
