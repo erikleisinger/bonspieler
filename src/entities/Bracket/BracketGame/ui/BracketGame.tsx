@@ -92,7 +92,11 @@ export default function BracketGame({
             id={GAME_ELEMENT_ID_PREFIX + game.id}
             onMouseDown={handleClick}
           >
-            {game.id.substr(0, 5)}
+            <BracketGameHeader
+              readableId={readableId}
+              drawNumber={drawNumber}
+              loserTo={loserConnection}
+            />
 
             <BracketGameTeams
               originConnections={originConnections}
