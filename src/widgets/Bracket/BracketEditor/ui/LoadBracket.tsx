@@ -34,10 +34,7 @@ import {
  * Connections
  */
 
-import {
-  resetConnections,
-  setConnections,
-} from "@/entities/Bracket/BracketGameConnections";
+import { setConnections } from "@/entities/Bracket/BracketGameConnections";
 
 import LoaderFullPage from "@/shared/ui/loader-full-page";
 export default function LoadBracket({
@@ -91,15 +88,19 @@ export default function LoadBracket({
 
   useEffect(() => {
     if (gamesData) {
-      const { brackets, schedule } = gamesData;
+      dispatch(resetState());
 
-      if (brackets) {
-        dispatch(initBracketGames(brackets));
-      }
+      setTimeout(() => {
+        const { brackets, schedule } = gamesData;
 
-      if (schedule) {
-        dispatch(setBracketGamesSchedule(schedule));
-      }
+        if (brackets) {
+          dispatch(initBracketGames(brackets));
+        }
+
+        if (schedule) {
+          dispatch(setBracketGamesSchedule(schedule));
+        }
+      }, 0);
     }
   }, [gamesData, dispatch]);
 
@@ -119,10 +120,7 @@ export default function LoadBracket({
 
   useEffect(() => {
     if (connections) {
-      dispatch(resetConnections());
-      setTimeout(() => {
-        dispatch(setConnections(connections));
-      }, 0);
+      dispatch(setConnections(connections));
     }
   }, [connections, dispatch]);
 

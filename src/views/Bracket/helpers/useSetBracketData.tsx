@@ -100,7 +100,14 @@ export default function useSetBracketData() {
     dispatch(updateNumTeams(startTeams * -1));
     dispatch(updateNumWinners(endTeams * -1));
 
-    if (currentBrackets.length <= 1) return;
+    dispatch(
+      shiftBracketAssignmentForGames({
+        increment: -1,
+        bracketsAfter: bracketIndex - 1,
+      })
+    );
+
+    if (currentBrackets.length <= 2) return;
     const { schedule: newSchedule, draws } = scheduleTournament(
       currentOriginConnections,
       currentNumSheets
@@ -118,13 +125,6 @@ export default function useSetBracketData() {
     );
     dispatch(setBracketGamesSchedule(scheduleWithNoEmptyDrawTimes));
     dispatch(trimDrawTimesTo(draws.length));
-
-    dispatch(
-      shiftBracketAssignmentForGames({
-        increment: -1,
-        bracketsAfter: bracketIndex - 1,
-      })
-    );
   }
 
   function renderBracketsFromWizard({
