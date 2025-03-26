@@ -24,7 +24,6 @@ import {
   getLoserConnections,
   getWinnerConnections,
   getOriginConnections,
-  getInitialConnectionGameIds,
 } from "@/entities/Bracket/BracketGameConnections";
 
 /**
@@ -58,7 +57,6 @@ export default function useSaveBracket() {
   const readableIdIndex = useAppSelector(getBracketGamesReadableIdIndex);
   const removedGameIds = useAppSelector(getRemovedGameIds);
 
-  const initialConnectionGameIds = useAppSelector(getInitialConnectionGameIds);
   const bracketName = useAppSelector(getBracketEventName);
 
   const [saveConnections] = useSaveBracketConnectionsMutation();
@@ -67,25 +65,7 @@ export default function useSaveBracket() {
   const [deleteConnections] = useDeleteBracketConnectionsMutation();
   const [updateStage] = useUpdateTournamentStageMutation();
 
-  async function handleSaveConnections() {
-    await saveConnections({
-      tournamentId,
-      stageId: bracketId,
-      connections: {
-        originConnections,
-        winnerConnections,
-        loserConnections,
-      },
-      initialConnectionGameIds,
-    });
-  }
-
   async function save() {
-    await deleteGames({
-      bracketStageId: bracketId,
-      idsArray: removedGameIds,
-    });
-
     await saveGames({
       tournamentId,
       bracketStageId: bracketId,
@@ -96,7 +76,15 @@ export default function useSaveBracket() {
 
     dispatch(resetRemovedGameIds());
 
-    await handleSaveConnections();
+    await saveConnections({
+      tournamentId,
+      stageId: bracketId,
+      connections: {
+        originConnections,
+        winnerConnections,
+        loserConnections,
+      },
+    });
 
     const startTeams = getBracketEventStartTeams(brackets);
     const endTeams = getBracketEventEndTeams(brackets);

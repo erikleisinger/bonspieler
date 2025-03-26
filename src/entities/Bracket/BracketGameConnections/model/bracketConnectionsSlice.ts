@@ -7,7 +7,6 @@ import type {
 import type { RootState } from "@/lib/store";
 import { Nullable } from "@/shared/types";
 export interface BracketWinnerConnectionsState {
-  initialConnectionGameIds: string[];
   loserConnections: LoserConnections;
   winnerConnections: WinnerConnections;
   originConnections: OriginConnections;
@@ -18,7 +17,6 @@ function defaultState() {
     loserConnections: {},
     winnerConnections: {},
     originConnections: {},
-    initialConnectionGameIds: [],
   };
 }
 
@@ -32,7 +30,6 @@ export const bracketConnectionsSlice = createSlice({
       state.winnerConnections = defaultState().winnerConnections;
       state.originConnections = defaultState().originConnections;
       state.loserConnections = defaultState().loserConnections;
-      state.initialConnectionGameIds = defaultState().initialConnectionGameIds;
     },
     addConnections: (state, action) => {
       const { loserConnections, winnerConnections, originConnections } =
@@ -134,34 +131,11 @@ export const bracketConnectionsSlice = createSlice({
       state.loserConnections[gameId] = destinationGameId;
     },
     setConnections: (state, action) => {
-      if (
-        Object.keys(state.loserConnections)?.length ||
-        Object.keys(state.winnerConnections)?.length ||
-        Object.keys(state.originConnections)?.length
-      ) {
-        console.warn(
-          "cannot set connections as there are existing connections. Call ResetConnections first. To modify, use addConnections or removeConnections"
-        );
-        console.log(
-          state.loserConnections,
-          state.winnerConnections,
-          state.originConnections
-        );
-        return;
-      }
       const { loserConnections, winnerConnections, originConnections } =
         action.payload;
       state.loserConnections = loserConnections || {};
       state.winnerConnections = winnerConnections || {};
       state.originConnections = originConnections || {};
-      state.initialConnectionGameIds = Object.keys({
-        ...loserConnections,
-        ...winnerConnections,
-        ...originConnections,
-      }).reduce((acc, gameId) => {
-        if (acc.includes(gameId)) return acc;
-        return [...acc, gameId];
-      }, []);
     },
   },
 });
@@ -189,13 +163,6 @@ export const getOriginConnections = (state: RootState) => {
 export const getLoserConnections = (state: RootState) => {
   return state.bracketConnections.loserConnections;
 };
-
-export const getInitialConnectionGameIds = createSelector(
-  [getConnectionsState],
-  (state) => {
-    return state.initialConnectionGameIds || [];
-  }
-);
 
 export const getLoserConnectionsForGame = createSelector(
   [getLoserConnections, (state, gameId?: Nullable<string>) => gameId],

@@ -1,7 +1,16 @@
 import { BracketGameType, BracketReadableIdIndex } from "@/entities/Bracket";
 import { apiSlice, client, Tables } from "@/shared/api";
 import { formatBracketGamesForSave } from "./helpers/formatBracketGamesForSave";
-async function updateBracketGames(games: Partial<Tables<"games">>[]) {
+async function updateBracketGames(
+  games: Partial<Tables<"games">>[],
+  bracketStageId: string
+) {
+  const gameIds = games.map((game) => game.id).join(",");
+  await client
+    .from("games")
+    .delete()
+    .eq("tournament_stage_id", bracketStageId)
+    .not("id", "in", `(${gameIds})`);
   const { error } = await client.from("games").upsert(games).select("*");
   return error;
 }
@@ -29,7 +38,7 @@ const saveBracketGames = apiSlice.injectEndpoints({
           readableIdIndex,
           schedule,
         });
-        const data = await updateBracketGames(games);
+        const data = await updateBracketGames(games, bracketStageId);
         return { data };
       },
       invalidatesTags: (result, _, { bracketStageId }) => {
