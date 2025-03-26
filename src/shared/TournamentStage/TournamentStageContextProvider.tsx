@@ -28,10 +28,12 @@ export default function TournamentStageContextProvider({
   const endTeams = stage.num_end_teams || 0;
 
   const thisStageIndex = stages?.findIndex((s) => s.id === stage.id) || 0;
-  const prevStageName = useMemo(() => {
+  const prevStage = useMemo(() => {
     if (thisStageIndex === 0) return null;
-    return (stages || [])[thisStageIndex - 1]?.name || "Unnamed Stage";
+    return (stages || [])[thisStageIndex - 1];
   }, [thisStageIndex, stages]);
+  const prevStageName = prevStage?.name || "Unnamed Stage";
+  const prevStageEndTeams = prevStage?.num_end_teams || null;
 
   const nextStageName = useMemo(() => {
     if (thisStageIndex === stages?.length - 1) return null;
@@ -45,6 +47,7 @@ export default function TournamentStageContextProvider({
       value={{
         startTeams,
         endTeams,
+        prevStageEndTeams,
         prevStageName,
         nextStageName,
       }}

@@ -23,7 +23,7 @@ export default function CreateBracketWizard({
   initialNumSheets = 8,
   renderBrackets,
 }: BracketEditorOptionsProps) {
-  const { startTeams: maxTeams, endTeams: targetEndTeams } = useContext(
+  const { prevStageEndTeams, endTeams: targetEndTeams } = useContext(
     TournamentStageContext
   );
 
@@ -81,7 +81,7 @@ export default function CreateBracketWizard({
         updateNumSheets={setNumSheets}
         numBrackets={numBrackets}
         updateNumBrackets={updateNumBrackets}
-        maxTeams={maxTeams}
+        maxTeams={prevStageEndTeams}
       ></CustomizeBracketEvent>
       <div className="pl-4  flex flex-col gap-4">
         {Array.from({ length: numBrackets }).map((_, i) => (
