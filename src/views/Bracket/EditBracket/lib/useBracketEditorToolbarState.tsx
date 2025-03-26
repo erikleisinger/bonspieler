@@ -8,8 +8,10 @@ import {
   setSelectedGame,
 } from "@/widgets/Bracket/BracketViewer";
 export default function useBracketEditorToolbarState({
+  onClose = () => {},
   toolbarRefs,
 }: {
+  onClose: () => void;
   toolbarRefs: React.RefObject<Nullable<HTMLDivElement>>[];
 }) {
   const dispatch = useAppDispatch();
@@ -55,7 +57,7 @@ export default function useBracketEditorToolbarState({
     function handleClickOutside(event: MouseEvent) {
       if (!checkClickInsideRef(event)) {
         updateToolbarState(null);
-        dispatch(setSelectedGame(null));
+        onClose();
       }
     }
     if (toolbarRefs?.length && !!toolbarState) {

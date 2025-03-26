@@ -26,7 +26,7 @@ export default function EditBracketModalController({
 
   const { save: saveBracket } = useSaveBracket();
 
-  const { availableDrawTimes, brackets } = useBracketData();
+  const { availableDrawTimes, brackets, selectedGame } = useBracketData();
   const { removeBracket, addBracket } = useSetBracketData();
 
   function handleRemoveBracket(bracketIndex: number) {
@@ -54,6 +54,11 @@ export default function EditBracketModalController({
   function lookForLoserConnection(game: BracketGameType) {
     dispatch(setLookingForLoserConnection(game));
   }
+  const handleLookForLoserConnection = !selectedGame
+    ? null
+    : selectedGame?.bracketNumber === brackets.length - 1
+    ? null
+    : lookForLoserConnection;
 
   function handleRemoveLoserConnection(game: BracketGameType) {
     if (!game?.id) return;
@@ -108,7 +113,7 @@ export default function EditBracketModalController({
         >
           {state === BracketEditorToolbarState.ViewingGame && (
             <BracketGameViewer
-              onEditLoserConnection={lookForLoserConnection}
+              onEditLoserConnection={handleLookForLoserConnection}
               onRemoveLoserConnection={handleRemoveLoserConnection}
               drawTimeChildren={
                 <EditDrawNumber availableDrawTimes={availableDrawTimes} />

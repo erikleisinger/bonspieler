@@ -1,14 +1,12 @@
-import { useMemo, useRef } from "react";
+import { useMemo, useRef, useEffect } from "react";
 import { useAppSelector, useAppDispatch } from "@/lib/store";
 import type { BracketGameType } from "@/entities/Bracket";
 import {
   assignTeamToGame,
   getLookingToAssignTeam,
+  setLookingToAssignTeam,
 } from "@/entities/BracketEvent";
-import {
-  getSelectedGame,
-  setSelectedGame,
-} from "@/widgets/Bracket/BracketViewer";
+import { setSelectedGame } from "@/widgets/Bracket/BracketViewer";
 import { scrollToGame } from "@/entities/Bracket";
 import { BracketViewer } from "@/widgets/Bracket/BracketViewer";
 import { BracketEditorToolbar } from "@/widgets/Bracket/BracketEditorToolbar";
@@ -44,6 +42,20 @@ export default function BracketEditorView({
   );
 
   /**
+   * Reset editing state
+   */
+
+  function resetEditingState() {
+    dispatch(setLookingToAssignTeam(null));
+    dispatch(setLookingForLoserConnection(null));
+    dispatch(setSelectedGame(null));
+  }
+
+  useEffect(() => {
+    resetEditingState();
+  }, []);
+
+  /**
    * Sidebar positioning
    */
   const el = useRef<HTMLDivElement>(null);
@@ -57,6 +69,7 @@ export default function BracketEditorView({
   /** Get stage for Tournament Context */
 
   const { toolbarState, setToolbarState } = useBracketEditorToolbarState({
+    onClose: resetEditingState,
     toolbarRefs: [toolbar, modalController],
   });
 
@@ -85,6 +98,12 @@ export default function BracketEditorView({
     originConnections,
   ]);
 
+  useEffect(() => {
+    if (!availableGameIds?.length) return;
+    const [firstAvailableGameId] = availableGameIds;
+    scrollToGame(firstAvailableGameId);
+  }, [availableGameIds]);
+
   function onGameClick(game: BracketGameType) {
     if (lookingToAssignTeam) {
       dispatch(
@@ -93,6 +112,7 @@ export default function BracketEditorView({
           gameId: game.id,
         })
       );
+      dispatch(setLookingForLoserConnection(null));
     } else if (lookingForLoserConnection?.id) {
       if (!availableGameIds.includes(game.id)) return;
       dispatch(
@@ -103,6 +123,7 @@ export default function BracketEditorView({
       );
       dispatch(setLookingForLoserConnection(null));
     } else {
+      dispatch(setLookingForLoserConnection(null));
       dispatch(setSelectedGame(game?.id));
       scrollToGame(game.id);
     }
