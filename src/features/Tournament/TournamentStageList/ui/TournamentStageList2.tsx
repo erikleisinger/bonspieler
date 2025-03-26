@@ -44,7 +44,6 @@ export default function TournamentStageList2({
     null
   );
   function clickStage(stage: TournamentStage) {
-    console.log("click stage: ", stage);
     if (!onEditStage) return;
     onEditStage(stage);
     // setViewingStage(stage);
@@ -90,7 +89,6 @@ export default function TournamentStageList2({
     if (over.id === active.id) return;
     const newStages = getNewOrder(active, over);
     setEditedStages(newStages);
-    console.log(args);
   }
   function onDragStart(data) {
     const { active } = data;
@@ -104,7 +102,6 @@ export default function TournamentStageList2({
     if (!onUpdateStages) return;
     const newStages = [...stages].filter(({ id }) => id !== stageId);
     const sorted = sortStages(newStages);
-    console.log("on delete sorted: ", sorted);
     onUpdateStages(sorted);
   }
 

@@ -87,7 +87,14 @@ export default function BracketEditorView({
           if (game.bracketNumber <= lookingForLoserConnection.bracketNumber)
             return all;
           const thisGameOriginConnections = originConnections[game.id] || [];
-          if (!thisGameOriginConnections.some(({ gameId }) => !gameId))
+
+          const thisGameOriginsWithTwoConnections = Array.from({
+            length: 2,
+          }).map((_, i) => thisGameOriginConnections[i] || { gameId: null });
+          if (
+            !!thisGameOriginsWithTwoConnections &&
+            !thisGameOriginsWithTwoConnections.some(({ gameId }) => !gameId)
+          )
             return all;
           return [...all, game.id];
         }, []);

@@ -23,7 +23,6 @@ export default function EditTournament({
   const router = useRouter();
   const params = useParams();
   async function onEditStage(stage: TournamentStage) {
-    console.log("edit stge", stage);
     if (stage.type === TournamentStageType.Bracket) {
       router.push(
         `/tournaments/${params.tournamentId}/stages/brackets/${stage.id}/edit/`

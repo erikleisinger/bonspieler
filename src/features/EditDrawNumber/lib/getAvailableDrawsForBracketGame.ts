@@ -40,8 +40,6 @@ export function getAvailableDrawsForBracketGame({
     maxDraw = Math.max(...nextGames.map((gameId) => schedule[gameId])) - 1;
   }
 
-  console.log(minDraw, maxDraw);
-
   const availableDraws = [];
   for (let i = minDraw; i <= maxDraw; i++) {
     availableDraws.push(i);

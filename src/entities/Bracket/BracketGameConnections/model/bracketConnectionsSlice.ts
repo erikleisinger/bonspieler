@@ -111,10 +111,12 @@ export const bracketConnectionsSlice = createSlice({
       }>
     ) => {
       const { gameId, destinationGameId } = action.payload;
+      const destinationOrigins = state.originConnections[destinationGameId];
+      const newDestinationOrigins = Array.from({ length: 2 }).map(
+        (_, i) => destinationOrigins[i] || { isWinner: false, gameId: null }
+      );
 
-      const newDestinationOrigins =
-        state.originConnections[destinationGameId] || [];
-      const availableIndex = newDestinationOrigins.findIndex((o) => !o.gameId);
+      const availableIndex = newDestinationOrigins.findIndex((o) => !o?.gameId);
       if (availableIndex < 0) {
         console.warn(
           "cannot assign loser connection: destination game is unavailable."

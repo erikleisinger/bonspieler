@@ -111,7 +111,7 @@ export default function EditBracketModalController({
           fullHeight={true}
           visible={state === BracketEditorToolbarState.ViewingGame}
         >
-          {state === BracketEditorToolbarState.ViewingGame && (
+          {state === BracketEditorToolbarState.ViewingGame && selectedGame && (
             <BracketGameViewer
               onEditLoserConnection={handleLookForLoserConnection}
               onRemoveLoserConnection={handleRemoveLoserConnection}

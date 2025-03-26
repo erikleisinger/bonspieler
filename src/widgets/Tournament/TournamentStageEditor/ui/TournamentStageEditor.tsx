@@ -113,7 +113,6 @@ export default function TournamentStageEditor({
       }
 
       const addedStages = getAddedStages();
-      console.log("added stages: ", addedStages);
 
       if (addedStages?.length) {
         await doAddStages({
@@ -126,7 +125,7 @@ export default function TournamentStageEditor({
       }
 
       const updatedStages = getUpdatedStages();
-      console.log("updated: ", updatedStages);
+
       if (updatedStages.length) {
         await doUpdateStages({
           tournamentId,
