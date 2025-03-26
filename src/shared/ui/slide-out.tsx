@@ -49,7 +49,7 @@ export default function Slideout({
         opacity: visible ? 1 : 0,
       }}
       className={cn(
-        "top-0 bottom-0  transition-all bg-glass w-screen md:w-[min(500px,45vw)] backdrop-blur-md shadow-md",
+        "top-0 bottom-0  transition-all bg-glass w-screen md:w-[min(500px,45vw)] backdrop-blur-md shadow-md overflow-auto",
         fixed ? "fixed" : "absolute",
 
         fullHeight ? "h-full" : "",

@@ -26,11 +26,20 @@ export const drawTimeSlice = createSlice({
     setDrawTimes: (state, action: PayloadAction<BracketDrawTimes>) => {
       state.drawTimes = action.payload;
     },
-    updateDrawTimes: (state, action: PayloadAction<BracketDrawTimes>) => {
+    addDrawTimes: (state, action: PayloadAction<BracketDrawTimes>) => {
       state.drawTimes = {
         ...state.drawTimes,
         ...action.payload,
       };
+    },
+    trimDrawTimesTo: (state, action: PayloadAction<number>) => {
+      const newDrawTimes = { ...state.drawTimes };
+      Object.keys(newDrawTimes).forEach((drawTimeId) => {
+        if (Number(drawTimeId) > action.payload) {
+          delete newDrawTimes[drawTimeId];
+        }
+      });
+      state.drawTimes = newDrawTimes;
     },
   },
   extraReducers: (builder) => {
@@ -65,7 +74,7 @@ export const getDrawTimeByNumber = createSelector(
     return drawTimes[drawNumber] || null;
   }
 );
-export const { setDrawTimes, updateDrawTimes, resetState } =
+export const { setDrawTimes, addDrawTimes, resetState, trimDrawTimesTo } =
   drawTimeSlice.actions;
 
 export const initDrawTimesForStage = thunks.initDrawTimesForStage;

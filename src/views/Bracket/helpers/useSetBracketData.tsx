@@ -18,8 +18,15 @@ import {
   getBracketGames,
   addBracketGames,
 } from "@/entities/Bracket/BracketGame";
-import { setDrawTimes } from "@/entities/DrawTime";
-import { setConnections } from "@/entities/Bracket/BracketGameConnections";
+import {
+  setDrawTimes,
+  addDrawTimes,
+  trimDrawTimesTo,
+} from "@/entities/DrawTime";
+import {
+  setConnections,
+  getOriginConnections,
+} from "@/entities/Bracket/BracketGameConnections";
 import {
   setNumTeams,
   setNumWinners,
@@ -31,10 +38,13 @@ import { useAppDispatch, useAppSelector } from "@/lib/store";
 
 import { generateBracket } from "@/features/Bracket/GenerateBracket";
 import { getBracketStartTeams, getBracketEndTeams } from "@/entities/Bracket";
+import { scheduleTournament } from "@erikleisinger/bracket-generator";
+import { flattenConnections } from "@/entities/Bracket/BracketGameConnections";
 export default function useSetBracketData() {
   const dispatch = useAppDispatch();
   const brackets = useAppSelector(getBracketGames);
   const numSheets = useAppSelector(getBracketEventNumSheets);
+  const currentOriginConnections = useAppSelector(getOriginConnections);
 
   async function addBracket({
     numTeams,
@@ -50,6 +60,7 @@ export default function useSetBracketData() {
       loserConnections,
       originConnections,
       winnerConnections,
+      drawTimes,
     } = generateBracket({
       numTeams,
       numWinners,
@@ -57,6 +68,21 @@ export default function useSetBracketData() {
       isSeeded,
       bracketIndex: brackets.length,
     });
+
+    const { schedule: newSchedule } = scheduleTournament(
+      flattenConnections({
+        brackets: [...brackets, ...newBrackets],
+        originConnections: {
+          ...currentOriginConnections,
+          ...originConnections,
+        },
+      }),
+      numSheets
+    );
+
+    console.log("newSchedule", newSchedule);
+
+    dispatch(setBracketGamesSchedule(newSchedule));
 
     await dispatch(addBracketGames(newBrackets));
     dispatch(updateNumTeams(numTeams));
@@ -68,9 +94,10 @@ export default function useSetBracketData() {
         loserConnections,
       })
     );
+    dispatch(addDrawTimes(drawTimes));
   }
 
-  function removeBracket(bracketIndex: number) {
+  async function removeBracket(bracketIndex: number) {
     const bracket = brackets[bracketIndex];
     const startTeams = getBracketStartTeams(bracket);
     const endTeams = getBracketEndTeams(bracket);
@@ -78,10 +105,31 @@ export default function useSetBracketData() {
       .flat()
 
       .map(({ id }) => id);
-    dispatch(removeConnections(gameIds));
-    dispatch(removeBracketGames(bracketIndex));
+    await dispatch(removeConnections(gameIds));
+    await dispatch(removeBracketGames(bracketIndex));
     dispatch(updateNumTeams(startTeams * -1));
     dispatch(updateNumWinners(endTeams * -1));
+
+    const { schedule: newSchedule, draws } = scheduleTournament(
+      flattenConnections({
+        brackets,
+        originConnections: currentOriginConnections,
+      }),
+      numSheets
+    );
+
+    const scheduleWithNoEmptyDrawTimes = Object.entries(newSchedule).reduce(
+      (all, [key, value]) => {
+        if (!value) return all;
+        return {
+          ...all,
+          [key]: value,
+        };
+      },
+      {}
+    );
+    dispatch(setBracketGamesSchedule(scheduleWithNoEmptyDrawTimes));
+    dispatch(trimDrawTimesTo(draws.length));
   }
 
   function renderBracketsFromWizard({
