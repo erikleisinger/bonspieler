@@ -1,7 +1,6 @@
 "use client";
 import { useState } from "react";
 import { useAppDispatch } from "@/lib/store";
-import type { Nullable } from "@/shared/types";
 import type { BracketRows, BracketGameType } from "@/entities/Bracket";
 import { Bracket, BracketRound, BracketGame } from "@/entities/Bracket";
 import { useAppSelector } from "@/lib/store";
@@ -17,7 +16,6 @@ import {
   getBracketGamesSchedule,
 } from "@/entities/Bracket/BracketGame";
 import { getSelectedGame, setSelectedGame, getSelectedDraw } from "../model";
-
 export default function BracketViewer({
   availableGameIds = [],
   onGameClick,
@@ -67,7 +65,7 @@ export default function BracketViewer({
 
   return (
     <>
-      <div>
+      <div className="pointer-events-auto">
         {brackets.map((rounds, bracketIndex) => {
           return (
             <Bracket

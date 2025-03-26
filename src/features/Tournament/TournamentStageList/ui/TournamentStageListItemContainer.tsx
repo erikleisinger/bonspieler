@@ -38,8 +38,9 @@ export default function TournamentStageListItemContainer({
   return (
     <div
       className={cn(
-        "flex  relative group px-2  cursor-pointer transition-all duration-300   h-full min-h-[160px] ",
-        animated && "stage_card--animated"
+        "flex  relative group px-2   transition-all duration-300   h-full min-h-[160px] ",
+        animated && "stage_card--animated",
+        onClick && "cursor-pointer"
       )}
       onClick={handleClick}
     >

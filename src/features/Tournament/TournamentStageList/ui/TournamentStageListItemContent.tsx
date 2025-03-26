@@ -5,12 +5,17 @@ import {
 import { cn } from "@/lib/utils";
 import { StageTypeIcon } from "@/shared/ui/Stage";
 import Typography from "@/shared/ui/typography";
-import { MdOutlineGroup } from "react-icons/md";
+
+import { FaFlagCheckered } from "react-icons/fa6";
+import { FaCalendarAlt } from "react-icons/fa";
+import { FaUserGroup } from "react-icons/fa6";
 export default function TournamentStageListItemContent({
   className,
+  nameChildren,
   stage,
 }: {
   className?: string;
+  nameChildren?: React.ReactNode;
   stage: TournamentStage;
 }) {
   function letterClass() {
@@ -54,14 +59,26 @@ export default function TournamentStageListItemContent({
       <div className="grid grid-cols-[auto,1fr] gap-2 ">
         <div className="pt-1"></div>
         <div className="overflow-hidden">
-          <Typography tag="h3" className="text-slate-600 ">
-            {stage.name}
-          </Typography>
+          {nameChildren ? (
+            nameChildren
+          ) : (
+            <Typography tag="h3" className="text-slate-600 ">
+              {stage.name}
+            </Typography>
+          )}
 
-          <div className="flex gap-2 mt-2">
+          <div className="flex gap-4 mt-2">
             <div className="flex gap-1 items-center  flex-wrap">
-              <MdOutlineGroup />
+              <FaUserGroup className="text-sm" />
               <span className="text-sm">{stage.num_start_teams || 0}</span>
+            </div>
+            <div className="flex gap-1 items-center  flex-wrap">
+              <FaFlagCheckered className="text-sm" />
+              <span className="text-sm">{stage.num_end_teams || 0}</span>
+            </div>
+            <div className="flex gap-1 items-center  flex-wrap">
+              <FaCalendarAlt className="text-sm" />
+              <span className="text-sm">0</span>
             </div>
           </div>
         </div>

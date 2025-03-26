@@ -10,7 +10,8 @@ import {
   TournamentStageListItemContainer,
   TournamentStageListItemContent,
 } from "@/features/Tournament/TournamentStageList";
-import { getBracketStartTeams } from "@/entities/Bracket";
+import { getBracketStartTeams, getBracketEndTeams } from "@/entities/Bracket";
+import { EditStageName } from "@/features/Stage/EditStageName";
 export default function EditBracketView() {
   const brackets = useAppSelector(getBracketGames);
   /** Get stage for Tournament Context */
@@ -27,6 +28,10 @@ export default function EditBracketView() {
     (all, current) => all + getBracketStartTeams(current),
     0
   );
+  const endTeams = (brackets || []).reduce(
+    (all, current) => all + getBracketEndTeams(current),
+    0
+  );
 
   const thisStage = stages?.find((s) => s.id === bracketStage.id) || 0;
 
@@ -37,9 +42,9 @@ export default function EditBracketView() {
       stage={bracketStage}
       tournamentId={tournament_id}
     >
-      <div className="absolute inset-0 grid grid-cols-[auto,1fr]">
-        <div className="h-full relative z-[-1]">
-          <div className="absolute inset-0">
+      <div className="absolute inset-0 grid grid-cols-[auto,1fr] pointer-events-none">
+        <div className="h-full relative z-[-1] pointer-events-auto">
+          <div className="absolute inset-0 ">
             <TournamentStageListItemContainer />
           </div>
 
@@ -48,8 +53,14 @@ export default function EditBracketView() {
               stage={{
                 ...thisStage,
                 num_start_teams: startTeams,
+                num_end_teams: endTeams,
               }}
               className="pl-4 w-[200px] m-auto"
+              nameChildren={
+                <div className="m-1">
+                  <EditStageName />
+                </div>
+              }
             />
           )}
         </div>
@@ -57,7 +68,10 @@ export default function EditBracketView() {
           {brackets?.length ? (
             <BracketEditorView offsetLeftPx={250}></BracketEditorView>
           ) : (
-            <BracketWizardView onRender={renderBracketsFromWizard} />
+            <div className="pointer-events-auto">
+              {" "}
+              <BracketWizardView onRender={renderBracketsFromWizard} />
+            </div>
           )}
         </div>
       </div>

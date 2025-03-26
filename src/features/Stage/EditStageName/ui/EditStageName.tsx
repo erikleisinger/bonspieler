@@ -15,7 +15,7 @@ export default function EditEventName() {
 
   return (
     <EditableText
-      tag="h2"
+      tag="h3"
       value={eventName}
       onChange={setName}
       maxLength={MAX_NAME_LENGTH}

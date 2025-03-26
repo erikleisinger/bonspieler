@@ -23,6 +23,7 @@ import {
   setLoserConnectionForGame,
 } from "@/entities/Bracket/BracketGameConnections";
 import { cn } from "@/lib/utils";
+import Typography from "@/shared/ui/typography";
 
 export default function BracketEditorView({
   children,
@@ -131,13 +132,13 @@ export default function BracketEditorView({
 
   return (
     <div
-      className={cn("absolute inset-0", className)}
+      className={cn("absolute inset-0 pointer-events-none", className)}
       style={{
         left: offsetLeftPx * -1 + "px",
       }}
     >
       <main
-        className="absolute inset-0 overflow-auto grid grid-cols-[auto,auto,1fr,auto]"
+        className="absolute inset-0 overflow-auto grid grid-cols-[auto,auto,1fr,auto] pointer-events-none"
         ref={el}
         style={{
           paddingLeft: offsetLeftPx + "px",
@@ -145,7 +146,7 @@ export default function BracketEditorView({
       >
         {children ? children : <div />}
         <div
-          className="sticky left-0 top-0 z-20"
+          className="sticky left-0 top-0 z-20 pointer-events-auto"
           style={{
             height: containerHeight + "px",
           }}
@@ -158,7 +159,7 @@ export default function BracketEditorView({
               left: offsetLeftPx * -1 + "px",
             }}
           >
-            <div ref={modalController}>
+            <div ref={modalController} className="pointer-events-auto">
               <EditBracketModalController
                 state={toolbarState}
                 setState={setToolbarState}
@@ -173,7 +174,7 @@ export default function BracketEditorView({
         />
 
         <div
-          className="sticky right-0 top-0 bg-glass z-20 backdrop-blur-md "
+          className="sticky right-0 top-0 bg-glass z-20 backdrop-blur-md pointer-events-auto "
           ref={toolbar}
           style={{
             height: containerHeight + "px",
