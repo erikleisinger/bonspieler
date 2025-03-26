@@ -1,1 +1,0 @@
-export { flattenConnections } from "./flattenConnections";

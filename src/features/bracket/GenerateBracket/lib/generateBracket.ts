@@ -2,7 +2,7 @@ import {
   generateTournament,
   scheduleTournament,
 } from "@/shared/utils/generateTournament";
-import type { BracketConnections, BracketDrawTimes } from "@/entities/Bracket";
+import type { BracketDrawTimes } from "@/entities/Bracket";
 import type { OriginConnections } from "@/entities/Bracket/BracketGameConnections";
 import type { GeneratedBracket } from "../types";
 function calculateTournamentSchedule(
