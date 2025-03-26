@@ -5,11 +5,12 @@ import {
   BracketSchedule,
 } from "@/entities/Bracket";
 import {
-  LoserConnections,
-  OriginConnections,
-  WinnerConnections,
+  type LoserConnections,
+  type OriginConnections,
+  type WinnerConnections,
   removeConnections,
   addConnections,
+  getOriginConnections,
 } from "@/entities/Bracket/BracketGameConnections";
 import {
   initBracketGames,
@@ -24,10 +25,7 @@ import {
   addDrawTimes,
   trimDrawTimesTo,
 } from "@/entities/DrawTime";
-import {
-  setConnections,
-  getOriginConnections,
-} from "@/entities/Bracket/BracketGameConnections";
+
 import {
   setNumTeams,
   setNumWinners,
@@ -102,6 +100,7 @@ export default function useSetBracketData() {
     dispatch(updateNumTeams(startTeams * -1));
     dispatch(updateNumWinners(endTeams * -1));
 
+    if (currentBrackets.length <= 1) return;
     const { schedule: newSchedule, draws } = scheduleTournament(
       currentOriginConnections,
       currentNumSheets
@@ -152,7 +151,11 @@ export default function useSetBracketData() {
     numWinners: number[];
   }) {
     dispatch(
-      setConnections({ originConnections, winnerConnections, loserConnections })
+      addConnections({
+        originConnections,
+        winnerConnections,
+        loserConnections,
+      })
     );
     dispatch(initBracketGames(brackets));
 

@@ -36,7 +36,7 @@ const getBracketConnections = apiSlice.injectEndpoints({
               }
             }
 
-            if (origin_game_id) {
+            if (origin_game_id && destination_game_id) {
               if (!acc.originConnections[destination_game_id])
                 acc.originConnections[destination_game_id] = [];
               acc.originConnections[destination_game_id].push({
@@ -54,7 +54,6 @@ const getBracketConnections = apiSlice.injectEndpoints({
             connections: [],
           }
         );
-
         return {
           data: {
             ...viewableConnections,

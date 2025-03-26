@@ -34,7 +34,10 @@ import {
  * Connections
  */
 
-import { setConnections } from "@/entities/Bracket/BracketGameConnections";
+import {
+  resetConnections,
+  setConnections,
+} from "@/entities/Bracket/BracketGameConnections";
 
 import LoaderFullPage from "@/shared/ui/loader-full-page";
 export default function LoadBracket({
@@ -116,7 +119,10 @@ export default function LoadBracket({
 
   useEffect(() => {
     if (connections) {
-      dispatch(setConnections(connections));
+      dispatch(resetConnections());
+      setTimeout(() => {
+        dispatch(setConnections(connections));
+      }, 0);
     }
   }, [connections, dispatch]);
 

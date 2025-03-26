@@ -125,6 +125,9 @@ export const bracketGamesSlice = createSlice({
         ...action.payload,
       };
     },
+    resetRemovedGameIds: (state) => {
+      state.removedGameIds = [];
+    },
     updateRemovedGameIds: (state, action: PayloadAction<string[]>) => {
       state.removedGameIds = [
         ...state.removedGameIds,
@@ -204,6 +207,7 @@ export const getBracketByIndex = createSelector(
 
 export const {
   removeBracket,
+  resetRemovedGameIds,
   setBracketGames,
   setBracketGameIndex,
   setBracketGamesReadableIdIndex,
