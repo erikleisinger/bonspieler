@@ -60,6 +60,36 @@ export const bracketConnectionsSlice = createSlice({
         delete state.originConnections[gameId];
       });
 
+      const newOriginConnections = { ...state.originConnections };
+      const newLoserConnections = { ...state.loserConnections };
+      const newWinnerConnections = { ...state.winnerConnections };
+
+      Object.keys(newOriginConnections).forEach((gameId) => {
+        const newConnections = newOriginConnections[gameId] || [];
+        newOriginConnections[gameId] = newConnections.map((c) => ({
+          ...c,
+          gameId: gameIds.includes(c.gameId) ? null : c.gameId,
+        }));
+      });
+
+      Object.keys(newLoserConnections).forEach((gameId) => {
+        const newLoserConnectionGameId = newLoserConnections[gameId];
+        if (gameIds.includes(newLoserConnectionGameId)) {
+          newLoserConnections[gameId] = null;
+        }
+      });
+
+      Object.keys(newWinnerConnections).forEach((gameId) => {
+        const newWinnerConnectionGameId = newWinnerConnections[gameId];
+        if (gameIds.includes(newWinnerConnectionGameId)) {
+          newWinnerConnections[gameId] = null;
+        }
+      });
+
+      state.originConnections = newOriginConnections;
+      state.loserConnections = newLoserConnections;
+      state.winnerConnections = newWinnerConnections;
+
       state.removedConnections = [
         ...state.removedConnections,
         ...removed.filter((id) => !state.removedConnections.includes(id)),

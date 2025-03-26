@@ -218,5 +218,7 @@ export const {
 export const initBracketGames = thunks.initBracketGames;
 export const addBracketGames = thunks.addBracketGames;
 export const removeBracketGames = thunks.removeBracketGames;
+export const shiftBracketAssignmentForGames =
+  thunks.shiftBracketAssignmentForGames;
 
 export default bracketGamesSlice.reducer;

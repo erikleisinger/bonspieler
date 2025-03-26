@@ -83,24 +83,16 @@ export function generateBracket({
     drawTimes[index + 1] = null;
   });
 
-  const bracketsWithCorrectBracketNumber = brackets.map((rounds) =>
-    rounds.map((games) =>
-      games.map((game) => ({
-        ...game,
-        bracketNumber: bracketIndex,
-      }))
-    )
+  const bracketsWithCorrectBracketNumber = brackets.map(
+    (rounds, thisBracketIndex) =>
+      rounds.map((games) =>
+        games.map((game) => ({
+          ...game,
+          bracketNumber: thisBracketIndex,
+        }))
+      )
   );
-  console.log("generate: ", {
-    brackets: bracketsWithCorrectBracketNumber,
-    drawTimes,
-    loserConnections,
-    numTeams,
-    numWinners,
-    originConnections,
-    schedule,
-    winnerConnections,
-  });
+
   return {
     brackets: bracketsWithCorrectBracketNumber,
     drawTimes,
