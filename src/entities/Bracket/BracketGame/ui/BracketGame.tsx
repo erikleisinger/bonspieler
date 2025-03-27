@@ -6,34 +6,35 @@ import type { BracketGame, BracketRow } from "../../types";
 import { GAME_ELEMENT_ID_PREFIX } from "../../lib/constants/element-id";
 import { getRowSpanForGame } from "../lib/getRowSpanForGame";
 import { GAME_HEIGHT } from "../../lib/constants/game";
-import BracketGameFinalResult from "./BracketGameFinalResult";
 import type { OriginConnection } from "@/entities/Bracket/BracketGameConnections";
 import { Nullable } from "@/shared/types";
 
 export default function BracketGame({
   available,
-  game,
-  winnerConnection,
-  loserConnection,
-  originConnections,
+  children,
   className = "",
   drawNumber,
+  game,
+  loserConnection,
   onClick = () => {},
+  originConnections,
   readableId,
   rows,
   selected,
+  winnerConnection,
 }: {
   available?: boolean;
-  game: BracketGame;
+  children?: React.ReactNode;
   className?: string;
   drawNumber: number;
+  game: BracketGame;
+  loserConnection: Nullable<string>;
   onClick?: (game: BracketGame) => void;
+  originConnections: OriginConnection[];
   readableId: string;
   rows: BracketRow;
   selected: boolean;
   winnerConnection: Nullable<string>;
-  loserConnection: Nullable<string>;
-  originConnections: OriginConnection[];
 }) {
   function getClassName() {
     const base = [
@@ -103,7 +104,7 @@ export default function BracketGame({
               isSeed={game.isSeed}
               readableId={readableId}
             />
-            {isFinal && <BracketGameFinalResult />}
+            {isFinal && children}
           </div>
         </div>
       </div>

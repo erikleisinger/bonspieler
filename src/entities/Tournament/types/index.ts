@@ -7,3 +7,4 @@ export {
   type ViewableTournamentStage,
 } from "./TournamentStage";
 export type { Tournament } from "./Tournament";
+export type { TournamentStoreState } from "./TournamentStoreState";

@@ -3,7 +3,7 @@ import { Nullable } from "@/shared/types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "@/lib/store";
 
-interface BracketEditorStoreState {
+export interface BracketEditorStoreState {
   lookingForLoserConnection: Nullable<BracketGameType>;
 }
 

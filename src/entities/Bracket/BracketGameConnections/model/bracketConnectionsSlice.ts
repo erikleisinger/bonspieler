@@ -6,7 +6,7 @@ import type {
 } from "../types/Connections";
 import type { RootState } from "@/lib/store";
 import { Nullable } from "@/shared/types";
-export interface BracketWinnerConnectionsState {
+export interface BracketConnectionsStoreState {
   loserConnections: LoserConnections;
   winnerConnections: WinnerConnections;
   originConnections: OriginConnections;
@@ -20,7 +20,7 @@ function defaultState() {
   };
 }
 
-const initialState: BracketWinnerConnectionsState = defaultState();
+const initialState: BracketConnectionsStoreState = defaultState();
 
 export const bracketConnectionsSlice = createSlice({
   name: "bracketConnections",

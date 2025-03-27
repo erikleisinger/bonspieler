@@ -8,7 +8,7 @@ import type { Nullable } from "@/shared/types";
 import type { RootState } from "@/lib/store";
 import * as thunks from "./thunks";
 
-interface BracketGamesState {
+export interface BracketGamesStoreState {
   gameIndex: {
     [gameId: string]: BracketGameType;
   };
@@ -30,7 +30,7 @@ function defaultState() {
   };
 }
 
-const initialState: BracketGamesState = defaultState();
+const initialState: BracketGamesStoreState = defaultState();
 
 export const bracketGamesSlice = createSlice({
   name: "bracketGames",

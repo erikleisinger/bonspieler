@@ -3,14 +3,18 @@
 
 import { useEffect, useState, useRef, useLayoutEffect } from "react";
 import { Reducer } from "@reduxjs/toolkit";
-import { useAppStore, getStore } from "@/lib/store";
+import { useAppStore } from "@/lib/store";
 import LoaderFullPage from "../ui/loader-full-page";
 import { PersistGate } from "redux-persist/integration/react";
+import type { DynamicStateModules } from "@/lib/store";
 
-interface SliceConfig {
-  name: string;
-  reducer: Reducer;
-  initialState?: any;
+interface SliceConfig<
+  K extends keyof DynamicStateModules = keyof DynamicStateModules
+> {
+  name: K;
+  reducer: Reducer<NonNullable<DynamicStateModules[K]>>;
+  initialState?: Partial<NonNullable<DynamicStateModules[K]>>;
+  reducerPath?: string;
 }
 
 interface StoreLoaderProps {
@@ -27,10 +31,10 @@ export default function StoreLoader({
   slices = [],
   children,
 }: StoreLoaderProps) {
-  const { store, persistor } = useAppStore();
+  const store = useAppStore();
 
   const [loaded, setLoaded] = useState(false);
-  const mountedSlicesRef = useRef(new Set<string>());
+  const mountedSlicesRef = useRef(new Set<keyof DynamicStateModules>());
 
   // Create a stable slices dependency
   const sliceNames = slices.map((s) => s.name || s.reducerPath).join(",");
@@ -44,7 +48,7 @@ export default function StoreLoader({
     }
 
     // Keep track of which slices we're mounting in this instance
-    const currentMountedSlices = new Set<string>();
+    const currentMountedSlices = new Set<keyof DynamicStateModules>();
 
     // Load all slices
     slices.forEach((slice) => {

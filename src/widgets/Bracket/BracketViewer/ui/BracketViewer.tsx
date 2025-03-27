@@ -16,11 +16,14 @@ import {
   getBracketGamesSchedule,
 } from "@/entities/Bracket/BracketGame";
 import { getSelectedGame, setSelectedGame, getSelectedDraw } from "../model";
+import BracketGameFinalResult from "@/entities/Bracket/BracketGame/ui/BracketGameFinalResult";
 export default function BracketViewer({
   availableGameIds = [],
+  gameResultChildren,
   onGameClick,
 }: {
   availableGameIds: string[];
+  gameResultChildren?: React.ReactNode;
   onGameClick: (game: BracketGameType) => void;
 }) {
   const dispatch = useAppDispatch();
@@ -99,7 +102,9 @@ export default function BracketViewer({
                             readableId={readableIdIndex[game.id]}
                             drawNumber={schedule[game.id]}
                             available={availableGameIds.includes(game.id)}
-                          />
+                          >
+                            {gameResultChildren || <BracketGameFinalResult />}
+                          </BracketGame>
                         );
                       })}
                   </BracketRound>

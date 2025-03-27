@@ -4,7 +4,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "@/lib/store";
 import * as thunks from "./thunks";
 
-interface BracketViewerStoreState {
+export interface BracketViewerStoreState {
   selectedGame: Nullable<BracketGameType>;
   selectedDraw: Nullable<number>;
 }

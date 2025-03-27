@@ -1,7 +1,7 @@
 export default function BracketRoundHeader({
   roundNumber,
 }: {
-  roundNumber: number;
+  bracketNumber: number;
 }) {
   // const roundDrawTimes = useMemo(() => {
   //     const times: number[] = [];

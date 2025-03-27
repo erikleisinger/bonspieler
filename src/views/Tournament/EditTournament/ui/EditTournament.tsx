@@ -10,10 +10,12 @@ import {
 /* Components */
 import { TournamentOptions } from "@/widgets/Tournament/TournamentOptions";
 import { TournamentStageEditor } from "@/widgets/Tournament/TournamentStageEditor";
+import { TournamentScheduler } from "@/widgets/Tournament/TournamentScheduler";
 
 /* Utils */
 
 import Typography from "@/shared/ui/typography";
+import { FaCalendarAlt } from "react-icons/fa";
 
 export default function EditTournament({
   tournamentId,
@@ -37,7 +39,36 @@ export default function EditTournament({
           <Typography tag="h3">Schedule</Typography>
           <TournamentOptions />
         </div> */}
-        <div className="">
+        <div>
+          <Typography tag="h2">My Tournament</Typography>
+          <Typography tag="p">March 4th, 2025 - March 5th, 2025</Typography>
+        </div>
+        <div className="mt-8">
+          <div className="rounded-sm bg-white/70 backdrop-blur-sm p-4 px-6 w-fit  border-l-4 border-indigo-500">
+            <div>
+              <header className="flex gap-4 ">
+                <div>
+                  <div className="p-3 flex items-center bg-indigo-50 rounded-md">
+                    <FaCalendarAlt className="text-indigo-500"></FaCalendarAlt>
+                  </div>
+                </div>
+
+                <div>
+                  <Typography tag="h4" className="text-indigo-500 font-bold">
+                    Schedule
+                  </Typography>
+                  <Typography tag="p" className="text-sm text-muted">
+                    March 4th, 2025 - March 5th, 2025
+                  </Typography>
+                </div>
+              </header>
+              <div className=" py-4">
+                <TournamentScheduler />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="mt-8">
           <Typography tag="h3" className="mb-6 ml-10">
             Stages
           </Typography>

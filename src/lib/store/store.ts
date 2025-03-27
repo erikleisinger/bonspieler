@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Action, ThunkAction } from "@reduxjs/toolkit";
-import { configureStore, Reducer, EnhancedStore } from "@reduxjs/toolkit";
+import { configureStore } from "@reduxjs/toolkit";
 import combineReducers from "./combineReducers";
+import type { AppStore, AsyncReducers } from "./storeTypes";
 import { setupListeners } from "@reduxjs/toolkit/query/react";
 
 import {
@@ -16,36 +16,6 @@ import {
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import { apiSlice } from "@/shared/api";
-export interface AsyncReducers {
-  [key: string]: Reducer;
-}
-
-export interface ModuleRefCounts {
-  [key: string]: number;
-}
-
-export interface AppStore extends EnhancedStore {
-  asyncReducers: AsyncReducers;
-  getInjectedReducers: () => string[];
-  injectReducer: (
-    key: string,
-    reducer: Reducer,
-    initialState?: any
-  ) => AppStore | void;
-  moduleRefCounts: ModuleRefCounts;
-  removeReducer: (key: string) => AppStore | void;
-  forceCleanState: () => void;
-  _persistor: any; // Add persistor to the store
-}
-
-export type RootState = ReturnType<AppStore["getState"]>;
-export type AppDispatch = AppStore["dispatch"];
-export type AppThunk<ThunkReturnType = void> = ThunkAction<
-  ThunkReturnType,
-  RootState,
-  unknown,
-  Action
->;
 
 const persistConfig = {
   key: "root",
@@ -210,19 +180,12 @@ export const makeStore = (): AppStore => {
 // Create a single store instance
 let store: AppStore | undefined;
 
-export const getStore = (): {
-  store: AppStore;
-  persistor: Persistor;
-} => {
+export const getStore = (): AppStore => {
   if (!store) {
     store = makeStore();
   }
   setupListeners(store.dispatch);
-  return { store, persistor: store._persistor };
+  return store;
 };
 
-export const useAppStore = () =>
-  getStore<RootState>() as {
-    store: AppStore;
-    persistor: Persistor;
-  };
+export const useAppStore = () => getStore() as AppStore;

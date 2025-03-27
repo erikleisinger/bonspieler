@@ -14,7 +14,7 @@ interface AppProviderProps {
  */
 export default function AppProvider({ children }: AppProviderProps) {
   // Get the singleton store instance
-  const { store } = getStore();
+  const store = getStore();
 
   return <Provider store={store}>{children}</Provider>;
 }

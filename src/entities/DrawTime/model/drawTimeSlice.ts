@@ -5,11 +5,11 @@ import * as thunks from "./thunks";
 import { RootState } from "@/lib/store";
 import { Nullable } from "@/shared/types";
 import { drawTimesApi } from "./api";
-export interface DrawTimeState {
+export interface DrawTimeStoreState {
   drawTimes: BracketDrawTimes;
   initialDrawTimes: BracketDrawTimes;
 }
-function defaultState() {
+function defaultState(): DrawTimeStoreState {
   return {
     drawTimes: {},
     initialDrawTimes: {},
