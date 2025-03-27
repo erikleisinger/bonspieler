@@ -1,9 +1,6 @@
 import { useContext } from "react";
 import { TournamentStageContext } from "@/shared/TournamentStage";
 import type { BracketConnectionTeam } from "../../types";
-import { useAppSelector } from "@/lib/store";
-import { getTournamentTeams } from "@/entities/Tournament";
-import { getReadableGameId } from "@/entities/Bracket/BracketGame";
 import { FaSeedling, FaRunning } from "react-icons/fa";
 import { OriginConnection } from "../../BracketGameConnections";
 export default function BracketGameTeam({

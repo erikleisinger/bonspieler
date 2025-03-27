@@ -63,15 +63,24 @@ export default function NextStagePreview({
       backgroundGameIds: brackets
         .flat()
         .flat()
-        .filter(({ roundNumber }) => roundNumber > 0)
+        .filter(
+          ({ id }) =>
+            originConnections[id]?.length &&
+            originConnections[id].every(({ gameId }) => !gameId)
+        )
         .map(({ id }) => id),
       availableGameIds: brackets
         .flat()
         .flat()
-        .filter(({ roundNumber }) => roundNumber === 0)
+        .filter(
+          ({ id }) =>
+            !originConnections[id]?.length ||
+            originConnections[id].length < 2 ||
+            originConnections[id].some(({ gameId }) => !gameId)
+        )
         .map(({ id }) => id),
     };
-  }, [nextStageBracketData]);
+  }, [nextStageBracketData, originConnections]);
   return (
     <div className="flex flex-col gap-8">
       {nextStageBracketData?.brackets?.length && (
