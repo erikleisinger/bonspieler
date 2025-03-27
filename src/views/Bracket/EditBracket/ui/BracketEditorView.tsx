@@ -1,12 +1,17 @@
-import { useMemo, useRef, useEffect } from "react";
+import { useMemo, useRef, useEffect, useState } from "react";
 import { useAppSelector, useAppDispatch } from "@/lib/store";
 import type { BracketGameType } from "@/entities/Bracket";
 import {
   assignTeamToGame,
   getLookingToAssignTeam,
   setLookingToAssignTeam,
+  getBracketEventOrder,
 } from "@/entities/BracketEvent";
-import { setSelectedGame } from "@/widgets/Bracket/BracketViewer";
+import {
+  getSelectedDraw,
+  setSelectedGame,
+  getSelectedGame,
+} from "@/widgets/Bracket/BracketViewer";
 import { scrollToGame } from "@/entities/Bracket";
 import { BracketViewer } from "@/widgets/Bracket/BracketViewer";
 import { BracketEditorToolbar } from "@/widgets/Bracket/BracketEditorToolbar";
@@ -17,30 +22,51 @@ import {
   getLookingForLoserConnection,
   setLookingForLoserConnection,
 } from "@/widgets/Bracket/BracketEditor";
-import { getBracketGames } from "@/entities/Bracket/BracketGame";
+import {
+  getBracketGames,
+  getBracketGamesReadableIdIndex,
+  getBracketGamesSchedule,
+} from "@/entities/Bracket/BracketGame";
 import {
   getOriginConnections,
   setLoserConnectionForGame,
+  getLoserConnections,
+  getWinnerConnections,
 } from "@/entities/Bracket/BracketGameConnections";
-import { cn } from "@/lib/utils";
-import Typography from "@/shared/ui/typography";
 
+import { cn } from "@/lib/utils";
+import NextStagePreview from "./NextStagePreview";
+import NextStagePreviewPopup from "./NextStagePreviewPopup";
+import { Nullable } from "@/shared/types";
 export default function BracketEditorView({
   children,
   className,
   offsetLeftPx = 0,
+  tournamentId,
+  bracketStageId,
 }: {
   children?: React.ReactNode;
   className?: string;
   offsetLeftPx?: number;
+  tournamentId: string;
+  bracketStageId: string;
 }) {
   const dispatch = useAppDispatch();
+
   const brackets = useAppSelector(getBracketGames);
   const originConnections = useAppSelector(getOriginConnections);
   const lookingToAssignTeam = useAppSelector(getLookingToAssignTeam);
   const lookingForLoserConnection = useAppSelector(
     getLookingForLoserConnection
   );
+  const order = useAppSelector(getBracketEventOrder);
+
+  const readableIdIndex = useAppSelector(getBracketGamesReadableIdIndex);
+  const schedule = useAppSelector(getBracketGamesSchedule);
+  const winnerConnections = useAppSelector(getWinnerConnections);
+  const loserConnections = useAppSelector(getLoserConnections);
+  const selectedDraw = useAppSelector(getSelectedDraw);
+  const selectedGame = useAppSelector(getSelectedGame);
 
   /**
    * Reset editing state
@@ -137,6 +163,13 @@ export default function BracketEditorView({
     }
   }
 
+  const [viewingGameResult, setViewingGameResult] =
+    useState<Nullable<BracketGameType>>(null);
+
+  function onGameResultClick(game: BracketGameType) {
+    setViewingGameResult(game);
+  }
+
   return (
     <div
       className={cn("absolute inset-0 pointer-events-none", className)}
@@ -144,6 +177,15 @@ export default function BracketEditorView({
         left: offsetLeftPx * -1 + "px",
       }}
     >
+      {viewingGameResult && (
+        <NextStagePreviewPopup className="z-50 pointer-events-auto">
+          <NextStagePreview
+            tournamentId={tournamentId}
+            stageOrder={2}
+            closePreview={() => setViewingGameResult(null)}
+          />
+        </NextStagePreviewPopup>
+      )}
       <main
         className="absolute inset-0 overflow-auto grid grid-cols-[auto,auto,1fr,auto] pointer-events-none"
         ref={el}
@@ -176,7 +218,16 @@ export default function BracketEditorView({
         </div>
 
         <BracketViewer
+          schedule={schedule}
+          winnerConnections={winnerConnections}
+          loserConnections={loserConnections}
+          selectedDraw={selectedDraw}
+          selectedGame={selectedGame}
+          readableIdIndex={readableIdIndex}
+          brackets={brackets}
+          originConnections={originConnections}
           onGameClick={onGameClick}
+          onGameResultClick={onGameResultClick}
           availableGameIds={availableGameIds}
         />
 

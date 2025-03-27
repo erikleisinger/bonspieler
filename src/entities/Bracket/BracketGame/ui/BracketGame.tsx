@@ -2,37 +2,35 @@ import "./game.scss";
 import { useEffect, useState, useRef } from "react";
 import BracketGameTeams from "./BracketGameTeams";
 import BracketGameHeader from "./BracketGameHeader";
-import type { BracketGame, BracketRow } from "../../types";
+import type { BracketGame } from "../../types";
 import { GAME_ELEMENT_ID_PREFIX } from "../../lib/constants/element-id";
-import { getRowSpanForGame } from "../lib/getRowSpanForGame";
 import { GAME_HEIGHT } from "../../lib/constants/game";
 import type { OriginConnection } from "@/entities/Bracket/BracketGameConnections";
 import { Nullable } from "@/shared/types";
+import { cn } from "@/lib/utils";
 
 export default function BracketGame({
   available,
-  children,
+  background = false,
   className = "",
   drawNumber,
   game,
-  loserConnection,
+  loserReadableId,
   onClick = () => {},
   originConnections,
   readableId,
-  rows,
   selected,
   winnerConnection,
 }: {
   available?: boolean;
-  children?: React.ReactNode;
+  background?: boolean;
   className?: string;
   drawNumber: number;
   game: BracketGame;
-  loserConnection: Nullable<string>;
+  loserReadableId: Nullable<string>;
   onClick?: (game: BracketGame) => void;
   originConnections: OriginConnection[];
   readableId: string;
-  rows: BracketRow;
   selected: boolean;
   winnerConnection: Nullable<string>;
 }) {
@@ -63,8 +61,6 @@ export default function BracketGame({
     }, 1001);
   }, [drawNumber, firstUpdate]);
 
-  const isFinal = !winnerConnection;
-
   function handleClick(e: MouseEvent<HTMLElement>) {
     e.stopPropagation();
     onClick(game);
@@ -72,11 +68,10 @@ export default function BracketGame({
 
   return (
     <div
-      key={game.id}
-      className="flex flex-col justify-center BRACKET_GAME"
-      style={{
-        ...getRowSpanForGame(rows),
-      }}
+      className={cn(
+        "flex flex-col justify-center BRACKET_GAME",
+        background && "opacity-50"
+      )}
     >
       <div className="py-4 flex text-xs pointer-events-auto relative">
         <div
@@ -96,7 +91,7 @@ export default function BracketGame({
             <BracketGameHeader
               readableId={readableId}
               drawNumber={drawNumber}
-              loserTo={loserConnection}
+              loserTo={loserReadableId}
             />
 
             <BracketGameTeams
@@ -104,7 +99,6 @@ export default function BracketGame({
               isSeed={game.isSeed}
               readableId={readableId}
             />
-            {isFinal && children}
           </div>
         </div>
       </div>

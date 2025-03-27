@@ -23,7 +23,7 @@ export default function BracketGameFinalResult() {
   }
 
   return (
-    <div className="absolute right-[-1rem] gap-4  top-0 bottom-0 m-auto h-fit translate-x-[100%] flex gap-2 text-xl px-4  backdrop-blur-md p-2 items-center">
+    <div className=" flex gap-2 text-xl px-4  backdrop-blur-md p-2 items-center">
       <div>{icon()}</div>
       {text()}
     </div>

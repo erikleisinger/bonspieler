@@ -16,13 +16,9 @@ export default function BracketGameTeam({
   isSeed: boolean;
 }) {
   const { prevStageName } = useContext(TournamentStageContext);
-  const tournamentTeams = useAppSelector(getTournamentTeams);
-  const readableId = useAppSelector((state) =>
-    getReadableGameId(state, connection.gameId)
-  );
   function getTeamInfo({ isWinner, gameId }: BracketConnectionTeam) {
     if (gameId) {
-      return `${isWinner ? "Winner of " : "Loser of "}${readableId}`;
+      return `${isWinner ? "Winner of " : "Loser of "}${gameId}`;
     }
     // if (isSeed) {
     //   if (!prevStageName) {

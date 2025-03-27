@@ -1,5 +1,5 @@
 import { useAppSelector } from "@/lib/store";
-import { getBracketEvent } from "@/entities/BracketEvent";
+import { getBracketEvent, getBracketEventId } from "@/entities/BracketEvent";
 import { getBracketGames } from "@/entities/Bracket/BracketGame";
 import { TournamentStageContextProvider } from "@/shared/TournamentStage";
 import { useSetBracketData } from "@/views/Bracket/helpers";
@@ -17,6 +17,7 @@ export default function EditBracketView() {
   /** Get stage for Tournament Context */
 
   const bracketStage = useAppSelector(getBracketEvent);
+  const bracketStageId = useAppSelector(getBracketEventId);
   const { tournament_id } = bracketStage;
 
   const { data: stages } = useGetTournamentStagesQuery(tournament_id, {
@@ -33,7 +34,8 @@ export default function EditBracketView() {
     0
   );
 
-  const thisStage = stages?.find((s) => s.id === bracketStage.id) || 0;
+  const thisStage =
+    (bracketStageId && stages?.find((s) => s.id === bracketStageId)) || null;
 
   const { renderBracketsFromWizard } = useSetBracketData();
 
@@ -66,7 +68,11 @@ export default function EditBracketView() {
         </div>
         <div className="relative">
           {brackets?.length ? (
-            <BracketEditorView offsetLeftPx={250}></BracketEditorView>
+            <BracketEditorView
+              offsetLeftPx={250}
+              tournamentId={tournament_id}
+              bracketStageId={bracketStageId}
+            ></BracketEditorView>
           ) : (
             <div className="pointer-events-auto">
               {" "}
