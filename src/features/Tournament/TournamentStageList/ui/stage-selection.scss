@@ -1,0 +1,114 @@
+@use "sass:math";
+
+// Variables to control opacity and minimum opacity
+$opacity-decrease-rate: 0.3; // Decrease by 0.1 per element distance
+$minimum-opacity: 0.6; // Elements won't go below this opacity
+$transform-left-percent: 50%;
+
+// Basic z-index stacking logic that will be reused
+@mixin stacking-logic($reference-index) {
+  @for $i from 1 through 20 {
+    &:nth-child(#{$i}) {
+      @if $i == $reference-index {
+        z-index: 100; // Reference element (hovered or selected) always on top
+        opacity: 1; // Reference element is fully opaque
+      } @else if $i < $reference-index {
+        // Elements to the left of reference
+        // Higher z-index for elements closer to reference
+        z-index: calc(80 - ($reference-index - $i));
+        // Opacity decreases with distance (min $minimum-opacity)
+        $distance: $reference-index - $i;
+        // $opacity: 1 - ($distance * $opacity-decrease-rate);
+        // @if $opacity < $minimum-opacity {
+        //   $opacity: $minimum-opacity;
+        // }
+        // opacity: $opacity;
+      } @else {
+        // Elements to the right of reference
+        // Higher z-index for elements closer to reference
+        z-index: calc(80 - ($i - $reference-index));
+        // Opacity decreases with distance (min $minimum-opacity)
+        $distance: $i - $reference-index;
+        // $opacity: 1 - ($distance * $opacity-decrease-rate);
+        // @if $opacity < $minimum-opacity {
+        //   $opacity: $minimum-opacity;
+        // }
+        // opacity: $opacity;
+      }
+    }
+  }
+}
+
+// Basic z-index stacking when nothing is hovered or selected
+@mixin stage-selection-z() {
+  @for $i from 1 through 20 {
+    &:nth-child(#{$i}) {
+      z-index: calc(49 - $i);
+      opacity: 1; // All elements fully opaque when no reference
+    }
+  }
+}
+
+@mixin base-translate() {
+  $translate-x-value: var(--actual-index);
+  transform: translateX(
+    calc($transform-left-percent * -1 * $translate-x-value)
+  );
+}
+
+.stage-selection__option--container {
+  position: relative; // Ensure container has positioning context
+
+  .stage-selection__option {
+    position: relative; // Ensure elements can be stacked with z-index
+    @include base-translate();
+    transition: z-index 0s, transform 0.3s ease, opacity 0.3s ease; // Add opacity transition
+    width: 150px;
+  }
+
+  // When nothing is hovered
+  &:not(:has(.stage-selection__option:hover)) {
+    // Apply stacking logic based on selected element
+    @for $selected-index from 1 through 20 {
+      &:has(.stage-selection__option:nth-child(#{$selected-index}).selected) {
+        .stage-selection__option {
+          @include stacking-logic($selected-index);
+        }
+      }
+    }
+
+    // Fallback if no element is selected
+    &:not(:has(.stage-selection__option.selected)) {
+      .stage-selection__option {
+        @include stage-selection-z();
+      }
+    }
+
+    // .stage-selection__option {
+    //   &:not(.selected) {
+    //     .stage-selection__option--content {
+    //       visibility: hidden;
+    //     }
+    //   }
+    // }
+  }
+
+  // When something is hovered
+  &:has(.stage-selection__option:hover) {
+    // Apply stacking logic based on hovered element
+    @for $hover-index from 1 through 20 {
+      &:has(.stage-selection__option:nth-child(#{$hover-index}):hover) {
+        .stage-selection__option {
+          @include stacking-logic($hover-index);
+        }
+      }
+    }
+    // .stage-selection__option {
+    //   &:not(:hover) {
+    //     .stage-selection__option--content {
+    //       visibility: hidden;
+    //     }
+    //   }
+    // }
+  }
+}

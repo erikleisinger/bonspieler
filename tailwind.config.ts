@@ -1,5 +1,5 @@
 import type { Config } from "tailwindcss";
-
+import plugin from "tailwindcss/plugin";
 export default {
   darkMode: ["class"],
   content: [
@@ -20,6 +20,7 @@ export default {
     {
       pattern: /bg-+/,
     },
+    { pattern: /--selected-index-\d+/ },
   ],
   theme: {
     extend: {
@@ -94,5 +95,18 @@ export default {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [
+    require("tailwindcss-animate"),
+    plugin(function ({ addUtilities, theme, e }) {
+      // Add custom utilities for CSS variables
+      const cssVarUtilities = {};
+      // Add specific utilities if needed
+      cssVarUtilities[".hover\\:selected-index"] = {
+        "&:hover": {
+          "--selected-index": "var(--hover-index)",
+        },
+      };
+      addUtilities(cssVarUtilities);
+    }),
+  ],
 } satisfies Config;

@@ -27,12 +27,14 @@ import { Nullable } from "@/shared/types";
 
 export default function TournamentStageList2({
   children,
+  className,
   onAddStage,
   onEditStage,
   onUpdateStages,
   stages = [],
 }: {
   children?: React.ReactNode;
+  className?: string;
   onAddStage: Nullable<(type: TournamentStageType, index: number) => void>;
   onEditStage?: Nullable<(stage: TournamentStage) => void>;
   onUpdateStages?: Nullable<(stages: TournamentStage[]) => void>;
@@ -130,7 +132,7 @@ export default function TournamentStageList2({
   }
 
   return (
-    <div>
+    <>
       {viewingStage && (
         <StageDetailsPopup
           stage={viewingStage}
@@ -138,7 +140,7 @@ export default function TournamentStageList2({
         />
       )}
 
-      <div className="flex  w-screen  flex-wrap ">
+      <div className="flex flex-wrap ">
         {children}
         <DndContext
           onDragStart={onDragStart}
@@ -204,6 +206,6 @@ export default function TournamentStageList2({
           )}
         </DndContext>
       </div>
-    </div>
+    </>
   );
 }

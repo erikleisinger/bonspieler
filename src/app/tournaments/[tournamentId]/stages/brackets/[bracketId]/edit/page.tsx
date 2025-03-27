@@ -12,7 +12,7 @@ import { EditBracketView } from "@/views/Bracket/EditBracket";
 import { use } from "react";
 export default function Page({ params }) {
   // Unwrap the entire params object first
-  const { bracketId } = use(params);
+  const { bracketId, tournamentId } = use(params);
   return (
     <StoreLoader
       slices={[
@@ -25,9 +25,7 @@ export default function Page({ params }) {
         bracketEditorSlice,
       ]}
     >
-      <LoadBracket stageId={bracketId}>
-        <EditBracketView />
-      </LoadBracket>
+      <EditBracketView tournamentId={tournamentId} />
     </StoreLoader>
   );
 }

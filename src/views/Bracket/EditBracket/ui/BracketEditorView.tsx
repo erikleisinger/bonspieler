@@ -172,7 +172,7 @@ export default function BracketEditorView({
 
   return (
     <div
-      className={cn("absolute inset-0 pointer-events-none", className)}
+      className={cn("absolute inset-0 pointer-events-none ", className)}
       style={{
         left: offsetLeftPx * -1 + "px",
       }}
@@ -187,7 +187,7 @@ export default function BracketEditorView({
         </NextStagePreviewPopup>
       )}
       <main
-        className="absolute inset-0 overflow-auto grid grid-cols-[auto,auto,1fr,auto] pointer-events-none"
+        className="absolute inset-0 overflow-auto grid grid-cols-[auto,auto,1fr,auto] "
         ref={el}
         style={{
           paddingLeft: offsetLeftPx + "px",

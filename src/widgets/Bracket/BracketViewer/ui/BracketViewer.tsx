@@ -115,7 +115,7 @@ export default function BracketViewer({
 
   return (
     <>
-      <div ref={el} className="pointer-events-auto">
+      <div ref={el} className="pointer-events-auto backdrop-blur-sm">
         {brackets.map((rounds, bracketIndex) => {
           return (
             <Bracket
