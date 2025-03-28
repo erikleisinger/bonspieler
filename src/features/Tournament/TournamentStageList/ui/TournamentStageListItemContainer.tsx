@@ -3,7 +3,9 @@ import { cn } from "@/lib/utils";
 export default function TournamentStageListItemContainer({
   active,
   animated = true,
+  blur,
   children,
+  className,
   destructive,
   detached,
   successful,
@@ -12,7 +14,9 @@ export default function TournamentStageListItemContainer({
 }: {
   active?: boolean;
   animated?: boolean;
+  blur?: boolean;
   children: React.ReactNode;
+  className?: string;
   destructive?: boolean;
   detached?: boolean;
   successful?: boolean;
@@ -35,6 +39,7 @@ export default function TournamentStageListItemContainer({
       return "group-hover:bg-pink-500/10";
     }
   }
+
   return (
     <div
       className={cn(
@@ -46,15 +51,22 @@ export default function TournamentStageListItemContainer({
     >
       <div
         className={cn(
-          "absolute inset-0   transition-all skew-x-[-20deg]  duration-200   ",
+          "absolute inset-0  transition-all skew-x-[-20deg]  duration-200   backdrop-blur-sm",
           active && hoverClass(),
           destructive && "bg-red-500/50",
           detached && "shadow-md",
           detached && hoverClass(),
-          successful && "group-hover:bg-emerald-500/20"
+          successful && "group-hover:bg-emerald-500/20",
+          blur && "backdrop-blur-sm",
+          className
         )}
       />
-      <div className="absolute top-0 bottom-0 right-0 w-[1px] shadow-xl big-shadow   transition-all skew-x-[-20deg] h-[80%] m-auto    duration-500  " />
+      <div
+        className={cn(
+          "absolute top-0 bottom-0 right-0 w-[1px] shadow-xl big-shadow   transition-all skew-x-[-20deg] h-[80%] m-auto    duration-500  ",
+          className
+        )}
+      />
       {children}
     </div>
   );

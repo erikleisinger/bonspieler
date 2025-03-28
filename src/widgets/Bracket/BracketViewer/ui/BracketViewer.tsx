@@ -84,6 +84,7 @@ export default function BracketViewer({
           .includes("BRACKET_GAME")
       )
         return;
+      console.log("bracket ground click");
       onBackgroundClick();
     }
 
@@ -115,7 +116,7 @@ export default function BracketViewer({
 
   return (
     <>
-      <div ref={el} className="pointer-events-auto backdrop-blur-sm">
+      <div ref={el} className="pointer-events-auto">
         {brackets.map((rounds, bracketIndex) => {
           return (
             <Bracket

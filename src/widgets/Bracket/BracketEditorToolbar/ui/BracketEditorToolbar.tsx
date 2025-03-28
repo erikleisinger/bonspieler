@@ -1,13 +1,7 @@
 import BracketEditorToolbarButton from "./BracketEditorToolbarButton";
 import { BracketEditorToolbarState } from "../lib/BracketEditorToolbarState";
 import { cn } from "@/lib/utils";
-import {
-  FaCog,
-  FaUserFriends,
-  FaCalendarAlt,
-  FaPlus,
-  FaSave,
-} from "react-icons/fa";
+import { FaCog, FaUserFriends, FaCalendarAlt, FaPlus } from "react-icons/fa";
 import { TbTournament } from "react-icons/tb";
 import { Nullable } from "@/shared/types";
 export default function BracketEditorToolbar({
@@ -60,9 +54,9 @@ export default function BracketEditorToolbar({
         <BracketEditorToolbarButton
           onClick={() => handleClick(BracketEditorToolbarState.ViewingEvent)}
           active={state === BracketEditorToolbarState.ViewingEvent}
-          tooltip="Review & Save"
+          tooltip="Stage options"
         >
-          <FaSave />
+          <FaCog />
         </BracketEditorToolbarButton>
       </>
     </div>

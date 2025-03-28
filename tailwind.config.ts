@@ -74,6 +74,14 @@ export default {
           "4": "hsl(var(--chart-4))",
           "5": "hsl(var(--chart-5))",
         },
+        gradient: {
+          "purple-from": "#4f46e5",
+          "purple-to": "#6366f1",
+          "emerald-from": "#00e0b0",
+          "emerald-to": "#00f5c0",
+          "pink-from": "#ee4266",
+          "pink-to": "#ef5778",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
