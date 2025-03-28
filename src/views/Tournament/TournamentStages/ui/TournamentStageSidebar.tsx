@@ -18,12 +18,12 @@ export default function TournamentStageSidebar({
   onSelectStage,
 }: {
   tournamentId: string;
-  editedStageId: Nullable<string>;
+  editedStageId?: Nullable<string>;
   selectedStage: TournamentStage;
-  onSelectEditedStage: (stage: TournamentStage) => void;
+  onSelectEditedStage?: (stage: TournamentStage) => void;
   onSelectStage: (stage: TournamentStage) => void;
-  onCancel: () => void;
-  onSave: () => void;
+  onCancel?: () => void;
+  onSave?: () => void;
 }) {
   const { data: stages } = useGetTournamentStagesQuery(tournamentId, {
     refetchOnMountOrArgChange: true,

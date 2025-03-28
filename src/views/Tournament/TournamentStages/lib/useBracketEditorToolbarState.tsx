@@ -1,12 +1,8 @@
 import { useState, useEffect } from "react";
-import type { Nullable } from "@/shared/types";
 import { BracketEditorToolbarState } from "@/widgets/Bracket/BracketEditorToolbar";
-import { useAppSelector, useAppDispatch } from "@/lib/store";
+import { useAppSelector } from "@/lib/store";
 
-import {
-  getSelectedGame,
-  setSelectedGame,
-} from "@/widgets/Bracket/BracketViewer";
+import { getSelectedGame } from "@/widgets/Bracket/BracketViewer";
 export default function useBracketEditorToolbarState() {
   const selectedGame = useAppSelector(getSelectedGame);
 

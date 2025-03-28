@@ -35,7 +35,7 @@ export default function BracketEditor() {
         })
       );
     } else {
-      dispatch(setSelectedGame(game.id));
+      dispatch(setSelectedGame(game));
       scrollToGame(game.id);
     }
   }

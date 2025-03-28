@@ -10,43 +10,30 @@ import ViewBracketStageView from "./ViewBracketStageView";
 import { LoadBracket } from "@/widgets/Bracket/BracketEditor";
 import { cn } from "@/lib/utils";
 import { useSaveBracket } from "../lib";
+import useTournamentStageViewerState from "../lib/useTournamentStageViewerState";
 export default function EditTournamentStagesView({
   tournamentId,
 }: {
   tournamentId: string;
 }) {
-  const [selectedStage, setSelectedStage] = useState<TournamentStage>(null);
-  const [editedStage, setEditedStage] = useState<TournamentStage>(null);
-
-  const [viewingPriority, setViewingPriority] = useState("editing");
-
-  function onSelectEditedStage(stage: TournamentStage) {
-    setEditedStage(stage);
-    setViewingPriority("editing");
-  }
-
-  function onSelectSelectedStage(stage: TournamentStage) {
-    setSelectedStage(stage);
-    if (stage.id === editedStage?.id) {
-      setViewingPriority("editing");
-    } else {
-      setViewingPriority("viewing");
-    }
-  }
-
-  function resetEditedStage() {
-    setSelectedStage(editedStage);
-    setEditedStage(null);
-    setViewingPriority("viewing");
-  }
-
+  const {
+    selectStage,
+    selectedStage,
+    editStage,
+    canEdit,
+    editedStage,
+    resetState,
+    whatToShow,
+  } = useTournamentStageViewerState({
+    editable: true,
+  });
   const { save: saveBracket } = useSaveBracket();
   async function onSaveStage() {
     if (!editedStage) return;
     if (editedStage.type === TournamentStageType.Bracket) {
       await saveBracket();
     }
-    resetEditedStage();
+    resetState();
   }
   return (
     <div className="absolute inset-0 overflow-auto flex">
@@ -54,12 +41,12 @@ export default function EditTournamentStagesView({
         <TournamentStageSidebar
           tournamentId={tournamentId}
           selectedStage={selectedStage}
-          onSelectStage={onSelectSelectedStage}
-          onSelectEditedStage={editedStage ? null : onSelectEditedStage}
-          editedStageId={editedStage?.id}
+          onSelectStage={selectStage}
+          onSelectEditedStage={!editedStage?.id ? editStage : null}
+          editedStageId={editedStage?.id || null}
           disabled={!!editedStage}
           onSave={onSaveStage}
-          onCancel={resetEditedStage}
+          onCancel={resetState}
         />
       </div>
 
@@ -68,18 +55,17 @@ export default function EditTournamentStagesView({
           stage={selectedStage}
           tournamentId={tournamentId}
         >
-          {selectedStage &&
-            selectedStage.type === TournamentStageType.Bracket &&
-            viewingPriority === "viewing" && (
-              <ViewBracketStageView
-                tournamentId={tournamentId}
-                stageId={selectedStage.id}
-              />
-            )}
+          {whatToShow === "view" && (
+            <ViewBracketStageView
+              tournamentId={tournamentId}
+              stageId={selectedStage.id}
+            />
+          )}
+
           {editedStage?.id &&
             editedStage.type === TournamentStageType.Bracket && (
               <LoadBracket stageId={editedStage.id}>
-                {viewingPriority === "editing" && (
+                {whatToShow === "edit" && (
                   <EditBracketStageView
                     tournamentId={tournamentId}
                     stageId={editedStage.id}

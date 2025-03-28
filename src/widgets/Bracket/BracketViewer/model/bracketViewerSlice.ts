@@ -2,7 +2,6 @@ import { BracketGameType } from "@/entities/Bracket";
 import { Nullable } from "@/shared/types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "@/lib/store";
-import * as thunks from "./thunks";
 
 export interface BracketViewerStoreState {
   selectedGame: Nullable<BracketGameType>;
@@ -26,23 +25,23 @@ export const bracketViewerSlice = createSlice({
       Object.assign(state, defaultState());
       state.selectedDraw = action.payload;
     },
-  },
-  extraReducers: (builder) => {
-    builder.addCase(thunks.setSelectedGame.fulfilled, (state, action) => {
+    setSelectedGame: (state, action: PayloadAction<BracketGameType>) => {
       Object.assign(state, defaultState());
       state.selectedGame = action.payload;
-    });
+    },
   },
 });
 
-export const getSelectedGame = (state: RootState) =>
-  state.bracketViewer.selectedGame;
+export const getSelectedGame = (state: RootState) => {
+  if (!state?.bracketViewer) return null;
+  return state.bracketViewer.selectedGame;
+};
 
-export const getSelectedDraw = (state: RootState) =>
-  state.bracketViewer.selectedDraw;
+export const getSelectedDraw = (state: RootState) => {
+  if (!state?.bracketViewer) return null;
+  return state.bracketViewer.selectedDraw;
+};
 
-export const { setSelectedDraw } = bracketViewerSlice.actions;
-
-export const setSelectedGame = thunks.setSelectedGame;
+export const { setSelectedDraw, setSelectedGame } = bracketViewerSlice.actions;
 
 export default bracketViewerSlice.reducer;

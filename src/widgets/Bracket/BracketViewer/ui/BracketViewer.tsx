@@ -18,6 +18,8 @@ import BracketGameFinalResult from "@/entities/Bracket/BracketGame/ui/BracketGam
 import { OriginConnections } from "@erikleisinger/bracket-generator";
 import { Nullable } from "@/shared/types";
 import { getRowSpanForGame } from "../lib/getRowSpanForGame";
+import { useAppSelector } from "@/lib/store";
+import { getSelectedGame, getSelectedDraw } from "../model";
 
 export default function BracketViewer({
   availableGameIds = [],
@@ -32,8 +34,6 @@ export default function BracketViewer({
   winnerConnections,
   originConnections,
   loserConnections,
-  selectedDraw,
-  selectedGame,
 }: {
   availableGameIds: string[];
   backgroundGameIds?: Nullable<string[]>;
@@ -47,9 +47,10 @@ export default function BracketViewer({
   winnerConnections: WinnerConnections;
   originConnections: OriginConnections;
   loserConnections: LoserConnections;
-  selectedDraw?: Nullable<number>;
-  selectedGame?: Nullable<BracketGameType>;
 }) {
+  const selectedGame = useAppSelector(getSelectedGame);
+  const selectedDraw = useAppSelector(getSelectedDraw);
+
   const [rows, setRows] = useState<BracketRows>({});
 
   function updateRows(rows: BracketRows) {

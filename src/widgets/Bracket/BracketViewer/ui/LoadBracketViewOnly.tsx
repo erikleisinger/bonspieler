@@ -12,7 +12,6 @@ import { BracketViewer } from "@/widgets/Bracket/BracketViewer";
 import { BracketGameType } from "@/entities/Bracket";
 import { useAppDispatch } from "@/lib/store";
 import { setSelectedGame } from "@/widgets/Bracket/BracketViewer";
-import LoaderFullPage from "@/shared/ui/loader-full-page";
 
 export default function LoadBracketViewOnly({ stageId }: { stageId: string }) {
   const { data: connections } = useGetBracketConnectionsQuery(stageId, {
@@ -48,7 +47,7 @@ export default function LoadBracketViewOnly({ stageId }: { stageId: string }) {
   const dispatch = useAppDispatch();
 
   function onGameClick(game: BracketGameType) {
-    dispatch(setSelectedGame(game.id));
+    dispatch(setSelectedGame(game));
   }
 
   return bracketData?.brackets?.length ? (

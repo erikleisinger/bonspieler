@@ -1,4 +1,4 @@
-import { useMemo, useRef, useEffect, useState } from "react";
+import { useMemo, useEffect, useState } from "react";
 import { useAppSelector, useAppDispatch } from "@/lib/store";
 import type { BracketGameType } from "@/entities/Bracket";
 import {
@@ -16,7 +16,6 @@ import { scrollToGame } from "@/entities/Bracket";
 import { BracketViewer } from "@/widgets/Bracket/BracketViewer";
 import { BracketEditorToolbar } from "@/widgets/Bracket/BracketEditorToolbar";
 import { useBracketEditorToolbarState } from "../lib";
-import useElementSize from "@/shared/hooks/useElementSize";
 import EditBracketModalController from "./EditBracketModalController";
 import {
   getLookingForLoserConnection,
@@ -33,24 +32,10 @@ import {
   getLoserConnections,
   getWinnerConnections,
 } from "@/entities/Bracket/BracketGameConnections";
-
-import { cn } from "@/lib/utils";
-import NextStagePreview from "./NextStagePreview";
-import NextStagePreviewPopup from "./NextStagePreviewPopup";
+import { CreateBracketEventWizard } from "@/widgets/Bracket/CreateBracketEventWizard";
 import { Nullable } from "@/shared/types";
-export default function BracketEditorView({
-  children,
-  className,
-  offsetLeftPx = 0,
-  tournamentId,
-  bracketStageId,
-}: {
-  children?: React.ReactNode;
-  className?: string;
-  offsetLeftPx?: number;
-  tournamentId: string;
-  bracketStageId: string;
-}) {
+import { useSetBracketData } from "../helpers";
+export default function EditBracketStageView() {
   const dispatch = useAppDispatch();
 
   const brackets = useAppSelector(getBracketGames);
@@ -68,6 +53,7 @@ export default function BracketEditorView({
   const selectedDraw = useAppSelector(getSelectedDraw);
   const selectedGame = useAppSelector(getSelectedGame);
 
+  const { renderBracketsFromWizard } = useSetBracketData();
   /**
    * Reset editing state
    */
@@ -85,20 +71,10 @@ export default function BracketEditorView({
   /**
    * Sidebar positioning
    */
-  const el = useRef<HTMLDivElement>(null);
-  const { height: containerHeight, width: containerWidth } = useElementSize(el);
-
-  const toolbar = useRef<HTMLDivElement>(null);
-  const { width: toolbarWidth } = useElementSize(toolbar);
-
-  const modalController = useRef<HTMLDivElement>(null);
 
   /** Get stage for Tournament Context */
 
-  const { toolbarState, setToolbarState } = useBracketEditorToolbarState({
-    onClose: resetEditingState,
-    toolbarRefs: [toolbar, modalController],
-  });
+  const { toolbarState, setToolbarState } = useBracketEditorToolbarState();
 
   const availableGameIds: string[] = useMemo(() => {
     if (!lookingToAssignTeam && !lookingForLoserConnection) return [];
@@ -158,9 +134,14 @@ export default function BracketEditorView({
       dispatch(setLookingForLoserConnection(null));
     } else {
       dispatch(setLookingForLoserConnection(null));
-      dispatch(setSelectedGame(game?.id));
+      dispatch(setSelectedGame(game));
       scrollToGame(game.id);
     }
+  }
+
+  function onBackgroundClick() {
+    setToolbarState(null);
+    dispatch(setSelectedGame(null));
   }
 
   const [viewingGameResult, setViewingGameResult] =
@@ -171,79 +152,36 @@ export default function BracketEditorView({
   }
 
   return (
-    <div
-      className={cn("absolute inset-0 pointer-events-none ", className)}
-      style={{
-        left: offsetLeftPx * -1 + "px",
-      }}
-    >
-      {viewingGameResult && (
-        <NextStagePreviewPopup className="z-50 pointer-events-auto">
-          <NextStagePreview
-            tournamentId={tournamentId}
-            stageOrder={2}
-            closePreview={() => setViewingGameResult(null)}
+    <>
+      <div className="grow">
+        {brackets.length ? (
+          <BracketViewer
+            schedule={schedule}
+            winnerConnections={winnerConnections}
+            loserConnections={loserConnections}
+            readableIdIndex={readableIdIndex}
+            brackets={brackets}
+            originConnections={originConnections}
+            onGameClick={onGameClick}
+            onGameResultClick={onGameResultClick}
+            onBackgroundClick={onBackgroundClick}
+            availableGameIds={availableGameIds}
           />
-        </NextStagePreviewPopup>
-      )}
-      <main
-        className="absolute inset-0 overflow-auto grid grid-cols-[auto,auto,1fr,auto] "
-        ref={el}
-        style={{
-          paddingLeft: offsetLeftPx + "px",
-        }}
-      >
-        {children ? children : <div />}
-        <div
-          className="sticky left-0 top-0 z-20 pointer-events-auto"
-          style={{
-            height: containerHeight + "px",
-          }}
-        >
-          <div
-            className="absolute  h-full  pointer-events-none z-40 overflow-hidden "
-            style={{
-              right: (toolbarWidth || 0) + offsetLeftPx + "px",
-              width: `calc(${containerWidth}px - ${toolbarWidth}px)`,
-              left: offsetLeftPx * -1 + "px",
-            }}
-          >
-            <div ref={modalController} className="pointer-events-auto">
-              <EditBracketModalController
-                state={toolbarState}
-                setState={setToolbarState}
-              />
-            </div>
-          </div>
-        </div>
+        ) : (
+          <CreateBracketEventWizard renderBrackets={renderBracketsFromWizard} />
+        )}
+      </div>
 
-        <BracketViewer
-          schedule={schedule}
-          winnerConnections={winnerConnections}
-          loserConnections={loserConnections}
-          selectedDraw={selectedDraw}
-          selectedGame={selectedGame}
-          readableIdIndex={readableIdIndex}
-          brackets={brackets}
-          originConnections={originConnections}
-          onGameClick={onGameClick}
-          onGameResultClick={onGameResultClick}
-          availableGameIds={availableGameIds}
+      <div className="fixed sticky top-0 bottom-0 right-[66px] z-50 min-w-[500px] overflow-hidden pointer-events-none ">
+        <EditBracketModalController
+          state={toolbarState}
+          setState={setToolbarState}
         />
+      </div>
 
-        <div
-          className="sticky right-0 top-0 bg-glass z-20 backdrop-blur-md pointer-events-auto "
-          ref={toolbar}
-          style={{
-            height: containerHeight + "px",
-          }}
-        >
-          <BracketEditorToolbar
-            state={toolbarState}
-            setState={setToolbarState}
-          />
-        </div>
-      </main>
-    </div>
+      <div className="sticky right-0 top-0 bg-glass backdrop-blur-sm flex z-50">
+        <BracketEditorToolbar state={toolbarState} setState={setToolbarState} />
+      </div>
+    </>
   );
 }
