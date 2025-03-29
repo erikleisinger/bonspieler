@@ -8,6 +8,7 @@ import { tournamentSlice } from "@/entities/Tournament";
 import { bracketViewerSlice } from "@/widgets/Bracket/BracketViewer";
 import { ViewTournamentStagesView } from "@/views/Tournament/TournamentStages";
 import { use } from "react";
+import TournamentLayout from "../tournament-layout";
 export default function Page({ params }) {
   // Unwrap the entire params object first
   const { tournamentId } = use(params);
@@ -22,7 +23,9 @@ export default function Page({ params }) {
         bracketViewerSlice,
       ]}
     >
-      <ViewTournamentStagesView tournamentId={tournamentId} />
+      <TournamentLayout tournamentId={tournamentId}>
+        <ViewTournamentStagesView tournamentId={tournamentId} />
+      </TournamentLayout>
     </StoreLoader>
   );
 }

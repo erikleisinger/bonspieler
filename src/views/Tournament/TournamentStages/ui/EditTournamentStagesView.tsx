@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useEffect, useState } from "react";
 import {
   TournamentStageType,
   type TournamentStage,
@@ -35,8 +35,22 @@ export default function EditTournamentStagesView({
     }
     resetState();
   }
+
+  const scroller = useRef<HTMLDivElement>(null);
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(() => {
+    function onScroll(e) {
+      setScrolled(e.target.scrollLeft > 50);
+    }
+    if (scroller?.current)
+      scroller.current.addEventListener("scroll", onScroll);
+    return () => {
+      if (scroller?.current)
+        scroller.current.removeEventListener("scroll", onScroll);
+    };
+  });
   return (
-    <div className="absolute inset-0 overflow-auto flex">
+    <div className="absolute inset-0 overflow-auto flex" ref={scroller}>
       <div className={cn("z-50 sticky top-0 left-0")}>
         <TournamentStageSidebar
           tournamentId={tournamentId}
@@ -47,6 +61,7 @@ export default function EditTournamentStagesView({
           disabled={!!editedStage}
           onSave={onSaveStage}
           onCancel={resetState}
+          dense={scrolled}
         />
       </div>
 

@@ -11,6 +11,7 @@ export default function TournamentStageListItemContainer({
   successful,
   onClick,
   stageType,
+  showBorder = true,
 }: {
   active?: boolean;
   animated?: boolean;
@@ -22,6 +23,7 @@ export default function TournamentStageListItemContainer({
   successful?: boolean;
   onClick?: () => void;
   stageType: TournamentStageType;
+  showBorder?: boolean;
 }) {
   function handleClick() {
     if (!onClick) return;
@@ -51,7 +53,7 @@ export default function TournamentStageListItemContainer({
     >
       <div
         className={cn(
-          "absolute inset-0  transition-all skew-x-[-20deg]  duration-200   backdrop-blur-sm",
+          "absolute inset-0  transition-all skew-x-[-20deg]  duration-200 ",
           active && hoverClass(),
           destructive && "bg-red-500/50",
           detached && "shadow-md",
@@ -61,12 +63,15 @@ export default function TournamentStageListItemContainer({
           className
         )}
       />
-      <div
-        className={cn(
-          "absolute top-0 bottom-0 right-0 w-[1px] shadow-xl big-shadow   transition-all skew-x-[-20deg] h-[80%] m-auto    duration-500  ",
-          className
-        )}
-      />
+      {showBorder && (
+        <div
+          className={cn(
+            "absolute top-0 bottom-0 right-0 w-[1px] shadow-xl big-shadow   transition-all skew-x-[-20deg] h-[80%] m-auto    duration-500  ",
+            className
+          )}
+        />
+      )}
+
       {children}
     </div>
   );

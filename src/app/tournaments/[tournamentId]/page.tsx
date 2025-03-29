@@ -1,9 +1,10 @@
 "use client";
-import { Provider } from "react-redux";
-import { store } from "@/lib/store";
+
+import StoreLoader from "@/shared/store/StoreLoader";
 import { use } from "react";
 import { ViewTournament } from "@/views/Tournament/ViewTournament";
 import { LoadTournament } from "@/entities/Tournament";
+import { tournamentSlice } from "@/entities/Tournament";
 
 export default function Page({
   params,
@@ -17,10 +18,10 @@ export default function Page({
   const tournamentId = unwrappedParams.id;
 
   return (
-    <Provider store={store}>
+    <StoreLoader slices={[tournamentSlice]}>
       <LoadTournament tournamentId={tournamentId} editable={false}>
         <ViewTournament />
       </LoadTournament>
-    </Provider>
+    </StoreLoader>
   );
 }

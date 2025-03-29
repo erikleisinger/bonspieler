@@ -83,7 +83,9 @@ export default function LoadBracket({
     });
 
   useLayoutEffect(() => {
-    // dispatch(resetState());
+    return () => {
+      dispatch(resetState());
+    };
   }, []);
 
   useEffect(() => {
@@ -130,5 +132,5 @@ export default function LoadBracket({
     isLoadingConnections ||
     isLoadingStage;
 
-  return isLoading ? <LoaderFullPage /> : <>{children}</>;
+  return isLoading ? <div /> : <>{children}</>;
 }

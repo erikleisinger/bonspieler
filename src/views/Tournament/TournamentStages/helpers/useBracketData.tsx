@@ -3,6 +3,7 @@ import {
   getBracketEventNumSheets,
   getBracketEventNumTeams,
   getLookingToAssignTeam,
+  getBracketEventOrder,
 } from "@/entities/BracketEvent";
 import {
   getLoserConnections,
@@ -17,12 +18,17 @@ import {
   getBracketGamesSchedule,
   getBracketGameIndex,
 } from "@/entities/Bracket/BracketGame";
-import { getSelectedGame } from "@/widgets/Bracket/BracketViewer";
+import {
+  getSelectedGame,
+  getViewingNextRoundGameConnection,
+} from "@/widgets/Bracket/BracketViewer";
 import { getDrawTimes } from "@/entities/DrawTime";
 import { getBracketEvent } from "@/entities/BracketEvent";
 import { isLookingForLoserConnection } from "@/widgets/Bracket/BracketEditor";
+import { useGetTournamentStagesQuery } from "@/shared/api";
 
 import { getAvailableDrawsForBracketGame } from "@/features/EditDrawNumber";
+import { useMemo } from "react";
 
 export default function useBracketData() {
   const selectedGame = useAppSelector(getSelectedGame);
@@ -31,7 +37,7 @@ export default function useBracketData() {
   const numSheets = useAppSelector(getBracketEventNumSheets);
   const numTeams = useAppSelector(getBracketEventNumTeams);
   const lookingToAssignTeam = useAppSelector(getLookingToAssignTeam);
-  const tournamentId = useAppSelector(getCurrentTournamentId);
+  const tournamentId = bracketStage?.tournament_id;
   const readableIdIndex = useAppSelector(getBracketGamesReadableIdIndex);
   const drawTimes = useAppSelector(getDrawTimes);
   const schedule = useAppSelector(getBracketGamesSchedule);
@@ -40,6 +46,15 @@ export default function useBracketData() {
   const originConnections = useAppSelector(getOriginConnections);
   const gameIndex = useAppSelector(getBracketGameIndex);
   const lookingForLoserConnection = useAppSelector(isLookingForLoserConnection);
+  const viewingNextRoundGameConnection = useAppSelector(
+    getViewingNextRoundGameConnection
+  );
+  const order = useAppSelector(getBracketEventOrder);
+
+  const { data: stages = [] } = useGetTournamentStagesQuery(tournamentId, {
+    skip: !tournamentId,
+    refetchOnMountOrArgChange: true,
+  });
 
   // const availableDrawTimes: number[] = getAvailableDrawsForBracketGame({
   //   gameId: selectedGame?.id,
@@ -49,6 +64,18 @@ export default function useBracketData() {
   //   originConnections,
   // });
   const availableDrawTimes = [];
+
+  const nextRoundToViewId = useMemo(() => {
+    if (!viewingNextRoundGameConnection?.id) return null;
+    if (!stages?.length) return null;
+    const nextStage = stages[order]?.id;
+    return nextStage;
+  }, [
+    viewingNextRoundGameConnection?.id,
+    order,
+    stages[order]?.id,
+    tournamentId,
+  ]);
 
   return {
     availableDrawTimes,
@@ -67,5 +94,6 @@ export default function useBracketData() {
     originConnections,
     gameIndex,
     lookingForLoserConnection,
+    nextRoundToViewId,
   };
 }

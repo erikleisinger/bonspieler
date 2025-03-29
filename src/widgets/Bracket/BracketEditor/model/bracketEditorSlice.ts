@@ -28,11 +28,15 @@ export const bracketEditorSlice = createSlice({
   },
 });
 
-export const isLookingForLoserConnection = (state: RootState) =>
-  !!state.bracketEditor.lookingForLoserConnection;
+export const isLookingForLoserConnection = (state: RootState) => {
+  if (!state?.bracketEditor) return false;
+  return !!state.bracketEditor.lookingForLoserConnection;
+};
 
-export const getLookingForLoserConnection = (state: RootState) =>
-  state.bracketEditor.lookingForLoserConnection;
+export const getLookingForLoserConnection = (state: RootState) => {
+  if (!state?.bracketEditor) return null;
+  return state.bracketEditor.lookingForLoserConnection;
+};
 
 export const { setLookingForLoserConnection } = bracketEditorSlice.actions;
 

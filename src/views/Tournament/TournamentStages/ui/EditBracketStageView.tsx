@@ -11,11 +11,15 @@ import {
   getSelectedDraw,
   setSelectedGame,
   getSelectedGame,
+  setViewingNextRoundGameConnection,
 } from "@/widgets/Bracket/BracketViewer";
 import { scrollToGame } from "@/entities/Bracket";
 import { BracketViewer } from "@/widgets/Bracket/BracketViewer";
-import { BracketEditorToolbar } from "@/widgets/Bracket/BracketEditorToolbar";
-import { useBracketEditorToolbarState } from "../lib";
+import {
+  BracketEditorToolbar,
+  BracketEditorToolbarState,
+  useBracketEditorToolbarState,
+} from "@/widgets/Bracket/BracketEditorToolbar";
 import EditBracketModalController from "./EditBracketModalController";
 import {
   getLookingForLoserConnection,
@@ -74,7 +78,9 @@ export default function EditBracketStageView() {
 
   /** Get stage for Tournament Context */
 
-  const { toolbarState, setToolbarState } = useBracketEditorToolbarState();
+  const { toolbarState, setToolbarState } = useBracketEditorToolbarState({
+    allow: "all",
+  });
 
   const availableGameIds: string[] = useMemo(() => {
     if (!lookingToAssignTeam && !lookingForLoserConnection) return [];
@@ -148,7 +154,7 @@ export default function EditBracketStageView() {
     useState<Nullable<BracketGameType>>(null);
 
   function onGameResultClick(game: BracketGameType) {
-    setViewingGameResult(game);
+    dispatch(setViewingNextRoundGameConnection(game));
   }
 
   return (

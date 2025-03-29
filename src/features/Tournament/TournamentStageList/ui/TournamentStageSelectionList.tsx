@@ -6,6 +6,7 @@ import { FaPencilAlt } from "react-icons/fa";
 import { Nullable } from "@/shared/types";
 import Typography from "@/shared/ui/typography";
 export default function TournamentStageSelectionList({
+  dense,
   stages,
   selectedStage,
   onEditStage,
@@ -13,6 +14,7 @@ export default function TournamentStageSelectionList({
   editedStageId,
   saveChildren,
 }: {
+  dense?: boolean;
   stages: TournamentStage[];
   selectedStage: TournamentStage | null;
   onEditStage?: (stage: TournamentStage) => void;
@@ -73,9 +75,10 @@ export default function TournamentStageSelectionList({
                   </Button>
                 )
               }
-              dense={selectedStage && !isStageSelected(stage.id)}
+              dense={dense || (selectedStage && !isStageSelected(stage.id))}
               hideText={
-                editedStageId !== stage.id && !isStageSelected(stage.id)
+                dense ||
+                (editedStageId !== stage.id && !isStageSelected(stage.id))
               }
               className={cn(
                 "p-0 cursor-pointer",

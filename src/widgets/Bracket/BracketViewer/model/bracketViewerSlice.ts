@@ -6,11 +6,13 @@ import { RootState } from "@/lib/store";
 export interface BracketViewerStoreState {
   selectedGame: Nullable<BracketGameType>;
   selectedDraw: Nullable<number>;
+  viewingNextRoundGameConnection: Nullable<BracketGameType>;
 }
 
 const defaultState = () => ({
   selectedGame: null,
   selectedDraw: null,
+  viewingNextRoundGameConnection: null,
 });
 
 const initialState: BracketViewerStoreState = {
@@ -29,6 +31,13 @@ export const bracketViewerSlice = createSlice({
       Object.assign(state, defaultState());
       state.selectedGame = action.payload;
     },
+    setViewingNextRoundGameConnection: (
+      state,
+      action: PayloadAction<BracketGameType>
+    ) => {
+      Object.assign(state, defaultState());
+      state.viewingNextRoundGameConnection = action.payload;
+    },
   },
 });
 
@@ -41,7 +50,15 @@ export const getSelectedDraw = (state: RootState) => {
   if (!state?.bracketViewer) return null;
   return state.bracketViewer.selectedDraw;
 };
+export const getViewingNextRoundGameConnection = (state: RootState) => {
+  if (!state?.bracketViewer) return null;
+  return state.bracketViewer.viewingNextRoundGameConnection;
+};
 
-export const { setSelectedDraw, setSelectedGame } = bracketViewerSlice.actions;
+export const {
+  setSelectedDraw,
+  setSelectedGame,
+  setViewingNextRoundGameConnection,
+} = bracketViewerSlice.actions;
 
 export default bracketViewerSlice.reducer;

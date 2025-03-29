@@ -7,7 +7,6 @@ import { useAppSelector } from "@/lib/store";
 import { DrawTime } from "@/entities/DrawTime";
 export default function BracketGameViewerHeader({
   children,
-
   game,
 }: {
   children?: React.ReactNode;

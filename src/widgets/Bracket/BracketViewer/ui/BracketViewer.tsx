@@ -77,15 +77,15 @@ export default function BracketViewer({
   const el = useRef(null);
   useEffect(() => {
     function onClick(e: MouseEvent) {
+      const paths = e
+        .composedPath()
+        .map((el) => Array.from(el?.classList || []))
+        .flat();
       if (
-        e
-          .composedPath()
-          .map((el) => Array.from(el?.classList || []))
-          .flat()
-          .includes("BRACKET_GAME")
+        paths.includes("BRACKET_GAME") ||
+        paths.includes("BRACKET_GAME_FINAL_RESULT")
       )
         return;
-      console.log("bracket ground click");
       onBackgroundClick();
     }
 

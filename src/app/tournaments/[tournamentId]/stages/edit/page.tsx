@@ -9,6 +9,7 @@ import { bracketViewerSlice } from "@/widgets/Bracket/BracketViewer";
 import { bracketEditorSlice } from "@/widgets/Bracket/BracketEditor";
 import { EditTournamentStagesView } from "@/views/Tournament/TournamentStages";
 import { use } from "react";
+import TournamentLayout from "@/app/tournaments/[tournamentId]/tournament-layout";
 export default function Page({ params }) {
   // Unwrap the entire params object first
   const { tournamentId } = use(params);
@@ -24,7 +25,9 @@ export default function Page({ params }) {
         bracketEditorSlice,
       ]}
     >
-      <EditTournamentStagesView tournamentId={tournamentId} />
+      <TournamentLayout tournamentId={tournamentId}>
+        <EditTournamentStagesView tournamentId={tournamentId} />
+      </TournamentLayout>
     </StoreLoader>
   );
 }

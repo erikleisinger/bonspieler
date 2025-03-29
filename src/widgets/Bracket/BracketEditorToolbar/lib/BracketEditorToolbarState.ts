@@ -5,4 +5,5 @@ export enum BracketEditorToolbarState {
   ViewingEvent = "VIEWING_EVENT",
   ViewingSchedule = "VIEWING_SCHEDULE",
   ViewingTeams = "VIEWING_TEAMS",
+  ViewingInterBracketConnection = "VIEWING_INTER_BRACKET_CONNECTION",
 }
