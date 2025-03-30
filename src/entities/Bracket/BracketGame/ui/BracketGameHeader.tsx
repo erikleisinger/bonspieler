@@ -13,7 +13,6 @@ export default function BracketGameHeader({
     <div className="flex justify-between">
       <div className="flex gap-2">
         <div className="flex font-bold">{readableId}</div>
-        <div className="text-muted">Draw {drawNumber}</div>
       </div>
       <div>
         <LoserIndicator loserTo={loserTo || null} />

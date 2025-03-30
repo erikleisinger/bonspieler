@@ -31,7 +31,7 @@ export default function Brackets({
   onGameClick,
   onGameResultClick = () => {},
   brackets,
-
+  loserConnections,
   schedule,
   winnerConnections,
   originConnections,
@@ -138,7 +138,12 @@ export default function Brackets({
                             >
                               <BracketGame
                                 game={game}
-                                winnerConnection={winnerConnections[game.id]}
+                                winnerConnection={
+                                  winnerConnections[game.id] || {}
+                                }
+                                loserConnection={
+                                  loserConnections[game.id] || {}
+                                }
                                 originConnections={
                                   originConnections[game.id] || []
                                 }
