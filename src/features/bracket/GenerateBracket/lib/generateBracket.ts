@@ -31,6 +31,7 @@ export function generateBracket({
 }): GeneratedBracket {
   const tournament = generateTournament(numTeams, numWinners);
   const { brackets, connections } = tournament;
+  console.log("generate brackets: ", brackets);
 
   const { originConnections, loserConnections, winnerConnections } =
     connections;

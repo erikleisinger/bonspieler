@@ -9,7 +9,6 @@ export type {
   BracketDrawTimes,
   BracketGame as BracketGameType,
   BracketEvent,
-  BracketReadableIdIndex,
   BracketRows,
   BracketRow,
   BracketSchedule,

@@ -11,14 +11,12 @@ export function calculateRowSpanForGame({
   roundIndex,
   rowsIndex,
   rowsArray,
-  stageId,
 }: {
   originConnections: OriginConnections;
   game: BracketGame;
   roundIndex: number;
   rowsIndex: BracketRows;
   rowsArray: BracketRowWithId[];
-  stageId: string;
 }): BracketRowWithId {
   /**
    * Find all games in previous round that are connected to this game
@@ -27,7 +25,7 @@ export function calculateRowSpanForGame({
   const gameConnections = (originConnections[game.id] || [])
     .filter(
       ({ gameId, isWinner, stageId: gameStageId }) =>
-        !!gameId && isWinner && gameStageId === stageId
+        !!gameId && isWinner && !gameStageId
     )
     .sort((a, b) => {
       const aRows = rowsIndex[a.gameId]?.rowEnd || 0;
@@ -68,37 +66,7 @@ export function calculateRowSpanForGame({
       (upperOrigin.rowStart * 2 - 1 + (lowerOrigin.rowStart * 2 - 1)) / 2;
 
     rowEnd = rowStart + 2 ** roundIndex;
-
-    /**
-     * In instances where the the vertical position of the game cannot
-     * be calculated by simply taking the middle of the two origin games,
-     * i.e. when the row-span of the origin games is not the same,
-     * find the vertical difference between those origin games and use it to offset
-     * the row span of the game being place.
-     */
-    // const upperOriginDiff = upperOrigin.rowEnd - upperOrigin.rowStart;
-    // const lowerOriginDiff = lowerOrigin.rowEnd - lowerOrigin.rowStart;
-    // const verticalDiff = upperOriginDiff - lowerOriginDiff;
-    // if (verticalDiff > 0) {
-    //   rowStart += verticalDiff;
-    // } else if (verticalDiff < 0) {
-    //   rowEnd += verticalDiff;
-    // }
   }
-
-  /**
-   * Account for instances where the game is being placed in a position where it overlaps with games above it
-   */
-
-  // const lastGame = rowsArray[rowsArray.length - 1];
-  // if (lastGame) {
-  //   const { rowEnd: lastGameRowEnd } = lastGame;
-  //   if (lastGameRowEnd > rowStart) {
-  //     const rowDiff = rowEnd - rowStart;
-  //     rowStart = lastGameRowEnd;
-  //     rowEnd = lastGameRowEnd + rowDiff;
-  //   }
-  // }
 
   return {
     id: game.id,

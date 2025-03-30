@@ -23,7 +23,6 @@ export default function NextStageConnectionViewer({
     loserConnections,
     winnerConnections,
     originConnections,
-    readableIdIndex,
     brackets,
     schedule,
   } = useBracket(stageId);
@@ -101,7 +100,6 @@ export default function NextStageConnectionViewer({
       schedule={schedule}
       winnerConnections={winnerConnections}
       loserConnections={loserConnections}
-      readableIdIndex={readableIdIndex}
       brackets={brackets}
       originConnections={updatedOriginConnections}
       onGameResultClick={() => {}}

@@ -1,16 +1,21 @@
 import type { OriginConnection } from "@/entities/Bracket/BracketGameConnections";
 import BracketGameTeam from "./BracketGameTeam";
+import { useMemo } from "react";
 export default function BracketGameTeams({
   originConnections,
   isSeed,
 }: {
-  readableId: string;
   originConnections: OriginConnection[];
   isSeed: boolean;
 }) {
+  const origins = useMemo(() => {
+    return Array.from({ length: 2 }).map(
+      (_, i) => originConnections[i] || { gameId: null }
+    );
+  }, [originConnections]);
   return (
     <div className="mt-2 flex flex-col gap-1">
-      {originConnections.map((connection, index) => {
+      {origins.map((connection, index) => {
         return (
           <BracketGameTeam
             connection={connection}

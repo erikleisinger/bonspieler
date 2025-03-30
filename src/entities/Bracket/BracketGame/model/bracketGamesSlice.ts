@@ -1,9 +1,5 @@
 import { createSelector, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import type {
-  BracketGameType,
-  BracketReadableIdIndex,
-  BracketSchedule,
-} from "@/entities/Bracket";
+import type { BracketGameType, BracketSchedule } from "@/entities/Bracket";
 import type { Nullable } from "@/shared/types";
 import type { RootState } from "@/lib/store";
 import * as thunks from "./thunks";
@@ -13,7 +9,6 @@ export interface BracketGamesStoreState {
     [gameId: string]: BracketGameType;
   };
   brackets: BracketGameType[][][];
-  readableIdIndex: BracketReadableIdIndex;
   schedule: BracketSchedule;
   removedGameIds: string[];
   stageId: Nullable<string>;
@@ -23,7 +18,6 @@ function defaultState() {
   return {
     gameIndex: {},
     brackets: [],
-    readableIdIndex: {},
     schedule: {},
     removedGameIds: [],
     stageId: null,
@@ -44,7 +38,7 @@ export const bracketGamesSlice = createSlice({
     resetState(state) {
       state.brackets = defaultState().brackets;
       state.gameIndex = defaultState().gameIndex;
-      state.readableIdIndex = defaultState().readableIdIndex;
+
       state.schedule = defaultState().schedule;
     },
     setBracketGames: (state, action: PayloadAction<BracketGameType[][][]>) => {
@@ -65,31 +59,7 @@ export const bracketGamesSlice = createSlice({
     ) => {
       state.brackets = [...state.brackets, ...action.payload];
     },
-    setBracketGamesReadableIdIndex: (
-      state,
-      action: PayloadAction<BracketReadableIdIndex>
-    ) => {
-      if (
-        !!Object.keys(state.readableIdIndex).length &&
-        Object.keys(state.readableIdIndex).length <
-          Object.keys(action.payload)?.length
-      ) {
-        console.warn(
-          "Cannot add bracket games readable id index when it already exists. use updateBracketGamesReadableIdIndex instead, or first call resetState"
-        );
-        return;
-      }
-      state.readableIdIndex = action.payload;
-    },
-    updateBracketGamesReadableIdIndex: (
-      state,
-      action: PayloadAction<BracketReadableIdIndex>
-    ) => {
-      state.readableIdIndex = {
-        ...state.readableIdIndex,
-        ...action.payload,
-      };
-    },
+
     setBracketGamesSchedule: (
       state,
       action: PayloadAction<BracketSchedule>
@@ -152,10 +122,6 @@ export const getBracketGames = createSelector(
   }
 );
 
-export const getBracketGamesReadableIdIndex = (state: RootState) => {
-  return state.bracketGames.readableIdIndex;
-};
-
 export const getRemovedGameIds = (state: RootState) => {
   return state.bracketGames.removedGameIds;
 };
@@ -165,17 +131,6 @@ export const getGameById = createSelector(
   (gameIndex, gameId) => {
     if (!gameId) return null;
     return gameIndex[gameId] || null;
-  }
-);
-
-export const getReadableGameId = createSelector(
-  [
-    getBracketGamesReadableIdIndex,
-    (state, gameId?: Nullable<string>) => gameId,
-  ],
-  (readableIdIndex, gameId) => {
-    if (!gameId) return null;
-    return readableIdIndex[gameId] || null;
   }
 );
 
@@ -209,10 +164,8 @@ export const {
   resetRemovedGameIds,
   setBracketGames,
   setBracketGameIndex,
-  setBracketGamesReadableIdIndex,
   setBracketGamesSchedule,
   updateBracketGameIndex,
-  updateBracketGamesReadableIdIndex,
   updateBracketGames,
   updateRemovedGameIds,
   resetState,

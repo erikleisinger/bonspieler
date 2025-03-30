@@ -4,7 +4,6 @@ import {
   getBracketEventNumTeams,
   getLookingToAssignTeam,
   getBracketEventOrder,
-  getBracketEventTournamentId,
 } from "@/entities/BracketEvent";
 import {
   getLoserConnections,
@@ -14,7 +13,6 @@ import {
 
 import {
   getBracketGames,
-  getBracketGamesReadableIdIndex,
   getBracketGamesSchedule,
   getBracketGameIndex,
 } from "@/entities/Bracket/BracketGame";
@@ -36,7 +34,6 @@ export default function useBracketData() {
   const numTeams = useAppSelector(getBracketEventNumTeams);
   const lookingToAssignTeam = useAppSelector(getLookingToAssignTeam);
   const tournamentId = bracketStage?.tournament_id;
-  const readableIdIndex = useAppSelector(getBracketGamesReadableIdIndex);
   const drawTimes = useAppSelector(getDrawTimes);
   const schedule = useAppSelector(getBracketGamesSchedule);
   const winnerConnections = useAppSelector(getWinnerConnections);
@@ -72,7 +69,6 @@ export default function useBracketData() {
     numTeams,
     lookingToAssignTeam,
     tournamentId,
-    readableIdIndex,
     drawTimes,
     schedule,
     winnerConnections,

@@ -29,7 +29,6 @@ export const tournamentSlice = createSlice({
     setCurrentTournamentName: reducers.setCurrentTournamentName,
     setTournamentEndDate: reducers.setTournamentEndDate,
     setTournamentStartDate: reducers.setTournamentStartDate,
-    updateTournamentStage: reducers.updateTournamentStage,
     updateTournamentStages: reducers.updateTournamentStages,
   },
   extraReducers: (builder) => {
@@ -50,21 +49,7 @@ export const tournamentSlice = createSlice({
       .addCase(initNewTournament.rejected, (state) => {
         state.status = "failed";
       })
-      .addCase(updateAndSaveTournament.pending, (state) => {
-        state.status = "loading";
-      })
-      .addCase(updateAndSaveTournament.fulfilled, (state, action) => {
-        state.status = "idle";
-        state.tournament.stages = action.payload;
-      })
-      .addCase(updateAndSaveTournament.rejected, (state) => {
-        state.status = "failed";
-      })
 
-      .addCase(
-        reducers.updateTournamentStageAction,
-        reducers.updateTournamentStage
-      )
       .addCase(reducers.updateTournamentIdAction, reducers.updateTournamentId);
   },
 });
@@ -101,14 +86,12 @@ export const getNextStageName = selectors.getNextStageName;
 export const getPrevStageName = selectors.getPrevStageName;
 
 export const initNewTournament = thunks.initNewTournament;
-export const updateAndSaveTournament = thunks.updateAndSaveTournament;
 
 export const {
   setCurrentTournamentId,
   setCurrentTournamentName,
   setTournamentStartDate,
   setTournamentEndDate,
-  updateTournamentStage,
   updateTournamentStages,
   initBlankTournament,
 } = tournamentSlice.actions;

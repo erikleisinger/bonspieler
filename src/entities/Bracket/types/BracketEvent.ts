@@ -1,14 +1,11 @@
-import {
-  BracketConnections,
-  BracketDrawTimes,
-  BracketGame,
-  BracketReadableIdIndex,
-  BracketSchedule,
-} from "./BracketReadableIdIndex";
+import { BracketConnections } from "./BracketConnection";
+import { BracketGameType } from "..";
+import { BracketDrawTimes } from "..";
+import { BracketSchedule } from "..";
 import type { Nullable } from "@/shared/types";
 
 export interface BracketEvent {
-  brackets: BracketGame[][][];
+  brackets: BracketGameType[][][];
   connections: BracketConnections;
   drawTimes: BracketDrawTimes;
   id: Nullable<string>;
@@ -17,5 +14,4 @@ export interface BracketEvent {
   numSheets: number;
   numWinners: number[];
   schedule: BracketSchedule;
-  readableIdIndex: BracketReadableIdIndex;
 }

@@ -1,11 +1,6 @@
 import type { AppThunk } from "@/lib/store";
 import { RootState } from "@/lib/store";
-import {
-  getBracketGames,
-  getBracketGamesReadableIdIndex,
-  setBracketGamesReadableIdIndex,
-  setBracketGames,
-} from "../bracketGamesSlice";
+import { getBracketGames, setBracketGames } from "../bracketGamesSlice";
 import { BracketGameType } from "@/entities/Bracket";
 import { generateReadableId } from "../helpers/generateReadableId";
 
@@ -27,10 +22,8 @@ export const shiftBracketAssignmentForGames =
   (dispatch, getState) => {
     const state: RootState = getState();
     const bracketGames: BracketGameType[][][] = [...getBracketGames(state)];
-    const readableIdIndex = { ...getBracketGamesReadableIdIndex(state) };
 
     let newBrackets = [...bracketGames];
-    const newReadableIndex = { ...readableIdIndex };
 
     newBrackets = newBrackets.map((bracket, bracketIndex) => {
       return bracket.map((round) => {
@@ -47,8 +40,7 @@ export const shiftBracketAssignmentForGames =
             bracketNumber: newBracketNumber,
           };
 
-          const newReadableId = generateReadableId(newGame, gameIndex);
-          newReadableIndex[game.id] = newReadableId;
+          newGame.readableId = generateReadableId(newGame, gameIndex);
 
           return newGame;
         });
@@ -56,5 +48,4 @@ export const shiftBracketAssignmentForGames =
     });
 
     dispatch(setBracketGames(newBrackets));
-    dispatch(setBracketGamesReadableIdIndex(newReadableIndex));
   };

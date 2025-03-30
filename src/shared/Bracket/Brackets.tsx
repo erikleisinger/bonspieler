@@ -1,11 +1,9 @@
 "use client";
 import { useEffect, useRef, useState, useContext } from "react";
 import { TournamentStageContext } from "../TournamentStage";
-import GameConnections from "@/entities/Bracket/ui/GameConnections";
 import type {
   BracketRows,
   BracketGameType,
-  BracketReadableIdIndex,
   BracketSchedule,
 } from "@/entities/Bracket";
 import {
@@ -33,11 +31,10 @@ export default function Brackets({
   onGameClick,
   onGameResultClick = () => {},
   brackets,
-  readableIdIndex,
+
   schedule,
   winnerConnections,
   originConnections,
-  loserConnections,
   selectedGameIds = [],
   tournamentId,
   stageId,
@@ -49,7 +46,7 @@ export default function Brackets({
   onGameClick: (game: BracketGameType) => void;
   onGameResultClick: (game: BracketGameType) => void;
   brackets: BracketGameType[][][];
-  readableIdIndex: BracketReadableIdIndex;
+
   schedule: BracketSchedule;
   winnerConnections: WinnerConnections;
   originConnections: OriginConnections;
@@ -100,46 +97,6 @@ export default function Brackets({
 
   const { stages } = useContext(TournamentStageContext);
 
-  function getReadableOriginConnectionsForGame(gameId: string) {
-    const originConnectionsForGame = (originConnections || {})[gameId] || [];
-    const atLeastTwoConnections = new Array(2)
-      .fill({
-        gameId: null,
-        isWinner: false,
-        stageId: null,
-      })
-      .map((e, i) => {
-        if (originConnectionsForGame[i]) return originConnectionsForGame[i];
-        return e;
-      })
-      .map((e) => {
-        if (!!e.stageId && e.stageId !== stageId) {
-          return {
-            ...e,
-            gameId: "From " + stages[e.stageId]?.name,
-            isPrevStage: true,
-          };
-        }
-        return {
-          ...e,
-          gameId: e.gameId
-            ? `${e.isWinner ? "Winner" : "Loser"} ${readableIdIndex[e.gameId]}`
-            : null,
-          isPrevStage: false,
-        };
-      });
-    return atLeastTwoConnections;
-  }
-
-  function getLoserReadableId(gameId: string) {
-    const loserConnectionsForGame = (loserConnections || {})[gameId];
-    if (!loserConnectionsForGame) return null;
-    const loserConnection = loserConnectionsForGame;
-    return loserConnection?.gameId
-      ? readableIdIndex[loserConnection.gameId]
-      : null;
-  }
-
   function isFinalResult(winnerConnection: DestinationConnection) {
     const { gameId: winnerGameId, stageId: winnerStageId } =
       winnerConnection || {};
@@ -182,14 +139,11 @@ export default function Brackets({
                               <BracketGame
                                 game={game}
                                 winnerConnection={winnerConnections[game.id]}
-                                loserReadableId={getLoserReadableId(game.id)}
-                                originConnections={getReadableOriginConnectionsForGame(
-                                  game.id
-                                )}
+                                originConnections={
+                                  originConnections[game.id] || []
+                                }
                                 onClick={onGameClick}
                                 selected={selectedGameIds.includes(game.id)}
-                                rows={rows[game.id] || {}}
-                                readableId={readableIdIndex[game.id]}
                                 drawNumber={schedule[game.id]}
                                 available={availableGameIds.includes(game.id)}
                                 background={

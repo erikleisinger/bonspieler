@@ -18,7 +18,6 @@ const DEFAULT_BRACKET_STAGE: Omit<TournamentBracketStage, "id"> = {
   numSheets: 8,
   numWinners: [],
   schedule: {},
-  readableIdIndex: {},
 };
 
 const DEFAULT_POOL_STAGE: Omit<TournamentStage, "id"> = {

@@ -19,16 +19,21 @@ export default function BracketGameTeam({
         className
       }
     >
-      {!connection?.gameId ? (
+      {!connection?.readableId ? (
         <FaSeedling className="text-emerald-500" />
-      ) : connection.isPrevStage ? (
+      ) : connection.stageName ? (
         <FaRunning className="text-indigo-500" />
       ) : (
         <div />
       )}
-      <div className="whitespace-nowrap overflow-hidden min-w-0 text-ellipsis">
-        {connection?.gameId}
-      </div>
+      {connection.readableId ? (
+        <div className="whitespace-nowrap overflow-hidden min-w-0 text-ellipsis">
+          {connection?.isWinner ? "Winner " : "Loser"} {connection?.readableId}{" "}
+          {connection?.stageName || ""}
+        </div>
+      ) : (
+        <div />
+      )}
 
       <div className="text-gray-300">0</div>
     </div>

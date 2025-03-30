@@ -33,7 +33,6 @@ export default function BracketGame({
   loserReadableId: Nullable<string>;
   onClick?: (game: BracketGame) => void;
   originConnections: OriginConnection[];
-  readableId: string;
   selected: boolean;
   winnerConnection: DestinationConnection;
 }) {
@@ -94,7 +93,7 @@ export default function BracketGame({
             onMouseDown={handleClick}
           >
             <BracketGameHeader
-              readableId={readableId}
+              readableId={game.readableId}
               drawNumber={drawNumber}
               loserTo={loserReadableId}
             />
@@ -102,7 +101,6 @@ export default function BracketGame({
             <BracketGameTeams
               originConnections={originConnections}
               isSeed={game.isSeed}
-              readableId={readableId}
             />
           </div>
         </div>

@@ -28,7 +28,6 @@ import {
 } from "@/widgets/Bracket/BracketEditor";
 import {
   getBracketGames,
-  getBracketGamesReadableIdIndex,
   getBracketGamesSchedule,
 } from "@/entities/Bracket/BracketGame";
 import {
@@ -53,7 +52,6 @@ export default function EditBracketStageView() {
   );
   const order = useAppSelector(getBracketEventOrder);
 
-  const readableIdIndex = useAppSelector(getBracketGamesReadableIdIndex);
   const schedule = useAppSelector(getBracketGamesSchedule);
   const winnerConnections = useAppSelector(getWinnerConnections);
   const loserConnections = useAppSelector(getLoserConnections);
@@ -168,7 +166,6 @@ export default function EditBracketStageView() {
             schedule={schedule}
             winnerConnections={winnerConnections}
             loserConnections={loserConnections}
-            readableIdIndex={readableIdIndex}
             brackets={brackets}
             originConnections={originConnections}
             onGameClick={onGameClick}

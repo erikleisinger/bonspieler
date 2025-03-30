@@ -1,8 +1,4 @@
-import type {
-  BracketGameType,
-  BracketReadableIdIndex,
-  BracketSchedule,
-} from "@/entities/Bracket";
+import type { BracketGameType, BracketSchedule } from "@/entities/Bracket";
 import { formatGameForSave } from "./formatGameForSave";
 import type { Tables } from "@/shared/api";
 
@@ -10,13 +6,11 @@ export function formatBracketGamesForSave({
   tournamentId,
   bracketStageId,
   brackets,
-  readableIdIndex,
   schedule,
 }: {
   tournamentId: string;
   bracketStageId: string;
   brackets: BracketGameType[][][];
-  readableIdIndex: BracketReadableIdIndex;
 
   schedule: BracketSchedule;
 }): Partial<Tables<"games">>[] {
@@ -32,7 +26,7 @@ export function formatBracketGamesForSave({
           bracketStageId,
           game,
         }),
-        readable_id: readableIdIndex[game.id],
+        readable_id: game.readableId,
         draw_number: schedule[game.id],
       });
     });

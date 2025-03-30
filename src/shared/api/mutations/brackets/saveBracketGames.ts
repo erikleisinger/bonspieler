@@ -1,4 +1,4 @@
-import { BracketGameType, BracketReadableIdIndex } from "@/entities/Bracket";
+import { BracketGameType } from "@/entities/Bracket";
 import { apiSlice, client, Tables } from "@/shared/api";
 import { formatBracketGamesForSave } from "./helpers/formatBracketGamesForSave";
 async function updateBracketGames(
@@ -22,20 +22,17 @@ const saveBracketGames = apiSlice.injectEndpoints({
         tournamentId,
         bracketStageId,
         brackets,
-        readableIdIndex,
         schedule,
       }: {
         tournamentId: string;
         bracketStageId: string;
         brackets: BracketGameType[][][];
-        readableIdIndex: BracketReadableIdIndex;
         schedule: BracketSchedule;
       }) => {
         const games = formatBracketGamesForSave({
           tournamentId,
           bracketStageId,
           brackets,
-          readableIdIndex,
           schedule,
         });
         const data = await updateBracketGames(games, bracketStageId);

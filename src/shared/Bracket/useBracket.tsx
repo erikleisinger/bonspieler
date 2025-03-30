@@ -1,13 +1,9 @@
 "use client";
-import { useMemo, useEffect } from "react";
+import { useMemo } from "react";
 import {
   useGetBracketGamesQuery,
   useGetBracketConnectionsQuery,
 } from "@/shared/api";
-import {
-  generateReadableIdIndex,
-  generateGameIndex,
-} from "@/entities/Bracket/BracketGame";
 
 export default function useBracket(stageId: string) {
   const { data: connections, isFetching: isFetchingConnections } =
@@ -43,21 +39,12 @@ export default function useBracket(stageId: string) {
     return bracketData?.brackets || [];
   }, [bracketData]);
 
-  const { readableIdIndex } = useMemo(() => {
-    const { brackets = [] } = bracketData || {};
-    return {
-      readableIdIndex: generateReadableIdIndex(brackets),
-      gameIndex: generateGameIndex(brackets),
-    };
-  }, [bracketData]);
-
   return {
     originConnections,
     winnerConnections,
     loserConnections,
     schedule,
     brackets,
-    readableIdIndex,
     loading: isFetchingConnections || isFetchingGames,
   };
 }

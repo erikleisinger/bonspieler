@@ -28,7 +28,7 @@ export default function GameConnections({
 
     games.forEach((game) => {
       const teams = (originConnections[game.id] || []).filter(
-        ({ stageId: thisStageId }) => thisStageId === stageId
+        ({ stageId: thisStageId }) => !thisStageId
       );
       const connectedGames = teams.filter(
         ({ gameId, isWinner }) => !!gameId && !!isWinner
@@ -37,7 +37,6 @@ export default function GameConnections({
 
       const verticalPositions = connectedGames.map((game) => {
         const gameEl = getBracketGameElement(game.gameId);
-
         if (!gameEl) return 0;
 
         const { top, height } = gameEl?.getBoundingClientRect();
@@ -84,8 +83,9 @@ export default function GameConnections({
         },
       };
     });
+    console.log("set positions: ", positions);
     setConnectionPositions(positions);
-  }, [games, originConnections, rows]);
+  }, [games, JSON.stringify(originConnections), rows]);
 
   useEffect(() => {
     calculateConnectionPositions();

@@ -1,7 +1,6 @@
 import {
   BracketDrawTimes,
   BracketGameType,
-  BracketReadableIdIndex,
   BracketSchedule,
 } from "@/entities/Bracket";
 import {
@@ -141,7 +140,6 @@ export default function useSetBracketData() {
     winnerConnections: WinnerConnections;
     loserConnections: LoserConnections;
     brackets: BracketGameType[][][];
-    readableIdIndex: BracketReadableIdIndex;
     gameIndex: {
       [gameId: string]: BracketGameType;
     };

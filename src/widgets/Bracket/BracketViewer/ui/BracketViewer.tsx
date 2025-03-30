@@ -23,7 +23,6 @@ export default function BracketViewer({
     loserConnections,
     winnerConnections,
     originConnections,
-    readableIdIndex,
     brackets,
     schedule,
   } = useBracket(stageId);
@@ -44,7 +43,6 @@ export default function BracketViewer({
       schedule={schedule}
       winnerConnections={winnerConnections}
       loserConnections={loserConnections}
-      readableIdIndex={readableIdIndex}
       brackets={brackets}
       originConnections={originConnections}
       onGameClick={onGameClick}

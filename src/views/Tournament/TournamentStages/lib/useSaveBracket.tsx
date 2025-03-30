@@ -39,7 +39,6 @@ import {
 import {
   getBracketGames,
   getBracketGamesSchedule,
-  getBracketGamesReadableIdIndex,
   getRemovedGameIds,
   resetRemovedGameIds,
 } from "@/entities/Bracket/BracketGame";
@@ -53,7 +52,6 @@ export default function useSaveBracket() {
   const originConnections = useAppSelector(getOriginConnections);
   const brackets = useAppSelector(getBracketGames);
   const schedule = useAppSelector(getBracketGamesSchedule);
-  const readableIdIndex = useAppSelector(getBracketGamesReadableIdIndex);
   const removedGameIds = useAppSelector(getRemovedGameIds);
 
   const bracketName = useAppSelector(getBracketEventName);
@@ -70,7 +68,6 @@ export default function useSaveBracket() {
       bracketStageId: bracketId,
       brackets,
       schedule,
-      readableIdIndex,
     });
 
     dispatch(resetRemovedGameIds());
