@@ -8,10 +8,12 @@ export default function GameConnections({
   games,
   rows,
   originConnections,
+  stageId,
 }: {
   games: BracketGame[];
   rows: BracketRows;
   originConnections: OriginConnections;
+  stageId: string;
 }) {
   const [connectionPositions, setConnectionPositions] = useState<{
     [gameId: string]: GameConnectionPositionInfo;
@@ -25,7 +27,9 @@ export default function GameConnections({
       container.current.getBoundingClientRect();
 
     games.forEach((game) => {
-      const teams = originConnections[game.id] || [];
+      const teams = (originConnections[game.id] || []).filter(
+        ({ stageId: thisStageId }) => thisStageId === stageId
+      );
       const connectedGames = teams.filter(
         ({ gameId, isWinner }) => !!gameId && !!isWinner
       );

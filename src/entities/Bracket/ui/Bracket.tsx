@@ -92,6 +92,7 @@ export default function Bracket({
             originConnections={originConnections}
             games={rounds.flat()}
             rows={rows}
+            stageId={stageId}
           />
           {children}
         </div>

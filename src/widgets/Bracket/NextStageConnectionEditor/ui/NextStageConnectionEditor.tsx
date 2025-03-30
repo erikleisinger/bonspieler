@@ -66,6 +66,8 @@ export default function NextStageConnectionEditor({
       tournamentId={tournamentId}
       onGameClick={onSelectGame}
       currentWinnerConnection={winnerConnections}
+      viewingGameId={game.id}
+      currentStageId={stageId}
     />
   );
 }
