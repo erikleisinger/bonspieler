@@ -27,7 +27,6 @@ export default function Slideout({
     function handleClickOutside(event: MouseEvent) {
       if (!!onAutoClose && el.current && !el.current.contains(event.target)) {
         onAutoClose();
-        console.log("auto close");
       }
     }
     if (autoClose && visible) {

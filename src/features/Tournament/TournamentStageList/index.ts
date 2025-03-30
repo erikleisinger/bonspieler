@@ -5,5 +5,4 @@ export {
   TournamentStageListItemContent,
   TournamentStageListItemContainer,
   TournamentStageSelectionList,
-  TournamentStageSelectionList2,
 } from "./ui";

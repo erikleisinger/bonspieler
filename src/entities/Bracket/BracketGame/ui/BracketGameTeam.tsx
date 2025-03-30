@@ -1,5 +1,3 @@
-import { useContext } from "react";
-import { TournamentStageContext } from "@/shared/TournamentStage";
 import type { BracketConnectionTeam } from "../../types";
 import { FaSeedling, FaRunning } from "react-icons/fa";
 import { OriginConnection } from "../../BracketGameConnections";
@@ -12,42 +10,24 @@ export default function BracketGameTeam({
   connection: OriginConnection;
   isSeed: boolean;
 }) {
-  const { prevStageName } = useContext(TournamentStageContext);
-  function getTeamInfo({ isWinner, gameId }: BracketConnectionTeam) {
-    if (gameId) {
-      return `${isWinner ? "Winner of " : "Loser of "}${gameId}`;
-    }
-    // if (isSeed) {
-    //   if (!prevStageName) {
-    //     return tournamentTeams.find(({ id }) => id === teamId)?.name || "";
-    //   } else {
-    //     return "From " + prevStageName;
-    //   }
-    // }
-
-    // if (teamId) {
-    //   return tournamentTeams.find(({ id }) => id === teamId)?.name || "Unknown";
-    // } else if (gameId) {
-    //   return `${isWinner ? "Winner of " : "Loser of "}${readableId}`;
-    // }
-  }
+  const prevStageName = "";
 
   return (
     <div
       className={
-        "flex justify-between bg-white/10 backdrop-blur-sm rounded-sm px-2 " +
+        "grid grid-cols-[auto_1fr_auto] gap-2 bg-white/10 backdrop-blur-sm rounded-sm px-2 " +
         className
       }
     >
-      <div className="flex gap-2 items-center">
-        {isSeed &&
-          !connection?.gameId &&
-          (prevStageName ? (
-            <FaRunning className="text-indigo-500" />
-          ) : (
-            <FaSeedling className="text-emerald-500" />
-          ))}
-        <div>{getTeamInfo(connection)}</div>
+      {!connection?.gameId ? (
+        <FaSeedling className="text-emerald-500" />
+      ) : connection.isPrevStage ? (
+        <FaRunning className="text-indigo-500" />
+      ) : (
+        <div />
+      )}
+      <div className="whitespace-nowrap overflow-hidden min-w-0 text-ellipsis">
+        {connection?.gameId}
       </div>
 
       <div className="text-gray-300">0</div>

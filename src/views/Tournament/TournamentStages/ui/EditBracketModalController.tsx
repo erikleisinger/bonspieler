@@ -13,7 +13,7 @@ import { BracketGameType } from "@/entities/Bracket";
 import { useAppDispatch } from "@/lib/store";
 import { setLookingForLoserConnection } from "@/widgets/Bracket/BracketEditor";
 import { removeLoserConnectionForGame } from "@/entities/Bracket/BracketGameConnections";
-import { LoadBracketViewOnly } from "@/widgets/Bracket/BracketViewer";
+import { NextStageConnectionEditor } from "@/widgets/Bracket/NextStageConnectionEditor";
 export default function EditBracketModalController({
   setState,
   state,
@@ -23,8 +23,14 @@ export default function EditBracketModalController({
 }) {
   const dispatch = useAppDispatch();
 
-  const { availableDrawTimes, brackets, selectedGame, nextRoundToViewId } =
-    useBracketData();
+  const {
+    availableDrawTimes,
+    brackets,
+    selectedGame,
+    viewingNextRoundGameConnection,
+    tournamentId,
+    bracketStageId,
+  } = useBracketData();
   const { removeBracket, addBracket } = useSetBracketData();
 
   function handleRemoveBracket(bracketIndex: number) {
@@ -130,7 +136,11 @@ export default function EditBracketModalController({
           state === BracketEditorToolbarState.ViewingInterBracketConnection
         }
       >
-        <LoadBracketViewOnly stageId={nextRoundToViewId} />
+        <NextStageConnectionEditor
+          game={viewingNextRoundGameConnection}
+          tournamentId={tournamentId}
+          stageId={bracketStageId}
+        />
       </Slideout>
     </>
   );

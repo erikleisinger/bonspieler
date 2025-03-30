@@ -34,7 +34,6 @@ const saveBracketConnections = apiSlice.injectEndpoints({
       }) => {
         const formatted = formatConnectionsForSave({
           connections,
-          bracketStageId: stageId,
           tournamentId,
         });
         const data = await saveBracketConnectionsMutation(formatted);

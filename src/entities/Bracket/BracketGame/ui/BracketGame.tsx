@@ -5,7 +5,10 @@ import BracketGameHeader from "./BracketGameHeader";
 import type { BracketGame } from "../../types";
 import { GAME_ELEMENT_ID_PREFIX } from "../../lib/constants/element-id";
 import { GAME_HEIGHT } from "../../lib/constants/game";
-import type { OriginConnection } from "@/entities/Bracket/BracketGameConnections";
+import type {
+  OriginConnection,
+  DestinationConnection,
+} from "@/entities/Bracket/BracketGameConnections";
 import { Nullable } from "@/shared/types";
 import { cn } from "@/lib/utils";
 
@@ -16,7 +19,7 @@ export default function BracketGame({
   drawNumber,
   game,
   loserReadableId,
-  onClick = () => {},
+  onClick,
   originConnections,
   readableId,
   selected,
@@ -32,7 +35,7 @@ export default function BracketGame({
   originConnections: OriginConnection[];
   readableId: string;
   selected: boolean;
-  winnerConnection: Nullable<string>;
+  winnerConnection: DestinationConnection;
 }) {
   function getClassName() {
     const base = [
@@ -62,6 +65,7 @@ export default function BracketGame({
   }, [drawNumber, firstUpdate]);
 
   function handleClick(e: MouseEvent<HTMLElement>) {
+    if (!onClick) return;
     e.stopPropagation();
     onClick(game);
   }
@@ -81,10 +85,11 @@ export default function BracketGame({
           }}
         >
           <div
-            className={
-              " flex flex-col text-foreground p-2  game__container  relative bg-glass text-glass-foreground backdrop-blur-sm shadow-sm " +
+            className={cn(
+              "flex flex-col text-foreground p-2  game__container  relative bg-glass text-glass-foreground backdrop-blur-sm shadow-sm",
+              onClick && "cursor-pointer",
               className
-            }
+            )}
             id={GAME_ELEMENT_ID_PREFIX + game.id}
             onMouseDown={handleClick}
           >

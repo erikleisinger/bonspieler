@@ -9,7 +9,6 @@ import { formatConnectionForSave } from "./formatConnectionForSave";
 
 export function formatConnectionsForSave({
   connections,
-  bracketStageId,
   tournamentId,
 }: {
   connections: {
@@ -17,28 +16,27 @@ export function formatConnectionsForSave({
     winnerConnections: WinnerConnections;
     originConnections: OriginConnections;
   };
-  bracketStageId: string;
   tournamentId: string;
 }): Partial<Tables<"game_connections">>[] {
   const { loserConnections, winnerConnections } = connections;
   const winners = Object.entries({ ...winnerConnections }).map(
-    ([gameId, connectionId]) => {
+    ([gameId, connection]) => {
+      const { gameId: connectionId } = connection || {};
       return formatConnectionForSave({
         gameId,
         connectionId,
         tournamentId,
-        bracketStageId,
         isWinner: true,
       });
     }
   );
   const losers = Object.entries({ ...loserConnections }).map(
-    ([gameId, connectionId]) => {
+    ([gameId, connection]) => {
+      const { gameId: connectionId } = connection || {};
       return formatConnectionForSave({
         gameId,
         connectionId,
         tournamentId,
-        bracketStageId,
         isWinner: false,
       });
     }

@@ -23,10 +23,7 @@ export default function EditTournamentStagesView({
       </div>
 
       {selectedStage?.id && (
-        <TournamentStageContextProvider
-          stage={selectedStage}
-          tournamentId={tournamentId}
-        >
+        <TournamentStageContextProvider tournamentId={tournamentId}>
           {whatToShow === "view" && (
             <ViewBracketStageView
               tournamentId={tournamentId}

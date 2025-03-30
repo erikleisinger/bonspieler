@@ -164,7 +164,6 @@ export const getGameById = createSelector(
   [getBracketGameIndex, (state, gameId?: Nullable<string>) => gameId],
   (gameIndex, gameId) => {
     if (!gameId) return null;
-    console.log("get game by id: ", gameId, gameIndex[gameId]);
     return gameIndex[gameId] || null;
   }
 );

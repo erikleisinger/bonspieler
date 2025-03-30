@@ -3,4 +3,5 @@ export type {
   LoserConnections,
   OriginConnection,
   OriginConnections,
+  DestinationConnection,
 } from "./Connections";

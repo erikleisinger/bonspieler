@@ -68,10 +68,6 @@ export default function useBracketEditorToolbarState(
   }, [selectedGame?.id]);
 
   useEffect(() => {
-    console.log(
-      "viewingNextRoundGameConnection",
-      viewingNextRoundGameConnection
-    );
     if (viewingNextRoundGameConnection?.id) {
       if (
         toolbarState === BracketEditorToolbarState.ViewingInterBracketConnection

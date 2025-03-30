@@ -6,6 +6,8 @@ import {
   getLookingToAssignTeam,
   setLookingToAssignTeam,
   getBracketEventOrder,
+  getBracketEventId,
+  getBracketEventTournamentId,
 } from "@/entities/BracketEvent";
 import {
   getSelectedDraw,
@@ -14,10 +16,9 @@ import {
   setViewingNextRoundGameConnection,
 } from "@/widgets/Bracket/BracketViewer";
 import { scrollToGame } from "@/entities/Bracket";
-import { BracketViewer } from "@/widgets/Bracket/BracketViewer";
+import { Brackets } from "@/shared/Bracket";
 import {
   BracketEditorToolbar,
-  BracketEditorToolbarState,
   useBracketEditorToolbarState,
 } from "@/widgets/Bracket/BracketEditorToolbar";
 import EditBracketModalController from "./EditBracketModalController";
@@ -43,6 +44,8 @@ export default function EditBracketStageView() {
   const dispatch = useAppDispatch();
 
   const brackets = useAppSelector(getBracketGames);
+  const bracketStageId = useAppSelector(getBracketEventId);
+  const tournamentId = useAppSelector(getBracketEventTournamentId);
   const originConnections = useAppSelector(getOriginConnections);
   const lookingToAssignTeam = useAppSelector(getLookingToAssignTeam);
   const lookingForLoserConnection = useAppSelector(
@@ -161,7 +164,7 @@ export default function EditBracketStageView() {
     <>
       <div className="grow">
         {brackets.length ? (
-          <BracketViewer
+          <Brackets
             schedule={schedule}
             winnerConnections={winnerConnections}
             loserConnections={loserConnections}
@@ -172,6 +175,8 @@ export default function EditBracketStageView() {
             onGameResultClick={onGameResultClick}
             onBackgroundClick={onBackgroundClick}
             availableGameIds={availableGameIds}
+            tournamentId={tournamentId}
+            stageId={bracketStageId}
           />
         ) : (
           <CreateBracketEventWizard renderBrackets={renderBracketsFromWizard} />

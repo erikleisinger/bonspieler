@@ -21,6 +21,7 @@ export default function ViewingBracket({
   const dispatch = useAppDispatch();
   const selectedGame = useAppSelector(getSelectedGame);
   const bracketStage = useAppSelector(getBracketEvent);
+  const tournamentId = bracketStage?.tournament_id;
   const brackets = useAppSelector(getBracketGames);
   const eventName = useAppSelector(getBracketEventName);
 
@@ -34,11 +35,11 @@ export default function ViewingBracket({
   }
 
   return (
-    <TournamentStageContextProvider stage={bracketStage}>
+    <TournamentStageContextProvider tournamentId={tournamentId}>
       <div className="absolute inset-0">
         <BracketViewLayout>
           <ViewingBracketHeader onBack={onEndView} eventName={eventName} />
-          <BracketViewer onGameClick={onGameClick}></BracketViewer>
+          <BracketViewer tournamentId={tournamentId}></BracketViewer>
         </BracketViewLayout>
 
         <Slideout visible={!!selectedGame} fullHeight={false}>

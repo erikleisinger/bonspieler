@@ -13,6 +13,7 @@ export interface BracketProps {
   rows: BracketRows;
   originConnections: OriginConnections;
   setRows: (newRows: BracketRows) => void;
+  stageId: string;
 }
 
 export default function Bracket({
@@ -22,6 +23,7 @@ export default function Bracket({
   rows,
   originConnections,
   setRows,
+  stageId,
 }: BracketProps) {
   const calculateRows = useCallback(() => {
     const gameRowSpanMap: BracketRows = {};
@@ -41,6 +43,7 @@ export default function Bracket({
               rowsIndex: gameRowSpanMap,
               rowsArray: all,
               originConnections,
+              stageId,
             }),
           ];
         },

@@ -4,6 +4,7 @@ import {
   getBracketEventNumTeams,
   getLookingToAssignTeam,
   getBracketEventOrder,
+  getBracketEventTournamentId,
 } from "@/entities/BracketEvent";
 import {
   getLoserConnections,
@@ -11,7 +12,6 @@ import {
   getOriginConnections,
 } from "@/entities/Bracket/BracketGameConnections";
 
-import { getCurrentTournamentId } from "@/entities/Tournament";
 import {
   getBracketGames,
   getBracketGamesReadableIdIndex,
@@ -27,12 +27,10 @@ import { getBracketEvent } from "@/entities/BracketEvent";
 import { isLookingForLoserConnection } from "@/widgets/Bracket/BracketEditor";
 import { useGetTournamentStagesQuery } from "@/shared/api";
 
-import { getAvailableDrawsForBracketGame } from "@/features/EditDrawNumber";
-import { useMemo } from "react";
-
 export default function useBracketData() {
   const selectedGame = useAppSelector(getSelectedGame);
   const bracketStage = useAppSelector(getBracketEvent);
+  const bracketStageId = bracketStage?.id;
   const brackets = useAppSelector(getBracketGames);
   const numSheets = useAppSelector(getBracketEventNumSheets);
   const numTeams = useAppSelector(getBracketEventNumTeams);
@@ -65,18 +63,6 @@ export default function useBracketData() {
   // });
   const availableDrawTimes = [];
 
-  const nextRoundToViewId = useMemo(() => {
-    if (!viewingNextRoundGameConnection?.id) return null;
-    if (!stages?.length) return null;
-    const nextStage = stages[order]?.id;
-    return nextStage;
-  }, [
-    viewingNextRoundGameConnection?.id,
-    order,
-    stages[order]?.id,
-    tournamentId,
-  ]);
-
   return {
     availableDrawTimes,
     selectedGame,
@@ -94,6 +80,8 @@ export default function useBracketData() {
     originConnections,
     gameIndex,
     lookingForLoserConnection,
-    nextRoundToViewId,
+    viewingNextRoundGameConnection,
+    tournamentId,
+    bracketStageId,
   };
 }

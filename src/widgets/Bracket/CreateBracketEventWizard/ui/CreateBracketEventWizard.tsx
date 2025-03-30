@@ -1,4 +1,4 @@
-import { useMemo, useState, useContext } from "react";
+import { useMemo, useState } from "react";
 import { Button } from "@/shared/ui/button";
 import { CustomizeBracketEvent } from "@/features/Bracket/CustomizeBracketEvent";
 import { CustomizeBracket } from "@/features/Bracket/CustomizeBracket";
@@ -7,7 +7,6 @@ import ValidationIcon from "@/shared/ui/validation-icon";
 import { getTotalBracketWinners } from "@/shared/Bracket/getTotalBracketWinners";
 import { Label } from "@/shared/ui/label";
 import { getNewBracketAndWinnerCount } from "../lib/getNewBracketAndWinnerCount";
-import { TournamentStageContext } from "@/shared/TournamentStage";
 import { generateBracket } from "@/features/Bracket/GenerateBracket";
 interface BracketEditorOptionsProps {
   initialNumBrackets?: number;
@@ -23,10 +22,6 @@ export default function CreateBracketWizard({
   initialNumSheets = 8,
   renderBrackets,
 }: BracketEditorOptionsProps) {
-  const { prevStageEndTeams, endTeams: targetEndTeams } = useContext(
-    TournamentStageContext
-  );
-
   const [numWinners, setNumWinners] = useState(initialNumWinners);
   const [numTeams, setNumTeams] = useState(initialTeamCount);
   const [numBrackets, setNumBrackets] = useState(numWinners.length);
@@ -63,6 +58,8 @@ export default function CreateBracketWizard({
     setNumWinners(newWinners);
   }
 
+  const targetEndTeams = null;
+
   const totalWinners = getTotalBracketWinners(numWinners);
   const winnersError = !targetEndTeams
     ? null
@@ -81,7 +78,7 @@ export default function CreateBracketWizard({
         updateNumSheets={setNumSheets}
         numBrackets={numBrackets}
         updateNumBrackets={updateNumBrackets}
-        maxTeams={prevStageEndTeams}
+        maxTeams={null}
       ></CustomizeBracketEvent>
       <div className="pl-4  flex flex-col gap-4">
         {Array.from({ length: numBrackets }).map((_, i) => (

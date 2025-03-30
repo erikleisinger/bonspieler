@@ -1,15 +1,12 @@
 import { createContext } from "react";
 import { Nullable } from "../types";
+import { TournamentStage } from "@/entities/Tournament";
 export const TournamentStageContext = createContext<{
-  startTeams: Nullable<number>;
-  endTeams: Nullable<number>;
-  prevStageEndTeams: Nullable<number>;
-  prevStageName: Nullable<string>;
-  nextStageName: Nullable<string>;
+  tournamentId: Nullable<string>;
+  stages: {
+    [stageId: string]: TournamentStage;
+  };
 }>({
-  startTeams: null,
-  endTeams: null,
-  prevStageEndTeams: null,
-  prevStageName: null,
-  nextStageName: null,
+  tournamentId: null,
+  stages: {},
 });

@@ -9,10 +9,10 @@ export default function ValidationIcon({
   onlyErrors?: boolean;
 }) {
   return errors ? (
-    <Tooltip text={errors.join("\n")}>
-      <FaExclamationTriangle className="text-destructive text-sm" />
-    </Tooltip>
-  ) : !onlyErrors ? (
+    // <Tooltip text={errors.join("\n")}>
+    <FaExclamationTriangle className="text-destructive text-sm" />
+  ) : // </Tooltip>
+  !onlyErrors ? (
     <FaCheckCircle className="text-success text-sm" />
   ) : (
     <div />

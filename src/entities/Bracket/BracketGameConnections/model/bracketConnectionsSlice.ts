@@ -3,6 +3,7 @@ import type {
   WinnerConnections,
   LoserConnections,
   OriginConnections,
+  DestinationConnection,
 } from "../types/Connections";
 import type { RootState } from "@/lib/store";
 import { Nullable } from "@/shared/types";
@@ -139,6 +140,46 @@ export const bracketConnectionsSlice = createSlice({
       state.winnerConnections = winnerConnections || {};
       state.originConnections = originConnections || {};
     },
+    updateWinnerConnectionForGame: (
+      state,
+      action: PayloadAction<{
+        gameId: string;
+        newWinnerConnection: DestinationConnection;
+      }>
+    ) => {
+      const { gameId, newWinnerConnection } = action.payload;
+
+      const { gameId: destinationGameId } = newWinnerConnection;
+
+      if (!destinationGameId) {
+        console.warn(
+          "cannot assign winner connection: destination game is unavailable."
+        );
+        return;
+      }
+
+      const existingDestinationOrigins =
+        state.originConnections[destinationGameId] || [];
+
+      if (existingDestinationOrigins.length >= 2) {
+        console.warn(
+          "cannot assign winner connection: destination game is unavailable."
+        );
+        return;
+      }
+      const newOriginConnections = {
+        ...state.originConnections,
+      };
+      newOriginConnections[destinationGameId] = [
+        ...existingDestinationOrigins,
+        { ...newWinnerConnection, isWinner: true },
+      ];
+      state.originConnections = newOriginConnections;
+
+      const newWinnerConnections = { ...state.winnerConnections };
+      newWinnerConnections[gameId] = newWinnerConnection;
+      state.winnerConnections = newWinnerConnections;
+    },
   },
 });
 
@@ -149,6 +190,7 @@ export const {
   setConnections,
   setLoserConnectionForGame,
   resetConnections,
+  updateWinnerConnectionForGame,
 } = bracketConnectionsSlice.actions;
 
 export const getConnectionsState = (state: RootState) => {

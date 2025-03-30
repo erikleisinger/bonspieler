@@ -51,16 +51,16 @@ export default function SeedToggle({
     }
   }
   return (
-    <Tooltip text={disabledTooltip} disabled={!disabledTooltip}>
-      <div className={"flex items-center gap-2 " + className}>
-        <Checkbox
-          id={id}
-          disabled={!!disabledTooltip}
-          checked={checked}
-          onCheckedChange={handleToggleSeed}
-        />
-        <label htmlFor={id}>Seed</label>
-      </div>
-    </Tooltip>
+    // <Tooltip text={disabledTooltip} disabled={!disabledTooltip}>
+    <div className={"flex items-center gap-2 " + className}>
+      <Checkbox
+        id={id}
+        disabled={!!disabledTooltip}
+        checked={checked}
+        onCheckedChange={handleToggleSeed}
+      />
+      <label htmlFor={id}>Seed</label>
+    </div>
+    // </Tooltip>
   );
 }

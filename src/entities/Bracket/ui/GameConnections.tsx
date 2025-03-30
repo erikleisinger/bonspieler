@@ -33,6 +33,9 @@ export default function GameConnections({
 
       const verticalPositions = connectedGames.map((game) => {
         const gameEl = getBracketGameElement(game.gameId);
+
+        if (!gameEl) return 0;
+
         const { top, height } = gameEl?.getBoundingClientRect();
         return top + height / 2;
       });
@@ -41,6 +44,9 @@ export default function GameConnections({
       const bottom = Math.max(...verticalPositions);
 
       const oneEl = getBracketGameElement(connectedGames[0].gameId);
+
+      if (!oneEl) return;
+
       const {
         left: originLeft,
         width: originWidth,
@@ -57,6 +63,8 @@ export default function GameConnections({
           : top - containerTop;
 
       const thisEl = getBracketGameElement(game.id);
+      if (!thisEl) return;
+
       const { left: thisLeft } = thisEl.getBoundingClientRect();
 
       const posWidth = thisLeft - (originLeft + originWidth);

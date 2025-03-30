@@ -1,2 +1,2 @@
-export { BracketViewer, LoadBracketViewOnly } from "./ui";
+export { BracketViewer } from "./ui";
 export * from "./model";

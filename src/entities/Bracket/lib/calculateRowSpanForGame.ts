@@ -11,19 +11,24 @@ export function calculateRowSpanForGame({
   roundIndex,
   rowsIndex,
   rowsArray,
+  stageId,
 }: {
   originConnections: OriginConnections;
   game: BracketGame;
   roundIndex: number;
   rowsIndex: BracketRows;
   rowsArray: BracketRowWithId[];
+  stageId: string;
 }): BracketRowWithId {
   /**
    * Find all games in previous round that are connected to this game
    * I.e. the winners of those games advance to the game being placed.
    */
   const gameConnections = (originConnections[game.id] || [])
-    .filter(({ gameId, isWinner }) => !!gameId && isWinner)
+    .filter(
+      ({ gameId, isWinner, stageId: gameStageId }) =>
+        !!gameId && isWinner && gameStageId === stageId
+    )
     .sort((a, b) => {
       const aRows = rowsIndex[a.gameId]?.rowEnd || 0;
       const bRows = rowsIndex[b.gameId]?.rowEnd || 0;
@@ -32,7 +37,6 @@ export function calculateRowSpanForGame({
 
   let rowStart = 1;
   let rowEnd = 2;
-
   if (!gameConnections.length) {
     // When a game has no origins, then we don't need to place a game vertically between its origin games.
     // We can just place it below the the current lowest game in the same round.
