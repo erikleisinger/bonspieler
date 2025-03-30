@@ -22,7 +22,7 @@ export default function GlobalLayout({
     router.push("/tournaments");
   }
   return (
-    <SidebarProvider>
+    <SidebarProvider defaultOpen={false}>
       <div
         className={`${koulen.variable} fixed inset-0 grid grid-rows-[auto_1fr] bg-gradient `}
       >

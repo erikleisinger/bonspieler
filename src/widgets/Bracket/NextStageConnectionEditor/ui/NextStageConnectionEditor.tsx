@@ -7,6 +7,7 @@ import { useGetTournamentStagesQuery } from "@/shared/api";
 import { TournamentStage } from "@/entities/Tournament";
 import { updateWinnerConnectionForGame } from "@/entities/Bracket/BracketGameConnections";
 import { useAppDispatch } from "@/lib/store";
+import BracketProvider from "@/shared/Bracket/BracketProvider";
 import NextStageConnectionViewer from "./NextStageConnectionViewer";
 export default function NextStageConnectionEditor({
   game,
@@ -61,13 +62,15 @@ export default function NextStageConnectionEditor({
       </div>
     );
   return (
-    <NextStageConnectionViewer
-      stageId={selectedStageId}
-      tournamentId={tournamentId}
-      onGameClick={onSelectGame}
-      currentWinnerConnection={winnerConnections}
-      viewingGameId={game.id}
-      currentStageId={stageId}
-    />
+    <BracketProvider stageId={selectedStageId}>
+      <NextStageConnectionViewer
+        stageId={selectedStageId}
+        tournamentId={tournamentId}
+        onGameClick={onSelectGame}
+        currentWinnerConnection={winnerConnections}
+        viewingGameId={game.id}
+        currentStageId={stageId}
+      />
+    </BracketProvider>
   );
 }

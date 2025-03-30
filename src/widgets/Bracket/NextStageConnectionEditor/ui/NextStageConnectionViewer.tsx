@@ -25,7 +25,7 @@ export default function NextStageConnectionViewer({
     originConnections,
     brackets,
     schedule,
-  } = useBracket(stageId);
+  } = useBracket();
 
   const updatedOriginConnections = useMemo(() => {
     if (!currentWinnerConnection?.gameId) {

@@ -158,6 +158,11 @@ export default function EditBracketStageView() {
     dispatch(setViewingNextRoundGameConnection(game));
   }
 
+  const selectedGameIds = useMemo(() => {
+    if (!selectedGame?.id) return [];
+    return [selectedGame.id];
+  }, [selectedGame?.id]);
+
   return (
     <>
       <div className="grow">
@@ -173,6 +178,7 @@ export default function EditBracketStageView() {
             onBackgroundClick={onBackgroundClick}
             availableGameIds={availableGameIds}
             tournamentId={tournamentId}
+            selectedGameIds={selectedGameIds}
             stageId={bracketStageId}
           />
         ) : (

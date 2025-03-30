@@ -8,7 +8,6 @@ import {
 } from "@/entities/Tournament";
 
 /* Components */
-import { TournamentOptions } from "@/widgets/Tournament/TournamentOptions";
 import { TournamentStageEditor } from "@/widgets/Tournament/TournamentStageEditor";
 import { TournamentScheduler } from "@/widgets/Tournament/TournamentScheduler";
 
