@@ -6,53 +6,14 @@ import { Nullable } from "@/shared/types";
 import { useMemo } from "react";
 export default function NextStageConnectionViewer({
   onGameClick,
-  stageId,
   tournamentId,
   currentWinnerConnection,
-  viewingGameId,
-  currentStageId,
 }: {
   onGameClick?: (game: BracketGameType) => void;
-  stageId: string;
   tournamentId: string;
   currentWinnerConnection: Nullable<DestinationConnection>;
-  viewingGameId: string;
-  currentStageId: string;
 }) {
-  const {
-    loserConnections,
-    winnerConnections,
-    originConnections,
-    brackets,
-    schedule,
-  } = useBracket();
-
-  const updatedOriginConnections = useMemo(() => {
-    if (!currentWinnerConnection?.gameId) {
-      return originConnections;
-    }
-
-    if (
-      (originConnections[currentWinnerConnection.gameId] || []).some(
-        ({ gameId, stageId: sid }) =>
-          gameId === viewingGameId && sid === currentStageId
-      )
-    ) {
-      return originConnections;
-    }
-
-    return {
-      ...originConnections,
-      [currentWinnerConnection.gameId]: [
-        ...(originConnections[currentWinnerConnection.gameId] || []),
-        {
-          stageId: currentStageId,
-          gameId: viewingGameId,
-          isWinner: true,
-        },
-      ],
-    };
-  }, [originConnections, currentWinnerConnection?.gameId]);
+  const { originConnections, brackets } = useBracket();
 
   const currentConnection = currentWinnerConnection?.gameId;
 
@@ -97,16 +58,10 @@ export default function NextStageConnectionViewer({
   return (
     <Brackets
       availableGameIds={availableGameIds}
-      schedule={schedule}
-      winnerConnections={winnerConnections}
-      loserConnections={loserConnections}
-      brackets={brackets}
-      originConnections={updatedOriginConnections}
       onGameResultClick={() => {}}
       onGameClick={onGameClick}
       backgroundGameIds={backgroundGameIds}
       tournamentId={tournamentId}
-      stageId={stageId}
     ></Brackets>
   );
 }

@@ -6,15 +6,18 @@ export default function BracketRoundRow({
   roundIndex,
   games,
   rows,
+  scale,
 }: {
   children?: React.ReactNode;
   roundIndex: number;
   games: BracketGame[];
   rows: BracketRows;
+  scale: number;
 }) {
   function getRowDefinition() {
     const rowHeight =
-      (GAME_HEIGHT + GAME_PADDING) / (!roundIndex ? 1 : 2 ** roundIndex);
+      ((GAME_HEIGHT + GAME_PADDING) / (!roundIndex ? 1 : 2 ** roundIndex)) *
+      (scale || 1);
 
     const numRowsForRound = Math.max(
       ...[...games.map(({ id }) => rows[id]?.rowEnd || 1)]
@@ -24,12 +27,13 @@ export default function BracketRoundRow({
       gridTemplateRows: `repeat(${
         numRowsForRound + 2 ** roundIndex
       }, ${rowHeight}px)`,
+      width: `calc(350px * ${scale})`,
     };
   }
 
   return (
     <div
-      className={`relative  grid px-8 md:px-16 pt-4 md:pt-8 w-screen md:w-fit`}
+      className={`relative  grid `}
       style={{
         ...getRowDefinition(),
       }}

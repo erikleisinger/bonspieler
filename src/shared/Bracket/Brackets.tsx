@@ -1,11 +1,6 @@
 "use client";
 import { useEffect, useRef, useState, useContext } from "react";
-import { TournamentStageContext } from "../TournamentStage";
-import type {
-  BracketRows,
-  BracketGameType,
-  BracketSchedule,
-} from "@/entities/Bracket";
+import type { BracketRows, BracketGameType } from "@/entities/Bracket";
 import {
   Bracket,
   BracketRound,
@@ -13,15 +8,13 @@ import {
   BracketRow,
 } from "@/entities/Bracket";
 
-import {
-  WinnerConnections,
-  LoserConnections,
-  DestinationConnection,
-} from "@/entities/Bracket/BracketGameConnections";
+import { DestinationConnection } from "@/entities/Bracket/BracketGameConnections";
 
 import BracketGameFinalResult from "@/entities/Bracket/BracketGame/ui/BracketGameFinalResult";
-import { OriginConnections } from "@erikleisinger/bracket-generator";
 import { Nullable } from "@/shared/types";
+
+import { BracketContext } from "./BracketContext";
+import { Button } from "../ui/button";
 
 export default function Brackets({
   availableGameIds = [],
@@ -30,14 +23,9 @@ export default function Brackets({
   onBackgroundClick,
   onGameClick,
   onGameResultClick = () => {},
-  brackets,
-  loserConnections,
-  schedule,
-  winnerConnections,
-  originConnections,
   selectedGameIds = [],
   tournamentId,
-  stageId,
+  initialScale = 1,
 }: {
   availableGameIds: string[];
   backgroundGameIds?: Nullable<string[]>;
@@ -45,16 +33,19 @@ export default function Brackets({
   onBackgroundClick?: () => void;
   onGameClick: (game: BracketGameType) => void;
   onGameResultClick: (game: BracketGameType) => void;
-  brackets: BracketGameType[][][];
-
-  schedule: BracketSchedule;
-  winnerConnections: WinnerConnections;
-  originConnections: OriginConnections;
-  loserConnections: LoserConnections;
   selectedGameIds: string[];
   tournamentId: string;
-  stageId: string;
+  initialScale: number;
 }) {
+  const {
+    originConnections,
+    winnerConnections,
+    loserConnections,
+    brackets,
+    schedule,
+    stageId,
+  } = useContext(BracketContext);
+
   function getRowSpanForGame(rows: BracketRow) {
     const { rowStart = 1, rowEnd = 2 } = rows || {};
     return {
@@ -95,17 +86,27 @@ export default function Brackets({
     };
   }, [el, onBackgroundClick]);
 
-  const { stages } = useContext(TournamentStageContext);
-
   function isFinalResult(winnerConnection: DestinationConnection) {
     const { gameId: winnerGameId, stageId: winnerStageId } =
       winnerConnection || {};
     return !winnerGameId || (!!winnerStageId && winnerStageId !== stageId);
   }
 
+  const [scale, setScale] = useState(initialScale);
+  const updateScale = (value: number) => () => {
+    setScale((prev) => {
+      const newValue = prev + value;
+      return Math.min(Math.max(newValue, 0.1), 2);
+    });
+  };
+
   return (
     <>
-      <div ref={el} className="pointer-events-auto">
+      <div ref={el} className="pointer-events-auto relative">
+        <div className="fixed bottom-8 right-8 z-50">
+          <Button onClick={updateScale(0.1)}>+</Button>
+          <Button onClick={updateScale(-0.1)}>-</Button>
+        </div>
         {brackets?.length &&
           brackets.map((rounds, bracketIndex) => {
             return (
@@ -117,6 +118,7 @@ export default function Brackets({
                 rows={rows}
                 bracketNumber={bracketIndex}
                 stageId={stageId}
+                scale={scale}
               >
                 {rounds.map((games, roundIndex) => {
                   return (
@@ -125,12 +127,13 @@ export default function Brackets({
                       key={"round-" + roundIndex}
                       rows={rows}
                       roundIndex={roundIndex}
+                      scale={scale}
                     >
                       {games &&
                         games.map((game: BracketGameType) => {
                           return (
                             <div
-                              className="flex items-center pointer-events-auto"
+                              className="flex items-center pointer-events-auto justify-center"
                               key={game.id}
                               style={{
                                 ...getRowSpanForGame(rows[game.id]),
@@ -155,6 +158,7 @@ export default function Brackets({
                                   !!backgroundGameIds &&
                                   backgroundGameIds.includes(game.id)
                                 }
+                                scale={scale}
                               />
                               {isFinalResult(winnerConnections[game.id]) && (
                                 <div

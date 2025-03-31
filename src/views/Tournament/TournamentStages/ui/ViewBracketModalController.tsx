@@ -11,7 +11,7 @@ export default function ViewBracketModalController() {
   return (
     <>
       <Slideout fullHeight={true} visible={!!selectedGame?.id}>
-        {!!selectedGame?.id && <BracketGameViewer />}
+        {!!selectedGame?.id && <BracketGameViewer game={selectedGame} />}
       </Slideout>
       <Slideout
         fullHeight={true}

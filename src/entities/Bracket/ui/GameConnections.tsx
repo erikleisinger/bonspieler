@@ -1,5 +1,5 @@
 import GameConnection from "./GameConnection";
-import type { BracketConnections, BracketGame, BracketRows } from "../types";
+import type { BracketGame, BracketRows } from "../types";
 import type { GameConnectionPositionInfo } from "../types/GameConnection";
 import { useState, useEffect, useRef, useCallback } from "react";
 import { getBracketGameElement } from "../lib/getBracketGameElement";
@@ -8,12 +8,12 @@ export default function GameConnections({
   games,
   rows,
   originConnections,
-  stageId,
+  scale,
 }: {
   games: BracketGame[];
   rows: BracketRows;
   originConnections: OriginConnections;
-  stageId: string;
+  scale;
 }) {
   const [connectionPositions, setConnectionPositions] = useState<{
     [gameId: string]: GameConnectionPositionInfo;
@@ -83,9 +83,8 @@ export default function GameConnections({
         },
       };
     });
-    console.log("set positions: ", positions);
     setConnectionPositions(positions);
-  }, [games, JSON.stringify(originConnections), rows]);
+  }, [games, JSON.stringify(originConnections), rows, scale]);
 
   useEffect(() => {
     calculateConnectionPositions();

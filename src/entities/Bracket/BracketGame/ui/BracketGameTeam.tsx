@@ -1,17 +1,12 @@
-import type { BracketConnectionTeam } from "../../types";
 import { FaSeedling, FaRunning } from "react-icons/fa";
 import { OriginConnection } from "../../BracketGameConnections";
 export default function BracketGameTeam({
   className,
   connection,
-  isSeed,
 }: {
   className?: string;
   connection: OriginConnection;
-  isSeed: boolean;
 }) {
-  const prevStageName = "";
-
   return (
     <div
       className={
@@ -32,7 +27,7 @@ export default function BracketGameTeam({
           {connection?.stageName || ""}
         </div>
       ) : (
-        <div />
+        <div className="text-muted">Seed</div>
       )}
 
       <div className="text-gray-300">0</div>

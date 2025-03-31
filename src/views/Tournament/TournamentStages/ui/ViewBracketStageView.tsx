@@ -12,7 +12,7 @@ export default function ViewBracketStageView({
   return (
     <>
       <BracketProvider stageId={stageId}>
-        <div className="grow">
+        <div className="grow flex">
           <BracketViewer stageId={stageId} tournamentId={tournamentId} />
         </div>
 

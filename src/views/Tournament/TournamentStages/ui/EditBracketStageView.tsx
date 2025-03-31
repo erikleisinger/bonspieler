@@ -1,16 +1,14 @@
-import { useMemo, useEffect, useState } from "react";
+import { useMemo, useEffect } from "react";
 import { useAppSelector, useAppDispatch } from "@/lib/store";
 import type { BracketGameType } from "@/entities/Bracket";
 import {
   assignTeamToGame,
   getLookingToAssignTeam,
   setLookingToAssignTeam,
-  getBracketEventOrder,
   getBracketEventId,
   getBracketEventTournamentId,
 } from "@/entities/BracketEvent";
 import {
-  getSelectedDraw,
   setSelectedGame,
   getSelectedGame,
   setViewingNextRoundGameConnection,
@@ -26,19 +24,14 @@ import {
   getLookingForLoserConnection,
   setLookingForLoserConnection,
 } from "@/widgets/Bracket/BracketEditor";
-import {
-  getBracketGames,
-  getBracketGamesSchedule,
-} from "@/entities/Bracket/BracketGame";
+import { getBracketGames } from "@/entities/Bracket/BracketGame";
 import {
   getOriginConnections,
   setLoserConnectionForGame,
-  getLoserConnections,
-  getWinnerConnections,
 } from "@/entities/Bracket/BracketGameConnections";
 import { CreateBracketEventWizard } from "@/widgets/Bracket/CreateBracketEventWizard";
-import { Nullable } from "@/shared/types";
 import { useSetBracketData } from "../helpers";
+import EditableBracketProvider from "@/shared/Bracket/EditableBracketProvider";
 export default function EditBracketStageView() {
   const dispatch = useAppDispatch();
 
@@ -50,12 +43,6 @@ export default function EditBracketStageView() {
   const lookingForLoserConnection = useAppSelector(
     getLookingForLoserConnection
   );
-  const order = useAppSelector(getBracketEventOrder);
-
-  const schedule = useAppSelector(getBracketGamesSchedule);
-  const winnerConnections = useAppSelector(getWinnerConnections);
-  const loserConnections = useAppSelector(getLoserConnections);
-  const selectedDraw = useAppSelector(getSelectedDraw);
   const selectedGame = useAppSelector(getSelectedGame);
 
   const { renderBracketsFromWizard } = useSetBracketData();
@@ -151,9 +138,6 @@ export default function EditBracketStageView() {
     dispatch(setSelectedGame(null));
   }
 
-  const [viewingGameResult, setViewingGameResult] =
-    useState<Nullable<BracketGameType>>(null);
-
   function onGameResultClick(game: BracketGameType) {
     dispatch(setViewingNextRoundGameConnection(game));
   }
@@ -164,22 +148,16 @@ export default function EditBracketStageView() {
   }, [selectedGame?.id]);
 
   return (
-    <>
+    <EditableBracketProvider stageId={bracketStageId}>
       <div className="grow">
         {brackets.length ? (
           <Brackets
-            schedule={schedule}
-            winnerConnections={winnerConnections}
-            loserConnections={loserConnections}
-            brackets={brackets}
-            originConnections={originConnections}
             onGameClick={onGameClick}
             onGameResultClick={onGameResultClick}
             onBackgroundClick={onBackgroundClick}
             availableGameIds={availableGameIds}
             tournamentId={tournamentId}
             selectedGameIds={selectedGameIds}
-            stageId={bracketStageId}
           />
         ) : (
           <CreateBracketEventWizard renderBrackets={renderBracketsFromWizard} />
@@ -196,6 +174,6 @@ export default function EditBracketStageView() {
       <div className="sticky right-0 top-0 bg-glass backdrop-blur-sm flex z-50">
         <BracketEditorToolbar state={toolbarState} setState={setToolbarState} />
       </div>
-    </>
+    </EditableBracketProvider>
   );
 }

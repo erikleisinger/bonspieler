@@ -15,6 +15,7 @@ export interface BracketProps {
   originConnections: OriginConnections;
   setRows: (newRows: BracketRows) => void;
   stageId: string;
+  scale: number;
 }
 
 export default function Bracket({
@@ -25,6 +26,7 @@ export default function Bracket({
   originConnections,
   setRows,
   stageId,
+  scale,
 }: BracketProps) {
   useEffect(() => {
     setRows(
@@ -37,7 +39,7 @@ export default function Bracket({
   }, [JSON.stringify(originConnections), rounds, stageId]);
 
   return (
-    <div className="w-fit">
+    <div>
       <div
         className="p-0 min-h-screen pr-[100vw] md:pr-[500px]"
         id={BRACKET_CONTAINER_ELEMENT_ID_PREFIX + bracketNumber}
@@ -48,6 +50,7 @@ export default function Bracket({
             games={rounds.flat()}
             rows={rows}
             stageId={stageId}
+            scale={scale}
           />
           {children}
         </div>

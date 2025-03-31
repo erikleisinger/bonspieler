@@ -9,7 +9,6 @@ import type {
   OriginConnection,
   DestinationConnection,
 } from "@/entities/Bracket/BracketGameConnections";
-import { Nullable } from "@/shared/types";
 import { cn } from "@/lib/utils";
 
 export default function BracketGame({
@@ -21,9 +20,8 @@ export default function BracketGame({
   loserConnection,
   onClick,
   originConnections,
-  readableId,
   selected,
-  winnerConnection,
+  scale,
 }: {
   available?: boolean;
   background?: boolean;
@@ -34,7 +32,7 @@ export default function BracketGame({
   onClick?: (game: BracketGame) => void;
   originConnections: OriginConnection[];
   selected: boolean;
-  winnerConnection: DestinationConnection;
+  scale: number;
 }) {
   function getClassName() {
     const base = [
@@ -75,6 +73,9 @@ export default function BracketGame({
         "flex flex-col justify-center BRACKET_GAME",
         background && "opacity-50"
       )}
+      style={{
+        transform: `scale(${scale}) `,
+      }}
     >
       <div className="py-4 flex text-xs pointer-events-auto relative">
         <div

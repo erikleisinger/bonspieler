@@ -113,6 +113,7 @@ export default function EditBracketModalController({
       >
         {state === BracketEditorToolbarState.ViewingGame && selectedGame && (
           <BracketGameViewer
+            game={selectedGame}
             onEditLoserConnection={handleLookForLoserConnection}
             onRemoveLoserConnection={handleRemoveLoserConnection}
             drawTimeChildren={
