@@ -46,10 +46,12 @@ export default function useBracketData() {
   );
   const order = useAppSelector(getBracketEventOrder);
 
-  const { data: stages = [] } = useGetTournamentStagesQuery(tournamentId, {
-    skip: !tournamentId,
-    refetchOnMountOrArgChange: true,
-  });
+  const { data: stages = [] } = useGetTournamentStagesQuery(
+    { tournamentId },
+    {
+      skip: !tournamentId,
+    }
+  );
 
   // const availableDrawTimes: number[] = getAvailableDrawsForBracketGame({
   //   gameId: selectedGame?.id,

@@ -9,10 +9,12 @@ export default function BracketGameFinalResult({
   connection: DestinationConnection;
   tournamentId: string;
 }) {
-  const { data: tournamentStages } = useGetTournamentStagesQuery(tournamentId, {
-    skip: !tournamentId,
-    refetchOnMountOrArgChange: true,
-  });
+  const { data: tournamentStages } = useGetTournamentStagesQuery(
+    { tournamentId },
+    {
+      skip: !tournamentId,
+    }
+  );
 
   function text() {
     if (!connection) return <div className="text-muted">???</div>;

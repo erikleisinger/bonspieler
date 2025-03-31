@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useEffect } from "react";
 import {
   useGetBracketGamesQuery,
   useGetBracketConnectionsQuery,
@@ -13,14 +13,11 @@ export default function BracketProvider({
 }) {
   const { data: connections, isFetching: isFetchingConnections } =
     useGetBracketConnectionsQuery(stageId, {
-      refetchOnMountOrArgChange: true,
       skip: !stageId,
     });
 
   const { data: bracketData, isFetching: isFetchingGames } =
     useGetBracketGamesQuery(stageId, {
-      refetchOnMountOrArgChange: true,
-
       skip: !stageId,
     });
 
@@ -44,6 +41,10 @@ export default function BracketProvider({
     return bracketData?.brackets || [];
   }, [bracketData]);
 
+  const isFetching = useMemo(() => {
+    return isFetchingConnections || isFetchingGames;
+  }, [isFetchingConnections, isFetchingGames]);
+
   return (
     <BracketContext.Provider
       value={{
@@ -52,11 +53,11 @@ export default function BracketProvider({
         loserConnections,
         brackets,
         schedule,
-        loading: isFetchingConnections || isFetchingGames,
+        loading: isFetching,
         stageId,
       }}
     >
-      {children}
+      {!isFetching && children}
     </BracketContext.Provider>
   );
 }

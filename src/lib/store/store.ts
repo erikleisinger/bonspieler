@@ -40,7 +40,7 @@ export const makeStore = (): AppStore => {
     const combinedReducer = persistReducer(
       persistConfig,
       combineReducers({
-        api: persistReducer(apiPersistConfig, apiSlice.reducer),
+        api: apiSlice.reducer,
         ...asyncReducers,
       })
     );

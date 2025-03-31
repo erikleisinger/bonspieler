@@ -29,20 +29,22 @@ export default function TournamentStageSidebar({
   onCancel?: () => void;
   onSave?: () => void;
 }) {
-  const { data: stages } = useGetTournamentStagesQuery(tournamentId, {
-    refetchOnMountOrArgChange: true,
-    skip: !tournamentId,
-  });
+  const { data: stages } = useGetTournamentStagesQuery(
+    { tournamentId },
+    {
+      skip: !tournamentId,
+    }
+  );
 
   const [initialLoadDone, setInitialLoadDone] = useState(false);
 
   useEffect(() => {
     if (initialLoadDone) return;
-    if (stages) {
+    if (stages?.length) {
       setInitialLoadDone(true);
       onSelectStage(stages[0]);
     }
-  }, [stages]);
+  }, [JSON.stringify(stages), initialLoadDone, onSelectStage]);
 
   return (
     <div className="h-full relative z-50 pointer-events-none w-[300px]">

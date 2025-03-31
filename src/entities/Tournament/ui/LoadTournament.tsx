@@ -17,8 +17,11 @@ export default function LoadTournament({
   useLayoutEffect(() => {
     dispatch(initBlankTournament(tournamentId));
   }, []);
-  const { isLoading } = useGetTournamentStagesQuery(tournamentId, {
-    skip: !tournamentId,
-  });
+  const { isLoading } = useGetTournamentStagesQuery(
+    { tournamentId },
+    {
+      skip: !tournamentId,
+    }
+  );
   return isLoading ? <LoaderFullPage></LoaderFullPage> : <>{children}</>;
 }

@@ -15,7 +15,7 @@ async function fetchTournamentStages(tournamentId: string) {
 export const getTournamentStages = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getTournamentStages: builder.query({
-      queryFn: async (tournamentId: string) => {
+      queryFn: async ({ tournamentId }: { tournamentId: string }) => {
         const data = await fetchTournamentStages(tournamentId);
         return { data };
       },
@@ -23,7 +23,7 @@ export const getTournamentStages = apiSlice.injectEndpoints({
       providesTags: (
         result: Tables<"tournament_stages">[],
         _,
-        tournamentId
+        { tournamentId }
       ) => {
         if (!result) return [];
 

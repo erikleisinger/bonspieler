@@ -26,10 +26,12 @@ export default function TournamentSidebar({
   const pathname = usePathname();
   const { setOpen } = useSidebar();
 
-  const { data: stages } = useGetTournamentStagesQuery(tournamentId, {
-    refetchOnMountOrArgChange: true,
-    skip: !tournamentId,
-  });
+  const { data: stages } = useGetTournamentStagesQuery(
+    { tournamentId },
+    {
+      skip: !tournamentId,
+    }
+  );
 
   const items = [
     {

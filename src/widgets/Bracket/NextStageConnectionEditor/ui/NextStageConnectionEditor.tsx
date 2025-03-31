@@ -18,10 +18,12 @@ export default function NextStageConnectionEditor({
   stageId: string;
   tournamentId: string;
 }) {
-  const { data: stages } = useGetTournamentStagesQuery(tournamentId, {
-    skip: !tournamentId,
-    refetchOnMountOrArgChange: true,
-  });
+  const { data: stages } = useGetTournamentStagesQuery(
+    { tournamentId },
+    {
+      skip: !tournamentId,
+    }
+  );
 
   const winnerConnections = useAppSelector((state) =>
     getWinnerConnectionsForGame(state, game?.id)

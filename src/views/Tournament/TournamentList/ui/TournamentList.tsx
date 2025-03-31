@@ -5,9 +5,7 @@ import { useGetTournamentsQuery } from "@/shared/api";
 import LoaderFullPage from "@/shared/ui/loader-full-page";
 import { useRouter } from "next/navigation";
 export default function TournamentList() {
-  const { data: tournaments = [], isFetching } = useGetTournamentsQuery(null, {
-    refetchOnMountOrArgChange: false,
-  });
+  const { data: tournaments = [], isFetching } = useGetTournamentsQuery(null);
 
   const router = useRouter();
 

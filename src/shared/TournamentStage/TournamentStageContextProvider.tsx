@@ -8,18 +8,20 @@ export default function TournamentStageContextProvider({
   children: React.ReactNode;
   tournamentId: string;
 }) {
-  const { data: stages } = useGetTournamentStagesQuery(tournamentId, {
-    refetchOnMountOrArgChange: true,
-    skip: !tournamentId,
-    selectFromResult: ({ data = [] }) => {
-      return {
-        data: (data || []).reduce((all, current) => {
-          const { id } = current;
-          return { ...all, [id]: current };
-        }, {}),
-      };
-    },
-  });
+  const { data: stages } = useGetTournamentStagesQuery(
+    { tournamentId },
+    {
+      skip: !tournamentId,
+      selectFromResult: ({ data = [] }) => {
+        return {
+          data: (data || []).reduce((all, current) => {
+            const { id } = current;
+            return { ...all, [id]: current };
+          }, {}),
+        };
+      },
+    }
+  );
 
   return (
     <TournamentStageContext.Provider

@@ -1,8 +1,5 @@
 import { useRef, useEffect, useState } from "react";
-import {
-  TournamentStageType,
-  type TournamentStage,
-} from "@/entities/Tournament";
+import { TournamentStageType } from "@/entities/Tournament";
 import TournamentStageSidebar from "./TournamentStageSidebar";
 import { TournamentStageContextProvider } from "@/shared/TournamentStage";
 import EditBracketStageView from "./EditBracketStageView";
@@ -49,20 +46,23 @@ export default function EditTournamentStagesView({
         scroller.current.removeEventListener("scroll", onScroll);
     };
   });
+
   return (
     <div className="absolute inset-0 overflow-auto flex" ref={scroller}>
       <div className={cn("z-50 sticky top-0 left-0")}>
-        <TournamentStageSidebar
-          tournamentId={tournamentId}
-          selectedStage={selectedStage}
-          onSelectStage={selectStage}
-          onSelectEditedStage={!editedStage?.id ? editStage : null}
-          editedStageId={editedStage?.id || null}
-          disabled={!!editedStage}
-          onSave={onSaveStage}
-          onCancel={resetState}
-          dense={scrolled}
-        />
+        {tournamentId && (
+          <TournamentStageSidebar
+            tournamentId={tournamentId}
+            selectedStage={selectedStage}
+            onSelectStage={selectStage}
+            onSelectEditedStage={!editedStage?.id ? editStage : null}
+            editedStageId={editedStage?.id || null}
+            disabled={!!editedStage}
+            onSave={onSaveStage}
+            onCancel={resetState}
+            dense={scrolled}
+          />
+        )}
       </div>
 
       {selectedStage?.id && (

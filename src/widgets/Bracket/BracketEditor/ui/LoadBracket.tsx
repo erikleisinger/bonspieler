@@ -52,7 +52,6 @@ export default function LoadBracket({
 
   const { isLoading: isLoadingStage, data: stageData } =
     useGetTournamentStageByIdQuery(stageId, {
-      refetchOnMountOrArgChange: true,
       skip: !stageId,
     });
 
@@ -78,7 +77,6 @@ export default function LoadBracket({
 
   const { isLoading: isLoadingGames, data: gamesData } =
     useGetBracketGamesQuery(stageId, {
-      refetchOnMountOrArgChange: true,
       skip: !stageId,
     });
 
@@ -116,7 +114,6 @@ export default function LoadBracket({
 
   const { isLoading: isLoadingConnections, data: connections } =
     useGetBracketConnectionsQuery(stageId, {
-      refetchOnMountOrArgChange: true,
       skip: !stageId,
     });
 

@@ -22,10 +22,12 @@ export default function TournamentStageEditor({
   onEditStage: (stage: TournamentStage) => void;
   tournamentId: string;
 }) {
-  const { data: stages } = useGetTournamentStagesQuery(tournamentId, {
-    refetchOnMountOrArgChange: true,
-    skip: !tournamentId,
-  });
+  const { data: stages } = useGetTournamentStagesQuery(
+    { tournamentId },
+    {
+      skip: !tournamentId,
+    }
+  );
 
   const [editing, setEditing] = useState(false);
 
