@@ -254,7 +254,7 @@ export default function EditBracketStageView() {
         )}
       </div>
 
-      <div className="fixed  top-0 bottom-0 right-0 z-50 min-w-[500px] overflow-hidden pointer-events-none ">
+      <div className="absolute  top-0 bottom-0 right-0 z-50 min-w-[500px] overflow-hidden pointer-events-none ">
         <EditBracketModalController
           state={toolbarState}
           setState={setToolbarState}
