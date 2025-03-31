@@ -100,6 +100,7 @@ export default function GameConnections({
             key={gameId}
             gameId={gameId}
             positionInfo={connectionPositions[gameId]}
+            scale={scale}
           ></GameConnection>
         );
       })}

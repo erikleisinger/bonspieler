@@ -93,9 +93,15 @@ export default function Brackets({
   }
 
   const [scale, setScale] = useState(initialScale);
+
+  const MIN_SCALE = 0.6;
+  const MAX_SCALE = 1.4;
+
   const updateScale = (value: number) => () => {
     setScale((prev) => {
       const newValue = prev + value;
+      if (newValue < MIN_SCALE) return MIN_SCALE;
+      if (newValue > MAX_SCALE) return MAX_SCALE;
       return Math.min(Math.max(newValue, 0.1), 2);
     });
   };
@@ -103,9 +109,13 @@ export default function Brackets({
   return (
     <>
       <div ref={el} className="pointer-events-auto relative">
-        <div className="fixed bottom-8 right-8 z-50">
-          <Button onClick={updateScale(0.1)}>+</Button>
-          <Button onClick={updateScale(-0.1)}>-</Button>
+        <div className="fixed bottom-8 right-32 z-50">
+          <Button onClick={updateScale(0.2)} disabled={scale >= MAX_SCALE}>
+            +
+          </Button>
+          <Button onClick={updateScale(-0.2)} disabled={scale <= MIN_SCALE}>
+            -
+          </Button>
         </div>
         {brackets?.length &&
           brackets.map((rounds, bracketIndex) => {
@@ -164,6 +174,11 @@ export default function Brackets({
                                 <div
                                   className="relative"
                                   onClick={() => onGameResultClick(game)}
+                                  style={{
+                                    transform: `scale(${scale}) translateX(calc(${
+                                      scale - 1
+                                    } * 100%))`,
+                                  }}
                                 >
                                   {gameResultChildren || (
                                     <BracketGameFinalResult

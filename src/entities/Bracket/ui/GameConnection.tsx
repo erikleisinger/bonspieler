@@ -4,9 +4,11 @@ import type { GameConnectionPositionInfo } from "../types/GameConnection";
 export default function GameConnection({
   gameId,
   positionInfo,
+  scale,
 }: {
   gameId: string;
   positionInfo: GameConnectionPositionInfo;
+  scale: number;
 }) {
   const { position, dimensions } = useMemo(() => {
     if (!positionInfo)
@@ -57,9 +59,10 @@ export default function GameConnection({
         </div>
 
         <div
-          className="h-[4px] bg-connection  grow translate-x-[-4px]  cursor-pointer"
+          className="h-[4px] bg-connection  grow   cursor-pointer"
           style={{
             width: "calc(100% + 4px)",
+            transform: `translateX(-4px)`,
           }}
         ></div>
       </div>
