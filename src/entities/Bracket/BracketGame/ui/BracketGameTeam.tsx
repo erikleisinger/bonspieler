@@ -1,5 +1,7 @@
 import { FaSeedling, FaRunning } from "react-icons/fa";
 import { OriginConnection } from "../../BracketGameConnections";
+import { useContext } from "react";
+import { BracketContext } from "@/shared/Bracket/BracketContext";
 export default function BracketGameTeam({
   className,
   connection,
@@ -7,6 +9,10 @@ export default function BracketGameTeam({
   className?: string;
   connection: OriginConnection;
 }) {
+  const { readableIdIndex } = useContext(BracketContext);
+  const connectionReadableId = connection.gameId
+    ? readableIdIndex[connection.gameId]
+    : null;
   return (
     <div
       className={
@@ -14,16 +20,16 @@ export default function BracketGameTeam({
         className
       }
     >
-      {!connection?.readableId ? (
+      {!connectionReadableId ? (
         <FaSeedling className="text-emerald-500" />
       ) : connection.stageName ? (
         <FaRunning className="text-indigo-500" />
       ) : (
         <div />
       )}
-      {connection.readableId ? (
+      {connectionReadableId ? (
         <div className="whitespace-nowrap overflow-hidden min-w-0 text-ellipsis">
-          {connection?.isWinner ? "Winner " : "Loser"} {connection?.readableId}{" "}
+          {connection?.isWinner ? "Winner " : "Loser"} {connectionReadableId}{" "}
           {connection?.stageName || ""}
         </div>
       ) : (

@@ -3,6 +3,7 @@ import {
   useGetBracketGamesQuery,
   useGetBracketConnectionsQuery,
 } from "@/shared/api";
+import { generateReadableIdIndex } from "./generateReadableIdIndex";
 import { BracketContext } from "./BracketContext";
 export default function BracketProvider({
   children,
@@ -45,6 +46,10 @@ export default function BracketProvider({
     return isFetchingConnections || isFetchingGames;
   }, [isFetchingConnections, isFetchingGames]);
 
+  const readableIdIndex = useMemo(() => {
+    return generateReadableIdIndex(brackets);
+  }, [brackets]);
+
   return (
     <BracketContext.Provider
       value={{
@@ -54,6 +59,7 @@ export default function BracketProvider({
         brackets,
         schedule,
         loading: isFetching,
+        readableIdIndex,
         stageId,
       }}
     >

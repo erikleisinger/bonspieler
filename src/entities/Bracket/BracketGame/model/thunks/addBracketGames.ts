@@ -1,10 +1,6 @@
 import type { AppThunk } from "@/lib/store";
 import { BracketGameType } from "@/entities/Bracket";
-import {
-  updateBracketGameIndex,
-  updateBracketGames,
-} from "../bracketGamesSlice";
-import { generateGameIndex } from "../helpers";
+import { updateBracketGames } from "../bracketGamesSlice";
 export const addBracketGames =
   ({
     games,
@@ -14,12 +10,10 @@ export const addBracketGames =
     index: number;
   }): AppThunk =>
   (dispatch) => {
-    const gameIndex = generateGameIndex(games);
     dispatch(
       updateBracketGames({
         brackets: games[0],
         index,
       })
     );
-    dispatch(updateBracketGameIndex(gameIndex));
   };

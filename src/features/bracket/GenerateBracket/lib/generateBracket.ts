@@ -29,7 +29,7 @@ export function generateBracket({
   isSeeded: boolean;
   bracketIndex: number;
 }): GeneratedBracket {
-  const tournament = generateTournament(numTeams, numWinners);
+  const tournament = generateTournament(numTeams, numWinners, bracketIndex);
   const { brackets, connections } = tournament;
   console.log("generate brackets: ", brackets);
 
@@ -48,18 +48,8 @@ export function generateBracket({
     drawTimes[index + 1] = null;
   });
 
-  const bracketsWithCorrectBracketNumber = brackets.map(
-    (rounds, thisBracketIndex) =>
-      rounds.map((games) =>
-        games.map((game) => ({
-          ...game,
-          bracketNumber: thisBracketIndex + bracketIndex,
-        }))
-      )
-  );
-
   return {
-    brackets: bracketsWithCorrectBracketNumber,
+    brackets,
     drawTimes,
     loserConnections,
     numTeams,

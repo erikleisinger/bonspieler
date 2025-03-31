@@ -17,7 +17,6 @@ import {
   removeBracketGames,
   getBracketGames,
   addBracketGames,
-  shiftBracketAssignmentForGames,
 } from "@/entities/Bracket/BracketGame";
 import {
   setDrawTimes,
@@ -66,7 +65,7 @@ export default function useSetBracketData() {
       numWinners,
       numSheets: currentNumSheets,
       isSeeded,
-      bracketIndex: currentBrackets.length,
+      bracketIndex: index,
     });
 
     const { schedule: newSchedule } = scheduleTournament(
@@ -107,13 +106,6 @@ export default function useSetBracketData() {
     dispatch(updateNumTeams(startTeams * -1));
     dispatch(updateNumWinners(endTeams * -1));
 
-    dispatch(
-      shiftBracketAssignmentForGames({
-        increment: -1,
-        bracketsAfter: bracketIndex - 1,
-      })
-    );
-
     if (currentBrackets.length <= 2) return;
     const { schedule: newSchedule, draws } = scheduleTournament(
       currentOriginConnections,
@@ -148,9 +140,6 @@ export default function useSetBracketData() {
     winnerConnections: WinnerConnections;
     loserConnections: LoserConnections;
     brackets: BracketGameType[][][];
-    gameIndex: {
-      [gameId: string]: BracketGameType;
-    };
     drawTimes: BracketDrawTimes;
     schedule: BracketSchedule;
     numTeams: number;

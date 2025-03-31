@@ -12,6 +12,9 @@ export const BracketContext = createContext<{
   brackets: BracketGameType[][][];
   schedule: BracketSchedule;
   loading: boolean;
+  readableIdIndex: {
+    [gameId: string]: string;
+  };
   stageId: string;
 }>({
   originConnections: {},
@@ -20,5 +23,6 @@ export const BracketContext = createContext<{
   brackets: [],
   schedule: {},
   loading: false,
+  readableIdIndex: {},
   stageId: "",
 });

@@ -39,8 +39,6 @@ import {
 import {
   getBracketGames,
   getBracketGamesSchedule,
-  getRemovedGameIds,
-  resetRemovedGameIds,
 } from "@/entities/Bracket/BracketGame";
 
 export default function useSaveBracket() {
@@ -52,7 +50,6 @@ export default function useSaveBracket() {
   const originConnections = useAppSelector(getOriginConnections);
   const brackets = useAppSelector(getBracketGames);
   const schedule = useAppSelector(getBracketGamesSchedule);
-  const removedGameIds = useAppSelector(getRemovedGameIds);
 
   const bracketName = useAppSelector(getBracketEventName);
 
@@ -69,8 +66,6 @@ export default function useSaveBracket() {
       brackets,
       schedule,
     });
-
-    dispatch(resetRemovedGameIds());
 
     await saveConnections({
       tournamentId,

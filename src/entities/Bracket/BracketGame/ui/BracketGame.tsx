@@ -96,7 +96,7 @@ export default function BracketGame({
             <BracketGameHeader
               readableId={game.readableId}
               drawNumber={drawNumber}
-              loserTo={loserConnection.readableId}
+              loserTo={loserConnection.gameId}
             />
 
             <BracketGameTeams

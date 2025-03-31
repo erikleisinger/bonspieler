@@ -157,7 +157,7 @@ export default function Brackets({
             >
               <div
                 className={cn(
-                  "grid grid-cols-[auto_1fr]  rounded-tl-xl rounded-bl-xl w-max relative"
+                  "grid grid-cols-[auto_1fr] w-full  rounded-tl-xl rounded-bl-xl  relative"
                 )}
               >
                 {bracketOverlayChildren?.length ? (

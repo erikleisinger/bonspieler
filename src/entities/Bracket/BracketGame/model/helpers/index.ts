@@ -1,1 +1,0 @@
-export { generateGameIndex } from "./generateGameIndex";

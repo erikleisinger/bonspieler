@@ -14,7 +14,6 @@ import {
 import {
   getBracketGames,
   getBracketGamesSchedule,
-  getBracketGameIndex,
 } from "@/entities/Bracket/BracketGame";
 import {
   getSelectedGame,
@@ -39,7 +38,6 @@ export default function useBracketData() {
   const winnerConnections = useAppSelector(getWinnerConnections);
   const loserConnections = useAppSelector(getLoserConnections);
   const originConnections = useAppSelector(getOriginConnections);
-  const gameIndex = useAppSelector(getBracketGameIndex);
   const lookingForLoserConnection = useAppSelector(isLookingForLoserConnection);
   const viewingNextRoundGameConnection = useAppSelector(
     getViewingNextRoundGameConnection
@@ -76,7 +74,6 @@ export default function useBracketData() {
     winnerConnections,
     loserConnections,
     originConnections,
-    gameIndex,
     lookingForLoserConnection,
     viewingNextRoundGameConnection,
     tournamentId,

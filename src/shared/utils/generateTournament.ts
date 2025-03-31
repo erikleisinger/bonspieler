@@ -2,4 +2,4 @@ export {
   scheduleTournament,
   generateTournament,
   generateBracketConnections,
-} from "@erikleisinger/bracket-generator";
+} from "../../../../bracket/index";

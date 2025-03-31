@@ -3,6 +3,7 @@ import { useAppSelector } from "@/lib/store";
 import {
   getBracketGames,
   getBracketGamesSchedule,
+  getReadableIdIndex,
 } from "@/entities/Bracket/BracketGame";
 import {
   getOriginConnections,
@@ -22,6 +23,7 @@ export default function BracketProvider({
   const schedule = useAppSelector(getBracketGamesSchedule);
   const winnerConnections = useAppSelector(getWinnerConnections);
   const loserConnections = useAppSelector(getLoserConnections);
+  const readableIdIndex = useAppSelector(getReadableIdIndex);
 
   return (
     <BracketContext.Provider
@@ -32,6 +34,7 @@ export default function BracketProvider({
         brackets,
         schedule,
         loading: false,
+        readableIdIndex,
         stageId,
       }}
     >
