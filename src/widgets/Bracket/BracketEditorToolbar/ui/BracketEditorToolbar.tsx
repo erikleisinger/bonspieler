@@ -45,9 +45,9 @@ export default function BracketEditorToolbar({
           <FaUserFriends />
         </BracketEditorToolbarButton>
         <BracketEditorToolbarButton
-          onClick={() => handleClick(BracketEditorToolbarState.ViewingBracket)}
-          active={state === BracketEditorToolbarState.ViewingBracket}
-          tooltip="View Brackets"
+          onClick={() => handleClick(BracketEditorToolbarState.EditingBrackets)}
+          active={state === BracketEditorToolbarState.EditingBrackets}
+          tooltip="Modify Brackets"
         >
           <TbTournament />
         </BracketEditorToolbarButton>

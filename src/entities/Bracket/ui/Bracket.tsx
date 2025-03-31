@@ -41,7 +41,7 @@ export default function Bracket({
   return (
     <div>
       <div
-        className="p-0 min-h-screen pr-[100vw] md:pr-[500px]"
+        className="p-0 "
         id={BRACKET_CONTAINER_ELEMENT_ID_PREFIX + bracketNumber}
       >
         <div className="flex relative">

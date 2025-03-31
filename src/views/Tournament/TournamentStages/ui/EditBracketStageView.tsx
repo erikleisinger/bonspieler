@@ -17,6 +17,7 @@ import { scrollToGame } from "@/entities/Bracket";
 import { Brackets } from "@/shared/Bracket";
 import {
   BracketEditorToolbar,
+  BracketEditorToolbarState,
   useBracketEditorToolbarState,
 } from "@/widgets/Bracket/BracketEditorToolbar";
 import EditBracketModalController from "./EditBracketModalController";
@@ -32,6 +33,11 @@ import {
 import { CreateBracketEventWizard } from "@/widgets/Bracket/CreateBracketEventWizard";
 import { useSetBracketData } from "../helpers";
 import EditableBracketProvider from "@/shared/Bracket/EditableBracketProvider";
+import { Button } from "@/shared/ui/button";
+import { Popover, PopoverTrigger, PopoverContent } from "@/shared/ui/popover";
+import { AddBracketOptions } from "@/widgets/Bracket/AddBracket";
+import { FaTrash } from "react-icons/fa";
+
 export default function EditBracketStageView() {
   const dispatch = useAppDispatch();
 
@@ -134,8 +140,12 @@ export default function EditBracketStageView() {
   }
 
   function onBackgroundClick() {
-    setToolbarState(null);
-    dispatch(setSelectedGame(null));
+    if (isBracketEditMode) {
+      console.log("bracket edit mode!");
+    } else {
+      setToolbarState(null);
+      dispatch(setSelectedGame(null));
+    }
   }
 
   function onGameResultClick(game: BracketGameType) {
@@ -147,32 +157,108 @@ export default function EditBracketStageView() {
     return [selectedGame.id];
   }, [selectedGame?.id]);
 
+  /**
+   *
+   * Bracket editing
+   */
+
+  const isBracketEditMode = useMemo(() => {
+    return toolbarState === BracketEditorToolbarState.EditingBrackets;
+  }, [toolbarState]);
+
+  function onBracketClick(bracketIndex: number) {
+    console.log("bracket click: ", bracketIndex);
+  }
+
+  const { addBracket, removeBracket } = useSetBracketData();
+
+  function onAddBracket(index, opts) {
+    addBracket(index + 1, opts);
+  }
+
+  function deleteBracketOverlays() {
+    if (!isBracketEditMode) return [];
+    return Array.from({ length: brackets.length }).map((_, i) => {
+      return (
+        <div
+          key={"delete-bracket-overlay-" + i}
+          className="absolute inset-0  w-full h-full hover:bg-black/10 z-50 rounded-3xl group flex items-center justify-center"
+        >
+          <Button
+            variant="ghost"
+            className="hidden group-hover:block h-fit w-fit text-white hover:text-destructive hover:bg-destructive/20"
+            onClick={() => removeBracket(i)}
+          >
+            <FaTrash
+              style={{
+                height: "4rem",
+                width: "4rem",
+              }}
+            />
+          </Button>
+        </div>
+      );
+    });
+  }
+
+  function addBracketElements() {
+    if (!isBracketEditMode) return [];
+    return Array.from({ length: brackets.length }).map((_, i) => {
+      return (
+        <div
+          key={i}
+          className="sticky left-0  w-full py-4   flex justify-center"
+        >
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button>+ Add bracket</Button>
+            </PopoverTrigger>
+            <PopoverContent align="start" side="top" className="w-[400px]">
+              <AddBracketOptions onAdd={(opts) => onAddBracket(i, opts)} />
+            </PopoverContent>
+          </Popover>
+        </div>
+      );
+    });
+  }
   return (
     <EditableBracketProvider stageId={bracketStageId}>
-      <div className="grow">
+      {!!brackets?.length && (
+        <div className="sticky left-0 top-0 bg-glass backdrop-blur-sm flex z-50">
+          <BracketEditorToolbar
+            state={toolbarState}
+            setState={setToolbarState}
+          />
+        </div>
+      )}
+
+      <div className="grow relative">
         {brackets.length ? (
           <Brackets
-            onGameClick={onGameClick}
+            onGameClick={isBracketEditMode ? null : onGameClick}
             onGameResultClick={onGameResultClick}
             onBackgroundClick={onBackgroundClick}
+            onBracketClick={!isBracketEditMode ? null : onBracketClick}
             availableGameIds={availableGameIds}
             tournamentId={tournamentId}
             selectedGameIds={selectedGameIds}
+            appendBracketChildren={addBracketElements()}
+            bracketOverlayChildren={deleteBracketOverlays()}
           />
         ) : (
-          <CreateBracketEventWizard renderBrackets={renderBracketsFromWizard} />
+          <div className="absolute inset-0 overflow-auto">
+            <CreateBracketEventWizard
+              renderBrackets={renderBracketsFromWizard}
+            />
+          </div>
         )}
       </div>
 
-      <div className="fixed sticky top-0 bottom-0 right-[66px] z-50 min-w-[500px] overflow-hidden pointer-events-none ">
+      <div className="fixed  top-0 bottom-0 right-0 z-50 min-w-[500px] overflow-hidden pointer-events-none ">
         <EditBracketModalController
           state={toolbarState}
           setState={setToolbarState}
         />
-      </div>
-
-      <div className="sticky right-0 top-0 bg-glass backdrop-blur-sm flex z-50">
-        <BracketEditorToolbar state={toolbarState} setState={setToolbarState} />
       </div>
     </EditableBracketProvider>
   );

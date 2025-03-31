@@ -6,7 +6,7 @@ import Slideout from "@/shared/ui/slide-out";
 import Typography from "@/shared/ui/typography";
 import { BracketGameViewer } from "@/widgets/Bracket/BracketGameViewer";
 import { AssignTeams } from "@/widgets/Bracket/AssignTeams";
-import { BracketOptions } from "@/widgets/Bracket/BracketOptions";
+
 import { EditDrawNumber } from "@/features/EditDrawNumber";
 import { useBracketData, useSetBracketData } from "../helpers";
 import { BracketGameType } from "@/entities/Bracket";
@@ -122,15 +122,7 @@ export default function EditBracketModalController({
           />
         )}
       </Slideout>
-      <Slideout
-        fullHeight={true}
-        visible={state === BracketEditorToolbarState.ViewingBracket}
-      >
-        <BracketOptions
-          brackets={brackets}
-          removeBracket={handleRemoveBracket}
-        />
-      </Slideout>
+
       <Slideout
         fullHeight={true}
         visible={

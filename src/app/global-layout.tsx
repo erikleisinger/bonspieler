@@ -38,6 +38,7 @@ export default function GlobalLayout({
             Bonspieler
           </h1>
         </header>
+
         <div className="relative overflow-hidden z-10">{children}</div>
       </div>
     </SidebarProvider>

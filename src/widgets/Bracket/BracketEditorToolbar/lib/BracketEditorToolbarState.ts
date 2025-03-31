@@ -1,5 +1,6 @@
 export enum BracketEditorToolbarState {
   AddingBracket = "ADDING_BRACKET",
+  EditingBrackets = "EDITING_BRACKETS",
   ViewingGame = "VIEWING_GAME",
   ViewingBracket = "VIEWING_BRACKET",
   ViewingEvent = "VIEWING_EVENT",

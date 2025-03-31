@@ -1,6 +1,6 @@
 import { useRef, useEffect, useState } from "react";
 import { TournamentStageType } from "@/entities/Tournament";
-import TournamentStageSidebar from "./TournamentStageSidebar";
+import TournamentStageSidebar2 from "./TournamentStageSidebar2";
 import { TournamentStageContextProvider } from "@/shared/TournamentStage";
 import EditBracketStageView from "./EditBracketStageView";
 import ViewBracketStageView from "./ViewBracketStageView";
@@ -8,6 +8,8 @@ import { LoadBracket } from "@/widgets/Bracket/BracketEditor";
 import { cn } from "@/lib/utils";
 import { useSaveBracket } from "../lib";
 import useTournamentStageViewerState from "../lib/useTournamentStageViewerState";
+import { Button } from "@/shared/ui/button";
+import { FaBan, FaCheck, FaEdit, FaPencilAlt } from "react-icons/fa";
 export default function EditTournamentStagesView({
   tournamentId,
 }: {
@@ -48,10 +50,13 @@ export default function EditTournamentStagesView({
   });
 
   return (
-    <div className="absolute inset-0 overflow-auto flex" ref={scroller}>
-      <div className={cn("z-50 sticky top-0 left-0")}>
+    <div
+      className="absolute inset-0  grid grid-rows-[auto_1fr] "
+      ref={scroller}
+    >
+      <div className={cn("z-50   w-full")}>
         {tournamentId && (
-          <TournamentStageSidebar
+          <TournamentStageSidebar2
             tournamentId={tournamentId}
             selectedStage={selectedStage}
             onSelectStage={selectStage}
@@ -61,36 +66,73 @@ export default function EditTournamentStagesView({
             onSave={onSaveStage}
             onCancel={resetState}
             dense={scrolled}
+            editChildren={
+              !editedStage?.id ? (
+                <div className="flex gap-2 items-center">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      editStage(selectedStage);
+                    }}
+                  >
+                    <FaPencilAlt />
+                  </Button>
+                </div>
+              ) : editedStage?.id === selectedStage?.id ? (
+                <div className="flex gap-2 items-center">
+                  <Button variant="ghost" size="icon" onClick={resetState}>
+                    <FaBan />
+                  </Button>
+                  <Button variant="ghost" size="icon" onClick={onSaveStage}>
+                    <FaCheck />
+                  </Button>
+                </div>
+              ) : (
+                <div />
+              )
+            }
           />
         )}
       </div>
-
-      {selectedStage?.id && (
-        <TournamentStageContextProvider
-          stage={selectedStage}
-          tournamentId={tournamentId}
-        >
-          {whatToShow === "view" && (
-            <ViewBracketStageView
-              tournamentId={tournamentId}
-              stageId={selectedStage.id}
-            />
-          )}
-
-          {editedStage?.id &&
-            editedStage.type === TournamentStageType.Bracket && (
-              <LoadBracket stageId={editedStage.id}>
-                {whatToShow === "edit" && (
-                  <EditBracketStageView
-                    tournamentId={tournamentId}
-                    stageId={editedStage.id}
-                    onSave={onSaveStage}
-                  />
-                )}
-              </LoadBracket>
+      <div
+        className={cn(
+          "relative flex  border-l-8 border-t-8 rounded-tl-xl ",
+          selectedStage?.id === editedStage?.id
+            ? "border-emerald-500"
+            : !!selectedStage?.id
+            ? "border-primary"
+            : "border-transparent"
+        )}
+      >
+        {selectedStage?.id && (
+          <TournamentStageContextProvider
+            stage={selectedStage}
+            tournamentId={tournamentId}
+          >
+            {whatToShow === "view" && (
+              <ViewBracketStageView
+                tournamentId={tournamentId}
+                stageId={selectedStage.id}
+              />
             )}
-        </TournamentStageContextProvider>
-      )}
+
+            {editedStage?.id &&
+              editedStage.type === TournamentStageType.Bracket && (
+                <LoadBracket stageId={editedStage.id}>
+                  {whatToShow === "edit" && (
+                    <EditBracketStageView
+                      tournamentId={tournamentId}
+                      stageId={editedStage.id}
+                      onSave={onSaveStage}
+                    />
+                  )}
+                </LoadBracket>
+              )}
+          </TournamentStageContextProvider>
+        )}
+      </div>
     </div>
   );
 }

@@ -55,9 +55,15 @@ export const bracketGamesSlice = createSlice({
     },
     updateBracketGames: (
       state,
-      action: PayloadAction<BracketGameType[][][]>
+      action: PayloadAction<{
+        index: number;
+        brackets: BracketGameType[][];
+      }>
     ) => {
-      state.brackets = [...state.brackets, ...action.payload];
+      const { index = 0, brackets } = action.payload;
+      const newBrackets = [...state.brackets];
+      newBrackets.splice(index, 0, brackets);
+      state.brackets = newBrackets;
     },
 
     setBracketGamesSchedule: (

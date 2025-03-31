@@ -15,8 +15,7 @@ export default function BracketRound({
   scale: number;
 }) {
   return (
-    <div className="pointer-events-none">
-      <BracketRoundHeader roundNumber={roundIndex + 1} />
+    <div className="pointer-events-none bracket-row">
       <div className="h-8" />
       <BracketRoundRow
         roundIndex={roundIndex}

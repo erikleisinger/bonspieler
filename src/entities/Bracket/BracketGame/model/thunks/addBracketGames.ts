@@ -6,9 +6,20 @@ import {
 } from "../bracketGamesSlice";
 import { generateGameIndex } from "../helpers";
 export const addBracketGames =
-  (games: BracketGameType[][][]): AppThunk =>
+  ({
+    games,
+    index,
+  }: {
+    games: BracketGameType[][][];
+    index: number;
+  }): AppThunk =>
   (dispatch) => {
     const gameIndex = generateGameIndex(games);
-    dispatch(updateBracketGames(games || []));
+    dispatch(
+      updateBracketGames({
+        brackets: games[0],
+        index,
+      })
+    );
     dispatch(updateBracketGameIndex(gameIndex));
   };

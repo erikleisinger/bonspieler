@@ -43,15 +43,18 @@ export default function useSetBracketData() {
   const currentNumSheets = useAppSelector(getBracketEventNumSheets);
   const currentOriginConnections = useAppSelector(getOriginConnections);
 
-  async function addBracket({
-    numTeams,
-    numWinners,
-    isSeeded,
-  }: {
-    numTeams: number;
-    numWinners: number[];
-    isSeeded: boolean;
-  }) {
+  async function addBracket(
+    index: number,
+    {
+      numTeams,
+      numWinners,
+      isSeeded,
+    }: {
+      numTeams: number;
+      numWinners: number[];
+      isSeeded: boolean;
+    }
+  ) {
     const {
       brackets,
       loserConnections,
@@ -73,7 +76,12 @@ export default function useSetBracketData() {
 
     dispatch(setBracketGamesSchedule(newSchedule));
 
-    await dispatch(addBracketGames(brackets));
+    await dispatch(
+      addBracketGames({
+        index,
+        games: brackets,
+      })
+    );
     dispatch(updateNumTeams(numTeams));
     dispatch(updateNumWinners(numWinners.reduce((a, c) => a + c, 0)));
     dispatch(

@@ -35,9 +35,6 @@ export default function AddBracket({
       numWinners: [numWinners],
       isSeeded,
     });
-    setTimeout(() => {
-      scrollToBracket(brackets.length);
-    }, 1);
   }
   return (
     <div className="p-6">
