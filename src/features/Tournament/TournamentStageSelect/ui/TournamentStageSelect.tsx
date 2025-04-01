@@ -6,20 +6,15 @@ import { Nullable } from "@/shared/types";
 import TournamentStageSelectItem from "./TournamentStageSelectItem";
 export default function TournamentStageSelect({
   editChildren,
-
   editedStage,
   selectedStage,
-
   onSelectStage,
   stages = [],
 }: {
   editChildren?: React.ReactNode;
-
   editedStage?: Nullable<TournamentStage>;
   selectedStage: TournamentStage;
-
   onSelectStage: (stage: TournamentStage) => void;
-
   stages: TournamentStage[];
 }) {
   const [initialLoadDone, setInitialLoadDone] = useState(false);

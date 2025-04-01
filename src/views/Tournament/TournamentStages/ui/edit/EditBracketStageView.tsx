@@ -38,7 +38,7 @@ import EditableBracketProvider from "@/shared/Bracket/EditableBracketProvider";
 import { Button } from "@/shared/ui/button";
 import { Popover, PopoverTrigger, PopoverContent } from "@/shared/ui/popover";
 import { AddBracketOptions } from "@/widgets/Bracket/AddBracket";
-import { FaTrash } from "react-icons/fa";
+import { DeleteBracketOverlay } from "@/features/Bracket/DeleteBracket";
 import {
   getBracketEventStartTeams,
   getBracketEventEndTeams,
@@ -181,35 +181,10 @@ export default function EditBracketStageView({
     return toolbarState === BracketEditorToolbarState.EditingBrackets;
   }, [toolbarState]);
 
-  const { addBracket, removeBracket } = useSetBracketData();
+  const { addBracket } = useSetBracketData();
 
   function onAddBracket(index, opts) {
     addBracket(index + 1, opts);
-  }
-
-  function deleteBracketOverlays() {
-    if (!isBracketEditMode) return [];
-    return Array.from({ length: brackets.length }).map((_, i) => {
-      return (
-        <div
-          key={"delete-bracket-overlay-" + i}
-          className="absolute inset-0  w-full h-full hover:bg-black/10 z-50 rounded-3xl group flex items-center justify-center"
-        >
-          <Button
-            variant="ghost"
-            className="hidden group-hover:block h-fit w-fit text-white hover:text-destructive hover:bg-destructive/20"
-            onClick={() => removeBracket(i)}
-          >
-            <FaTrash
-              style={{
-                height: "4rem",
-                width: "4rem",
-              }}
-            />
-          </Button>
-        </div>
-      );
-    });
   }
 
   function addBracketElements() {
@@ -254,7 +229,14 @@ export default function EditBracketStageView({
             tournamentId={tournamentId}
             selectedGameIds={selectedGameIds}
             appendBracketChildren={addBracketElements()}
-            bracketOverlayChildren={deleteBracketOverlays()}
+            bracketOverlayChildren={Array.from({ length: brackets.length }).map(
+              (_, i) => (
+                <DeleteBracketOverlay
+                  bracketIndex={i}
+                  key={"delete-bracket-overlay-" + i}
+                />
+              )
+            )}
           />
         ) : (
           <div className="absolute inset-0 overflow-auto">

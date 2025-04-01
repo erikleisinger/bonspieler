@@ -1,4 +1,4 @@
-import { TournamentStageSelect } from "@/widgets/Tournament/TournamentStageSelect";
+import { TournamentStageSelect } from "@/features/Tournament/TournamentStageSelect";
 import { TournamentStageContextProvider } from "@/entities/Tournament";
 import ViewBracketStageView from "./ViewBracketStageView";
 import { cn } from "@/lib/utils";

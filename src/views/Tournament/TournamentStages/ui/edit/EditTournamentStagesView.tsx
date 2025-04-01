@@ -1,7 +1,5 @@
-import { useRef, useEffect, useState } from "react";
 import { TournamentStageType } from "@/entities/Tournament";
-import { TournamentStageSelect } from "@/widgets/Tournament/TournamentStageSelect";
-import { TournamentStageContextProvider } from "@/entities/Tournament";
+import { TournamentStageSelect } from "@/features/Tournament/TournamentStageSelect";
 import EditBracketStageView from "./EditBracketStageView";
 import ViewBracketStageView from "../view/ViewBracketStageView";
 import { LoadBracket } from "@/widgets/Bracket/BracketEditor";
@@ -30,7 +28,6 @@ export default function EditTournamentStagesView({
     selectStage,
     selectedStage,
     editStage,
-    canEdit,
     editedStage: currentEditedStage,
     resetState,
     whatToShow,
@@ -55,39 +52,16 @@ export default function EditTournamentStagesView({
     resetState();
   }
 
-  const scroller = useRef<HTMLDivElement>(null);
-  const [scrolled, setScrolled] = useState(false);
-  useEffect(() => {
-    function onScroll(e) {
-      setScrolled(e.target.scrollLeft > 50);
-    }
-    if (scroller?.current)
-      scroller.current.addEventListener("scroll", onScroll);
-    return () => {
-      if (scroller?.current)
-        scroller.current.removeEventListener("scroll", onScroll);
-    };
-  });
-
   return (
-    <div
-      className="absolute inset-0  grid grid-rows-[auto_1fr] "
-      ref={scroller}
-    >
+    <div className="absolute inset-0  grid grid-rows-[auto_1fr] ">
       <div className={cn("z-50   w-full")}>
         {tournamentId && (
           <div className="flex">
             <TournamentStageSelect
-              stages={stages}
-              tournamentId={tournamentId}
+              stages={stages || []}
               selectedStage={selectedStage}
               onSelectStage={selectStage}
-              onSelectEditedStage={!editedStage ? editStage : null}
               editedStage={editedStage}
-              disabled={!!editedStage}
-              onSave={onSaveStage}
-              onCancel={resetState}
-              dense={scrolled}
               editChildren={
                 !editedStage?.id ? (
                   <div className="flex gap-2 items-center">
@@ -134,10 +108,7 @@ export default function EditTournamentStagesView({
         )}
       >
         {selectedStage?.id && (
-          <TournamentStageContextProvider
-            stage={selectedStage}
-            tournamentId={tournamentId}
-          >
+          <>
             {whatToShow === "view" &&
               selectedStage.type === TournamentStageType.Bracket && (
                 <ViewBracketStageView
@@ -159,7 +130,7 @@ export default function EditTournamentStagesView({
                   )}
                 </LoadBracket>
               )}
-          </TournamentStageContextProvider>
+          </>
         )}
       </div>
     </div>

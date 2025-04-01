@@ -1,6 +1,5 @@
 import { useEffect, useLayoutEffect } from "react";
 
-import { useFetchDrawTimesForStageQuery } from "@/entities/DrawTime";
 import {
   useGetBracketConnectionsQuery,
   useGetBracketGamesQuery,
@@ -39,7 +38,6 @@ import {
 
 import { setConnections } from "@/entities/Bracket/BracketGameConnections";
 
-import LoaderFullPage from "@/shared/ui/loader-full-page";
 export default function LoadBracket({
   children,
   stageId,
