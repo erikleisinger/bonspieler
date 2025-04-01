@@ -43,3 +43,6 @@ next-env.d.ts
 test/
 .npmrc
 gen.txt
+
+#code counter
+.VSCodeCounter
