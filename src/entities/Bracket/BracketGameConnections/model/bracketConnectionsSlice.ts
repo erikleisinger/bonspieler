@@ -89,7 +89,7 @@ export const bracketConnectionsSlice = createSlice({
     },
     removeLoserConnectionForGame: (state, action: PayloadAction<string>) => {
       const gameId = action.payload;
-      const currentLoserDestination = state.loserConnections[gameId];
+      const currentLoserDestination = state.loserConnections[gameId]?.gameId;
       if (!currentLoserDestination) {
         console.warn("could not remove loser connection, as it does not exist");
         return;
@@ -109,9 +109,10 @@ export const bracketConnectionsSlice = createSlice({
       action: PayloadAction<{
         gameId: string;
         destinationGameId: string;
+        stageId: string;
       }>
     ) => {
-      const { gameId, destinationGameId } = action.payload;
+      const { gameId, destinationGameId, stageId } = action.payload;
       const destinationOrigins = state.originConnections[destinationGameId];
       const newDestinationOrigins = Array.from({ length: 2 }).map(
         (_, i) => destinationOrigins[i] || { isWinner: false, gameId: null }
@@ -127,11 +128,15 @@ export const bracketConnectionsSlice = createSlice({
       newDestinationOrigins.splice(availableIndex, 1, {
         isWinner: false,
         gameId,
+        stageId,
       });
 
       state.originConnections[destinationGameId] = newDestinationOrigins;
 
-      state.loserConnections[gameId] = destinationGameId;
+      state.loserConnections[gameId] = {
+        gameId: destinationGameId,
+        stageId,
+      };
     },
     setConnections: (state, action) => {
       const { loserConnections, winnerConnections, originConnections } =
@@ -197,16 +202,27 @@ export const getConnectionsState = (state: RootState) => {
   return state.bracketConnections;
 };
 
-export const getWinnerConnections = (state: RootState) =>
-  state.bracketConnections.winnerConnections;
+export const getConnections = (state: RootState) => state.bracketConnections;
 
-export const getOriginConnections = (state: RootState) => {
-  return state.bracketConnections.originConnections;
-};
+export const getWinnerConnections = createSelector(
+  [getConnections],
+  (connections) => {
+    return connections?.winnerConnections || {};
+  }
+);
 
-export const getLoserConnections = (state: RootState) => {
-  return state.bracketConnections.loserConnections;
-};
+export const getOriginConnections = createSelector(
+  [getConnections],
+  (connections) => {
+    return connections?.originConnections || {};
+  }
+);
+export const getLoserConnections = createSelector(
+  [getConnections],
+  (connections) => {
+    return connections?.loserConnections || {};
+  }
+);
 
 export const getLoserConnectionsForGame = createSelector(
   [getLoserConnections, (state, gameId?: Nullable<string>) => gameId],

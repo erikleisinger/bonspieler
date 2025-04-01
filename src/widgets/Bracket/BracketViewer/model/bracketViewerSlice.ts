@@ -27,7 +27,10 @@ export const bracketViewerSlice = createSlice({
       Object.assign(state, defaultState());
       state.selectedDraw = action.payload;
     },
-    setSelectedGame: (state, action: PayloadAction<BracketGameType>) => {
+    _setSelectedGame: (
+      state,
+      action: PayloadAction<Nullable<BracketGameType>>
+    ) => {
       Object.assign(state, defaultState());
       state.selectedGame = action.payload;
     },
@@ -57,8 +60,10 @@ export const getViewingNextRoundGameConnection = (state: RootState) => {
 
 export const {
   setSelectedDraw,
-  setSelectedGame,
   setViewingNextRoundGameConnection,
+  _setSelectedGame,
 } = bracketViewerSlice.actions;
+
+export { setSelectedGame } from "./setSelectedGame";
 
 export default bracketViewerSlice.reducer;

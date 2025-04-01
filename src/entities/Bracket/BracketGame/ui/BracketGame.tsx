@@ -64,7 +64,7 @@ export default function BracketGame({
 
   function handleClick(e: MouseEvent<HTMLElement>) {
     if (!onClick) return;
-    e.stopPropagation();
+
     onClick(game);
   }
 
@@ -93,7 +93,7 @@ export default function BracketGame({
               className
             )}
             id={GAME_ELEMENT_ID_PREFIX + game.id}
-            onMouseDown={handleClick}
+            onClick={handleClick}
           >
             <BracketGameHeader
               readableId={game.readableId}

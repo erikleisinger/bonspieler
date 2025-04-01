@@ -1,18 +1,23 @@
 import type { Nullable } from "@/shared/types";
 import { FaTrophy, FaHeartBroken } from "react-icons/fa";
-import { useAppDispatch } from "@/lib/store";
-import { setSelectedGame } from "@/widgets/Bracket/BracketViewer";
 import { DestinationConnection } from "@/entities/Bracket/BracketGameConnections";
+import { useContext } from "react";
+import { BracketContext } from "@/shared/Bracket/BracketContext";
 export default function BracketGameViewerConnection({
   connection,
   isWinner = false,
   isLoser = false,
+  onClick,
 }: {
   connection: Nullable<DestinationConnection>;
   isWinner?: boolean;
   isLoser?: boolean;
+  onClick?: (connection?: DestinationConnection) => void;
 }) {
-  const dispatch = useAppDispatch();
+  const { readableIdIndex } = useContext(BracketContext);
+  const connectionReadableId = !connection?.gameId
+    ? null
+    : readableIdIndex[connection?.gameId];
 
   function icon() {
     if (isLoser) {
@@ -25,28 +30,29 @@ export default function BracketGameViewerConnection({
 
   function text() {
     if (isLoser) {
-      if (connection?.readableId) {
-        return connection?.readableId;
+      if (connectionReadableId) {
+        return connectionReadableId;
       }
       return "Out";
     }
     if (isWinner) {
-      if (connection?.readableId) {
-        return connection?.readableId;
+      if (connectionReadableId) {
+        return connectionReadableId;
       }
       return "Advances";
     }
   }
 
-  function onClick() {
+  function handleClick() {
     if (!connection) return;
-    dispatch(setSelectedGame(connection));
+    if (!onClick) return;
+    onClick(connection);
   }
 
   return (
     <div
       className="flex gap-4 items-center rounded-md hover:bg-white/50 p-2 cursor-pointer"
-      onClick={onClick}
+      onClick={handleClick}
     >
       {icon()}
 

@@ -22,28 +22,28 @@ export default function BracketEditorToolbar({
   return (
     <div className={cn("py-2 px-4 flex flex-col gap-2")}>
       <>
-        <BracketEditorToolbarButton
+        {/* <BracketEditorToolbarButton
           onClick={() => handleClick(BracketEditorToolbarState.AddingBracket)}
           active={state === BracketEditorToolbarState.AddingBracket}
           tooltip="Add bracket"
         >
           <FaPlus />
-        </BracketEditorToolbarButton>
-        <BracketEditorToolbarButton
+        </BracketEditorToolbarButton> */}
+        {/* <BracketEditorToolbarButton
           onClick={() => handleClick(BracketEditorToolbarState.ViewingSchedule)}
           active={state === BracketEditorToolbarState.ViewingSchedule}
           tooltip="Schedule"
         >
           <FaCalendarAlt />
-        </BracketEditorToolbarButton>
+        </BracketEditorToolbarButton> */}
 
-        <BracketEditorToolbarButton
+        {/* <BracketEditorToolbarButton
           onClick={() => handleClick(BracketEditorToolbarState.ViewingTeams)}
           active={state === BracketEditorToolbarState.ViewingTeams}
           tooltip="Assign teams"
         >
           <FaUserFriends />
-        </BracketEditorToolbarButton>
+        </BracketEditorToolbarButton> */}
         <BracketEditorToolbarButton
           onClick={() => handleClick(BracketEditorToolbarState.EditingBrackets)}
           active={state === BracketEditorToolbarState.EditingBrackets}

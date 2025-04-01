@@ -14,6 +14,9 @@ import { useAppDispatch } from "@/lib/store";
 import { setLookingForLoserConnection } from "@/widgets/Bracket/BracketEditor";
 import { removeLoserConnectionForGame } from "@/entities/Bracket/BracketGameConnections";
 import { NextStageConnectionEditor } from "@/widgets/Bracket/NextStageConnectionEditor";
+import { setSelectedGame } from "@/widgets/Bracket/BracketViewer";
+import type { DestinationConnection } from "@/entities/Bracket/BracketGameConnections";
+
 export default function EditBracketModalController({
   setState,
   state,
@@ -116,6 +119,9 @@ export default function EditBracketModalController({
             game={selectedGame}
             onEditLoserConnection={handleLookForLoserConnection}
             onRemoveLoserConnection={handleRemoveLoserConnection}
+            onClickConnection={(connection: DestinationConnection) =>
+              dispatch(setSelectedGame(connection.gameId))
+            }
             drawTimeChildren={
               <EditDrawNumber availableDrawTimes={availableDrawTimes} />
             }

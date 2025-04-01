@@ -105,7 +105,7 @@ const getBracketGamesState = (state: RootState) => state.bracketGames;
 export const getBracketGames = createSelector(
   [getBracketGamesState],
   (bracketGamesState) => {
-    return bracketGamesState.brackets;
+    return bracketGamesState?.brackets || [];
   }
 );
 

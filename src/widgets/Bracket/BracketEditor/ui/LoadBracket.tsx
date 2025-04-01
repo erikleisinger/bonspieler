@@ -18,6 +18,7 @@ import {
   setBracketEventId,
   setBracketEventOrder,
   setBracketEventName,
+  setBracketEventType,
 } from "@/entities/BracketEvent";
 
 /**
@@ -57,7 +58,7 @@ export default function LoadBracket({
 
   useEffect(() => {
     if (stageData) {
-      const { id, tournament_id, order, name } = stageData;
+      const { id, tournament_id, order, name, type } = stageData;
       if (id) {
         dispatch(setBracketEventId(id));
       }
@@ -66,6 +67,9 @@ export default function LoadBracket({
       }
       if (order) {
         dispatch(setBracketEventOrder(order));
+      }
+      if (type) {
+        dispatch(setBracketEventType(type));
       }
       dispatch(setBracketEventName(name));
     }

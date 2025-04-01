@@ -1,5 +1,5 @@
 import type { Nullable } from "@/shared/types";
-
+import type { TournamentStageType } from "@/entities/Tournament";
 export type ViewableBracketEvent = {
   id: Nullable<string>;
   name: string;
@@ -8,4 +8,5 @@ export type ViewableBracketEvent = {
   num_end_teams: number;
   tournament_id: string;
   order: number;
+  type: TournamentStageType;
 };

@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useMemo } from "react";
 import { Button } from "@/shared/ui/button";
 import { FaEye, FaPencilAlt, FaTrashAlt } from "react-icons/fa";
 
@@ -10,15 +10,18 @@ import BracketGameViewerHeader from "./BracketGameViewerHeader";
 import BracketGameViewerConnection from "./BracketGameViewerConnection";
 import { Nullable } from "@/shared/types";
 import { BracketContext } from "@/shared/Bracket/BracketContext";
+import { DestinationConnection } from "@/entities/Bracket/BracketGameConnections";
 
 export default function BracketGameViewer({
   drawTimeChildren,
   game,
+  onClickConnection,
   onEditLoserConnection,
   onRemoveLoserConnection,
 }: {
   drawTimeChildren?: React.ReactNode;
   game: BracketGameType;
+  onClickConnection?: (connection?: DestinationConnection) => void;
   onEditLoserConnection?: (game: Nullable<BracketGameType>) => void;
   onRemoveLoserConnection?: (game: Nullable<BracketGameType>) => void;
 }) {
@@ -28,9 +31,17 @@ export default function BracketGameViewer({
     loserConnections,
   } = useContext(BracketContext);
 
-  const winnerConnection = winnerConnections[game.id];
-  const loserConnection = loserConnections[game.id];
-  const originConnections = allOriginConnections[game.id] || [];
+  const winnerConnection = useMemo(() => {
+    return winnerConnections[game.id];
+  }, [winnerConnections, game.id]);
+
+  const loserConnection = useMemo(() => {
+    return loserConnections[game.id];
+  }, [loserConnections, game.id]);
+
+  const originConnections = useMemo(() => {
+    return allOriginConnections[game.id] || [];
+  }, [allOriginConnections, game.id]);
 
   const dispatch = useAppDispatch();
   function selectGame(gameId: string) {
@@ -62,7 +73,7 @@ export default function BracketGameViewer({
                   <Button
                     variant="ghost"
                     size="icon"
-                    onClick={() => selectGame(connection?.gameId)}
+                    onClick={() => onClickConnection(connection)}
                     className="-ml-2 mr-2"
                     disabled={!connection?.gameId}
                   >
@@ -81,12 +92,14 @@ export default function BracketGameViewer({
             <BracketGameViewerConnection
               isWinner={true}
               connection={winnerConnection}
+              onClick={onClickConnection}
             />
             <div className="flex items-center">
               <div className="grow">
                 <BracketGameViewerConnection
                   isLoser={true}
                   connection={loserConnection}
+                  onClick={onClickConnection}
                 />
               </div>
 

@@ -3,6 +3,8 @@ import { TournamentStage } from "@/entities/Tournament";
 import { useGetTournamentStagesQuery } from "@/shared/api";
 
 import { Nullable } from "@/shared/types";
+import { useAppSelector } from "@/lib/store";
+import { getBracketEvent } from "@/entities/BracketEvent";
 
 import TournamentStageSidebarItem from "./TournamentStageSidebarItem";
 export default function TournamentStageSidebar({
@@ -26,6 +28,8 @@ export default function TournamentStageSidebar({
   onCancel?: () => void;
   onSave?: () => void;
 }) {
+  const editedStage = useAppSelector(getBracketEvent);
+
   const { data: stages } = useGetTournamentStagesQuery(
     { tournamentId },
     {
@@ -43,6 +47,12 @@ export default function TournamentStageSidebar({
     }
   }, [JSON.stringify(stages), initialLoadDone, onSelectStage]);
 
+  function isEditedStage(stageId: string) {
+    return editedStageId === stageId;
+  }
+  function isSelectedStage(stageId: string) {
+    return selectedStage?.id === stageId;
+  }
   return (
     <div className="flex gap-8 px-4  bg-glass backdrop-blur-sm relative">
       {stages?.length &&
@@ -50,12 +60,12 @@ export default function TournamentStageSidebar({
           return (
             <TournamentStageSidebarItem
               key={s.id}
-              stage={s}
+              stage={isEditedStage(s.id) ? editedStage : s}
               onClick={() => onSelectStage(s)}
-              selected={s.id === selectedStage?.id}
-              edited={s.id === editedStageId}
+              selected={isSelectedStage(s.id)}
+              edited={isEditedStage(s.id)}
             >
-              {s.id === selectedStage?.id && editChildren}
+              {isSelectedStage(s.id) && editChildren}
             </TournamentStageSidebarItem>
           );
         })}

@@ -31,6 +31,7 @@ export default function Brackets({
   backgroundGameIds,
   backgroundSelectable = false,
   bracketOverlayChildren = [],
+  className,
   gameResultChildren,
   onBackgroundClick,
   onGameClick,
@@ -45,6 +46,7 @@ export default function Brackets({
   backgroundGameIds?: Nullable<string[]>;
   backgroundSelectable?: boolean;
   bracketOverlayChildren?: React.ReactNode[];
+  className?: string;
   gameResultChildren?: React.ReactNode;
   onBackgroundClick?: () => void;
   onGameClick?: (game: BracketGameType) => void;
@@ -68,10 +70,10 @@ export default function Brackets({
 
   useEffect(() => {
     if (!el.current) return;
-    if (selectedGameIds.length) {
-      scrollToGame(selectedGameIds[0], el);
-    } else if (availableGameIds.length) {
+    if (availableGameIds.length) {
       scrollToGame(availableGameIds[0], el);
+    } else if (selectedGameIds.length) {
+      scrollToGame(selectedGameIds[0], el);
     }
   }, [availableGameIds, selectedGameIds, el]);
 
@@ -185,13 +187,14 @@ export default function Brackets({
               key={"bracket-" + bracketIndex}
               id={BRACKET_CONTAINER_ELEMENT_ID_PREFIX + bracketIndex}
               className={cn(
-                "relative",
+                "relative w-max",
+                className,
                 backgroundSelectable && "hover:bg-indigo-500/10 cursor-pointer"
               )}
             >
               <div
                 className={cn(
-                  "grid grid-cols-[auto_1fr] w-full  rounded-tl-xl rounded-bl-xl  relative"
+                  "grid grid-cols-[auto_1fr] w-max  rounded-tl-xl rounded-bl-xl  relative"
                 )}
               >
                 {bracketOverlayChildren?.length ? (

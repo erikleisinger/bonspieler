@@ -3,7 +3,6 @@ import type { RootState } from "@/lib/store";
 import type { ViewableBracketEvent } from "../types/ViewableBracketEvent";
 import { defaultState } from "./default-state";
 import * as reducers from "./reducers";
-import * as thunks from "./thunks";
 
 export interface BracketEventState {
   bracket: ViewableBracketEvent;
@@ -39,6 +38,7 @@ export const bracketEventSlice = createSlice({
     setBracketEventTournamentId: reducers.setBracketEventField("tournament_id"),
     setBracketEventId: reducers.setBracketEventField("id"),
     setBracketEventOrder: reducers.setBracketEventField("order"),
+    setBracketEventType: reducers.setBracketEventField("type"),
   },
 });
 
@@ -84,6 +84,7 @@ export const {
   setBracketEventTournamentId,
   setBracketEventId,
   setBracketEventOrder,
+  setBracketEventType,
   setLookingToAssignTeam,
   setNumSheets,
   setNumTeams,

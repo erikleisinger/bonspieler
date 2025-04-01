@@ -36,6 +36,7 @@ import { Button } from "@/shared/ui/button";
 import { Popover, PopoverTrigger, PopoverContent } from "@/shared/ui/popover";
 import { AddBracketOptions } from "@/widgets/Bracket/AddBracket";
 import { FaTrash } from "react-icons/fa";
+import { cn } from "@/lib/utils";
 
 export default function EditBracketStageView() {
   const dispatch = useAppDispatch();
@@ -137,6 +138,7 @@ export default function EditBracketStageView() {
     } else {
       setToolbarState(null);
       dispatch(setSelectedGame(null));
+      dispatch(setLookingForLoserConnection(null));
     }
   }
 
@@ -227,6 +229,7 @@ export default function EditBracketStageView() {
       <div className="grow relative">
         {brackets.length ? (
           <Brackets
+            className={!!toolbarState ? "pr-[500px]" : ""}
             onGameClick={isBracketEditMode ? null : onGameClick}
             onGameResultClick={onGameResultClick}
             onBackgroundClick={onBackgroundClick}
