@@ -1,9 +1,9 @@
-import { useMemo, useEffect } from "react";
+import { useMemo } from "react";
 import {
   useGetBracketGamesQuery,
   useGetBracketConnectionsQuery,
 } from "@/shared/api";
-import { generateReadableIdIndex } from "./generateReadableIdIndex";
+import { generateReadableIdIndex } from "@/shared/utils/bracket";
 import { BracketContext } from "./BracketContext";
 export default function BracketProvider({
   children,

@@ -4,6 +4,5 @@ export {
   updateTournamentIdAction,
 } from "./updateTournamentId";
 export { initBlankTournament } from "./initBlankTournament";
-export { setCurrentTournamentName } from "./setCurrentTournamentName";
 export { setTournamentStartDate } from "./setTournamentStartDate";
 export { setTournamentEndDate } from "./setTournamentEndDate";

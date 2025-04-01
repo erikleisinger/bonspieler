@@ -1,5 +1,4 @@
 export {
-  TournamentStageList,
   TournamentStageList2,
   TournamentStageListItem,
   TournamentStageListItemContent,

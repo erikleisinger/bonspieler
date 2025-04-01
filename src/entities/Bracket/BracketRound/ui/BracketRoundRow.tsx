@@ -1,6 +1,6 @@
 import type { BracketGame, BracketRows } from "../../types";
-import { GAME_HEIGHT } from "../../lib/constants/game";
-const GAME_PADDING = 16;
+import { GAME_HEIGHT, GAME_PADDING } from "../../lib/constants/style";
+
 export default function BracketRoundRow({
   children,
   roundIndex,
@@ -27,7 +27,7 @@ export default function BracketRoundRow({
       gridTemplateRows: `repeat(${
         numRowsForRound + 2 ** roundIndex
       }, ${rowHeight}px)`,
-      width: `calc(350px * ${scale})`,
+      minWidth: `calc(220px * ${scale})`,
     };
   }
 

@@ -26,7 +26,6 @@ export const tournamentSlice = createSlice({
       const { id } = action.payload;
       state.tournament.id = id;
     },
-    setCurrentTournamentName: reducers.setCurrentTournamentName,
     setTournamentEndDate: reducers.setTournamentEndDate,
     setTournamentStartDate: reducers.setTournamentStartDate,
     updateTournamentStages: reducers.updateTournamentStages,
@@ -79,8 +78,6 @@ export const getCurrentTournamentId = selectors.getTournamentField("id");
 export const getCurrentTournamentStages = (state: RootState) => {
   return state.tournament.stages || [];
 };
-
-export const getStartTeams = selectors.getStartTeams;
 export const getEndTeams = selectors.getEndTeams;
 export const getNextStageName = selectors.getNextStageName;
 export const getPrevStageName = selectors.getPrevStageName;
@@ -89,7 +86,6 @@ export const initNewTournament = thunks.initNewTournament;
 
 export const {
   setCurrentTournamentId,
-  setCurrentTournamentName,
   setTournamentStartDate,
   setTournamentEndDate,
   updateTournamentStages,

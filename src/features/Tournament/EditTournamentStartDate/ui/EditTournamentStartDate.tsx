@@ -3,7 +3,7 @@ import {
   getTournamentStartDate,
   setTournamentStartDate,
 } from "@/entities/Tournament";
-import EditableDate from "@/shared/input/EditableDate";
+import EditableDate from "@/shared/ui/editable-date";
 import { Nullable } from "@/shared/types";
 
 export default function EditTournamentStartDate({

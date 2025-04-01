@@ -4,13 +4,13 @@ import BracketGameTeams from "./BracketGameTeams";
 import BracketGameHeader from "./BracketGameHeader";
 import type { BracketGame } from "../../types";
 import { GAME_ELEMENT_ID_PREFIX } from "../../lib/constants/element-id";
-import { GAME_HEIGHT } from "../../lib/constants/game";
 import type {
   OriginConnection,
   DestinationConnection,
 } from "@/entities/Bracket/BracketGameConnections";
 import { cn } from "@/lib/utils";
 import { BRACKET_GAME } from "../../lib/constants/element-id";
+import { GAME_PADDING } from "../../lib/constants/style";
 
 export default function BracketGame({
   available,
@@ -35,33 +35,6 @@ export default function BracketGame({
   selected: boolean;
   scale: number;
 }) {
-  function getClassName() {
-    const base = [
-      "flex group game__container--outer relative ",
-      className || "",
-      " ",
-    ];
-    if (available) {
-      base.push("available");
-    } else if (selected) {
-      base.push("selected");
-    }
-    return base.join(" ");
-  }
-
-  const firstUpdate = useRef(true);
-  const [modified, setModified] = useState<"modified" | null>(null);
-  useEffect(() => {
-    if (firstUpdate.current) {
-      firstUpdate.current = false;
-      return;
-    }
-    setModified("modified");
-    setTimeout(() => {
-      setModified(null);
-    }, 1001);
-  }, [drawNumber, firstUpdate]);
-
   function handleClick(e: MouseEvent<HTMLElement>) {
     if (!onClick) return;
 
@@ -70,43 +43,31 @@ export default function BracketGame({
 
   return (
     <div
-      className={cn(
-        BRACKET_GAME,
-        "flex flex-col justify-centerE",
-        background && "opacity-50"
-      )}
-      style={{
-        transform: `scale(${scale}) `,
-      }}
+      className="grid grid-cols-[30px,1fr] w-[220px]"
+      id={GAME_ELEMENT_ID_PREFIX + game.id}
     >
-      <div className="py-4 flex text-xs pointer-events-auto relative">
-        <div
-          className={getClassName() + " " + modified}
-          style={{
-            height: GAME_HEIGHT + "px",
-          }}
-        >
-          <div
-            className={cn(
-              "flex flex-col text-foreground p-2  game__container  relative bg-glass text-glass-foreground backdrop-blur-sm shadow-sm",
-              onClick && "cursor-pointer",
-              className
-            )}
-            id={GAME_ELEMENT_ID_PREFIX + game.id}
-            onClick={handleClick}
-          >
-            <BracketGameHeader
-              readableId={game.readableId}
-              drawNumber={drawNumber}
-              loserTo={loserConnection.gameId}
-            />
-
-            <BracketGameTeams
-              originConnections={originConnections}
-              isSeed={game.isSeed}
-            />
-          </div>
-        </div>
+      <div className="h-fit w-fit m-auto flex items-center justify-center m-auto  rounded-xl z-10  text-xs font-bold">
+        <div>{game.readableId}</div>
+      </div>
+      <div
+        onClick={handleClick}
+        className={cn(
+          BRACKET_GAME,
+          " text-xs pointer-events-auto relative shadow-md min-w-[200px] bg-glass backdrop-blur-sm game__container",
+          background && "opacity-50",
+          onClick && "cursor-pointer",
+          available && "available",
+          selected && "selected"
+        )}
+        style={{
+          transform: `scale(${scale}) `,
+          padding: `${GAME_PADDING}px 0`,
+        }}
+      >
+        <BracketGameTeams
+          originConnections={originConnections}
+          isSeed={game.isSeed}
+        />
       </div>
     </div>
   );

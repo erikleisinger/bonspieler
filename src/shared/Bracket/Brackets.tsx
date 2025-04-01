@@ -25,6 +25,7 @@ import {
   BRACKET_CONTAINER_ELEMENT_ID_PREFIX,
 } from "@/entities/Bracket";
 import { scrollToGame, scrollToBracket } from "@/entities/Bracket/lib/scroll";
+import useDraggableBracket from "./useDraggableBracket";
 
 export default function Brackets({
   availableGameIds = [],
@@ -39,7 +40,6 @@ export default function Brackets({
 
   selectedGameIds = [],
   tournamentId,
-  initialScale = 0.8,
   appendBracketChildren = [],
 }: {
   availableGameIds: string[];
@@ -53,7 +53,6 @@ export default function Brackets({
   onGameResultClick?: (game: BracketGameType) => void;
   selectedGameIds: string[];
   tournamentId: string;
-  initialScale: number;
   appendBracketChildren?: React.ReactNode[];
 }) {
   const {
@@ -132,49 +131,24 @@ export default function Brackets({
     };
   }, [el, onBackgroundClick]);
 
+  const { isDragging } = useDraggableBracket({ ref: el });
+
   function isFinalResult(winnerConnection: DestinationConnection) {
     const { gameId: winnerGameId, stageId: winnerStageId } =
       winnerConnection || {};
     return !winnerGameId || (!!winnerStageId && winnerStageId !== stageId);
   }
 
-  const [scale, setScale] = useState(initialScale);
-
-  const MIN_SCALE = 0.6;
-  const MAX_SCALE = 1.4;
-
-  const updateScale = (value: number) => () => {
-    setScale((prev) => {
-      const newValue = prev + value;
-      if (newValue < MIN_SCALE) return MIN_SCALE;
-      if (newValue > MAX_SCALE) return MAX_SCALE;
-      return Math.min(Math.max(newValue, 0.1), 2);
-    });
-  };
-
   return (
     <div
       ref={el}
-      className="pointer-events-auto absolute inset-0 overflow-auto bg-glass flex flex-col gap-2"
+      className={cn(
+        "pointer-events-auto absolute inset-0 overflow-auto bg-glass flex flex-col gap-2 ",
+        isDragging ? "cursor-grabbing" : "cursor-grab"
+      )}
+      draggable={true}
     >
-      <div className="fixed bottom-8 right-8 z-50 flex gap-2">
-        <Button
-          variant="secondary"
-          onClick={updateScale(0.2)}
-          disabled={scale >= MAX_SCALE}
-        >
-          +
-        </Button>
-        <Button
-          variant="secondary"
-          onClick={updateScale(-0.2)}
-          disabled={scale <= MIN_SCALE}
-        >
-          -
-        </Button>
-      </div>
-
-      {brackets?.length &&
+      {brackets?.length ? (
         brackets.map((rounds, bracketIndex) => {
           return (
             <div
@@ -211,7 +185,6 @@ export default function Brackets({
                   setRows={updateRows}
                   rows={rows}
                   stageId={stageId}
-                  scale={scale}
                 >
                   {rounds.map((games, roundIndex) => {
                     return (
@@ -220,7 +193,6 @@ export default function Brackets({
                         key={"round-" + roundIndex}
                         rows={rows}
                         roundIndex={roundIndex}
-                        scale={scale}
                       >
                         {games &&
                           games.map((game: BracketGameType) => {
@@ -243,7 +215,7 @@ export default function Brackets({
                                   originConnections={
                                     originConnections[game.id] || []
                                   }
-                                  onClick={onGameClick}
+                                  onClick={isDragging ? null : onGameClick}
                                   selected={selectedGameIds.includes(game.id)}
                                   drawNumber={schedule[game.id]}
                                   available={availableGameIds.includes(game.id)}
@@ -251,17 +223,11 @@ export default function Brackets({
                                     !!backgroundGameIds &&
                                     backgroundGameIds.includes(game.id)
                                   }
-                                  scale={scale}
                                 />
                                 {isFinalResult(winnerConnections[game.id]) && (
                                   <div
                                     className="relative"
                                     onClick={() => onGameResultClick(game)}
-                                    style={{
-                                      transform: `scale(${scale}) translateX(calc(${
-                                        scale - 1
-                                      } * 100%))`,
-                                    }}
                                   >
                                     {gameResultChildren || (
                                       <BracketGameFinalResult
@@ -283,7 +249,12 @@ export default function Brackets({
                 appendBracketChildren[bracketIndex]}
             </div>
           );
-        })}
+        })
+      ) : (
+        <div className="absolute inset-0 flex justify-center items-center">
+          No brackets
+        </div>
+      )}
     </div>
   );
 }

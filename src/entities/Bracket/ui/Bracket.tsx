@@ -4,6 +4,7 @@ import GameConnections from "./GameConnections";
 
 import type { OriginConnections } from "@/entities/Bracket/BracketGameConnections";
 import { calculateRows } from "../lib/calculateRows";
+import { ROUND_GAP } from "../lib/constants/style";
 
 export interface BracketProps {
   children?: React.ReactNode;
@@ -37,7 +38,14 @@ export default function Bracket({
   return (
     <div>
       <div className="p-0 ">
-        <div className="flex relative">
+        <div
+          className="flex relative "
+          style={{
+            gap: ROUND_GAP + "px",
+          }}
+        >
+          {children}
+
           <GameConnections
             originConnections={originConnections}
             games={rounds.flat()}
@@ -45,7 +53,6 @@ export default function Bracket({
             stageId={stageId}
             scale={scale}
           />
-          {children}
         </div>
       </div>
     </div>

@@ -1,6 +1,7 @@
 import type { BracketGame as BracketGameType, BracketRows } from "../../types";
 import BracketRoundRow from "./BracketRoundRow";
 import BracketRoundHeader from "./BracketRoundHeader";
+
 export default function BracketRound({
   children,
   games,
@@ -15,7 +16,7 @@ export default function BracketRound({
   scale: number;
 }) {
   return (
-    <div className="pointer-events-none bracket-row">
+    <div className="pointer-events-none bracket-row z-10">
       <div className="h-8" />
       <BracketRoundRow
         roundIndex={roundIndex}

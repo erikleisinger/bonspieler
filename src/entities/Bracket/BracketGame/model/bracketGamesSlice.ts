@@ -4,7 +4,7 @@ import type { Nullable } from "@/shared/types";
 import type { RootState } from "@/lib/store";
 import * as thunks from "./thunks";
 import { numberToLetter } from "@/shared/utils/numberToLetter";
-import { generateReadableIdIndex } from "@/shared/Bracket/generateReadableIdIndex";
+import { generateReadableIdIndex } from "@/shared/utils/bracket";
 
 function resetGameBracketNumbers(brackets: BracketGameType[][][]) {
   return [...brackets].map((rounds, bracketIndex) => {

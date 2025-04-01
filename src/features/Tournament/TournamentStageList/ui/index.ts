@@ -1,4 +1,3 @@
-export { default as TournamentStageList } from "./TournamentStageList";
 export { default as TournamentStageList2 } from "./TournamentStageList2";
 export { default as TournamentStageListItem } from "./TournamentStageListItem";
 export { default as TournamentStageListItemContent } from "./TournamentStageListItemContent";

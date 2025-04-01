@@ -1,1 +1,1 @@
-export { DEFAULTS } from "./constants/default-stage";
+export * from "./stage-context";

@@ -4,7 +4,7 @@ import { CustomizeBracketEvent } from "@/features/Bracket/CustomizeBracketEvent"
 import { CustomizeBracket } from "@/features/Bracket/CustomizeBracket";
 import Typography from "@/shared/ui/typography";
 import ValidationIcon from "@/shared/ui/validation-icon";
-import { getTotalBracketWinners } from "@/shared/Bracket/getTotalBracketWinners";
+import { getTotalBracketWinners } from "@/shared/utils/bracket";
 import { Label } from "@/shared/ui/label";
 import { getNewBracketAndWinnerCount } from "../lib/getNewBracketAndWinnerCount";
 import { generateBracket } from "@/features/Bracket/GenerateBracket";

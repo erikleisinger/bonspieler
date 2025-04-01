@@ -4,7 +4,7 @@ import {
   getBracketEventName,
 } from "@/entities/BracketEvent";
 const MAX_NAME_LENGTH = 28;
-import EditableText from "@/shared/input/EditableText";
+import EditableText from "@/shared/ui/editable-text";
 export default function EditEventName() {
   const dispatch = useAppDispatch();
   const eventName = useAppSelector(getBracketEventName) || "Unnamed event";

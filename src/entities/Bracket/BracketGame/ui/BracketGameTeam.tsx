@@ -28,9 +28,9 @@ export default function BracketGameTeam({
         <div />
       )}
       {connectionReadableId ? (
-        <div className="whitespace-nowrap overflow-hidden min-w-0 text-ellipsis">
-          {connection?.isWinner ? "Winner " : "Loser"} {connectionReadableId}{" "}
-          {connection?.stageName || ""}
+        <div className="whitespace-nowrap overflow-hidden min-w-0 text-ellipsis italic">
+          {connection?.isWinner ? "Winner of " : "Loser of "}{" "}
+          {connectionReadableId} {connection?.stageName || ""}
         </div>
       ) : (
         <div className="text-muted">Seed</div>

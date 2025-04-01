@@ -9,7 +9,7 @@ import { useAppDispatch, useAppSelector } from "@/lib/store";
 import { getNumSheets } from "@/entities/BracketEvent";
 import { getDrawTimes, setDrawTimes } from "@/entities/DrawTime";
 import { formatISO, parseISO } from "date-fns";
-import InputDate from "@/shared/input/InputDate";
+import InputDate from "@/shared/ui/input-date";
 export default function SetStageDrawTimes() {
   const dispatch = useAppDispatch();
   const schedule = useAppSelector(getBracketGamesSchedule);

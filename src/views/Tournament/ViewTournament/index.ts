@@ -1,1 +1,0 @@
-export { ViewTournament } from "./ui";

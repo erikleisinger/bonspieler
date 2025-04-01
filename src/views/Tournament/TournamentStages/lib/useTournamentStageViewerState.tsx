@@ -33,7 +33,7 @@ export default function useTournamentStageViewerState({
   }
 
   function resetState() {
-    setSelectedStage(editedStage);
+    setSelectedStage(null);
     setEditedStage(null);
     setViewingPriority("viewing");
   }

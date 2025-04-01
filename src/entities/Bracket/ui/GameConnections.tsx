@@ -93,7 +93,7 @@ export default function GameConnections({
   const container = useRef(null);
 
   return (
-    <div ref={container} className="absolute inset-0 pointer-events-none z-10">
+    <div ref={container} className="absolute inset-0 pointer-events-none">
       {games.map(({ id: gameId }) => {
         return (
           <GameConnection

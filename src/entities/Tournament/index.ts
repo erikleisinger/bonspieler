@@ -1,5 +1,5 @@
 export * from "./ui";
-export { DEFAULTS } from "./lib";
+export * from "./lib";
 export * from "./model";
 
 export type {

@@ -29,14 +29,11 @@ import {
 import {
   setNumTeams,
   setNumWinners,
-  updateNumTeams,
-  updateNumWinners,
   getBracketEventNumSheets,
 } from "@/entities/BracketEvent";
 import { useAppDispatch, useAppSelector } from "@/lib/store";
 
 import { generateBracket } from "@/features/Bracket/GenerateBracket";
-import { getBracketStartTeams, getBracketEndTeams } from "@/entities/Bracket";
 import { scheduleTournament } from "@/shared/utils/generateTournament";
 export default function useSetBracketData() {
   const dispatch = useAppDispatch();

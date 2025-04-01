@@ -1,10 +1,8 @@
 .game__container {
   // border-radius: 10px;
   // border: 1px solid rgba(141, 139, 139, 0.1);
-  pointer-events: all;
+
   transition: all 0.1s;
-  min-width: 200px;
-  max-width: 200px;
 }
 $SMALL_SCREEN_GAME_WIDTH: calc(100vw - 70px);
 @media (max-width: 768px) {
@@ -14,50 +12,29 @@ $SMALL_SCREEN_GAME_WIDTH: calc(100vw - 70px);
     max-width: $SMALL_SCREEN_GAME_WIDTH;
   }
 }
-.game__container--outer {
-  &:not(:has(.bracket-game__loser-indicator:hover)) {
-    &:not(.unavailable) &:not(.available) {
-      &:hover {
-        .game__container {
-          box-shadow: #c5cfff 0px 0px 6px 4px;
-          border-color: transparent;
-        }
-      }
-    }
-  }
-
+.game__container {
   &:not(.unavailable) {
     &.available {
-      .game__container {
-        box-shadow: #6ee7b7 0px 0px 8px 1px;
-      }
+      box-shadow: #6ee7b7 0px 0px 8px 1px;
     }
     &:hover {
       &.available {
-        .game__container {
-          box-shadow: #fcd34d 0px 0px 8px 1px;
-        }
+        box-shadow: #fcd34d 0px 0px 8px 1px;
       }
     }
   }
 
   &.unavailable {
-    .game__container {
-      cursor: not-allowed;
-    }
+    cursor: not-allowed;
   }
 
   &.selected {
-    .game__container {
-      box-shadow: #9dd0fd 0px 0px 6px 4px;
-      border-color: transparent;
-    }
+    box-shadow: #9dd0fd 0px 0px 6px 4px;
+    border-color: transparent;
   }
 
   &.modified {
-    .game__container {
-      animation: flash 0.8s;
-    }
+    animation: flash 0.8s;
   }
 }
 

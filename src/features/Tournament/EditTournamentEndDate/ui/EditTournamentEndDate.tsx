@@ -4,7 +4,7 @@ import {
   getTournamentEndDate,
   setTournamentEndDate,
 } from "@/entities/Tournament";
-import EditableDate from "@/shared/input/EditableDate";
+import EditableDate from "@/shared/ui/editable-date";
 
 export default function EditTournamentEndDate({
   minDate,

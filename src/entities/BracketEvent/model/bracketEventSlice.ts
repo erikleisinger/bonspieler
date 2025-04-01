@@ -28,13 +28,9 @@ export const bracketEventSlice = createSlice({
       "lookingToAssignTeam"
     ),
     setNumSheets: reducers.setBracketEventField("numSheets"),
-
     setNumTeams: reducers.setBracketEventField("num_start_teams"),
     setNumWinners: reducers.setBracketEventField("num_end_teams"),
-    updateBracketGameTeam: reducers.updateBracketGameTeam,
     updateBracketEvent: reducers.updateBracketEvent,
-    updateNumWinners: reducers.updateNumWinners,
-    updateNumTeams: reducers.updateNumTeams,
     setBracketEventTournamentId: reducers.setBracketEventField("tournament_id"),
     setBracketEventId: reducers.setBracketEventField("id"),
     setBracketEventOrder: reducers.setBracketEventField("order"),
@@ -89,10 +85,7 @@ export const {
   setNumSheets,
   setNumTeams,
   setNumWinners,
-  updateBracketGameTeam,
   updateBracketEvent,
-  updateNumTeams,
-  updateNumWinners,
 } = bracketEventSlice.actions;
 
 export default bracketEventSlice.reducer;

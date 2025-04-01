@@ -5,7 +5,12 @@ import {
 } from "@/entities/BracketEvent";
 import { EditStageName } from "@/features/Stage/EditStageName";
 import { BracketEventInfo } from "@/entities/BracketEvent";
-export default function BracketEventOptions() {
+import { Button } from "@/shared/ui/button";
+export default function BracketEventOptions({
+  onDelete,
+}: {
+  onDelete: () => void;
+}) {
   const numEndTeams = useAppSelector(getBracketEventNumWinners);
 
   const numStartTeams = useAppSelector(getBracketEventNumTeams);
@@ -27,6 +32,13 @@ export default function BracketEventOptions() {
           </div>
         </div>
       </div>
+      {onDelete && (
+        <footer className="flex justify-center p-4">
+          <Button variant="destructive" onClick={onDelete}>
+            Delete bracket
+          </Button>
+        </footer>
+      )}
     </div>
   );
 }

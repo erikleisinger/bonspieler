@@ -14,7 +14,7 @@ export default function BracketGameTeams({
     );
   }, [originConnections]);
   return (
-    <div className="mt-2 flex flex-col gap-1">
+    <div className=" flex flex-col gap-1">
       {origins.map((connection, index) => {
         return (
           <BracketGameTeam
