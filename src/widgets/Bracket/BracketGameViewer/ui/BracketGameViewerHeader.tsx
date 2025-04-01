@@ -1,4 +1,3 @@
-import { scrollToGame } from "@/entities/Bracket";
 import type { BracketGameType } from "@/entities/Bracket";
 import { getDrawTimes } from "@/entities/DrawTime";
 import { getBracketGamesSchedule } from "@/entities/Bracket/BracketGame";
@@ -18,10 +17,7 @@ export default function BracketGameViewerHeader({
     <header className="flex justify-between  p-4 px-6 ">
       <div>
         <div className="flex gap-2 items-end">
-          <h2
-            className="text-3xl font-bold cursor-pointer"
-            onClick={() => scrollToGame(game.id)}
-          >
+          <h2 className="text-3xl font-bold cursor-pointer">
             {game.readableId}
           </h2>
         </div>

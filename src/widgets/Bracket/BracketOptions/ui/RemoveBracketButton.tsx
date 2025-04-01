@@ -1,8 +1,5 @@
-import { useAppSelector } from "@/lib/store";
-
 import { Button } from "@/shared/ui/button";
 import { getBracketName } from "@/entities/Bracket";
-import { scrollToBracket } from "@/entities/Bracket";
 export default function RemoveBracketButton({
   onClick,
   bracketNumber,

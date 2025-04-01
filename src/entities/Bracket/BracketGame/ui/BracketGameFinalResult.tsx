@@ -1,7 +1,7 @@
-import { FaTrophy } from "react-icons/fa";
-import { FaPersonRunning } from "react-icons/fa6";
+import { BRACKET_GAME_FINAL_RESULT } from "../../lib/constants/element-id";
 import { useGetTournamentStagesQuery } from "@/shared/api";
 import { DestinationConnection } from "../../BracketGameConnections";
+import { cn } from "@/lib/utils";
 export default function BracketGameFinalResult({
   connection,
   tournamentId,
@@ -30,7 +30,12 @@ export default function BracketGameFinalResult({
   }
 
   return (
-    <div className=" flex gap-2 text-xl px-4  backdrop-blur-md p-2 items-center BRACKET_GAME_FINAL_RESULT">
+    <div
+      className={cn(
+        BRACKET_GAME_FINAL_RESULT,
+        " flex gap-2 text-xl px-4  backdrop-blur-md p-2 items-center"
+      )}
+    >
       <div>{icon()}</div>
       <div className="whitespace-nowrap">{text()}</div>
     </div>

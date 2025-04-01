@@ -12,7 +12,6 @@ import { TournamentStageContextProvider } from "@/shared/TournamentStage";
 
 import BracketViewLayout from "@/shared/layouts/BracketViewLayout";
 import ViewingBracketHeader from "./ViewingBracketHeader";
-import { BracketGameType, scrollToGame } from "@/entities/Bracket";
 export default function ViewingBracket({
   onEndView,
 }: {
@@ -27,11 +26,6 @@ export default function ViewingBracket({
 
   function cancelSelectedGame() {
     dispatch(setSelectedGame(null));
-  }
-
-  function onGameClick(game: BracketGameType) {
-    dispatch(setSelectedGame(game));
-    scrollToGame(game.id);
   }
 
   return (

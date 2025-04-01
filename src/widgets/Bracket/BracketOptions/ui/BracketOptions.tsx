@@ -6,7 +6,6 @@ import BracketInfo from "./BracketInfo";
 
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { BracketGameType, getBracketName } from "@/entities/Bracket";
-import { scrollToBracket } from "@/entities/Bracket";
 export default function BracketOptions({
   brackets = [],
   editDrawTimes,
@@ -22,7 +21,6 @@ export default function BracketOptions({
 
   function goBracket(newIndex: number) {
     setBracketIndex(newIndex);
-    scrollToBracket(newIndex);
   }
 
   function handleRemoveBracket() {

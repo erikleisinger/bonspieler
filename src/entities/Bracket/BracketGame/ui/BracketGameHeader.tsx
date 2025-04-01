@@ -9,7 +9,6 @@ export default function BracketGameHeader({
   loserTo: Nullable<string>;
   readableId: string;
 }) {
-  console.log("r ");
   const { readableIdIndex } = useContext(BracketContext);
   const loserToReadableId = loserTo ? readableIdIndex[loserTo] : null;
   return (

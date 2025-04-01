@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, useContext } from "react";
+import { useEffect, useRef, useState, useContext, useMemo } from "react";
 import type { BracketRows, BracketGameType } from "@/entities/Bracket";
 import {
   Bracket,
@@ -19,6 +19,12 @@ import { Button } from "../ui/button";
 import Typography from "../ui/typography";
 import { numberToLetter } from "../utils/numberToLetter";
 import { cn } from "@/lib/utils";
+import {
+  BRACKET_GAME,
+  BRACKET_GAME_FINAL_RESULT,
+  BRACKET_CONTAINER_ELEMENT_ID_PREFIX,
+} from "@/entities/Bracket";
+import { scrollToGame, scrollToBracket } from "@/entities/Bracket/lib/scroll";
 
 export default function Brackets({
   availableGameIds = [],
@@ -57,7 +63,34 @@ export default function Brackets({
     schedule,
     stageId,
   } = useContext(BracketContext);
-  const el = useRef(null);
+
+  const el = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    if (!el.current) return;
+    if (selectedGameIds.length) {
+      scrollToGame(selectedGameIds[0], el);
+    } else if (availableGameIds.length) {
+      scrollToGame(availableGameIds[0], el);
+    }
+  }, [availableGameIds, selectedGameIds, el]);
+
+  const bracketIds = useMemo(() => {
+    return brackets.map((rounds) => rounds.flat()[0].id);
+  }, [brackets]);
+
+  const [oldBracketIds, setOldBracketIds] = useState<string[]>([]);
+
+  useEffect(() => {
+    const firstNewBracketIndex = bracketIds.findIndex(
+      (id) => !oldBracketIds.includes(id)
+    );
+
+    if (firstNewBracketIndex !== -1) {
+      scrollToBracket(firstNewBracketIndex, el);
+    }
+    setOldBracketIds(bracketIds);
+  }, [bracketIds]);
 
   function getRowSpanForGame(rows: BracketRow) {
     const { rowStart = 1, rowEnd = 2 } = rows || {};
@@ -83,8 +116,8 @@ export default function Brackets({
         .map((el) => Array.from(el?.classList || []))
         .flat();
       if (
-        paths.includes("BRACKET_GAME") ||
-        paths.includes("BRACKET_GAME_FINAL_RESULT")
+        paths.includes(BRACKET_GAME) ||
+        paths.includes(BRACKET_GAME_FINAL_RESULT)
       )
         return;
       onBackgroundClick();
@@ -150,6 +183,7 @@ export default function Brackets({
           return (
             <div
               key={"bracket-" + bracketIndex}
+              id={BRACKET_CONTAINER_ELEMENT_ID_PREFIX + bracketIndex}
               className={cn(
                 "relative",
                 backgroundSelectable && "hover:bg-indigo-500/10 cursor-pointer"
@@ -181,7 +215,6 @@ export default function Brackets({
                   rounds={rounds}
                   setRows={updateRows}
                   rows={rows}
-                  bracketNumber={bracketIndex}
                   stageId={stageId}
                   scale={scale}
                 >

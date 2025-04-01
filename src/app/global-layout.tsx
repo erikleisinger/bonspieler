@@ -24,7 +24,7 @@ export default function GlobalLayout({
   return (
     <SidebarProvider defaultOpen={false}>
       <div
-        className={`${koulen.variable} fixed inset-0 grid grid-rows-[auto_1fr] bg-gradient `}
+        className={`${koulen.variable} fixed inset-0 grid grid-rows-[auto_1fr] bg-gradient`}
       >
         <header className="p-4 bg-glass backdrop-blur-md shadow-md z-50">
           <h1

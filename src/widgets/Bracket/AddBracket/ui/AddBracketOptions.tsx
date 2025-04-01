@@ -6,7 +6,6 @@ import { Button } from "@/shared/ui/button";
 import { FaPlus } from "react-icons/fa";
 import { Checkbox } from "@/shared/ui/checkbox";
 import { Label } from "@/shared/ui/label";
-import { scrollToBracket } from "@/entities/Bracket";
 import { useAppSelector } from "@/lib/store";
 
 import { getBracketGames } from "@/entities/Bracket/BracketGame";

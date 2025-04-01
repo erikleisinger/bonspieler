@@ -13,7 +13,6 @@ import {
   getSelectedGame,
   setViewingNextRoundGameConnection,
 } from "@/widgets/Bracket/BracketViewer";
-import { scrollToGame } from "@/entities/Bracket";
 import { Brackets } from "@/shared/Bracket";
 import {
   BracketEditorToolbar,
@@ -108,12 +107,6 @@ export default function EditBracketStageView() {
     originConnections,
   ]);
 
-  useEffect(() => {
-    if (!availableGameIds?.length) return;
-    const [firstAvailableGameId] = availableGameIds;
-    scrollToGame(firstAvailableGameId);
-  }, [availableGameIds]);
-
   function onGameClick(game: BracketGameType) {
     if (lookingToAssignTeam) {
       dispatch(
@@ -135,7 +128,6 @@ export default function EditBracketStageView() {
     } else {
       dispatch(setLookingForLoserConnection(null));
       dispatch(setSelectedGame(game));
-      scrollToGame(game.id);
     }
   }
 

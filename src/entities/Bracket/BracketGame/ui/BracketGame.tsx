@@ -10,6 +10,7 @@ import type {
   DestinationConnection,
 } from "@/entities/Bracket/BracketGameConnections";
 import { cn } from "@/lib/utils";
+import { BRACKET_GAME } from "../../lib/constants/element-id";
 
 export default function BracketGame({
   available,
@@ -36,7 +37,7 @@ export default function BracketGame({
 }) {
   function getClassName() {
     const base = [
-      "BRACKET_GAME flex group game__container--outer relative ",
+      "flex group game__container--outer relative ",
       className || "",
       " ",
     ];
@@ -70,7 +71,8 @@ export default function BracketGame({
   return (
     <div
       className={cn(
-        "flex flex-col justify-center BRACKET_GAME",
+        BRACKET_GAME,
+        "flex flex-col justify-centerE",
         background && "opacity-50"
       )}
       style={{

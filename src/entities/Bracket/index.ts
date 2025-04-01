@@ -16,8 +16,6 @@ export type {
 export {
   calculateRowSpanForGame,
   getBracketName,
-  scrollToBracket,
-  scrollToGame,
   MAX_BRACKET_COUNT,
   MAX_TEAM_COUNT,
   MAX_WINNER_COUNT,
@@ -28,6 +26,10 @@ export {
   getBracketStartTeams,
 } from "./lib";
 export { Bracket } from "./ui";
-export { BRACKET_CONTAINER_ELEMENT_ID_PREFIX } from "./lib";
+export {
+  BRACKET_CONTAINER_ELEMENT_ID_PREFIX,
+  BRACKET_GAME,
+  BRACKET_GAME_FINAL_RESULT,
+} from "./lib";
 export { BracketRound } from "./BracketRound";
 export { BracketGame, BracketGameTeam } from "./BracketGame";

@@ -6,7 +6,6 @@ import { BracketGameTeam, BracketGameType } from "@/entities/Bracket";
 import { useAppDispatch } from "@/lib/store";
 import { setSelectedGame } from "@/widgets/Bracket/BracketViewer";
 
-import { scrollToGame } from "@/entities/Bracket";
 import BracketGameViewerHeader from "./BracketGameViewerHeader";
 import BracketGameViewerConnection from "./BracketGameViewerConnection";
 import { Nullable } from "@/shared/types";
@@ -35,7 +34,6 @@ export default function BracketGameViewer({
 
   const dispatch = useAppDispatch();
   function selectGame(gameId: string) {
-    scrollToGame(gameId);
     dispatch(setSelectedGame(gameId));
   }
 
