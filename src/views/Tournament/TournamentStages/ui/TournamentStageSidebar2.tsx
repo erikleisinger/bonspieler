@@ -11,7 +11,7 @@ export default function TournamentStageSidebar({
   dense,
   editChildren,
   tournamentId,
-  editedStageId,
+  editedStage,
   selectedStage,
   onCancel = () => {},
   onSave = () => {},
@@ -21,15 +21,13 @@ export default function TournamentStageSidebar({
   dense?: boolean;
   editChildren?: React.ReactNode;
   tournamentId: string;
-  editedStageId?: Nullable<string>;
+  editedStage?: Nullable<TournamentStage>;
   selectedStage: TournamentStage;
   onSelectEditedStage?: (stage: TournamentStage) => void;
   onSelectStage: (stage: TournamentStage) => void;
   onCancel?: () => void;
   onSave?: () => void;
 }) {
-  const editedStage = useAppSelector(getBracketEvent);
-
   const { data: stages } = useGetTournamentStagesQuery(
     { tournamentId },
     {
@@ -48,7 +46,8 @@ export default function TournamentStageSidebar({
   }, [JSON.stringify(stages), initialLoadDone, onSelectStage]);
 
   function isEditedStage(stageId: string) {
-    return editedStageId === stageId;
+    if (!editedStage?.id) return false;
+    return editedStage?.id === stageId;
   }
   function isSelectedStage(stageId: string) {
     return selectedStage?.id === stageId;

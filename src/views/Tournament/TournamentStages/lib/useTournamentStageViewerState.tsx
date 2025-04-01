@@ -1,5 +1,5 @@
-import { useState, useMemo } from "react";
-import type { TournamentStage } from "@/entities/Tournament";
+import { useState, useMemo, useEffect } from "react";
+import { type TournamentStage } from "@/entities/Tournament";
 
 import type { StageViewerPriority } from "../types/StageViewerPriority";
 

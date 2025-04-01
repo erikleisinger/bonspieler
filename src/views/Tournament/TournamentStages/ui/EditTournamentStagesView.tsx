@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, useMemo } from "react";
 import { TournamentStageType } from "@/entities/Tournament";
 import TournamentStageSidebar2 from "./TournamentStageSidebar2";
 import { TournamentStageContextProvider } from "@/shared/TournamentStage";
@@ -10,6 +10,7 @@ import { useSaveBracket } from "../lib";
 import useTournamentStageViewerState from "../lib/useTournamentStageViewerState";
 import { Button } from "@/shared/ui/button";
 import { FaBan, FaCheck, FaEdit, FaPencilAlt } from "react-icons/fa";
+import useEditedStage from "../lib/useEditedStage";
 export default function EditTournamentStagesView({
   tournamentId,
 }: {
@@ -20,12 +21,14 @@ export default function EditTournamentStagesView({
     selectedStage,
     editStage,
     canEdit,
-    editedStage,
+    editedStage: currentEditedStage,
     resetState,
     whatToShow,
   } = useTournamentStageViewerState({
     editable: true,
   });
+
+  const editedStage = useEditedStage({ stage: currentEditedStage });
   const { save: saveBracket } = useSaveBracket();
   async function onSaveStage() {
     if (!editedStage) return;
@@ -60,8 +63,8 @@ export default function EditTournamentStagesView({
             tournamentId={tournamentId}
             selectedStage={selectedStage}
             onSelectStage={selectStage}
-            onSelectEditedStage={!editedStage?.id ? editStage : null}
-            editedStageId={editedStage?.id || null}
+            onSelectEditedStage={!editedStage ? editStage : null}
+            editedStage={editedStage}
             disabled={!!editedStage}
             onSave={onSaveStage}
             onCancel={resetState}
@@ -118,13 +121,13 @@ export default function EditTournamentStagesView({
               />
             )}
 
-            {editedStage?.id &&
-              editedStage.type === TournamentStageType.Bracket && (
-                <LoadBracket stageId={editedStage.id}>
+            {currentEditedStage?.id &&
+              currentEditedStage.type === TournamentStageType.Bracket && (
+                <LoadBracket stageId={currentEditedStage?.id}>
                   {whatToShow === "edit" && (
                     <EditBracketStageView
                       tournamentId={tournamentId}
-                      stageId={editedStage.id}
+                      stageId={currentEditedStage?.id}
                       onSave={onSaveStage}
                     />
                   )}
