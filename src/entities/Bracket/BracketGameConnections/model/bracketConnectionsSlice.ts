@@ -113,7 +113,8 @@ export const bracketConnectionsSlice = createSlice({
       }>
     ) => {
       const { gameId, destinationGameId, stageId } = action.payload;
-      const destinationOrigins = state.originConnections[destinationGameId];
+      const destinationOrigins =
+        state.originConnections[destinationGameId] || [];
       const newDestinationOrigins = Array.from({ length: 2 }).map(
         (_, i) => destinationOrigins[i] || { isWinner: false, gameId: null }
       );

@@ -77,8 +77,8 @@ export default function useSaveBracket() {
       },
     });
 
-    const startTeams = getBracketEventStartTeams(brackets);
-    const endTeams = getBracketEventEndTeams(brackets);
+    const startTeams = getBracketEventStartTeams(brackets, originConnections);
+    const endTeams = getBracketEventEndTeams(brackets, winnerConnections);
     await updateStage({
       tournamentStageId: bracketId,
       updates: {

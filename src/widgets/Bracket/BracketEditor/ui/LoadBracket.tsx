@@ -19,6 +19,8 @@ import {
   setBracketEventOrder,
   setBracketEventName,
   setBracketEventType,
+  setNumTeams,
+  setNumWinners,
 } from "@/entities/BracketEvent";
 
 /**
@@ -58,7 +60,15 @@ export default function LoadBracket({
 
   useEffect(() => {
     if (stageData) {
-      const { id, tournament_id, order, name, type } = stageData;
+      const {
+        id,
+        tournament_id,
+        order,
+        name,
+        type,
+        num_end_teams,
+        num_start_teams,
+      } = stageData;
       if (id) {
         dispatch(setBracketEventId(id));
       }
@@ -71,7 +81,9 @@ export default function LoadBracket({
       if (type) {
         dispatch(setBracketEventType(type));
       }
-      dispatch(setBracketEventName(name));
+      dispatch(setNumTeams(num_start_teams || 0));
+      dispatch(setNumWinners(num_end_teams || 0));
+      dispatch(setBracketEventName(name || "Unnamed stage"));
     }
   }, [stageData, dispatch]);
 

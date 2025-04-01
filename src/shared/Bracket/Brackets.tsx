@@ -36,7 +36,7 @@ export default function Brackets({
   onBackgroundClick,
   onGameClick,
   onGameResultClick = () => {},
-  onBracketClick,
+
   selectedGameIds = [],
   tournamentId,
   initialScale = 0.8,
@@ -51,7 +51,6 @@ export default function Brackets({
   onBackgroundClick?: () => void;
   onGameClick?: (game: BracketGameType) => void;
   onGameResultClick?: (game: BracketGameType) => void;
-  onBracketClick?: (bracketIndex: number) => void;
   selectedGameIds: string[];
   tournamentId: string;
   initialScale: number;
@@ -153,11 +152,6 @@ export default function Brackets({
     });
   };
 
-  function handleBracketClick(bracketIndex: number) {
-    if (!onBracketClick) return;
-    onBracketClick(bracketIndex);
-  }
-
   return (
     <div
       ref={el}
@@ -204,10 +198,8 @@ export default function Brackets({
                 )}
                 <div
                   className={cn(
-                    "h-full relative  p-4  flex items-center  z-20  bg-indigo-500/5 bracket-label",
-                    onBracketClick && "cursor-pointer"
+                    "h-full relative  p-4  flex items-center  z-20  bg-indigo-500/5 bracket-label"
                   )}
-                  onClick={() => handleBracketClick(bracketIndex)}
                 >
                   <Typography tag="h2" className="text-center">
                     {numberToLetter(bracketIndex + 1)}

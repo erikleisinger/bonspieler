@@ -7,6 +7,8 @@ import {
   setLookingToAssignTeam,
   getBracketEventId,
   getBracketEventTournamentId,
+  setNumTeams,
+  setNumWinners,
 } from "@/entities/BracketEvent";
 import {
   setSelectedGame,
@@ -27,6 +29,7 @@ import {
 import { getBracketGames } from "@/entities/Bracket/BracketGame";
 import {
   getOriginConnections,
+  getWinnerConnections,
   setLoserConnectionForGame,
 } from "@/entities/Bracket/BracketGameConnections";
 import { CreateBracketEventWizard } from "@/widgets/Bracket/CreateBracketEventWizard";
@@ -36,20 +39,34 @@ import { Button } from "@/shared/ui/button";
 import { Popover, PopoverTrigger, PopoverContent } from "@/shared/ui/popover";
 import { AddBracketOptions } from "@/widgets/Bracket/AddBracket";
 import { FaTrash } from "react-icons/fa";
-import { cn } from "@/lib/utils";
+import {
+  getBracketEventStartTeams,
+  getBracketEventEndTeams,
+} from "@/entities/Bracket";
 
 export default function EditBracketStageView() {
   const dispatch = useAppDispatch();
-
   const brackets = useAppSelector(getBracketGames);
   const bracketStageId = useAppSelector(getBracketEventId);
   const tournamentId = useAppSelector(getBracketEventTournamentId);
   const originConnections = useAppSelector(getOriginConnections);
+  const winnerConnections = useAppSelector(getWinnerConnections);
   const lookingToAssignTeam = useAppSelector(getLookingToAssignTeam);
   const lookingForLoserConnection = useAppSelector(
     getLookingForLoserConnection
   );
   const selectedGame = useAppSelector(getSelectedGame);
+
+  useEffect(() => {
+    dispatch(
+      setNumWinners(getBracketEventEndTeams(brackets, winnerConnections))
+    );
+  }, [winnerConnections, brackets, dispatch]);
+  useEffect(() => {
+    dispatch(
+      setNumTeams(getBracketEventStartTeams(brackets, originConnections))
+    );
+  }, [originConnections, brackets, dispatch]);
 
   const { renderBracketsFromWizard } = useSetBracketData();
   /**
@@ -160,10 +177,6 @@ export default function EditBracketStageView() {
     return toolbarState === BracketEditorToolbarState.EditingBrackets;
   }, [toolbarState]);
 
-  function onBracketClick(bracketIndex: number) {
-    console.log("bracket click: ", bracketIndex);
-  }
-
   const { addBracket, removeBracket } = useSetBracketData();
 
   function onAddBracket(index, opts) {
@@ -233,7 +246,6 @@ export default function EditBracketStageView() {
             onGameClick={isBracketEditMode ? null : onGameClick}
             onGameResultClick={onGameResultClick}
             onBackgroundClick={onBackgroundClick}
-            onBracketClick={!isBracketEditMode ? null : onBracketClick}
             availableGameIds={availableGameIds}
             tournamentId={tournamentId}
             selectedGameIds={selectedGameIds}

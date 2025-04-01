@@ -6,7 +6,6 @@ import { _setSelectedGame } from "./bracketViewerSlice";
 export const setSelectedGame =
   (gameOrGameId: BracketGameType | string): AppThunk =>
   (dispatch, getState) => {
-    console.log("set selected game", gameOrGameId);
     if (typeof gameOrGameId === "string") {
       const state = getState();
       const brackets = [...getBracketGames(state)];

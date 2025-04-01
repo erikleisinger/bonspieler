@@ -1,9 +1,14 @@
 import type { BracketGameType } from "@/entities/Bracket";
-import { getBracketEndTeams } from "./getBracketEndTeams";
+import { WinnerConnections } from "../BracketGameConnections";
 
-export function getBracketEventEndTeams(brackets: BracketGameType[][][]) {
-  return brackets.reduce(
-    (all, current) => all + getBracketEndTeams(current),
-    0
-  );
+export function getBracketEventEndTeams(
+  brackets: BracketGameType[][][],
+  winnerConnections: WinnerConnections
+) {
+  const count = brackets
+    .flat()
+    .flat()
+    .filter(({ id }) => !winnerConnections[id]?.gameId).length;
+
+  return count;
 }

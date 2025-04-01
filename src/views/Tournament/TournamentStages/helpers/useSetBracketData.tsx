@@ -2,6 +2,8 @@ import {
   BracketDrawTimes,
   BracketGameType,
   BracketSchedule,
+  getBracketEventEndTeams,
+  getBracketEventStartTeams,
 } from "@/entities/Bracket";
 import {
   type LoserConnections,
@@ -81,8 +83,6 @@ export default function useSetBracketData() {
         games: brackets,
       })
     );
-    dispatch(updateNumTeams(numTeams));
-    dispatch(updateNumWinners(numWinners.reduce((a, c) => a + c, 0)));
     dispatch(
       addConnections({
         originConnections,
@@ -95,16 +95,12 @@ export default function useSetBracketData() {
 
   async function removeBracket(bracketIndex: number) {
     const bracket = currentBrackets[bracketIndex];
-    const startTeams = getBracketStartTeams(bracket);
-    const endTeams = getBracketEndTeams(bracket);
     const gameIds = bracket
       .flat()
 
       .map(({ id }) => id);
     await dispatch(removeConnections(gameIds));
     await dispatch(removeBracketGames(bracketIndex));
-    dispatch(updateNumTeams(startTeams * -1));
-    dispatch(updateNumWinners(endTeams * -1));
 
     if (currentBrackets.length <= 2) return;
     const { schedule: newSchedule, draws } = scheduleTournament(
@@ -133,8 +129,6 @@ export default function useSetBracketData() {
     brackets,
     drawTimes,
     schedule,
-    numTeams,
-    numWinners,
   }: {
     originConnections: OriginConnections;
     winnerConnections: WinnerConnections;
@@ -142,8 +136,6 @@ export default function useSetBracketData() {
     brackets: BracketGameType[][][];
     drawTimes: BracketDrawTimes;
     schedule: BracketSchedule;
-    numTeams: number;
-    numWinners: number[];
   }) {
     dispatch(
       addConnections({
@@ -156,8 +148,12 @@ export default function useSetBracketData() {
 
     dispatch(setDrawTimes(drawTimes));
     dispatch(setBracketGamesSchedule(schedule));
-    dispatch(setNumTeams(numTeams));
-    dispatch(setNumWinners(numWinners.reduce((a, c) => a + c, 0)));
+    dispatch(
+      setNumTeams(getBracketEventStartTeams(brackets, originConnections))
+    );
+    dispatch(
+      setNumWinners(getBracketEventEndTeams(brackets, winnerConnections))
+    );
   }
 
   return { renderBracketsFromWizard, removeBracket, addBracket };
