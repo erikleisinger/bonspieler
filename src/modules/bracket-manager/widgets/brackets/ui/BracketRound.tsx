@@ -1,16 +1,17 @@
-import type { BracketGame, BracketRows } from "../../types";
-import { GAME_HEIGHT, GAME_PADDING } from "../../lib/constants/style";
+import type { BracketRows } from "../types";
+import type { BracketGame } from "@/modules/bracket-manager/shared/types";
+import { GAME_HEIGHT, GAME_PADDING } from "../lib/constants/style";
 
-export default function BracketRoundRow({
+export default function BracketRound({
   children,
-  roundIndex,
   games,
   rows,
+  roundIndex,
 }: {
   children?: React.ReactNode;
-  roundIndex: number;
   games: BracketGame[];
   rows: BracketRows;
+  roundIndex: number;
 }) {
   function getRowDefinition() {
     const rowHeight =
@@ -29,13 +30,16 @@ export default function BracketRoundRow({
   }
 
   return (
-    <div
-      className={`relative  grid `}
-      style={{
-        ...getRowDefinition(),
-      }}
-    >
-      {children}
+    <div className="pointer-events-none bracket-row z-10">
+      <div className="h-8" />
+      <div
+        className={`relative  grid `}
+        style={{
+          ...getRowDefinition(),
+        }}
+      >
+        {children}
+      </div>
     </div>
   );
 }

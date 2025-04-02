@@ -9,6 +9,7 @@ import type { BracketEventStoreState } from "@/entities/BracketEvent";
 import type { BracketGamesStoreState } from "@/entities/Bracket/BracketGame";
 import type { BracketViewerStoreState } from "@/widgets/Bracket/BracketViewer";
 import type { BracketEditorStoreState } from "@/widgets/Bracket/BracketEditor";
+import type { BracketManagerStoreState } from "@/modules/bracket-manager";
 export interface AsyncReducers {
   [key: string]: Reducer;
 }
@@ -30,6 +31,7 @@ export interface DynamicStateModules {
   bracketEvent?: BracketEventStoreState;
   drawTime?: DrawTimeStoreState;
   tournament?: TournamentStoreState;
+  bracketManager?: BracketManagerStoreState;
 }
 
 // This type will be used to augment the RootState

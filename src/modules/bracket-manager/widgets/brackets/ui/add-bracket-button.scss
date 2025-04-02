@@ -1,0 +1,13 @@
+.add-bracket-button {
+  animation: grow 0.3s forwards;
+  transform-origin: top;
+}
+
+@keyframes grow {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}

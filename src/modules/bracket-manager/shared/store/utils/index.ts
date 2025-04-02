@@ -1,0 +1,1 @@
+export { generateReadableIdIndex } from "./generateReadableIdIndex";

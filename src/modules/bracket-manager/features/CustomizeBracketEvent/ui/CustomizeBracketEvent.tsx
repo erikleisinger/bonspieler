@@ -5,7 +5,7 @@ import {
 } from "@/entities/Bracket";
 
 import Typography from "@/shared/ui/typography";
-import NumberInput from "@/shared/ui/number-input";
+import NumberInput from "./NumberInput";
 import { TbTournament } from "react-icons/tb";
 import { FaCog } from "react-icons/fa";
 
@@ -41,41 +41,22 @@ export default function CustomizeBracketEvent({
   return (
     <div>
       <section className="mb-12">
-        <header className="mb-6 flex gap-4 items-baseline">
-          <FaCog className="text-primary" />
-          <Typography tag="h4">Event options</Typography>
-        </header>
-        <div className="flex flex-col gap-4">
+        <div className="flex justify-around gap-4">
           <NumberInput
-            number={teamCount}
-            setNumber={updateTeamCount}
+            value={teamCount}
+            setValue={updateTeamCount}
             max={MAX_TEAM_COUNT}
             min={MIN_TEAM_COUNT}
+            label="Teams"
           >
-            <div className="flex gap-2">
-              <div>How many teams?</div>
-              <ValidationIcon errors={teamErrors} onlyErrors={true} />
-            </div>
+            <ValidationIcon errors={teamErrors} onlyErrors={true} />
           </NumberInput>
-          <NumberSheetsSelect
-            numSheets={numSheets}
-            setNumSheets={updateNumSheets}
-          >
-            How many sheets of ice?
-          </NumberSheetsSelect>
-        </div>
-      </section>
-      <section>
-        <header className="mb-6 flex gap-4 items-baseline">
-          <TbTournament className="text-blue-500" />
-          <Typography tag="h4">Bracket options</Typography>
-        </header>
-
-        <div>
           <NumberInput
-            number={numBrackets}
-            setNumber={updateNumBrackets}
+            value={numBrackets}
+            setValue={updateNumBrackets}
+            min={1}
             max={MAX_BRACKET_COUNT}
+            label="Brackets"
           >
             <div className="flex gap-2">
               <div>How many brackets?</div>
@@ -83,6 +64,9 @@ export default function CustomizeBracketEvent({
             </div>
           </NumberInput>
         </div>
+      </section>
+      <section>
+        <div></div>
       </section>
     </div>
   );

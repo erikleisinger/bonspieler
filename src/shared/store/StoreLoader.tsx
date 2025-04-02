@@ -107,15 +107,12 @@ export default function StoreLoader({
   }, [store, sliceNames, slices]);
 
   // Use the persistor from the store
-  return (
-    <>
-      {loaded ? (
-        <PersistGate loading={<LoaderFullPage />} persistor={store._persistor}>
-          {children}
-        </PersistGate>
-      ) : (
-        <LoaderFullPage />
-      )}
-    </>
+
+  return loaded ? (
+    <PersistGate loading={<LoaderFullPage />} persistor={store._persistor}>
+      {children}
+    </PersistGate>
+  ) : (
+    <LoaderFullPage />
   );
 }

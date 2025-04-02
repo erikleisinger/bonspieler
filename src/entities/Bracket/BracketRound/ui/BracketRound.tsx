@@ -7,23 +7,16 @@ export default function BracketRound({
   games,
   rows,
   roundIndex,
-  scale,
 }: {
   children?: React.ReactNode;
   games: BracketGameType[];
   rows: BracketRows;
   roundIndex: number;
-  scale: number;
 }) {
   return (
     <div className="pointer-events-none bracket-row z-10">
       <div className="h-8" />
-      <BracketRoundRow
-        roundIndex={roundIndex}
-        games={games}
-        rows={rows}
-        scale={scale}
-      >
+      <BracketRoundRow roundIndex={roundIndex} games={games} rows={rows}>
         {children}
       </BracketRoundRow>
     </div>

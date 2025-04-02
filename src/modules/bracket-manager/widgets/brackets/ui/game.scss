@@ -1,0 +1,51 @@
+.game__container {
+  // border-radius: 10px;
+  // border: 1px solid rgba(141, 139, 139, 0.1);
+
+  transition: all 0.1s;
+}
+$SMALL_SCREEN_GAME_WIDTH: calc(100vw - 70px);
+@media (max-width: 768px) {
+  .game__container {
+    min-width: 200px;
+    width: $SMALL_SCREEN_GAME_WIDTH;
+    max-width: $SMALL_SCREEN_GAME_WIDTH;
+  }
+}
+.game__container {
+  &:not(.unavailable) {
+    &.available {
+      box-shadow: #6ee7b7 0px 0px 8px 1px;
+    }
+    &:hover {
+      &.available {
+        box-shadow: #fcd34d 0px 0px 8px 1px;
+      }
+    }
+  }
+
+  &.unavailable {
+    cursor: not-allowed;
+  }
+
+  &.selected {
+    box-shadow: #9dd0fd 0px 0px 6px 4px;
+    border-color: transparent;
+  }
+
+  &.modified {
+    animation: flash 0.8s;
+  }
+}
+
+@keyframes flash {
+  0% {
+    background-color: initial;
+  }
+  50% {
+    background-color: #a7f3d050;
+  }
+  100% {
+    background-color: initial;
+  }
+}
