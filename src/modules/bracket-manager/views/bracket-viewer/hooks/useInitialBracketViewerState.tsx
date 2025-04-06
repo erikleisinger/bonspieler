@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { BracketEvent } from "@/modules/bracket-manager/shared/types";
-import { BracketEditorToolbarState } from "@/widgets/Bracket/BracketEditorToolbar";
+import { BracketEditorToolbarState } from "@/modules/bracket-manager/widgets/bracket-editor-toolbar";
 export function useInitialBracketViewerState({
   editing,
   brackets,
