@@ -1,15 +1,17 @@
 import BracketEditorToolbarButton from "./BracketEditorToolbarButton";
 import { BracketEditorToolbarState } from "../types";
 import { cn } from "@/lib/utils";
-import { FaCog } from "react-icons/fa";
+import { FaArrowLeft, FaCog } from "react-icons/fa";
 import { TbTournament } from "react-icons/tb";
 import { Nullable } from "@/shared/types";
 export default function BracketEditorToolbar({
   className,
+  onBack,
   state,
   setState,
 }: {
   className?: string;
+  onBack?: () => void;
   state: BracketEditorToolbarState | null;
   setState: (state: Nullable<BracketEditorToolbarState>) => void;
 }) {
@@ -29,6 +31,11 @@ export default function BracketEditorToolbar({
       )}
     >
       <>
+        {onBack && (
+          <BracketEditorToolbarButton tooltip="Back" onClick={onBack}>
+            <FaArrowLeft />
+          </BracketEditorToolbarButton>
+        )}
         <BracketEditorToolbarButton
           onClick={() => handleClick(BracketEditorToolbarState.EditingBrackets)}
           active={state === BracketEditorToolbarState.EditingBrackets}

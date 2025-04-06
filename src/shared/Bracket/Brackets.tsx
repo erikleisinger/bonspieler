@@ -15,7 +15,6 @@ import BracketGameFinalResult from "@/entities/Bracket/BracketGame/ui/BracketGam
 import { Nullable } from "@/shared/types";
 
 import { BracketContext } from "./BracketContext";
-import { Button } from "../ui/button";
 import Typography from "../ui/typography";
 import { numberToLetter } from "../utils/numberToLetter";
 import { cn } from "@/lib/utils";

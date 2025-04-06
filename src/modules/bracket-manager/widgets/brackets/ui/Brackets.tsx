@@ -1,49 +1,55 @@
 "use client";
 
-import { useRef, useState } from "react";
-import type { BracketRows, BracketRow } from "../types";
-import type { BracketGame as BracketGameType } from "@/modules/bracket-manager/shared/types";
+import { useRef, useMemo, useId } from "react";
+import type {
+  BracketDisplaySize,
+  BracketGame as BracketGameType,
+  BracketMode,
+} from "@/modules/bracket-manager/shared/types";
 import Bracket from "./Bracket";
 import BracketRound from "./BracketRound";
-import { BracketGame } from "./BracketGame";
-
-import Typography from "@/shared/ui/typography";
-import { numberToLetter } from "@/shared/utils/numberToLetter";
+import BracketGame from "./BracketGame";
+import BracketGameMini from "./BracketGameMini";
 import { cn } from "@/lib/utils";
-import { BRACKET_CONTAINER_ELEMENT_ID_PREFIX } from "@/entities/Bracket";
 import { useDraggableBracket } from "../hooks/useDraggableBracket";
 import { useBracketData } from "../hooks/useBracketData";
 import { useBackgroundClick } from "../hooks/useBackgroundClick";
 import { useAutoScroll } from "../hooks/useAutoScroll";
 import { useBracketInteractions } from "../hooks/useBracketInteractions";
-import DeleteBracketOverlay from "./DeleteBracketOverlay";
-import AddBracketButton from "./AddBracketButton";
 import { Nullable } from "@/shared/types";
+import { calculateRows } from "../lib";
+import GameConnections from "./GameConnections";
+import { BracketContext } from "../lib/context/BracketContext";
 export default function Brackets({
   children,
   className,
+  mode = "games",
+  size = "full",
+  showTitle,
   onAddBracket,
   onBackgroundClick,
   onDeleteBracket,
   extendOnGameClick,
-  selectedGameIds = [],
 }: {
   children?: React.ReactNode;
   className?: string;
+  mode: BracketMode;
+  size: BracketDisplaySize;
+  showTitle?: boolean;
   onAddBracket?: Nullable<(bracketIndex: number) => void>;
   onBackgroundClick?: () => void;
   onDeleteBracket: Nullable<(bracketIndex: number) => void>;
   extendOnGameClick?: Nullable<(game: Nullable<BracketGameType>) => boolean>;
-  selectedGameIds: string[];
 }) {
   const el = useRef<HTMLElement>(null);
+  const containerId = useId();
 
   /**
    * Store data
    */
 
   const schedule = {};
-  const { brackets, originConnections } = useBracketData();
+  const { brackets, originConnections, bracketName } = useBracketData();
 
   /**
    * Interaction hooks
@@ -55,126 +61,107 @@ export default function Brackets({
     scrollerRef: el,
   });
 
-  const { isDragging } = useDraggableBracket({ ref: el });
+  const { isDragging } = useDraggableBracket({
+    ref: el,
+    disabled: size !== "full",
+  });
 
   const { onGameClick } = useBracketInteractions({
     extendOnGameClick,
   });
 
-  /**
-   *
-   * Setting of bracket rows for grid display
-   */
-
-  function getRowSpanForGame(rows: BracketRow) {
-    const { rowStart = 1, rowEnd = 2 } = rows || {};
-    return {
-      gridRow: `${rowStart} / ${rowEnd}`,
-    };
-  }
-
-  const [rows, setRows] = useState<BracketRows>({});
-
-  function updateRows(rows: BracketRows) {
-    setRows((prev) => ({
-      ...prev,
-      ...rows,
-    }));
-  }
+  const rows = useMemo(() => {
+    return brackets.reduce((all, rounds) => {
+      return {
+        ...all,
+        ...calculateRows({
+          rounds,
+          originConnections,
+        }),
+      };
+    }, {});
+  }, [originConnections, brackets, size]);
 
   return (
-    <div
-      ref={el}
-      className={cn(
-        "pointer-events-auto absolute inset-0 overflow-auto bg-glass flex flex-col gap-4  ",
-        isDragging ? "cursor-grabbing" : "cursor-grab"
-      )}
-      draggable={true}
+    <BracketContext.Provider
+      value={{
+        rows,
+        brackets,
+        size,
+      }}
     >
-      {onAddBracket && (
-        <AddBracketButton className="mt-4" onClick={() => onAddBracket(0)} />
-      )}
-      {brackets?.length ? (
-        brackets.map((rounds, bracketIndex) => {
-          return (
-            <div
-              key={"bracket-" + bracketIndex}
-              id={BRACKET_CONTAINER_ELEMENT_ID_PREFIX + bracketIndex}
-              className={cn("relative w-max", className)}
-            >
-              <div
-                className={cn(
-                  "grid grid-cols-[auto_1fr] w-max  rounded-tl-xl rounded-bl-xl  relative"
-                )}
+      <div
+        id={containerId}
+        ref={el}
+        className={cn(
+          "pointer-events-auto absolute inset-0 overflow-auto bg-glass flex flex-col gap-4  ",
+          size !== "full"
+            ? "unset"
+            : isDragging
+            ? "cursor-grabbing"
+            : "cursor-grab",
+          size !== "full" && "gap-1",
+          className
+        )}
+        draggable={size === "full"}
+      >
+        <GameConnections
+          games={brackets.flat().flat()}
+          containerId={containerId}
+        />
+
+        {brackets?.length ? (
+          brackets.map((rounds, bracketIndex) => {
+            return (
+              <Bracket
+                key={"bracket-" + bracketIndex}
+                small={size !== "full"}
+                bracketNumber={bracketIndex}
               >
-                {onDeleteBracket && (
-                  <DeleteBracketOverlay
-                    bracketIndex={bracketIndex}
-                    onDelete={() => onDeleteBracket(bracketIndex)}
-                  />
-                )}
-                <div
-                  className={cn(
-                    "h-full relative  p-4  flex items-center  z-20  bg-indigo-500/5 bracket-label"
-                  )}
-                >
-                  <Typography tag="h2" className="text-center">
-                    {numberToLetter(bracketIndex + 1)}
-                  </Typography>
-                </div>
-                <Bracket
-                  originConnections={originConnections}
-                  rounds={rounds}
-                  setRows={updateRows}
-                  rows={rows}
-                >
-                  {rounds.map((games, roundIndex) => {
-                    return (
-                      <BracketRound
-                        games={games}
-                        key={"round-" + roundIndex}
-                        rows={rows}
-                        roundIndex={roundIndex}
-                      >
-                        {games &&
-                          games.map((game: BracketGameType) => {
-                            return (
-                              <div
-                                className="flex items-center pointer-events-auto justify-center"
-                                key={game.id}
-                                style={{
-                                  ...getRowSpanForGame(rows[game.id]),
-                                }}
-                              >
-                                <BracketGame
-                                  game={game}
-                                  onClick={isDragging ? null : onGameClick}
-                                  selected={selectedGameIds.includes(game.id)}
-                                  drawNumber={schedule[game.id]}
-                                />
-                              </div>
-                            );
-                          })}
-                      </BracketRound>
-                    );
-                  })}
-                </Bracket>
-              </div>
-              {onAddBracket && (
-                <AddBracketButton
-                  className="mt-4"
-                  onClick={() => onAddBracket(bracketIndex + 1)}
-                />
-              )}
-            </div>
-          );
-        })
-      ) : (
-        <div className="absolute inset-0 flex justify-center items-center">
-          No brackets
-        </div>
-      )}
-      {children}
-    </div>
+                {rounds.map((games, roundIndex) => {
+                  return (
+                    <BracketRound
+                      bracketNumber={bracketIndex}
+                      key={"round-" + roundIndex}
+                      roundNumber={roundIndex}
+                    >
+                      {games &&
+                        games.map((game: BracketGameType) => {
+                          return mode === "connections" ? (
+                            <BracketGameMini
+                              key={game.id}
+                              game={game}
+                              onClick={isDragging ? null : onGameClick}
+                            />
+                          ) : (
+                            <BracketGame
+                              key={game.id}
+                              game={game}
+                              onClick={isDragging ? null : onGameClick}
+                              drawNumber={schedule[game.id]}
+                            />
+                          );
+                        })}
+                    </BracketRound>
+                  );
+                })}
+              </Bracket>
+              // {/* </div> */}
+              // {onAddBracket && (
+              //   <AddBracketButton
+              //     className="mt-4"
+              //     onClick={() => onAddBracket(bracketIndex + 1)}
+              //   />
+              // )}
+            );
+          })
+        ) : (
+          <div className="absolute inset-0 flex justify-center items-center">
+            No brackets
+          </div>
+        )}
+        {children}
+      </div>
+    </BracketContext.Provider>
   );
 }

@@ -14,6 +14,7 @@
     --glass-foreground: 217 33% 17%;
     --primary: 239 84% 67%;
     --primary-foreground: 0 0% 98%;
+    --primary-muted: 217 33% 17%;
     --secondary: 0 0% 96.1%;
     --secondary-foreground: 0 0% 9%;
     --muted: 0 0% 40.1%;
@@ -25,6 +26,19 @@
     --connection: 213 27% 84%;
     --success: 160 84% 39%;
     --success-foreground: 0 0% 98%;
+
+
+    --bracket-primary: 350 89% 60%;
+    --bracket-primary-foreground: 0 100% 100%;
+    --bracket-muted: 353 96% 82%;
+
+     --pool-primary: 217 91% 60%;
+     --pool-primary-foreground: 0 100% 100%;
+     --pool-muted: 212 96% 78%;
+
+     --points-primary: 350 89% 60%;
+     --points-primary-foreground: 0 100% 100%;
+     --points-muted: 353 96% 82%;
 
 
 

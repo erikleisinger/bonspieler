@@ -20,7 +20,6 @@ export default function NumberInput({
 
   function handleChange(e) {
     setValue(Number(e.target.value));
-    console.log("handle change: ", e);
   }
 
   function incrementValue(increment: number) {

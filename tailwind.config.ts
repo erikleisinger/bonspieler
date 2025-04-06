@@ -42,6 +42,7 @@ export default {
         primary: {
           DEFAULT: "hsl(var(--primary) / <alpha-value>)",
           foreground: "hsl(var(--primary-foreground) / <alpha-value>)",
+          muted: "hsl(var(--primary-muted) / <alpha-value>)",
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary) / <alpha-value>)",
@@ -63,6 +64,28 @@ export default {
           DEFAULT: "hsl(var(--success) / <alpha-value>)",
           foreground: "hsl(var(--success-foreground) / <alpha-value>)",
         },
+
+        bracket: {
+          primary: "hsl(var(--bracket-primary) / <alpha-value>)",
+          "primary-foreground":
+            "hsl(var(--bracket-primary-foreground) / <alpha-value>)",
+          muted: "hsl(var(--bracket-muted) / <alpha-value>)",
+        },
+
+        pool: {
+          primary: "hsl(var(--pool-primary) / <alpha-value>)",
+          "primary-foreground":
+            "hsl(var(--pool-primary-foreground) / <alpha-value>)",
+          muted: "hsl(var(--pool-muted) / <alpha-value>)",
+        },
+
+        points: {
+          primary: "hsl(var(--points-primary) / <alpha-value>)",
+          "primary-foreground":
+            "hsl(var(--points-primary-foreground) / <alpha-value>)",
+          muted: "hsl(var(--points-muted) / <alpha-value>)",
+        },
+
         connection: "hsl(var(--connection))",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

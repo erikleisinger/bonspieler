@@ -1,8 +1,10 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import type {
   BracketEvent,
   BracketGame,
+  DestinationConnection,
   LoserConnections,
+  OriginConnection,
   OriginConnections,
   ReadableIdIndex,
   WinnerConnections,
@@ -15,37 +17,90 @@ interface BracketManagerState {
   name: string;
   order: number;
   type: string;
+  tournamentId: string;
+  availableGameIds: string[];
   brackets: BracketEvent;
   connections: {
     winnerConnections: WinnerConnections;
     loserConnections: LoserConnections;
     originConnections: OriginConnections;
   };
+
   lookingForLoserConnection: Nullable<BracketGame>;
-  readableIdIndex: ReadableIdIndex;
+  lookingForNextStageConnection: Nullable<BracketGame>;
   selectedGame: Nullable<BracketGame>;
-  availableGameIds: string[];
 }
 
 export interface BracketManagerStoreState {
-  [stageId: string]: BracketManagerState;
+  connectionMode: boolean;
+  stages: {
+    [stageId: string]: BracketManagerState;
+  };
+  gameIndex: {
+    [gameId: string]: BracketGame;
+  };
+  readableIdIndex: ReadableIdIndex;
+  stageNameIndex: {
+    [stageId: string]: string;
+  };
 }
 
-const initialState: BracketManagerStoreState = {};
+const initialState: BracketManagerStoreState = {
+  stages: {},
+  gameIndex: {},
+  readableIdIndex: {},
+  stageNameIndex: {},
+  connectionMode: false,
+};
 
 export const bracketManagerSlice = createSlice({
   name: "bracketManager",
   initialState,
   reducers: {
+    addOriginConnectionForGame: (
+      state,
+      action: PayloadAction<{
+        stageId: string;
+        gameId: string;
+        newOriginConnection: OriginConnection;
+      }>
+    ) => {
+      const { stageId, gameId, newOriginConnection } = action.payload;
+
+      if (!gameId) {
+        console.warn("cannot assign origin connection:  game is unavailable.");
+        return;
+      }
+
+      const existingOrigins =
+        state.stages[stageId].connections.originConnections[gameId] || [];
+      console.log("existingOrigins", existingOrigins);
+      if (
+        existingOrigins.length >= 2 &&
+        existingOrigins.every(({ gameId }) => !!gameId)
+      ) {
+        console.warn(
+          "cannot assign origin connection: game has too many origins already."
+        );
+        return;
+      }
+      const newOriginConnections = {
+        ...state.stages[stageId].connections.originConnections,
+      };
+
+      newOriginConnections[gameId] = [...existingOrigins, newOriginConnection];
+      state.stages[stageId].connections.originConnections =
+        newOriginConnections;
+    },
     beginLookingForLoserConnection: (
       state,
       action: { payload: { stageId: string; gameId: string } }
     ) => {
       const { stageId, gameId } = action.payload;
-      if (!(state || {})[stageId]) {
+      if (!(state?.stages || {})[stageId]) {
         return;
       }
-      const game = state[stageId].brackets
+      const game = state.stages[stageId].brackets
         .flat()
         .flat()
         .find(({ id }) => id === gameId);
@@ -56,34 +111,68 @@ export const bracketManagerSlice = createSlice({
         return;
       }
 
-      state[stageId].lookingForLoserConnection = game;
+      state.stages[stageId].lookingForLoserConnection = game;
 
-      state[stageId].availableGameIds = state[stageId].brackets
+      state.stages[stageId].availableGameIds = state.stages[stageId].brackets
         .flat()
         .flat()
         .filter(({ id, bracketNumber }) => {
           if (bracketNumber <= game.bracketNumber) return false;
           const originConnections =
-            state[stageId].connections.originConnections[id] || [];
+            state.stages[stageId].connections.originConnections[id] || [];
           if (originConnections.length < 2) return true;
           return originConnections.some(({ gameId }) => !gameId);
         })
         .map(({ id }) => id);
+    },
+    beginLookingForNextStageConnection: (
+      state,
+      action: { payload: { stageId: string; gameId: string } }
+    ) => {
+      const { stageId, gameId } = action.payload;
+      if (!(state?.stages || {})[stageId]) {
+        return;
+      }
+      const game = state.stages[stageId].brackets
+        .flat()
+        .flat()
+        .find(({ id }) => id === gameId);
+      if (!game) {
+        console.warn(
+          "could not look for next stage connection: origin game not found"
+        );
+        return;
+      }
+      state.stages[stageId].lookingForNextStageConnection = game;
     },
     cancelLookingForLoserConnection: (
       state,
       action: { payload: { stageId: string } }
     ) => {
       const { stageId } = action.payload;
-      if (!(state || {})[stageId]) {
+      if (!(state?.stages || {})[stageId]) {
         return;
       }
-      state[stageId].lookingForLoserConnection = null;
-      state[stageId].availableGameIds = [];
+      state.stages[stageId].lookingForLoserConnection = null;
+      state.stages[stageId].availableGameIds = [];
+    },
+    cancelLookingForNextStageConnection: (
+      state,
+      action: { payload: { stageId: string } }
+    ) => {
+      const { stageId } = action.payload;
+      if (!(state?.stages || {})[stageId]) {
+        return;
+      }
+      state.stages[stageId].lookingForNextStageConnection = null;
     },
     initBracketEvent: (state, action: { payload: { stageId: string } }) => {
       const { stageId } = action.payload;
-      state[stageId] = {
+      /**
+       * If stage is already initialized, do not overwrite it
+       */
+      if (!!state.stages[stageId]) return;
+      state.stages[stageId] = {
         id: null,
         name: "",
         order: 0,
@@ -95,7 +184,7 @@ export const bracketManagerSlice = createSlice({
           originConnections: {},
         },
         lookingForLoserConnection: null,
-        readableIdIndex: {},
+        lookingForNextStageConnection: null,
         selectedGame: null,
         availableGameIds: [],
       };
@@ -105,41 +194,81 @@ export const bracketManagerSlice = createSlice({
       action: { payload: { stageId: string; gameId: string } }
     ) => {
       const { stageId, gameId } = action.payload;
-      if (!(state || {})[stageId]) {
+      if (!(state?.stages || {})[stageId]) {
         console.warn("bracketManager state not initialized");
         return;
       }
 
       const currentLoserDestination =
-        state[stageId].connections.loserConnections[gameId]?.gameId;
+        state.stages[stageId].connections.loserConnections[gameId]?.gameId;
       if (!currentLoserDestination) {
         console.warn("could not remove loser connection, as it does not exist");
         return;
       }
-      state[stageId].connections.loserConnections[gameId] = null;
+      state.stages[stageId].connections.loserConnections[gameId] = null;
 
       const newDestinationOrigins = (
-        state[stageId].connections.originConnections[currentLoserDestination] ||
-        []
+        state.stages[stageId].connections.originConnections[
+          currentLoserDestination
+        ] || []
       ).map((o) => ({
         ...o,
         gameId: o.gameId === gameId ? null : o.gameId,
       }));
-      state[stageId].connections.originConnections[currentLoserDestination] =
-        newDestinationOrigins;
+      state.stages[stageId].connections.originConnections[
+        currentLoserDestination
+      ] = newDestinationOrigins;
+    },
+    removeWinnerConnectionForGame: (
+      state,
+      action: { payload: { stageId: string; gameId: string } }
+    ) => {
+      const { stageId, gameId } = action.payload;
+      if (!(state?.stages || {})[stageId]) {
+        console.warn("bracketManager state not initialized");
+        return;
+      }
+
+      const currentWinnerDestination =
+        state.stages[stageId].connections.winnerConnections[gameId];
+
+      if (!currentWinnerDestination) {
+        console.warn(
+          "could not remove winner connection, as it does not exist"
+        );
+        return;
+      }
+
+      const { gameId: destinationGameId, stageId: destinationStageId } =
+        currentWinnerDestination;
+      state.stages[stageId].connections.winnerConnections[gameId] = null;
+
+      const newDestinationOrigins = (
+        state.stages[destinationStageId || stageId].connections
+          .originConnections[destinationGameId] || []
+      ).filter((o) => {
+        return !(o.gameId === gameId && o.stageId === stageId);
+      });
+      state.stages[destinationStageId || stageId].connections.originConnections[
+        destinationGameId
+      ] = newDestinationOrigins;
     },
     setBrackets: (
       state,
       action: { payload: { stageId: string; brackets: BracketEvent } }
     ) => {
       const { stageId, brackets } = action.payload;
-      if (!(state || {})[stageId]) {
+      if (!(state?.stages || {})[stageId]) {
         console.warn("bracketManager state not initialized");
         return;
       }
 
-      state[stageId].brackets = brackets;
-      state[stageId].readableIdIndex = generateReadableIdIndex(brackets);
+      state.stages[stageId].brackets = brackets;
+      const newReadableIdIndex = {
+        ...state.readableIdIndex,
+        ...generateReadableIdIndex(brackets),
+      };
+      state.readableIdIndex = newReadableIdIndex;
     },
     setConnections: (
       state,
@@ -158,11 +287,11 @@ export const bracketManagerSlice = createSlice({
         loserConnections,
         originConnections,
       } = action.payload;
-      if (!(state || {})[stageId]) {
+      if (!(state?.stages || {})[stageId]) {
         console.warn("bracketManager state not initialized");
         return;
       }
-      state[stageId].connections = {
+      state.stages[stageId].connections = {
         winnerConnections,
         loserConnections,
         originConnections,
@@ -173,23 +302,28 @@ export const bracketManagerSlice = createSlice({
       action: {
         payload: {
           stageId: string;
-          id: string;
           name: string;
-          order: number;
           type: string;
+          tournamentId: string;
         };
       }
     ) => {
-      const { stageId, id, name, order, type } = action.payload;
-      if (!(state || {})[stageId]) {
+      const { stageId, name, type } = action.payload;
+      if (!(state?.stages || {})[stageId]) {
         console.warn("bracketManager state not initialized");
         return;
       }
-      state[stageId].id = id;
-      state[stageId].name = name;
-      state[stageId].order = order;
-      state[stageId].type = type;
+      state.stages[stageId].id = stageId;
+      state.stages[stageId].name = name;
+      state.stages[stageId].type = type;
+      state.stages[stageId].tournamentId = action.payload.tournamentId;
+      const newStageNameIndex = {
+        ...state.stageNameIndex,
+        [stageId]: name,
+      };
+      state.stageNameIndex = newStageNameIndex;
     },
+
     setSelectedGame: (
       state,
       action: {
@@ -200,12 +334,12 @@ export const bracketManagerSlice = createSlice({
       }
     ) => {
       const { game: selectedGameOrGameId, stageId } = action.payload;
-      if (!state || !state[stageId]) {
+      if (!state || !state.stages[stageId]) {
         console.warn("bracketManager state not initialized");
         return;
       }
       if (typeof selectedGameOrGameId === "string") {
-        const game = state[stageId].brackets
+        const game = state.stages[stageId].brackets
           .flat()
           .flat()
           .find((game) => game.id === selectedGameOrGameId);
@@ -213,9 +347,9 @@ export const bracketManagerSlice = createSlice({
           console.warn("could not set selected game: game not found");
           return;
         }
-        state[stageId].selectedGame = game;
+        state.stages[stageId].selectedGame = game;
       } else {
-        state[stageId].selectedGame = selectedGameOrGameId;
+        state.stages[stageId].selectedGame = selectedGameOrGameId;
       }
     },
     setLoserConnectionForGame: (
@@ -229,12 +363,14 @@ export const bracketManagerSlice = createSlice({
       }
     ) => {
       const { stageId, originGameId, destinationGameId } = action.payload;
-      if (!(state || {})[stageId]) {
+      if (!(state?.stages || {})[stageId]) {
         console.warn("bracketManager state not initialized");
         return;
       }
       const destinationOrigins =
-        state[stageId].connections.originConnections[destinationGameId] || [];
+        state.stages[stageId].connections.originConnections[
+          destinationGameId
+        ] || [];
       const newDestinationOrigins = Array.from({ length: 2 }).map(
         (_, i) => destinationOrigins[i] || { isWinner: false, gameId: null }
       );
@@ -252,27 +388,74 @@ export const bracketManagerSlice = createSlice({
         stageId,
       });
 
-      state[stageId].connections.originConnections[destinationGameId] =
+      state.stages[stageId].connections.originConnections[destinationGameId] =
         newDestinationOrigins;
 
-      state[stageId].connections.loserConnections[originGameId] = {
+      state.stages[stageId].connections.loserConnections[originGameId] = {
         gameId: destinationGameId,
         stageId,
       };
-      state[stageId].lookingForLoserConnection = null;
-      state[stageId].availableGameIds = [];
+      state.stages[stageId].lookingForLoserConnection = null;
+      state.stages[stageId].availableGameIds = [];
+    },
+    setWinnerConnectionForGame: (
+      state,
+      action: PayloadAction<{
+        originStageId: string;
+        originGameId: string;
+        newWinnerConnection: DestinationConnection;
+      }>
+    ) => {
+      const { originGameId, newWinnerConnection, originStageId } =
+        action.payload;
+
+      const { gameId: destinationGameId, stageId: destinationStageId } =
+        newWinnerConnection;
+      const destinationGame =
+        state.stages[destinationStageId].connections.originConnections[
+          destinationGameId
+        ] || [];
+      if (
+        destinationGame.length >= 2 &&
+        destinationGame.every(({ gameId }) => !!gameId)
+      ) {
+        console.warn("destination game already has a winner connection");
+        return;
+      }
+
+      const newWinnerConnections = {
+        ...state.stages[originStageId].connections.winnerConnections,
+      };
+      newWinnerConnections[originGameId] = newWinnerConnection;
+      state.stages[originStageId].connections.winnerConnections =
+        newWinnerConnections;
+    },
+    toggleConnectionMode: (
+      state,
+      action: PayloadAction<{
+        bool: boolean;
+      }>
+    ) => {
+      const { bool } = action.payload;
+      state.connectionMode = bool;
     },
   },
 });
 
 export const {
+  addOriginConnectionForGame,
   beginLookingForLoserConnection,
+  beginLookingForNextStageConnection,
   cancelLookingForLoserConnection,
+  cancelLookingForNextStageConnection,
   initBracketEvent,
   removeLoserConnectionForGame,
+  removeWinnerConnectionForGame,
   setBrackets,
   setBracketStageInfo,
   setConnections,
   setLoserConnectionForGame,
   setSelectedGame,
+  setWinnerConnectionForGame,
+  toggleConnectionMode,
 } = bracketManagerSlice.actions;

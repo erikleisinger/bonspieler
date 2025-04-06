@@ -2,6 +2,7 @@ import type { Nullable } from "@/shared/types";
 import { FaTrophy, FaHeartBroken } from "react-icons/fa";
 import { DestinationConnection } from "@/modules/bracket-manager/shared/types";
 import { useBracketSelector } from "@/modules/bracket-manager/shared/hooks";
+import { useAppSelector } from "@/lib/store";
 import { getReadableId } from "@/modules/bracket-manager/shared/store";
 export default function BracketGameViewerConnection({
   connection,
@@ -14,7 +15,9 @@ export default function BracketGameViewerConnection({
   isLoser?: boolean;
   onClick?: (connection?: DestinationConnection) => void;
 }) {
-  const readableId = useBracketSelector(getReadableId, connection?.gameId);
+  const readableId = useAppSelector((state) =>
+    getReadableId(state, connection?.gameId)
+  );
 
   function icon() {
     if (isLoser) {

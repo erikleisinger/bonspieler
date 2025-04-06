@@ -1,5 +1,5 @@
 import type { BracketGameType } from "@/entities/Bracket";
-import { useBracketSelector } from "@/modules/bracket-manager/shared/hooks";
+import { useAppSelector } from "@/lib/store";
 import { getReadableId } from "@/modules/bracket-manager/shared/store";
 export default function BracketGameViewerHeader({
   children,
@@ -11,7 +11,7 @@ export default function BracketGameViewerHeader({
 }) {
   const drawTimes = {};
   const schedule = {};
-  const readableId = useBracketSelector(getReadableId, game?.id);
+  const readableId = useAppSelector((state) => getReadableId(state, game?.id));
   return (
     <header className="flex justify-between  p-4 px-6 ">
       <div>

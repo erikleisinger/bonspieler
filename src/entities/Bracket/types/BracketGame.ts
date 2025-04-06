@@ -4,4 +4,5 @@ export interface BracketGame {
   roundNumber: number;
   isSeed: boolean;
   readableId: string;
+  stageId: string;
 }

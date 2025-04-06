@@ -1,18 +1,13 @@
 import { useMemo, useState } from "react";
 
-import { CustomizeBracketEvent } from "@/modules/bracket-manager/features/CustomizeBracketEvent";
-import { CustomizeBracket } from "@/modules/bracket-manager/features/CustomizeBracket";
 import Typography from "@/shared/ui/typography";
-import ValidationIcon from "@/shared/ui/validation-icon";
-import { getTotalBracketWinners } from "@/shared/utils/bracket";
 import { Label } from "@/shared/ui/label";
 import { getNewBracketAndWinnerCount } from "../lib/getNewBracketAndWinnerCount";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/shared/ui/tabs";
-import NumberInput from "./NumberInput";
 import BracketFormatCard from "./BracketFormatCard";
 import { Input } from "@/shared/ui/input";
 import { Button } from "@/shared/ui/button";
-import { FaDoorOpen, FaMagic } from "react-icons/fa";
+import { FaMagic } from "react-icons/fa";
 import { generateBracket } from "../lib/generateBracket";
 import { useBracketDispatch } from "@/modules/bracket-manager/shared/hooks";
 import {
@@ -36,12 +31,7 @@ export default function CreateBracketWizard({
   const [numWinners, setNumWinners] = useState(initialNumWinners);
   const [numWinnersArray, setNumWinnersArray] = useState([]);
   const [numTeams, setNumTeams] = useState(initialTeamCount);
-  const [numBrackets, setNumBrackets] = useState(numWinners.length);
-  const [numSheets, setNumSheets] = useState(initialNumSheets);
-
-  const isDisabled = useMemo(() => {
-    return !numBrackets;
-  }, [numBrackets]);
+  const [numBrackets, setNumBrackets] = useState(1);
 
   const dispatch = useBracketDispatch();
 
@@ -96,7 +86,6 @@ export default function CreateBracketWizard({
 
   function handleUpdateNumWinners(newWinnerCount: number) {
     setNumWinners(newWinnerCount);
-    console.log("new winner count", newWinnerCount);
     redistributeWinners(newWinnerCount);
   }
 

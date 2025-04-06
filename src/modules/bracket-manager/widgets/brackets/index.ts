@@ -1,1 +1,8 @@
-export { Brackets } from "./ui";
+export {
+  Brackets,
+  Bracket,
+  BracketRound,
+  BracketGame,
+  BracketGameMini,
+} from "./ui";
+export { getBracketGameElement } from "./lib";

@@ -1,58 +1,29 @@
-import { useEffect } from "react";
-import type { BracketRows } from "../types";
-import type { BracketGame } from "@/modules/bracket-manager/shared/types";
-import GameConnections from "./GameConnections";
-
-import type { OriginConnections } from "@/entities/Bracket/BracketGameConnections";
-import { calculateRows } from "../lib";
-import { ROUND_GAP } from "../lib/constants/style";
+import { ROUND_GAP, ROUND_GAP_SMALL } from "../lib/constants/style";
+import { cn } from "@/lib/utils";
+import { BRACKET_CONTAINER_ELEMENT_ID_PREFIX } from "@/entities/Bracket";
 import { useContext } from "react";
-import { StageContext } from "@/modules/bracket-manager/shared/lib/context";
-
+import { BracketContext } from "../lib/context/BracketContext";
 export interface BracketProps {
+  bracketNumber: number;
   children?: React.ReactNode;
-  rounds: BracketGame[][];
-  rows: BracketRows;
-  originConnections: OriginConnections;
-  setRows: (newRows: BracketRows) => void;
-  stageId: string;
 }
 
-export default function Bracket({
-  children,
-  rounds,
-  rows,
-  originConnections,
-  setRows,
-}: BracketProps) {
-  const { stageId } = useContext(StageContext);
-
-  useEffect(() => {
-    setRows(
-      calculateRows({
-        originConnections,
-        rounds,
-        stageId,
-      })
-    );
-  }, [JSON.stringify(originConnections), rounds, stageId]);
-
+export default function Bracket({ children, bracketNumber }: BracketProps) {
+  const { size } = useContext(BracketContext);
+  const isSmall = size !== "full";
   return (
-    <div>
+    <div
+      id={BRACKET_CONTAINER_ELEMENT_ID_PREFIX + bracketNumber}
+      className={cn("relative w-max")}
+    >
       <div className="p-0 ">
         <div
           className="flex relative "
           style={{
-            gap: ROUND_GAP + "px",
+            gap: (isSmall ? ROUND_GAP_SMALL : ROUND_GAP) + "px",
           }}
         >
           {children}
-
-          <GameConnections
-            originConnections={originConnections}
-            games={rounds.flat()}
-            rows={rows}
-          />
         </div>
       </div>
     </div>

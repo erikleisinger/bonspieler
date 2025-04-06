@@ -1,105 +1,124 @@
-import { useEffect, useMemo } from "react";
+// Optimized useLoadBracket hook with better skipping logic
+import { useEffect, useMemo, useRef } from "react";
 import { useAppDispatch } from "@/lib/store";
-// Assuming these are your action creators from the Redux slice
-import {
-  initBracketEvent,
-  setBrackets,
-  setBracketStageInfo,
-  setConnections,
-} from "../store";
+import { setBrackets, setBracketStageInfo, setConnections } from "../store";
+import { useBracketSelector } from "./useBracketSelector";
+import { isBracketStageInitialized } from "../store";
 import {
   useGetBracketConnectionsQuery,
   useGetBracketGamesQuery,
   useGetTournamentStageByIdQuery,
-} from "@/shared/api"; // Assuming RTK Query setup
+} from "@/shared/api";
 
-export default function useLoadBracket({ stageId }: { stageId: string }) {
+export default function useLoadBracket({
+  stageId,
+  disabled,
+}: {
+  stageId: string;
+  disabled: boolean;
+}) {
   const dispatch = useAppDispatch();
 
-  // Fetch Stage Info (only if needed directly, otherwise just use its status)
+  // Track whether we've already dispatched this data
+  const dataDispatchedRef = useRef({
+    brackets: false,
+    connections: false,
+    stageInfo: false,
+  });
+
+  // Reset the dispatch tracking when stageId changes
+  useEffect(() => {
+    dataDispatchedRef.current = {
+      brackets: false,
+      connections: false,
+      stageInfo: false,
+    };
+  }, [stageId]);
+
+  // Queries with improved skip logic
   const {
     isFetching: isLoadingStage,
     isSuccess: isSuccessStage,
-    isError: isErrorStage,
     data: stageData,
   } = useGetTournamentStageByIdQuery(stageId, {
-    skip: !stageId, // Skip query if stageId is falsy
+    skip: !!disabled || !stageId || dataDispatchedRef.current.stageInfo,
   });
 
-  // Fetch Games (Brackets)
   const {
     isFetching: isLoadingGames,
     isSuccess: isSuccessGames,
-    isError: isErrorGames,
-    data: gamesData, // Contains { brackets: [...] } on success
+    data: gamesData,
   } = useGetBracketGamesQuery(stageId, {
-    skip: !stageId,
+    skip: !!disabled || !stageId || dataDispatchedRef.current.brackets,
   });
 
-  // Fetch Connections
   const {
     isFetching: isLoadingConnections,
     isSuccess: isSuccessConnections,
     isError: isErrorConnections,
-    // Rename data to avoid conflict with the 'connections' variable name used in dispatch
     data: connectionsData,
   } = useGetBracketConnectionsQuery(stageId, {
-    skip: !stageId,
+    skip: !!disabled || !stageId || dataDispatchedRef.current.connections,
   });
 
-  // --- Initialization Logic ---
-  // Dispatch the init event once when a valid stageId is provided.
-  // Consider if this action truly needs to be dispatched from here,
-  // or if it's handled implicitly by reducers when data arrives,
-  // or if it should happen elsewhere in your application flow.
+  // Dispatch effects with tracking to prevent repeated dispatches
   useEffect(() => {
-    if (stageId) {
-      // You might want additional logic here to check if this stageId
-      // has *already* been initialized in Redux to avoid redundant dispatches
-      // e.g., const isInitialized = useSelector(selectIsStageInitialized(stageId));
-      // if (!isInitialized) { dispatch(...) }
-      dispatch(initBracketEvent({ stageId }));
-    }
-    // Optional: Add cleanup logic if needed when stageId changes or component unmounts
-    // return () => { /* dispatch cleanup action? */ };
-  }, [stageId, dispatch]); // Re-run if stageId changes
-
-  // --- Data Dispatch Logic ---
-
-  // Effect to dispatch bracket/game data when it's successfully loaded
-  useEffect(() => {
-    // Only dispatch if the query succeeded, data is present, and we have a stageId
-    if (isSuccessGames && gamesData && stageId) {
+    if (
+      isSuccessGames &&
+      gamesData &&
+      stageId &&
+      !dataDispatchedRef.current.brackets
+    ) {
       dispatch(
         setBrackets({
           stageId,
-          // Use optional chaining and nullish coalescing for safety
           brackets: gamesData?.brackets ?? [],
         })
       );
+      dataDispatchedRef.current.brackets = true;
     }
-  }, [isSuccessGames, gamesData, stageId, dispatch]); // Depend on success flag and data
+  }, [isSuccessGames, gamesData, stageId, dispatch]);
 
-  // Effect to dispatch connection data when it's successfully loaded
   useEffect(() => {
-    // Only dispatch if the query succeeded, data is present, and we have a stageId
-    if (isSuccessConnections && connectionsData && stageId) {
+    if (
+      !isErrorConnections &&
+      isSuccessConnections &&
+      connectionsData &&
+      stageId &&
+      !dataDispatchedRef.current.connections
+    ) {
       dispatch(
         setConnections({
           stageId,
-          // Use optional chaining and nullish coalescing for safety
           winnerConnections: connectionsData?.winnerConnections ?? {},
           loserConnections: connectionsData?.loserConnections ?? {},
           originConnections: connectionsData?.originConnections ?? {},
         })
       );
+      dataDispatchedRef.current.connections = true;
     }
-  }, [isSuccessConnections, connectionsData, stageId, dispatch]);
+  }, [
+    isSuccessConnections,
+    isErrorConnections,
+    connectionsData,
+    stageId,
+    dispatch,
+  ]);
 
   useEffect(() => {
-    // Only dispatch if the query succeeded, data is present, and we have a stageId
-    if (isSuccessStage && stageData && stageId) {
-      const { id, name = "", type = "bracket", order = 0 } = stageData;
+    if (
+      isSuccessStage &&
+      stageData &&
+      stageId &&
+      !dataDispatchedRef.current.stageInfo
+    ) {
+      const {
+        id,
+        name = "",
+        type = "bracket",
+        order = 0,
+        tournament_id,
+      } = stageData;
       dispatch(
         setBracketStageInfo({
           stageId,
@@ -107,43 +126,19 @@ export default function useLoadBracket({ stageId }: { stageId: string }) {
           name: name || "",
           type: type || "bracket",
           order: order || 0,
+          tournamentId: tournament_id || "",
         })
       );
+      dataDispatchedRef.current.stageInfo = true;
     }
   }, [isSuccessStage, stageData, stageId, dispatch]);
 
-  // --- Combined Loading and Status ---
-  // Determine overall loading state (true if any essential query is fetching)
+  // Status calculations
   const isLoading = useMemo(() => {
-    // Only consider loading if stageId is present
     return Boolean(
       stageId && (isLoadingStage || isLoadingGames || isLoadingConnections)
     );
   }, [isLoadingStage, isLoadingGames, isLoadingConnections, stageId]);
 
-  // Determine overall success state (true if all essential queries succeeded)
-  // Adjust this logic based on which queries are strictly necessary for a "success" state
-  const isSuccess = useMemo(() => {
-    return Boolean(
-      stageId && isSuccessStage && isSuccessGames && isSuccessConnections
-    );
-  }, [isSuccessStage, isSuccessGames, isSuccessConnections, stageId]);
-
-  // Determine overall error state (true if any query failed)
-  const isError = useMemo(() => {
-    return Boolean(
-      stageId && (isErrorStage || isErrorGames || isErrorConnections)
-    );
-  }, [isErrorStage, isErrorGames, isErrorConnections, stageId]);
-
-  // --- Return Value ---
-  // Return status flags that consuming components can use
-  return {
-    isLoading, // Is any data currently being fetched?
-    isSuccess, // Have all required data fetches completed successfully?
-    isError, // Did any data fetch encounter an error?
-    // Optionally return data if the consuming component needs direct access
-    // gamesData,
-    // connectionsData,
-  };
+  return { isLoading };
 }

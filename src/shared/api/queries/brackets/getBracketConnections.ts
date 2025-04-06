@@ -2,10 +2,13 @@ import { client } from "@/shared/api";
 import { apiSlice } from "../../model";
 import { BRACKET_CONNECTIONS } from "../../keys";
 export async function fetchBracketEventConnections(bracketEventId: string) {
-  const { data, error } = await client
-    .from("game_connections")
-    .select(
-      `
+  let errors = null;
+  let returnData = [];
+  try {
+    const { data, error } = await client
+      .from("game_connections")
+      .select(
+        `
       *, 
       origin_stage_info:origin_game_id!inner(
       tournament_stage_id,
@@ -22,13 +25,18 @@ export async function fetchBracketEventConnections(bracketEventId: string) {
       )
       )
       `
-    )
-    .eq(`origin_stage_info.tournament_stage_id`, bracketEventId);
+      )
+      .eq(`origin_stage_info.tournament_stage_id`, bracketEventId);
+    if (error) {
+      errors = error;
+    } else {
+      returnData = [...returnData, ...(data || [])];
+    }
 
-  const { data: prevData } = await client
-    .from("game_connections")
-    .select(
-      `
+    const { data: prevData, error: prevError } = await client
+      .from("game_connections")
+      .select(
+        `
       *, 
       origin_stage_info:origin_game_id!inner(
       tournament_stage_id,
@@ -45,16 +53,43 @@ export async function fetchBracketEventConnections(bracketEventId: string) {
       )
       )
       `
-    )
-    .eq(`destination_stage_info.tournament_stage_id`, bracketEventId)
-    .neq("origin_stage_info.tournament_stage_id", bracketEventId);
-  return [...(data || []), ...(prevData || [])];
+      )
+      .eq(`destination_stage_info.tournament_stage_id`, bracketEventId)
+      .neq("origin_stage_info.tournament_stage_id", bracketEventId);
+
+    if (prevError) {
+      errors = prevError;
+    } else {
+      returnData = [...returnData, ...(prevData || [])];
+    }
+  } catch (e) {
+    console.log("caugh error: ", e);
+    errors = e;
+  }
+
+  if (errors)
+    return {
+      data: null,
+      error: errors,
+    };
+  return {
+    data: returnData,
+    error: null,
+  };
 }
 const getBracketConnections = apiSlice.injectEndpoints({
   endpoints: (build) => ({
     getBracketConnections: build.query({
       queryFn: async (bracketEventId: string) => {
-        const connections = await fetchBracketEventConnections(bracketEventId);
+        const { data: connections, error } = await fetchBracketEventConnections(
+          bracketEventId
+        );
+        console.log("connections", connections, error);
+        if (error) {
+          return {
+            error,
+          };
+        }
         if (!connections) {
           return {
             data: {

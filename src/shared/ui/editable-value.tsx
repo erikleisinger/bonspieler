@@ -13,20 +13,20 @@ export default function EditableValue({
   children: React.ReactNode;
   editingChildren: React.ReactNode;
   inputRef: React.RefObject<HTMLInputElement>;
-  onBeginEdit: () => void;
-  onSave: () => void;
+  onBeginEdit?: () => void;
+  onSave?: () => void;
 }) {
   const el = useRef(null);
   const [editing, setEditing] = useState(false);
 
-  function save() {
-    onSave();
-    setTimeout(() => {
-      setEditing(false);
-    }, 1);
-  }
-
   useEffect(() => {
+    function save() {
+      onSave();
+      setTimeout(() => {
+        setEditing(false);
+      }, 1);
+    }
+
     function handleClickOutside(event: MouseEvent) {
       if (
         el.current &&
@@ -36,6 +36,14 @@ export default function EditableValue({
         save();
       }
     }
+
+    function onKeyDown(e: KeyboardEvent) {
+      const { key } = e || {};
+      if (["Enter", "Tab"].includes(key)) {
+        save();
+      }
+    }
+
     if (editing) {
       document.addEventListener("mousedown", handleClickOutside);
       if (inputRef) {
@@ -47,14 +55,7 @@ export default function EditableValue({
       document.removeEventListener("mousedown", handleClickOutside);
       if (inputRef) inputRef.current?.removeEventListener("keydown", onKeyDown);
     };
-  }, [el, editing, onSave, checkRefs]);
-
-  function onKeyDown(e: KeyboardEvent) {
-    const { key } = e || {};
-    if (["Enter", "Tab"].includes(key)) {
-      save();
-    }
-  }
+  }, [el, editing, onSave, checkRefs, inputRef]);
 
   function beginEdit() {
     onBeginEdit();

@@ -1,8 +1,10 @@
 import { FaSeedling, FaRunning } from "react-icons/fa";
 import { OriginConnection } from "@/modules/bracket-manager/shared/types/Connections";
 import { cn } from "@/lib/utils";
-import { useBracketSelector } from "@/modules/bracket-manager/shared/hooks";
+
+import { useAppSelector } from "@/lib/store";
 import { getReadableId } from "@/modules/bracket-manager/shared/store";
+
 export default function BracketGameTeam({
   className = "",
   connection,
@@ -10,7 +12,9 @@ export default function BracketGameTeam({
   className?: string;
   connection: OriginConnection;
 }) {
-  const readableId = useBracketSelector(getReadableId, connection.gameId);
+  const readableId = useAppSelector((state) =>
+    getReadableId(state, connection.gameId)
+  );
   return (
     <div
       className={cn(
@@ -20,7 +24,7 @@ export default function BracketGameTeam({
     >
       {!readableId ? (
         <FaSeedling className="text-emerald-500" />
-      ) : connection?.stageName ? (
+      ) : connection?.stageId ? (
         <FaRunning className="text-indigo-500" />
       ) : (
         <div />

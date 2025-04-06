@@ -19,7 +19,7 @@ interface SliceConfig<
 
 interface StoreLoaderProps {
   slices: SliceConfig[];
-  children: React.ReactNode;
+  children?: React.ReactNode;
   debugMode?: boolean;
 }
 

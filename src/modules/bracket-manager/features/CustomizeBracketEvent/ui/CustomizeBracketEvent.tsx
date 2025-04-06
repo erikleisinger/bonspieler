@@ -4,13 +4,9 @@ import {
   MIN_TEAM_COUNT,
 } from "@/entities/Bracket";
 
-import Typography from "@/shared/ui/typography";
 import NumberInput from "./NumberInput";
-import { TbTournament } from "react-icons/tb";
-import { FaCog } from "react-icons/fa";
 
 import type { CustomizeBracketEventProps } from "../lib";
-import NumberSheetsSelect from "@/shared/ui/number-sheets-select";
 import ValidationIcon from "@/shared/ui/validation-icon";
 
 /**

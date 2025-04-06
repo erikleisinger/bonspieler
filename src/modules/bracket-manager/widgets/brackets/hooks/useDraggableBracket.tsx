@@ -1,7 +1,9 @@
 import { useEffect, useState, useRef } from "react";
 export function useDraggableBracket({
+  disabled,
   ref,
 }: {
+  disabled?: boolean;
   ref: React.RefObject<HTMLElement | null>;
 }) {
   const dragging = useRef(false);
@@ -28,7 +30,7 @@ export function useDraggableBracket({
         setIsDragging(false);
       }, 1);
     }
-    if (ref.current) {
+    if (!disabled && ref.current) {
       document.addEventListener("mousemove", onDrag);
       ref.current.addEventListener("dragstart", onDragStart);
       document.addEventListener("mouseup", onMouseUp);
@@ -41,7 +43,7 @@ export function useDraggableBracket({
         document.removeEventListener("mouseup", onMouseUp);
       }
     };
-  }, [ref]);
+  }, [ref, disabled]);
 
   return {
     isDragging,

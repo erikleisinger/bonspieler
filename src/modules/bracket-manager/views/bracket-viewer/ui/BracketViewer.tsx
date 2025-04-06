@@ -1,5 +1,10 @@
-import { useState, useEffect } from "react";
-import { Brackets } from "@/modules/bracket-manager/widgets/brackets";
+import { useState } from "react";
+import {
+  Bracket,
+  Brackets,
+  BracketRound,
+  BracketGame,
+} from "@/modules/bracket-manager/widgets/brackets";
 import {
   BracketEditorToolbar,
   useBracketEditorToolbar,
@@ -19,52 +24,78 @@ import {
   setLoserConnectionForGame,
 } from "@/modules/bracket-manager/shared/store";
 import { getBrackets } from "@/modules/bracket-manager/shared/store";
-import { BracketGame } from "@/modules/bracket-manager/shared/types";
+import {
+  BracketDisplaySize,
+  BracketGame,
+  BracketMode,
+} from "@/modules/bracket-manager/shared/types";
 import { Button } from "@/shared/ui/button";
 import { FaMagic } from "react-icons/fa";
 import { cn } from "@/lib/utils";
+import { useInitialBracketViewerState } from "../hooks";
+import type { Nullable } from "@/shared/types";
 export default function BracketViewer({
+  bracketClass,
+  className,
   editing = false,
+  onBack,
+  mode,
+  providedOnGameClick,
+  providedOnBackgroundClick,
+  showTitle,
+  size,
 }: {
+  bracketClass?: string;
+  className?: string;
   editing?: boolean;
+  onBack?: () => void;
+  mode: BracketMode;
+  providedOnBackgroundClick?: () => void;
+  providedOnGameClick?: (game: Nullable<BracketGame>) => boolean;
+  showTitle?: boolean;
+  size: BracketDisplaySize;
 }) {
   const dispatch = useBracketDispatch();
   const brackets = useBracketSelector(getBrackets);
-
-  useEffect(() => {
-    if (!editing) return;
-    if (!!brackets?.length) return;
-    setToolbarState(BracketEditorToolbarState.EditingBrackets);
-    setWizardMode(true);
-  }, []);
-
-  const isLookingForLoserConnection = useBracketSelector(
-    getLookingForLoserConnection
-  );
 
   const { toolbarState, setToolbarState } = useBracketEditorToolbar({
     allow: "all",
   });
 
+  const [wizardMode, setWizardMode] = useState(false);
+
+  useInitialBracketViewerState({
+    editing,
+    brackets,
+    setToolbarState,
+    setWizardMode,
+  });
+
+  const isLookingForLoserConnection = useBracketSelector(
+    getLookingForLoserConnection
+  );
+
   const editingBrackets = useMemo(() => {
     return toolbarState === BracketEditorToolbarState.EditingBrackets;
   }, [toolbarState]);
-
-  const [wizardMode, setWizardMode] = useState(false);
 
   const slideoutComponent = useMemo(() => {
     if (!!isLookingForLoserConnection) return null;
     if (toolbarState === BracketEditorToolbarState.ViewingGame) {
       return <BracketGameViewer />;
     }
-    if (toolbarState === BracketEditorToolbarState.ViewingEvent) {
-      return <div>Event!</div>;
-    }
+
     return null;
   }, [toolbarState, isLookingForLoserConnection]);
 
   function onBackgroundClick() {
-    if (toolbarState === BracketEditorToolbarState.EditingBrackets) return;
+    if (
+      [
+        BracketEditorToolbarState.EditingBrackets,
+        BracketEditorToolbarState.ViewingEvent,
+      ].includes(toolbarState)
+    )
+      return;
     setToolbarState(null);
     dispatch(cancelLookingForLoserConnection, null);
   }
@@ -91,7 +122,6 @@ export default function BracketViewer({
           originGameId,
           destinationGameId,
         });
-        console.log("game: ", game);
       }
       return !isLookingForLoserConnection;
     },
@@ -103,13 +133,19 @@ export default function BracketViewer({
     setToolbarState(null);
   }
 
+  const viewMode = useMemo(() => {
+    if (toolbarState === BracketEditorToolbarState.ViewingEvent) return "mini";
+    return "full";
+  }, [toolbarState]);
+
   return (
-    <div className="absolute inset-0 flex">
+    <div className={cn("absolute inset-0 flex", className)}>
       {editing && (
         <BracketEditorToolbar
           state={toolbarState}
           setState={setToolbarState}
           className="sticky top-0 left-0 z-50"
+          onBack={onBack}
         />
       )}
 
@@ -119,7 +155,7 @@ export default function BracketViewer({
             "absolute bottom-8 right-8 z-50 transition-all duration",
             editingBrackets && !wizardMode
               ? "translate-x-0 opacity-100"
-              : "translate-x-full opacity-0"
+              : "translate-x-full opacity-0 pointer-events-none"
           )}
         >
           <Button
@@ -138,9 +174,13 @@ export default function BracketViewer({
         />
         <Brackets
           onAddBracket={onAddBracket}
-          onBackgroundClick={onBackgroundClick}
+          onBackgroundClick={providedOnBackgroundClick || onBackgroundClick}
           onDeleteBracket={onDeleteBracket}
-          extendOnGameClick={onGameClick}
+          extendOnGameClick={providedOnGameClick || onGameClick}
+          size={size || viewMode}
+          mode={mode}
+          showTitle={showTitle}
+          className={bracketClass}
         ></Brackets>
 
         <Slideout visible={!!slideoutComponent}>{slideoutComponent}</Slideout>

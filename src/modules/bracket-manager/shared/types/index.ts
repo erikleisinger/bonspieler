@@ -8,3 +8,5 @@ export type {
   OriginConnections,
 } from "./Connections";
 export type { ReadableIdIndex } from "./ReadableIdIndex";
+export type { BracketDisplaySize } from "./BracketDisplaySize";
+export type { BracketMode } from "./BracketMode";

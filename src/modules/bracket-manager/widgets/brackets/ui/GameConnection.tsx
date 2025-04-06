@@ -1,10 +1,13 @@
 import { useMemo } from "react";
 import type { GameConnectionPositionInfo } from "../types/GameConnection";
-import { ROUND_GAP } from "../lib/constants/style";
+import { ROUND_GAP, ROUND_GAP_SMALL } from "../lib/constants/style";
+import { cn } from "@/lib/utils";
 export default function GameConnection({
+  small,
   gameId,
   positionInfo,
 }: {
+  small?: boolean;
   gameId: string;
   positionInfo: GameConnectionPositionInfo;
 }) {
@@ -24,6 +27,8 @@ export default function GameConnection({
     return { position, dimensions };
   }, [positionInfo]);
 
+  const showHandlebars = !small || dimensions.height > 12;
+
   return (
     /**
      * TODO:
@@ -40,18 +45,34 @@ export default function GameConnection({
           height: dimensions.height + "px",
         }}
       >
-        <div
-          className="h-full border-r-4 border-connection border-t-4 border-b-4 rounded-tr-md rounded-br-md"
-          style={{
-            width: ROUND_GAP / 2 + "px",
-          }}
-        ></div>
+        {showHandlebars && (
+          <div
+            className={cn(
+              "h-full  border-connection ",
+              small && !dimensions.height
+                ? ""
+                : small
+                ? "border-r-[3px] border-t-[3px] border-b-[3px] rounded-tr-md rounded-br-md "
+                : "border-r-4 border-t-4 border-b-4 rounded-tr-md rounded-br-md"
+            )}
+            style={{
+              width: (small ? ROUND_GAP_SMALL : ROUND_GAP) / 2 + "px",
+            }}
+          ></div>
+        )}
 
         <div
-          className="h-[4px] bg-connection  grow absolute top-0 bottom-0 m-auto  cursor-pointer"
+          className={cn(
+            " bg-connection  grow absolute top-0 bottom-0 m-auto  cursor-pointer",
+            small ? "h-[3px]" : "h-[4px]"
+          )}
           style={{
-            width: `calc(100% - ${ROUND_GAP / 2}px)`,
-            transform: `translateX(${ROUND_GAP / 2}px)`,
+            width: !showHandlebars
+              ? "100%"
+              : `calc(100% - ${(small ? ROUND_GAP_SMALL : ROUND_GAP) / 2}px)`,
+            transform: !showHandlebars
+              ? "unset"
+              : `translateX(${(small ? ROUND_GAP_SMALL : ROUND_GAP) / 2}px)`,
           }}
         ></div>
       </div>
