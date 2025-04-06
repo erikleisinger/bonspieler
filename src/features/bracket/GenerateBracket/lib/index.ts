@@ -1,1 +1,0 @@
-export { generateBracket } from "./generateBracket";

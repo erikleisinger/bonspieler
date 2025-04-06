@@ -1,7 +1,3 @@
-export * from "./ui";
-export * from "./lib";
-export * from "./model";
-
 export type {
   TournamentStage,
   TournamentTeam,

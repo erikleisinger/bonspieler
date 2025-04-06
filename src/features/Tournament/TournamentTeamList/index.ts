@@ -1,1 +1,0 @@
-export { TournamentTeamList } from "./ui";

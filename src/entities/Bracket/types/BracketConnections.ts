@@ -6,10 +6,10 @@ export interface DestinationConnection {
 }
 
 export interface WinnerConnections {
-  [gameId: string]: DestinationConnection;
+  [gameId: string]: Nullable<DestinationConnection>;
 }
 export interface LoserConnections {
-  [gameId: string]: DestinationConnection;
+  [gameId: string]: Nullable<DestinationConnection>;
 }
 export interface OriginConnection {
   isWinner: boolean;
